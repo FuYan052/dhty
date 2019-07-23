@@ -1,7 +1,7 @@
 <template>
-  <!-- 羽毛球活动 -->
+  <!-- 羽毛球活动首页 -->
   <div class="activities">
-
+    羽毛球活动首页
   </div>
 </template>
 

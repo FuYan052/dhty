@@ -20,31 +20,26 @@ export default {
   name: 'ActivitiesDetail',
   data() {
     return {
-      tabList: ['首页','活动','排名','风采墙'],
+      tabList: ['首页','活动','群员'],
       currtabIndex: 0,
     }
   },
   methods: {
     changeTab(index) {
       this.currtabIndex = index
-      // if(index === 0) {
-      //   this.$router.push({
-      //     path: ''
-      //   })
-      // }
-      // if(index === 1) {
-      //   this.$router.push({
-      //     path: ''
-      //   })
-      // }
-      // if(index === 2) {
-      //   this.$router.push({
-      //     path: ''
-      //   })
-      // }
-      if(index === 3) {
+      if(index === 0) {
         this.$router.push({
-          path: '/badminton/activitiesDetail/bShow'
+          path: '/badminton/activitiesDetail/bActivities'
+        })
+      }
+      if(index === 1) {
+        this.$router.push({
+          path: ''
+        })
+      }
+      if(index === 2) {
+        this.$router.push({
+          path: '/badminton/activitiesDetail/bMember'
         })
       }
     }
@@ -66,14 +61,18 @@ export default {
       ul{
         width: 100%;
         height: 70px;
-        padding: 0 4%;
+        padding: 10px 4%;
         li{
-          width: 25%;
-          height: 70px;
+          width: 33.3%;
+          height: 50px;
           float: left;
-          line-height: 70px;
+          line-height: 50px;
           text-align: center;
           color: #999999;
+        }
+        li:nth-child(2) {
+          border-left: 1px solid #ccc;
+          border-right: 1px solid #ccc;
         }
         .currTab{
           color: #000;

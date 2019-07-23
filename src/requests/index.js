@@ -10,6 +10,9 @@ const ajax = axios.create({
 // const ajax = axios.create({
 //   baseURL: 'http://rap2api.taobao.org/app/mock'
 // })
+const ajax3 = axios.create({
+
+})
 
 // request拦截器
 ajax.interceptors.request.use(config => {
@@ -74,4 +77,7 @@ export const postLogin = (params) => {
 }
 // export const postLogin = () => {
 //   return ajax.post(`/167512/api/login`)
+// }
+// export const getInfo = () => {
+//   return ajax3.post(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET`)
 // }

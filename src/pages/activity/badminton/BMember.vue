@@ -1,16 +1,17 @@
 <template>
-  <!-- 参加过的活动 -->
-  <div class="attended">
-
+  <!-- 羽毛球群成员 -->
+  <div class="bMember">
+    羽毛球群成员
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Attended'
+  name: 'BMember'
 }
 </script>
 
 <style lang="scss" scoped>
-  
+
 </style>
+

@@ -8,6 +8,8 @@ import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
+import BActivities from '@/pages/activity/badminton/BActivities'
+import BMember from '@/pages/activity/badminton/BMember'
 import ManageHome from '@/pages/userCenter/myManagement/manageGroup/ManageHome'
 import GroupManagement from '@/pages/userCenter/myManagement/manageGroup/GroupManagement'
 import CreateGroup from '@/pages/userCenter/myManagement/manageGroup/CreateGroup'
@@ -62,6 +64,16 @@ export default new Router({
           path: '/badminton/activitiesDetail/bShow',
           name: 'BShow',
           component: BShow
+        },
+        {
+          path: '/badminton/activitiesDetail/bActivities',
+          name: 'BActivities',
+          component: BActivities
+        },
+        {
+          path: '/badminton/activitiesDetail/bMember',
+          name: 'BMember',
+          component: BMember
         }
       ]
     },

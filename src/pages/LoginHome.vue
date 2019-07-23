@@ -19,6 +19,11 @@ export default {
         path: '/home/login'
       })
     }
+  },
+  created() {
+    // this.$http.getInfo().then( resp => {
+    //   console.log(resp)
+    // })
   }
 }
 </script>
