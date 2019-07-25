@@ -10,10 +10,20 @@
     <div class="loginType">
         <ul>
           <li>
-            <input type="text" placeholder="请输入你的账号" placeholder-class="placeholderStyle">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+              <el-form-item label="" prop="phoneNum">
+                <el-input v-model="ruleForm.phoneNum" placeholder="请输入您的手机号"></el-input>
+              </el-form-item>
+            </el-form>
+            <!-- <input type="text" placeholder="请输入你的账号" placeholder-class="placeholderStyle"> -->
           </li>
           <li class="hqyzm">
-            <input type="text" placeholder="请输入你的密码" placeholder-class="placeholderStyle">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+              <el-form-item label="" prop="inputPassword">
+                <el-input type="password" placeholder="请输入6-16位的密码" show-password v-model="ruleForm.inputPassword"></el-input>
+              </el-form-item>
+            </el-form>
+            <!-- <input type="text" placeholder="请输入你的密码" placeholder-class="placeholderStyle"> -->
           </li>
         </ul>
         <div class="loginBtn">
@@ -35,13 +45,45 @@
 export default {
   name: 'Login',
   data() {
+    let validPhone=(rule,value,callback)=>{
+      let reg=/[0-9]{11}/
+      if(!reg.test(value)){callback(
+        new Error('账号是11位的手机号'))
+      }else{
+          this.callback()
+      }
+    };
+    let validPassword=(rule,value,callback)=>{
+      let reg=/[0-9a-zA-Z]{6,16}/
+      if(!reg.test(value)){callback(
+        new Error('请输入正确的6-16位密码'))
+      }else{
+          this.callback()
+      }
+    };
     return {
+      ruleForm: {
+        phoneNum: '',
+        inputPassword: '',
+      },
+       rules: {
+        phoneNum: [
+          { validator:validPhone,trigger:'blur'}
+        ],
+        inputPassword: [
+          { validator:validPassword,trigger:'blur' }
+        ]
+      },
       content: '获取验证码',
       totalTime: 0,
       timer: null
     }
   },
   methods: {
+    // 输入值合法时的回调
+    callback () {
+      // console.log("输入合法")
+    },
     getCode() {
       this.totalTime = 60
       this.timer = setInterval(() => {
@@ -199,4 +241,14 @@ export default {
     }
   }
 </style>
-
+<style>
+.login .el-input__inner{
+  height: 100px;
+  line-height: 100px;
+  padding: 0;
+  border: none;
+}
+.login .el-form-item__error {
+  top: 75%;
+}
+</style>

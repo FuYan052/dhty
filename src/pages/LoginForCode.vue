@@ -11,7 +11,12 @@
     <div class="loginType">
         <ul>
           <li>
-            <input type="text" placeholder="请输入你的账号" placeholder-class="placeholderStyle">
+            <!-- <input type="text" placeholder="请输入你的账号" placeholder-class="placeholderStyle"> -->
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+              <el-form-item label="" prop="phoneNum">
+                <el-input v-model="ruleForm.phoneNum" placeholder="请输入您的手机号"></el-input>
+              </el-form-item>
+            </el-form>
           </li>
           <li class="hqyzm">
             <input type="text" placeholder="请输入手机验证码" placeholder-class="placeholderStyle">
@@ -29,14 +34,34 @@
 export default {
   name: 'LoginForCode',
   data() {
+    let validPhone=(rule,value,callback)=>{
+      let reg=/[0-9]{11}/
+      if(!reg.test(value)){callback(
+        new Error('账号必须是11位的手机号'))
+      }else{
+          this.callback()
+      }
+    };
     return {
+      ruleForm: {
+        phoneNum: '',
+      },
       disabled: false,
       content: '获取验证码',
       totalTime: 0,
-      timer: null
+      timer: null,
+      rules: {
+        phoneNum: [
+          { validator:validPhone,trigger:'blur'}
+        ],
+      },
     }
   },
   methods: {
+     // 输入值合法时的回调
+    callback () {
+      // console.log("输入合法")
+    },
     getCode() {
       this.totalTime = 60
       this.timer = setInterval(() => {
@@ -171,4 +196,14 @@ export default {
     }
   }
 </style>
-
+<style>
+.loginForCode .el-input__inner{
+  height: 100px;
+  line-height: 100px;
+  padding: 0;
+  border: none;
+}
+.loginForCode .el-form-item__error {
+  top: 75%;
+}
+</style>
