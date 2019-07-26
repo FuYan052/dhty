@@ -6,6 +6,7 @@ import Register from '@/pages/Register'
 import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
+import ActivityHome from '@/pages/activity/ActivityHome'
 import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
@@ -54,6 +55,12 @@ export default new Router({
       path: '/home/forgetPassword',
       name: 'ForgetPassword',
       component: ForgetPassword,
+    },
+    // 活动
+    {
+      path: '/activityHome',
+      name: 'ActivityHome',
+      component: ActivityHome,
     },
     {
       path: '/badminton/activitiesDetail',
