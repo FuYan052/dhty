@@ -7,7 +7,6 @@
     <div class="toBotton" @click="doLogin">
       登录/注册
     </div>
-    <p>电话<a href="tel://15096762547">拨号</a></p>
   </div>
 </template>
 

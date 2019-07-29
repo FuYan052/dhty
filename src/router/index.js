@@ -7,6 +7,7 @@ import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ActivityHome from '@/pages/activity/ActivityHome'
+import Playground from '@/pages/activity/Playground'
 import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
@@ -61,6 +62,11 @@ export default new Router({
       path: '/activityHome',
       name: 'ActivityHome',
       component: ActivityHome,
+    },
+    {
+      path: '/playground',
+      name: 'Playground',
+      component: Playground,
     },
     {
       path: '/badminton/activitiesDetail',

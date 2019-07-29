@@ -78,7 +78,7 @@ table{
   /* text-align: center;
   color: #2c3e50;
   margin-top: 60px; */
-  font-size: 27px;
+  font-size: 26px;
   background: #fff;
   font-family: '微软雅黑';
 }
