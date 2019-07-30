@@ -7,12 +7,15 @@ import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ActivityHome from '@/pages/activity/ActivityHome'
+import Playground from '@/pages/activity/Playground'
+import Organization from '@/pages/activity/Organization'
 import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
 import BMember from '@/pages/activity/badminton/BMember'
-import ManageHome from '@/pages/userCenter/myManagement/manageGroup/ManageHome'
+import ManageHome from '@/pages/userCenter/myManagement/ManageHome'
 import GroupManagement from '@/pages/userCenter/myManagement/manageGroup/GroupManagement'
+import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/ManageGroupMembers'
 import CreateGroup from '@/pages/userCenter/myManagement/manageGroup/CreateGroup'
 import CreatedGroupList from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupList'
 import JoinCroupList from '@/pages/userCenter/myManagement/manageGroup/JoinCroupList'
@@ -63,6 +66,16 @@ export default new Router({
       component: ActivityHome,
     },
     {
+      path: '/playground',
+      name: 'Playground',
+      component: Playground,
+    },
+    {
+      path: '/organization',
+      name: 'Organization',
+      component: Organization,
+    },
+    {
       path: '/badminton/activitiesDetail',
       name: 'ActivitiesDetail',
       component: ActivitiesDetail,
@@ -95,6 +108,11 @@ export default new Router({
       path: '/userCenter/groupManagement',
       name: 'GroupManagement',
       component: GroupManagement,
+    },
+    {
+      path: '/userCenter/groupManagement/manageGroupMembers',
+      name: 'ManageGroupMembers',
+      component: ManageGroupMembers,
     },
     {
       path: '/userCenter/createGroup',

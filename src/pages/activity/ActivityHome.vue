@@ -28,7 +28,7 @@
     <!-- 活动详情 -->
     <div class="contentBg">
       <div class="content">
-        <div class="activItem">
+        <div class="activItem" v-for="(item,index) in 3" :key="index">
           <div class="top">
             <div class="title">
               <img src="../../assets/123.jpg" alt="">
@@ -40,10 +40,35 @@
               <span>大虎管理员</span>
               <span>杨洋然</span>
             </div>
-            <h6 class="address">金地羽毛球馆1<span>16km</span></h6>
+            <p class="address">金地羽毛球馆1<span>16km</span></p>
+            <div class="detailBox">
+              <p class="p1"><span><i class="el-icon-house"></i></span>6月26日周三晚19:00，羽毛球约起</p>
+              <p class="p1"><span><i class="el-icon-time"></i></span>2019-06-26&nbsp;&nbsp;19:00-21:00</p>
+              <p class="p1"><span><i class="el-icon-coin"></i></span>60元/人</p>
+            </div>
+            <div class="signUpBtn">
+              <div class="green">正在报名</div>
+              <div class="number">8/10</div>
+            </div>
           </div>
           <div class="bottom">
-
+            <div class="leftIcon"><i class="el-icon-user-solid"></i></div>
+            <div class="HeadPortrait">
+              <img src="../../assets/touxiang.jpg" alt="">
+              <img src="../../assets/123.jpg" alt="">
+              <img src="../../assets/touxiang.jpg" alt="">
+              <img src="../../assets/123.jpg" alt="">
+              <img src="../../assets/touxiang.jpg" alt="">
+              <img src="../../assets/123.jpg" alt="">
+              <img src="../../assets/touxiang.jpg" alt="">
+              <img src="../../assets/123.jpg" alt="">
+              <img src="../../assets/touxiang.jpg" alt="">
+              <img src="../../assets/123.jpg" alt="">
+              <img src="../../assets/touxiang.jpg" alt="">
+              <img src="../../assets/123.jpg" alt="">
+              <img src="../../assets/touxiang.jpg" alt="">
+              <img src="../../assets/123.jpg" alt="">
+            </div>
           </div>
         </div>
       </div>
@@ -202,10 +227,12 @@ export default {
           box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
           .activItem{
             width: 100%;
-            height: 540px;
+            // height: 555px;
+            min-height: 555px;
             .top{
               width: 100%;
-              height: 460px;
+              // height: 475px;
+              height: auto;
               padding: 0 10px;
               .title{
                 width: 100%;
@@ -268,11 +295,90 @@ export default {
                   font-weight: normal;
                 }
               }
+              .detailBox{
+                width: 600px;
+                min-height: 145px;
+                background: #f6f6f6;
+                margin-top: 15px;
+                margin-left: 90px;
+                padding-top: 10px;
+                p{
+                  color: #565656;
+                  line-height: 45px;
+                  span{
+                    display: inline-block;
+                    width: 30px;
+                    height: 30px;
+                    margin: 0 15px;
+                    background: #fff;
+                    padding: 5px;
+                    i{
+                      color: #37b59c;
+                      font-size: 22px;
+                      vertical-align: middle;
+                      text-align: center;
+                      float: left;
+                    }
+                  }
+                }
+              }
+              .signUpBtn{
+                width: 100%;
+                height: 75px;
+                .green{
+                  width: 145px;
+                  height: 50px;
+                  float: right;
+                  color: #fff;
+                  background: #29cb92;
+                  line-height: 48px;
+                  text-align: center;
+                  margin-top: 12px;
+                  margin-right: -20px;
+                }
+                .number{
+                  width: 92px;
+                  height: 100%;
+                  color: #5d5d5d;
+                  padding-top: 20px;
+                  text-align: center;
+                  float: right;
+                }
+              }
             }
             .bottom{
               width: 100%;
-              height: 78px;
-              font-size: 18px;
+              height: 83px;
+              background: #fafafa;
+              border-top: 1px solid #efefef;
+              border-bottom: 1px solid #efefef;
+              .leftIcon{
+                width: 90px;
+                height: 100%;
+                float: left;
+                padding-top: 20px;
+                padding-left: 25px;
+                i{
+                  font-size: 32px;
+                  color: #cccccc;
+                }
+              }
+              .HeadPortrait{
+                width: 620px;
+                height: 78px;
+                float: left;
+                overflow-x: auto;
+                overflow-y: hidden;
+                white-space: nowrap;
+                img{
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 50%;
+                  margin-left: 10px;
+                  margin-top: 9px;
+                  display: inline-block;
+                }
+              }
             }
           }
         }
