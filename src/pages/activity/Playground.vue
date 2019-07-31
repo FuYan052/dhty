@@ -37,6 +37,22 @@
              <p>成都市武侯区益州大道555号</p>
              <div class="icon"><span class="el-icon-location"></span></div>
            </div>
+<<<<<<< HEAD
+=======
+           <div class="mapBox">
+             <baidu-map 
+                class="bm-view" 
+                ak="uRhBKfzW36pGW8KGkyAhpwXDYwmjNcZP"
+                :zoom="zoom" 
+                @ready="handler"
+                :scroll-wheel-zoom="true"
+                >
+                <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
+                <bm-marker :position="center" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+                <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
+              </baidu-map>
+           </div>
+>>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
          </div>
       </div>
     </div>
@@ -45,13 +61,39 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 export default {
   name: 'Playground',
+=======
+import { BaiduMap, BmGeolocation, BmMarker, BmNavigation  } from 'vue-baidu-map'
+export default {
+  name: 'Playground',
+  components: {
+    BaiduMap,
+    BmGeolocation,
+    BmMarker,
+    BmNavigation 
+  },
+>>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
   data() {
     return {
       cateList: ['羽毛球', '跑步'],
       currIndex: 0,
+<<<<<<< HEAD
     }
+=======
+      center: {lng: 0, lat: 0},
+      address: '',
+      zoom: 3,
+    }
+  },
+  methods: {
+    handler ({BMap, map}) {
+      this.center.lng = 103.67937
+      this.center.lat = 30.767555
+      this.zoom = 15
+    },
+>>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
   }
 }
 </script>
@@ -94,7 +136,11 @@ export default {
       padding: 0 20px;
       .groundItem{
         width: 100%;
+<<<<<<< HEAD
         height: 572px;
+=======
+        min-height: 572px;
+>>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
         background: #fff;
         margin-top: 30px;
         .g_top{
@@ -193,6 +239,19 @@ export default {
               border-radius: 25%;
             }
           }
+<<<<<<< HEAD
+=======
+          .mapBox{
+            width: 100%;
+            height: 500px;
+            border: 1px solid red;
+            margin: 10px 0;
+            .bm-view{
+              width: 100%;
+              height: 100%;
+            }
+          }
+>>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
         }
       }
     }

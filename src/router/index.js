@@ -8,8 +8,11 @@ import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import Playground from '@/pages/activity/Playground'
+<<<<<<< HEAD
 import Organization from '@/pages/activity/Organization'
 import ClubInfo from '@/pages/activity/ClubInfo'
+=======
+>>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
 import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
@@ -73,6 +76,7 @@ export default new Router({
       component: Playground,
     },
     {
+<<<<<<< HEAD
       path: '/organization',
       name: 'Organization',
       component: Organization,
@@ -83,6 +87,8 @@ export default new Router({
       component: ClubInfo,
     },
     {
+=======
+>>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
       path: '/badminton/activitiesDetail',
       name: 'ActivitiesDetail',
       component: ActivitiesDetail,
