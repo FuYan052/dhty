@@ -8,20 +8,19 @@ import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import Playground from '@/pages/activity/Playground'
-<<<<<<< HEAD
+import ActivitySignUp from '@/pages/activity/ActivitySignUp'
 import Organization from '@/pages/activity/Organization'
+import Members from '@/pages/activity/Members'
 import ClubInfo from '@/pages/activity/ClubInfo'
-=======
->>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
 import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
 import BMember from '@/pages/activity/badminton/BMember'
 import ManageHome from '@/pages/userCenter/myManagement/ManageHome'
 import GroupManagement from '@/pages/userCenter/myManagement/manageGroup/GroupManagement'
+import CreateGroup from '@/pages/userCenter/myManagement/manageGroup/CreateGroup'
 import EditGroupInfo from '@/pages/userCenter/myManagement/manageGroup/EditGroupInfo'
 import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/ManageGroupMembers'
-import CreateGroup from '@/pages/userCenter/myManagement/manageGroup/CreateGroup'
 import CreatedGroupList from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupList'
 import JoinCroupList from '@/pages/userCenter/myManagement/manageGroup/JoinCroupList'
 import MyActivities from '@/pages/userCenter/myManagement/MyActivities'
@@ -76,10 +75,19 @@ export default new Router({
       component: Playground,
     },
     {
-<<<<<<< HEAD
+      path: '/activitySignUp',
+      name: 'ActivitySignUp',
+      component: ActivitySignUp,
+    },
+    {
       path: '/organization',
       name: 'Organization',
       component: Organization,
+    },
+    {
+      path: '/members',
+      name: 'Members',
+      component: Members,
     },
     {
       path: '/clubInfo',
@@ -87,8 +95,6 @@ export default new Router({
       component: ClubInfo,
     },
     {
-=======
->>>>>>> dcf1b6a3b8ffcafd5a553628886cfb7823ba61c3
       path: '/badminton/activitiesDetail',
       name: 'ActivitiesDetail',
       component: ActivitiesDetail,
@@ -123,6 +129,11 @@ export default new Router({
       component: GroupManagement,
     },
     {
+      path: '/userCenter/groupManagement/createGroup',
+      name: 'CreateGroup',
+      component: CreateGroup,
+    },
+    {
       path: '/userCenter/groupManagement/manageGroupMembers',
       name: 'ManageGroupMembers',
       component: ManageGroupMembers,
@@ -131,11 +142,6 @@ export default new Router({
       path: '/userCenter/groupManagement/editGroupInfo',
       name: 'EditGroupInfo',
       component: EditGroupInfo,
-    },
-    {
-      path: '/userCenter/createGroup',
-      name: 'CreateGroup',
-      component: CreateGroup,
     },
     {
       path: '/userCenter/createdGroupList',
