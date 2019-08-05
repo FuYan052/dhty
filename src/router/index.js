@@ -8,6 +8,7 @@ import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import Playground from '@/pages/activity/Playground'
+import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
 import Organization from '@/pages/activity/Organization'
 import Members from '@/pages/activity/Members'
@@ -16,14 +17,15 @@ import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
 import BMember from '@/pages/activity/badminton/BMember'
+import CompleteInfo from '@/pages/userCenter/myData/CompleteInfo'
 import ManageHome from '@/pages/userCenter/myManagement/ManageHome'
+import MyActivities from '@/pages/userCenter/myManagement/MyActivities'
 import GroupManagement from '@/pages/userCenter/myManagement/manageGroup/GroupManagement'
 import CreateGroup from '@/pages/userCenter/myManagement/manageGroup/CreateGroup'
 import EditGroupInfo from '@/pages/userCenter/myManagement/manageGroup/EditGroupInfo'
 import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/ManageGroupMembers'
 import CreatedGroupList from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupList'
 import JoinCroupList from '@/pages/userCenter/myManagement/manageGroup/JoinCroupList'
-import MyActivities from '@/pages/userCenter/myManagement/MyActivities'
 import MyOrder from '@/pages/userCenter/myManagement/MyOrder'
 import CommonProblem from '@/pages/userCenter/myManagement/CommonProblem'
 import AddressManage from '@/pages/userCenter/myManagement/AddressManage'
@@ -75,6 +77,11 @@ export default new Router({
       component: Playground,
     },
     {
+      path: '/mapPage',
+      name: 'MapPage',
+      component: MapPage,
+    },
+    {
       path: '/activitySignUp',
       name: 'ActivitySignUp',
       component: ActivitySignUp,
@@ -116,11 +123,22 @@ export default new Router({
         }
       ]
     },
+    // 我的数据
+    {
+      path: '/userCenter/myData/completeInfo',
+      name: 'CompleteInfo',
+      component: CompleteInfo,
+    },
     // 我的管理
     {
       path: '/userCenter/manageHome',
       name: 'ManageHome',
       component: ManageHome,
+    },
+    {
+      path: '/userCenter/myActivities',
+      name: 'MyActivities',
+      component: MyActivities,
     },
     // 群组管理
     {
@@ -152,11 +170,6 @@ export default new Router({
       path: '/userCenter/joinCroupList',
       name: 'JoinCroupList',
       component: JoinCroupList,
-    },
-    {
-      path: '/userCenter/myActivities',
-      name: 'MyActivities',
-      component: MyActivities,
     },
     {
       path: '/userCenter/MyOrder',

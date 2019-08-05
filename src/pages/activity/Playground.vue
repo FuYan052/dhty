@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="contentWrap">
-      <div class="groundItem">
+      <div class="groundItem" v-for="(item,index) in 3" :key="index">
          <div class="g_top">
            <div class="g_top_left">
              07月29日&nbsp;&nbsp;19:00——20:00
@@ -35,20 +35,7 @@
            <div class="g_bottom g_address">
              <img src="../../assets/g-img.png" alt="">
              <p>成都市武侯区益州大道555号</p>
-             <div class="icon"><span class="el-icon-location"></span></div>
-           </div>
-           <div class="mapBox">
-             <baidu-map 
-                class="bm-view" 
-                ak="uRhBKfzW36pGW8KGkyAhpwXDYwmjNcZP"
-                :zoom="zoom" 
-                @ready="handler"
-                :scroll-wheel-zoom="true"
-                >
-                <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
-                <bm-marker :position="center" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
-                <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
-              </baidu-map>
+             <div class="icon" @click="toMap"><span class="el-icon-location"></span></div>
            </div>
          </div>
       </div>
@@ -64,17 +51,23 @@ export default {
     return {
       cateList: ['羽毛球', '跑步'],
       currIndex: 0,
-      center: {lng: 0, lat: 0},
       address: '',
       zoom: 3,
     }
   },
   methods: {
-    handler ({BMap, map}) {
-      this.center.lng = 103.67937
-      this.center.lat = 30.767555
-      this.zoom = 15
-    },
+    toMap() {
+      const location = {
+        lat: 30.558120,
+        lng: 104.057150
+      }
+      this.$router.push({
+        path: '/mapPage',
+        name: 'MapPage',
+        params: location
+      })
+      window.sessionStorage.setItem('location',JSON.stringify(location))
+    }
   }
 }
 </script>
