@@ -7,6 +7,7 @@ import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ActivityHome from '@/pages/activity/ActivityHome'
+import ActivityDetail from '@/pages/activity/ActivityDetail'
 import Playground from '@/pages/activity/Playground'
 import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
@@ -80,6 +81,11 @@ export default new Router({
       path: '/mapPage',
       name: 'MapPage',
       component: MapPage,
+    },
+    {
+      path: '/activityDetail',
+      name: 'ActivityDetail',
+      component: ActivityDetail,
     },
     {
       path: '/activitySignUp',

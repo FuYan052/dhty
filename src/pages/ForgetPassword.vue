@@ -11,7 +11,6 @@
     <div class="resetPassword">
         <ul>
           <li>
-            <!-- <input type="text" placeholder="请输入您的手机号" placeholder-class="placeholderStyle"> -->
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
               <el-form-item label="" prop="phoneNum">
                 <el-input v-model="ruleForm.phoneNum" placeholder="请输入您的手机号"></el-input>
@@ -19,20 +18,25 @@
             </el-form>
           </li>
           <li class="passWord">
-            <!-- <input type="password" v-show="typeState" v-model="inputPassword" placeholder="请输入6-16位的密码" placeholder-class="placeholderStyle">
-            <input type="text" v-show="!typeState" v-model="inputPassword" placeholder="请输入6-16位的密码" placeholder-class="placeholderStyle"> -->
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
                 <el-form-item label="" prop="inputPassword">
-                  <el-input type="password" placeholder="请输入6-16位的密码" show-password v-model="ruleForm.inputPassword"></el-input>
+                  <el-input type="password" placeholder="请输入6-16位的新密码" show-password v-model="ruleForm.inputPassword"></el-input>
+                </el-form-item>
+              </el-form>
+          </li>
+          <li class="passWord">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+                <el-form-item label="" prop="inputRePassword">
+                  <el-input type="password" placeholder="确认新密码" show-password v-model="ruleForm.inputRePassword"></el-input>
                 </el-form-item>
               </el-form>
           </li>
           <li class="hqyzm">
-            <input type="text" placeholder="请输入验证码" placeholder-class="placeholderStyle">
+            <input type="text" v-model="code" placeholder="请输入验证码" placeholder-class="placeholderStyle">
             <el-button class="yzm" :disabled='disabled' @click="getCode">{{content}}</el-button>
           </li>
         </ul>
-        <div class="resetBtn">
+        <div class="resetBtn" @click="resetPassword">
           重置密码
         </div>
     </div>
@@ -47,41 +51,65 @@ export default {
       let reg=/[0-9]{11}/
       if(!reg.test(value)){callback(
         new Error('账号必须是11位的手机号'))
+        this.rule1 = false
       }else{
-          this.callback()
+        this.callback1()
       }
     };
     let validPassword=(rule,value,callback)=>{
       let reg=/[0-9a-zA-Z]{6,16}/
       if(!reg.test(value)){callback(
         new Error('密码必须是6-16位'))
+        this.rule2 = false
       }else{
-          this.callback()
+        this.callback2()
+      }
+    };
+    let validRePassword=(rule,value,callback)=>{
+      if(value !== this.ruleForm.inputPassword){callback(
+        new Error('两次密码不一致'))
+        this.rule3 = false
+      }else{
+        this.callback3()
       }
     };
     return {
        ruleForm: {
         phoneNum: '',
         inputPassword: '',
+        inputRePassword: ''
       },
       disabled: false,
       content: '获取验证码',
       totalTime: 0,
       timer: null,
+      code: '',
       rules: {
         phoneNum: [
           { validator:validPhone,trigger:'blur'}
         ],
         inputPassword: [
           { validator:validPassword,trigger:'blur' }
+        ],
+        inputRePassword: [
+          { validator:validRePassword,trigger:'blur' }
         ]
       },
+      rule1: false,  //当输入合法时才允许重置密码操作
+      rule2: false,  //当输入合法时才允许重置密码操作
+      rule3: false,  //当输入合法时才允许重置密码操作
     }
   },
   methods: {
     // 输入值合法时的回调
-    callback () {
-      // console.log("输入合法")
+    callback1() {
+      this.rule1 = true
+    },
+    callback2() {
+      this.rule2 = true
+    },
+    callback3() {
+      this.rule3 = true
     },
     getCode() {  
       this.totalTime = 60
@@ -98,6 +126,22 @@ export default {
         }
       },1000)
     },
+    resetPassword() {
+      if(this.rule1 && this.rule2 && this.rule3 && this.code !== '') {
+        const params = {
+          phone: this.ruleForm.phoneNum,
+          passWord: this.ruleForm.inputRePassword,
+          code: this.code,
+        }
+        console.log(params)
+      } else {
+        this.$message({
+          showClose: true,
+          message: '请输入正确的信息及验证码！',
+          type: 'warning'
+        })
+      }
+    }
   }
 }
 </script>

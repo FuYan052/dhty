@@ -15,7 +15,6 @@
                 <el-input v-model="ruleForm.phoneNum" placeholder="请输入您的手机号"></el-input>
               </el-form-item>
             </el-form>
-            <!-- <input type="text" placeholder="请输入你的账号" placeholder-class="placeholderStyle"> -->
           </li>
           <li class="hqyzm">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
@@ -23,10 +22,9 @@
                 <el-input type="password" placeholder="请输入6-16位的密码" show-password v-model="ruleForm.inputPassword"></el-input>
               </el-form-item>
             </el-form>
-            <!-- <input type="text" placeholder="请输入你的密码" placeholder-class="placeholderStyle"> -->
           </li>
         </ul>
-        <div class="loginBtn">
+        <div class="loginBtn" @click="doLodin">
           登录
         </div>
         <p class="changeHandle">
@@ -48,17 +46,19 @@ export default {
     let validPhone=(rule,value,callback)=>{
       let reg=/[0-9]{11}/
       if(!reg.test(value)){callback(
-        new Error('账号是11位的手机号'))
+        new Error('账号为11位的手机号'))
+        this.rule1 = false
       }else{
-          this.callback()
+        this.callback1()
       }
     };
     let validPassword=(rule,value,callback)=>{
       let reg=/[0-9a-zA-Z]{6,16}/
       if(!reg.test(value)){callback(
         new Error('请输入正确的6-16位密码'))
+        this.rule2 = true
       }else{
-          this.callback()
+        this.callback2()
       }
     };
     return {
@@ -76,14 +76,12 @@ export default {
       },
       content: '获取验证码',
       totalTime: 0,
-      timer: null
+      timer: null,
+      rule1: false,
+      rule2: false
     }
   },
   methods: {
-    // 输入值合法时的回调
-    callback () {
-      // console.log("输入合法")
-    },
     getCode() {
       this.totalTime = 60
       this.timer = setInterval(() => {
@@ -96,6 +94,28 @@ export default {
           clearInterval(this.timer)
         }
       },1000)
+    },
+    // 输入值合法时的回调
+    callback1() {
+      this.rule1 = true
+    },
+    callback2() {
+      this.rule2 = true
+    },
+    doLodin() {
+      if(this.rule1 && this.rule2){
+        const params = {
+          phone: this.ruleForm.phoneNum,
+          password: this.ruleForm.inputPassword
+        }
+        console.log(params)
+      }else{
+        this.$message({
+          showClose: true,
+          message: '请输入正确的信息！',
+          type: 'warning'
+        });
+      }
     },
     handleChangeType() {
       this.$router.push({

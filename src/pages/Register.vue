@@ -25,11 +25,11 @@
               </el-form>
           </li>
           <li class="hqyzm">
-            <input type="text" placeholder="请输入验证码" placeholder-class="placeholderStyle">
+            <input type="text" v-model="checkCode" placeholder="请输入验证码" placeholder-class="placeholderStyle">
             <el-button class="yzm" :disabled='disabled' @click="getCode">{{content}}</el-button>
           </li>
         </ul>
-        <div class="registerBtn">
+        <div class="registerBtn" @click="doRegister">
           注册
         </div>
         <p class="agreement">
@@ -47,16 +47,18 @@ export default {
       let reg=/[0-9]{11}/
       if(!reg.test(value)){callback(
         new Error('账号必须是11位的手机号'))
+        this.rule1 = false
       }else{
-          this.callback()
+        this.callback1()
       }
     };
     let validPassword=(rule,value,callback)=>{
       let reg=/[0-9a-zA-Z]{6,16}/
       if(!reg.test(value)){callback(
         new Error('密码必须是6-16位'))
+        this.rule2 = false
       }else{
-          this.callback()
+        this.callback2()
       }
     };
     return {
@@ -68,6 +70,7 @@ export default {
       content: '获取验证码',
       totalTime: 0,
       timer: null,
+      checkCode: '',  //验证码
       rules: {
         phoneNum: [
           { validator:validPhone,trigger:'blur'}
@@ -76,6 +79,8 @@ export default {
           { validator:validPassword,trigger:'blur' }
         ]
       },
+      rule1: false,  //当输入不合法时无法注册
+      rule2: false,  //当输入不合法时无法注册
     }
   },
   methods: {
@@ -95,8 +100,31 @@ export default {
       },1000)
     },
     // 输入值合法时的回调
-    callback () {
-      // console.log("输入合法")
+    callback1 () {
+      this.rule1 = true
+    },
+    callback2 () {
+      this.rule2 = true
+    },
+    // 提交注册信息
+    doRegister() {
+      console.log(this.rule1)
+      console.log(this.rule2)
+      if(this.rule1 && this.rule2 && this.checkCode !== ''){
+        const params = {
+          phone: this.ruleForm.phoneNum,
+          password: this.ruleForm.inputPassword,
+          checkCode: this.checkCode
+        }
+        console.log(params)
+        console.log("注册成功:" + params)
+      }else{
+        this.$message({
+          showClose: true,
+          message: '请输入正确的信息及验证码！',
+          type: 'warning'
+        });
+      }
     }
   }
 }

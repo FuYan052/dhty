@@ -19,11 +19,11 @@
             </el-form>
           </li>
           <li class="hqyzm">
-            <input type="text" placeholder="请输入手机验证码" placeholder-class="placeholderStyle">
+            <input type="text" v-model="code" placeholder="请输入手机验证码" placeholder-class="placeholderStyle">
             <el-button class="yzm" :disabled='disabled' @click="getCode">{{content}}</el-button>
           </li>
         </ul>
-        <div class="loginBtn">
+        <div class="loginBtn" @click="loginForCodde">
           登录
         </div>
     </div>
@@ -38,8 +38,9 @@ export default {
       let reg=/[0-9]{11}/
       if(!reg.test(value)){callback(
         new Error('账号必须是11位的手机号'))
+        this.rule1 = false
       }else{
-          this.callback()
+        this.callback()
       }
     };
     return {
@@ -50,17 +51,19 @@ export default {
       content: '获取验证码',
       totalTime: 0,
       timer: null,
+      code: '',
       rules: {
         phoneNum: [
           { validator:validPhone,trigger:'blur'}
         ],
       },
+      rule1: false //当输入合法时才允许提交登录信息
     }
   },
   methods: {
      // 输入值合法时的回调
     callback () {
-      // console.log("输入合法")
+      this.rule1 = true
     },
     getCode() {
       this.totalTime = 60
@@ -77,6 +80,21 @@ export default {
         }
       },1000)
     },
+    loginForCodde() {
+      if(this.rule1 && this.code !== ''){
+        const params = {
+          phone: this.ruleForm.phoneNum,
+          code: this.code
+        }
+        console.log(params)
+      }else{
+        this.$message({
+          showClose: true,
+          message: '请输入正确的信息！',
+          type: 'warning'
+        });
+      }
+    }
   }
 }
 </script>
