@@ -47,7 +47,7 @@
               <p class="p1"><span><i class="el-icon-coin"></i></span>60元/人</p>
             </div>
             <div class="signUpBtn">
-              <div class="green">正在报名</div>
+              <div class="green" @click="toSignUp">正在报名</div>
               <div class="number">8/10</div>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default {
       this.dateList[i].date1 = result
     }
     this.dateList[3].date1 = this.dateList[3].date1 + '~'
-    console.log(this.dateList)
+    // console.log(this.dateList)
   },
   methods: {
     changeCate(index) {
@@ -139,6 +139,12 @@ export default {
       }
       var time = _month + "月"+ _day+ "日"
       return time;
+    },
+    // 去报名
+    toSignUp() {
+      this.$router.push({
+        path: '/activityDetail'
+      })
     }
   }
 }

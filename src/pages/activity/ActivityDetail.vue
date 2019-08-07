@@ -71,7 +71,10 @@ export default {
       console.log(this.isChecked)
     },
     submit() {
-      console.log("ok")
+      // console.log("ok")
+      this.$router.push({
+        path: '/activitySignUp'
+      })
     },
     // 倒计时
     countdowm(timestamp) {

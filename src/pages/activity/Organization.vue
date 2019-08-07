@@ -2,7 +2,7 @@
   <!-- 组织活动 -->
   <div class="organization" v-title data-title="组织活动">
     <ul>
-      <li>
+      <li @click="dialogVisible = true">
         选择运动种类<span class="el-icon-arrow-right"></span>
       </li>
       <li>
@@ -32,6 +32,20 @@
       </el-input>
     </div>
     <div class="submit">确认发布</div>
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 弹框背景 -->
+    <div class="bg" v-show="dialogVisible"></div>
   </div>
 </template>
 
@@ -41,6 +55,16 @@ export default {
   data() {
     return {
       textarea1: '',
+      dialogVisible: false
+    }
+  },
+   methods: {
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     }
   }
 }
@@ -112,6 +136,16 @@ export default {
       margin-top: 87px;
       border-radius: 10px;
       letter-spacing: 1px;
+    }
+    .bg{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      z-index: 20;
+      outline: none;
+      background: rgba(0,0,0,0.5)
     }
   }
 </style>
