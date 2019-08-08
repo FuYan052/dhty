@@ -23,13 +23,27 @@
     </div>
     <!-- 活动列表 -->
     <div class="actList">
-      <div class="actiItem" v-for="(item,index) in 2" :key="index">
+      <div class="actiItem" v-for="(item,index) in 5" :key="index">
         <div class="left">
-          <img src="../../../assets/123.jpg" alt="">
+          <img src="../../../assets/g-img.png" alt="">
         </div>
         <div class="right">
-          <p class="p1"></p>
+          <p class="p1">【羽毛球】7月26日周五晚上20:00</p>
+          <div class="text text1">
+            <span class="el-icon-house"></span>成都千羽千寻羽毛球俱乐部
+          </div>
+          <div class="text text2">
+            <span class="el-icon-location-information"></span>中和首创羽毛球馆
+          </div>
+          <div class="text text3">
+            <span class="sp1 el-icon-time"></span>20:00~22:30
+            <span class="sp2 el-icon-coin"></span>25元
+            <span class="sp3 el-icon-user"></span>8/12
+          </div>
         </div>
+        <div class="cancle">取消</div>
+        <div class="complete">完成</div>
+        <div class="see">查看成绩</div>
       </div>
     </div>
     
@@ -121,6 +135,7 @@ export default {
         width: 100%;
         height: 218px;
         border-top: 1px solid #e2e2e2;
+        position: relative;
         .left{
           width: 165px;
           height: 218px;
@@ -130,12 +145,71 @@ export default {
             height: 142px;
             float: left;
             margin-top: 40px;
+            border-radius: 10px;
           }
         }
         .right{
           width: 514px;
           height: 218px;
           float: left;
+          .p1{
+            width: 514px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 26px;
+            color: #323232;
+            font-weight: bold;
+            margin-top: 25px;
+          }
+          .text{
+            height: 40px;
+            line-height: 40px;
+            font-size: 20px;
+            color: #6f6f6f;
+            span{
+              color: #f9c72a;
+              padding: 0 10px;
+              font-size: 26px;
+            }
+          }
+        }
+        .cancle{
+          width: 78px;
+          height: 34px;
+          font-size: 18px;
+          line-height: 30px;
+          text-align: center;
+          color: #9fa1a0;
+          border: 1px solid #ff8c2f;
+          border-radius: 20px;
+          position: absolute;
+          top: 75px;
+          right: 40px;
+        }
+        .complete{
+          width: 78px;
+          height: 34px;
+          font-size: 18px;
+          line-height: 34px;
+          text-align: center;
+          color: #9fa1a0;
+          position: absolute;
+          top: 110px;
+          right: 40px;
+        }
+        .see{
+          width: 94px;
+          height: 34px;
+          background: #ff9036;
+          font-size: 18px;
+          line-height: 32px;
+          text-align: center;
+          color: #fff;
+          border-radius: 20px;
+          position: absolute;
+          top: 150px;
+          right: 35px;
         }
       }
       .actiItem:nth-of-type(1){

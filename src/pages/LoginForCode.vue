@@ -172,8 +172,8 @@ export default {
           .yzm{
             width: 160px;
             height: 48px;
-            border: 1px solid #29cb92;
-            color: #29cb92;
+            border: 1px solid #fac31e;
+            color: #fac31e;
             border-radius: 25px;
             text-align: center;
             float: right;
@@ -190,7 +190,7 @@ export default {
       .loginBtn{
         width: 100%;
         height: 80px;
-        background: #29cb92;
+        background: #fac31e;
         color: #fff;
         line-height: 80px;
         text-align: center;
@@ -199,17 +199,6 @@ export default {
         border-radius: 40px;
         margin-bottom: 35px;
         padding-left: 15px;
-      }
-      .changeHandle{
-        width: 100%;
-        padding: 0 20px;
-        span{
-          display: inline-block;
-          color: #29cb92;
-        }
-        span:nth-child(2){
-          float: right;
-        }
       }
     }
   }

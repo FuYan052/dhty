@@ -21,8 +21,8 @@
         :class="{activeDate : currDateIndex === index}"
         @click="changeDate(index)"
         >
-        <p class="p p1">{{item.date1}}</p>
-        <p class="p p2">{{item.date2}}</p>
+        <p class="p p1">{{item.date2}}</p>
+        <p class="p p2">{{item.date1}}</p>
       </div>
     </div>
     <!-- 活动详情 -->
@@ -31,44 +31,21 @@
         <div class="activItem" v-for="(item,index) in 3" :key="index">
           <div class="top">
             <div class="title">
-              <img src="../../assets/123.jpg" alt="">
-              <span class="text">成都千羽千寻羽毛球俱乐部</span>
-              <span class="rightIcon"><i class="el-icon-arrow-right"></i></span>
-            </div>
-            <div class="admin">
               <img src="../../assets/touxiang.jpg" alt="">
-              <span>大虎管理员</span>
-              <span>杨洋然</span>
+              <p class="text">昆仑山人007</p>
+              <p class="role">大虎管理员</p>
+              <div class="rightBtn" @click="toSignUp">正在报名</div>
             </div>
-            <p class="address">金地羽毛球馆1<span>16km</span></p>
+            <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
-              <p class="p1"><span><i class="el-icon-house"></i></span>6月26日周三晚19:00，羽毛球约起</p>
-              <p class="p1"><span><i class="el-icon-time"></i></span>2019-06-26&nbsp;&nbsp;19:00-21:00</p>
-              <p class="p1"><span><i class="el-icon-coin"></i></span>60元/人</p>
-            </div>
-            <div class="signUpBtn">
-              <div class="green" @click="toSignUp">正在报名</div>
-              <div class="number">8/10</div>
+              <img src="../../assets/g-img.png" alt="">
+              <div class="p1"><span><i class="el-icon-house"></i></span>6月26日周三晚19:00，羽毛球约起</div>
+              <div class="p1"><span><i class="el-icon-time"></i></span>2019-06-26&nbsp;&nbsp;19:00-21:00</div>
+              <div class="p1"><span><i class="el-icon-coin"></i></span>60元/人</div>
             </div>
           </div>
-          <div class="bottom">
-            <div class="leftIcon"><i class="el-icon-user-solid"></i></div>
-            <div class="HeadPortrait">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <img src="../../assets/123.jpg" alt="">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <img src="../../assets/123.jpg" alt="">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <img src="../../assets/123.jpg" alt="">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <img src="../../assets/123.jpg" alt="">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <img src="../../assets/123.jpg" alt="">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <img src="../../assets/123.jpg" alt="">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <img src="../../assets/123.jpg" alt="">
-            </div>
+          <div class="address" @click="toMap">
+            <span class="span1 el-icon-location"></span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-arrow-right"></span>
           </div>
         </div>
       </div>
@@ -140,6 +117,19 @@ export default {
       var time = _month + "月"+ _day+ "日"
       return time;
     },
+    //场馆导航
+    toMap() {
+      const location = {
+        lat: 30.558120,
+        lng: 104.057150
+      }
+      this.$router.push({
+        path: '/mapPage',
+        name: 'MapPage',
+        params: location
+      })
+      window.sessionStorage.setItem('location',JSON.stringify(location))
+    },
     // 去报名
     toSignUp() {
       this.$router.push({
@@ -155,171 +145,153 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
+    padding-bottom: 20px;
     .cateNav{
       width: 100%;
       height: 94px;
-      background: #0ab090;
+      background: #fff;
       .content{
-        width: 246px;
+        width: 100%;
         height: 94px;
-        margin: 0 auto;
-        padding-top: 20px;
+        padding-left: 10px;
         .cateItem{
-          width: 40%;
-          height: 62px;
-          line-height: 62px;
-          text-align: center;
-          color: #f3fbf9;
-          font-size: 32px;
-        }
-        .cateItem:nth-child(1){
-          float: left;
-        }
-        .cateItem:nth-child(2){
-          float: right;
+          padding-top: 30px;
+          font-size: 28px;
+          color: #9e9e9e;
+          display: inline-block;
+          vertical-align: bottom;
+          margin: 0 20px;
         }
         .activeCate{
+          color: #3d3d3d;
+          font-size: 42px;
           border-bottom: 3px solid #fff;
         }
       }
     }
     .dateList{
       width: 100%;
-      height: 84px;
-      border-bottom: 2px solid #d9d9d9;
+      height: 130px;
       background: #fff;
       .dateItem{
         width: 25%;
-        height: 82px;
+        height: 130px;
+        padding-top: 30px;
         float: left;
         text-align: center;
-        padding-top: 8px;
         position: relative;
         .p{
-          color: #2c2c2c;
+          color: #928d93;
         }
         .p1{
           font-size: 20px;
+          padding-bottom: 15px;
         }
         .p2{
           font-size: 18px;
           line-height: 26px;
         }
       }
-      .dateItem::before{
+      .activeDate::before{
         display: block;
         content: '';
-        width: 4px;
-        height: 50px;
-        border-right: 1px solid #e2e2e2;
+        width: 37px;
+        height: 5px;
+        background: #23a0f2;
         position: absolute;
-        top: 15px;
-        left: -5px;
-      }
-      .dateItem:nth-child(1)::before{
-        display: none;
-      }
-      .activeDate{
-        border-bottom: 4px solid #2db299;
+        bottom: 1px;
+        left: 78px;
       }
     }
     .contentBg{
         width: 100%;
-        padding: 20px;
+        padding: 0 25px;
         .content{
           width: 100%;
           height: auto;
-          background: #fff;
           box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
           .activItem{
             width: 100%;
-            // height: 555px;
-            min-height: 555px;
+            height: 378px;
+            margin-top: 20px;
+            background: #fff;
+            border-top-right-radius: 25px;
             .top{
               width: 100%;
-              // height: 475px;
               height: auto;
-              padding: 0 10px;
               .title{
                 width: 100%;
-                height: 95px;
-                line-height: 95px;
-                border-bottom: 1px solid #eeeeee;
+                height: 128px;
+                position: relative;
                 img{
-                  width: 60px;
-                  height: 60px;
+                  width: 50px;
+                  height: 50px;
                   float: left;
-                  margin-top: 17px;
-                  margin-left: 10px;
-                  border-radius: 12px;
+                  margin-top: 23px;
+                  margin-left: 30px;
+                  border-radius: 50%;
                 }
                 .text{
                   display: inline-block;
-                  width: 565px;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                  color: #161616;
-                  padding-left: 25px;
-                }
-                .rightIcon{
                   font-size: 26px;
-                  color: #b0b0b0;
-                  font-weight: bolder;
-                  float: right;
+                  line-height: 30px;
+                  color: #161616;
+                  margin-top: 22px;
+                  margin-left: 18px;
                 }
-              }
-              .admin{
-                width: 100%;
-                height: 94px;
-                line-height: 94px;
-                img{
-                  width: 60px;
+                .role{
+                  width: 135px;
+                  height: 35px;
+                  line-height: 30px;
+                  text-align: center;
+                  color: #73bbf5;
+                  border: 1px solid #259ff2;
+                  font-size: 20px;
+                  border-radius: 20px;
+                  position: absolute;
+                  top: 71px;
+                  left: 95px;
+                }
+                .rightBtn{
+                  width: 150px;
                   height: 60px;
-                  float: left;
-                  margin-top: 20px;
-                  margin-left: 10px;
-                  border-radius: 50%;
-                }
-                span{
-                  color: #aaaaaa;
-                  padding-left: 25px;
-                }
-                span:nth-child(3){
-                  padding-left: 50px;
-                }
-              }
-              .address{
-                width: 100%;
-                line-height: 50px;
-                padding-left: 90px;
-                font-size: 26px;
-                color: #515151;
-                span{
-                  color: #989898;
-                  float: right;
-                  font-weight: normal;
+                  line-height: 60px;
+                  background: #72cad8;
+                  font-size: 23px;
+                  color: #fff;
+                  text-align: center;
+                  border-top-right-radius: 25px;
+                  border-bottom-left-radius: 25px;
+                  position: absolute;
+                  top: 0;
+                  right: 0;
                 }
               }
               .detailBox{
-                width: 600px;
-                min-height: 145px;
-                background: #f6f6f6;
-                margin-top: 15px;
-                margin-left: 90px;
-                padding-top: 10px;
-                p{
-                  color: #565656;
-                  line-height: 45px;
+                width: 636px;
+                height: 168px;
+                margin: 0 auto;
+                border-top: 1px solid #eeeeee;
+                border-bottom: 1px solid #eeeeee;
+                img{
+                  width: 126px;
+                  height: 126px;
+                  margin-top: 22px;
+                  float: left;
+                  border-radius: 10px;
+                }
+                .p1{
+                  width: 480px;
+                  float: right;
+                  line-height: 37px;
+                  color: #838383;
+                  font-size: 23px;
                   span{
                     display: inline-block;
-                    width: 30px;
-                    height: 30px;
-                    margin: 0 15px;
                     background: #fff;
-                    padding: 5px;
+                    padding-right: 15px;
                     i{
-                      color: #37b59c;
+                      color: #b7ab71;
                       font-size: 22px;
                       vertical-align: middle;
                       text-align: center;
@@ -327,67 +299,40 @@ export default {
                     }
                   }
                 }
-              }
-              .signUpBtn{
-                width: 100%;
-                height: 75px;
-                .green{
-                  width: 145px;
-                  height: 50px;
-                  float: right;
-                  color: #fff;
-                  background: #29cb92;
-                  line-height: 48px;
-                  text-align: center;
-                  margin-top: 12px;
-                  margin-right: -20px;
-                }
-                .number{
-                  width: 92px;
-                  height: 100%;
-                  color: #5d5d5d;
-                  padding-top: 20px;
-                  text-align: center;
-                  float: right;
+                .p1:nth-of-type(1){
+                  margin-top: 30px;
                 }
               }
             }
-            .bottom{
+            .address{
               width: 100%;
-              height: 83px;
-              background: #fafafa;
-              border-top: 1px solid #efefef;
-              border-bottom: 1px solid #efefef;
-              .leftIcon{
-                width: 90px;
-                height: 100%;
-                float: left;
-                padding-top: 20px;
-                padding-left: 25px;
-                i{
-                  font-size: 32px;
-                  color: #cccccc;
-                }
+              height: 78px;
+              padding-left: 45px;
+              padding-right: 40px;
+              line-height: 78px;
+              .span1{
+                font-size: 31px;
+                color: #b5ab70;
+                padding-right: 15px;
               }
-              .HeadPortrait{
-                width: 620px;
-                height: 78px;
-                float: left;
-                overflow-x: auto;
-                overflow-y: hidden;
-                white-space: nowrap;
-                img{
-                  width: 60px;
-                  height: 60px;
-                  border-radius: 50%;
-                  margin-left: 10px;
-                  margin-top: 9px;
-                  display: inline-block;
-                }
+              .span2{
+                float: right;
+                line-height: 78px;
+                font-size: 27px;
+                color: #b2b2b2;
+                font-weight: bold;
               }
             }
           }
         }
       }
+  }
+</style>
+<style>
+  .activItem:nth-of-type(2) .rightBtn {
+    background: #fa8796 !important;
+  }
+  .activItem:nth-of-type(3) .rightBtn {
+    background: #91b9f7 !important;
   }
 </style>

@@ -205,25 +205,11 @@ export default {
             letter-spacing: 1px;
           }
         }
-        .hqyzm{
-          .yzm{
-            width: 160px;
-            height: 48px;
-            border: 1px solid #29cb92;
-            color: #29cb92;
-            border-radius: 25px;
-            line-height: 43px;
-            text-align: center;
-            float: right;
-            font-size: 20px;
-            margin-top: 30px;
-          }
-        }
       }
       .loginBtn{
         width: 100%;
         height: 80px;
-        background: #29cb92;
+        background: #fac31e;
         color: #fff;
         line-height: 80px;
         text-align: center;
@@ -238,7 +224,7 @@ export default {
         padding: 0 20px;
         span{
           display: inline-block;
-          color: #29cb92;
+          color: #fac31e;
         }
         span:nth-child(2){
           float: right;

@@ -8,6 +8,7 @@
           class="cateItem"
           v-for="(item,index) in cateList" 
           :key="index"
+          @click="changeCate(item,index)"
           :class="{activeCate : currIndex === index}"
           >{{item}}</div>
       </div>
@@ -16,7 +17,8 @@
       <div class="groundItem" v-for="(item,index) in 3" :key="index">
          <div class="g_top">
            <div class="g_top_left">
-             07月29日&nbsp;&nbsp;19:00——20:00
+             <!-- 07月29日&nbsp;&nbsp; -->
+             19:00——20:00
            </div>
            <div class="g_top_right">
              <span class="el-icon-coin"></span>25元/小时
@@ -56,6 +58,9 @@ export default {
     }
   },
   methods: {
+    changeCate(item,index) {
+      this.currIndex = index
+    },
     toMap() {
       const location = {
         lat: 30.558120,
@@ -80,7 +85,7 @@ export default {
     .cateNav{
       width: 100%;
       height: 94px;
-      background: #0ab090;
+      background: #fac31e;
       .content{
         width: 246px;
         height: 94px;
@@ -101,7 +106,8 @@ export default {
           float: right;
         }
         .activeCate{
-          border-bottom: 3px solid #fff;
+          color: #000;
+          border-bottom: 3px solid #000;
         }
       }
     }
@@ -118,7 +124,7 @@ export default {
           height: 80px;
           border-bottom: 1px solid #f4f4f4;
           div{
-            width: 50%;
+            width: 220px;
             height: 100%;
             float: left;
             line-height: 78px;
@@ -188,7 +194,7 @@ export default {
               height: 30px;
               float: right;
               font-size: 30px;
-              color: #0db699;
+              color: #fac51d;
               margin-top: 13px;
               margin-right: 10px;
             }
@@ -200,7 +206,7 @@ export default {
             }
             .icon{
               a{
-                color: #0db699;
+                color: #fac51d;
               }
             }
           }

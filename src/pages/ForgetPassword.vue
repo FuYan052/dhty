@@ -229,8 +229,8 @@ export default {
           .yzm{
             width: 160px;
             height: 48px;
-            border: 1px solid #29cb92;
-            color: #29cb92;
+            border: 1px solid #fac31e;
+            color: #fac31e;
             border-radius: 25px;
             text-align: center;
             float: right;
@@ -247,7 +247,7 @@ export default {
       .resetBtn{
         width: 100%;
         height: 80px;
-        background: #29cb92;
+        background: #fac31e;
         color: #fff;
         line-height: 80px;
         text-align: center;

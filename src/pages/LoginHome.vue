@@ -61,7 +61,7 @@ export default {
       text-align: center;
       letter-spacing: 1px;
       color: #fff;
-      background: #29cb92;
+      background: #fac31e;
       border-radius: 40px;
       margin: 80px auto;
     }

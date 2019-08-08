@@ -4,10 +4,10 @@
       <img src="../../assets/123.jpg" alt="">
       <p>千羽千寻羽毛球俱乐部</p>
     </div>
-    <div class="member">
+    <!-- <div class="member">
       <img v-for="(item,index) in 10" :key="index" src="../../assets/touxiang.jpg" alt="">
       <span class="el-icon-arrow-right"></span>
-    </div>
+    </div> -->
     <div class="join">
       <div class="joinBtn">申请加入俱乐部</div>
     </div>
@@ -35,7 +35,7 @@
     <div class="introd">
       <div class="title">俱乐部简介</div>
       <p>羽毛球是一项室内、室外都可以进行的体育运动。依据参与的人数，可以分为单打与双打，羽毛球是一项室内、室外都可以进行的体育运动。依据参与的人数，可以分为单打与双打，及新兴的3打3。羽毛球拍由：拍面、拍杆、拍柄及拍框与拍杆的接头构成。一支球拍的长度不超过680毫米，其中球拍柄与球拍杆长度不超过41厘米，拍框长度为28厘米，宽为23厘米，随着科学技术的发展</p>
-      <img src="../../assets/code.png" alt="">
+      <!-- <img src="../../assets/code.png" alt=""> -->
     </div>
   </div>
 </template>
