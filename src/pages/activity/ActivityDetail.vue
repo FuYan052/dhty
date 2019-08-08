@@ -1,24 +1,30 @@
 <template>
   <div class="activityDetail" v-title data-title="活动详情">
     <div class="topTitle">
-      <p class="p1">【俱乐部活动】7月22日周一浩然俱乐部活动晚上7:00</p>
-      <p class="p2">报名情况<span><b>4</b>/24</span></p>
+      <p class="p1">活动主题：</p>
+      <p class="p2">俱乐部俱乐部活动晚俱乐部活动晚活动7月22日周一浩然俱乐部活动晚上俱乐部活动晚7:00周一浩然俱乐部活动周一浩然俱乐部活动</p>
     </div>
     <ul>
       <li>
-        <span class="span1 el-icon-time"></span>2019-06-26&nbsp;&nbsp;19:00-21:00<span class="span2 el-icon-arrow-right"></span>
+        <span class="span1">活动时间：</span>2019-06-26&nbsp;&nbsp;19:00-21:00
       </li>
       <li>
-        <span class="span1 el-icon-location-information"></span>地点：中和首创羽毛球馆<span class="span2 el-icon-arrow-right"></span>
+        <span class="span1">报名费用：</span>￥180
       </li>
       <li>
-        <span class="span1 el-icon-phone-outline"></span>组织者：17602848628(楠少轻狂)<span class="span2 el-icon-arrow-right"></span>
+        <span class="span1">活动地点：</span>中和首创羽毛球馆<span class="span2 el-icon-location-information" @click="toMap"><b>导航</b></span>
       </li>
       <li>
-        <span class="span1 el-icon-house"></span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-arrow-right"></span>
+        <span class="span1">组&nbsp;&nbsp;织&nbsp;&nbsp;者：</span>17602848628(楠少轻狂)<a href="tel://15096762111"><span class="span2 el-icon-phone-outline"><b>拨打</b></span></a>
+      </li>
+      <li>
+        <span class="span1">俱&nbsp;&nbsp;乐&nbsp;&nbsp;部：</span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-house"><b>查看</b></span>
+      </li>
+      <li>
+        <span class="span1">报名人数：</span>4/16
       </li>
       <li class="num">
-        <span class="span1 el-icon-user"></span>人数：4/18<span class="span2 el-icon-arrow-right"></span>
+        <span class="span1">已&nbsp;&nbsp;报&nbsp;&nbsp;名：</span><span class="span2 el-icon-arrow-right"></span>
         <div class="imgBox">
           <img src="../../assets/touxiang.jpg" alt="">
           <img src="../../assets/touxiang.jpg" alt="">
@@ -31,7 +37,7 @@
     <!-- 活动描述 -->
     <div class="descr">
       <div class="tiltle">
-        <span class="span1 el-icon-document"></span>活动描述
+        活动详情：
       </div>
       <div class="text">
         活跃在高新区中和首创的一直俱乐部，创建两年时间拥有700位会员球友，每天都有活动，分级对抗，美女多多，每周五还有免费八人转奖品赛，精美奖品免费带回家！！！
@@ -66,6 +72,18 @@ export default {
     console.log(new Date(1565092516 * 1000))
   },
   methods: {
+    toMap() {
+      const location = {
+        lat: 30.558120,
+        lng: 104.057150
+      }
+      this.$router.push({
+        path: '/mapPage',
+        name: 'MapPage',
+        params: location
+      })
+      window.sessionStorage.setItem('location',JSON.stringify(location))
+    },
     checked() {
       this.isChecked = !this.isChecked
       console.log(this.isChecked)
@@ -125,40 +143,33 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f7f8fa;
+    padding-bottom: 210px;
     .topTitle{
       width: 100%;
-      height: 200px;
+      min-height: 200px;
       background: #fff;
       border-bottom: 1px solid #dfdfdf;
       overflow: hidden;
+      padding: 0 35px;
       .p1{
         width: 100%;
-        padding: 0 35px;
-        color: #fac41a;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-size: 28px;
-        margin-top: 50px;
+        color: #50505a;
+        font-size: 24px;
+        line-height: 60px ;
+        font-weight: bold;
       }
       .p2{
         font-size: 21px;
-        color: #0c0c0c;
+        color: #636363;
         float: right;
-        margin-right: 20px;
-        margin-top: 45px;
-        span{
-          color: #fac41a;
-          padding-left: 10px;
-          b{
-            font-size: 27px;
-          }
-        }
+        line-height: 42px;
+        padding-left: 115px;
       }
     }
     ul{
       width: 100%;
       height: auto;
+      margin-top: 20px;
       background: #fff;
       border-bottom: 1px solid #e2e2e2;
       padding-left: 35px;
@@ -167,19 +178,29 @@ export default {
         height: 112px;
         line-height: 112px;
         color: #717171;
-        padding-right: 20px;
         border-top: 1px solid #dfdfdf;
         .span1{
           padding-right: 20px;
-          color: #fcd560;
-          font-size: 32px;
+          color: #141414;
+          font-weight: bold;
+          font-size: 24px;
         }
         .span2{
+          width: 100px;
+          height: 52px;
+          font-size: 32px;
           float: right;
           font-weight: bold;
           display: block;
-          margin-top: 40px;
-          color: #cdcdcd;
+          margin-top: 20px;
+          color: #2ebda1;
+          text-align: center;
+          b{
+            display: block;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+          }
         }
       }
       li:nth-of-type(1) {
@@ -187,7 +208,7 @@ export default {
       }
       .num{
         .imgBox{
-          width: 240px;
+          width: 490px;
           height: 100px;
           float: right;
           overflow: hidden;
@@ -197,10 +218,15 @@ export default {
             height: 62px;
             border: 1px solid #dedede;
             border-radius: 50%;
-            float: right;
-            margin-left: -10px;
+            float: left;
+            // margin-left: -10px;
             margin-top: 22px;
           }
+        }
+        .span2{
+          width: 70px;
+          margin-top: 40px;
+          color: #b1b1b1;
         }
       }
     }
@@ -213,15 +239,11 @@ export default {
       margin-top: 40px;
       .tiltle{
         width: 100%;
-        height: 112px;
-        line-height: 112px;
-        color: #717171;
-        border-bottom: 1px solid #dfdfdf;
-        .span1{
-          padding-right: 20px;
-          color: #fcd560;
-          font-size: 32px;
-        }
+        height: 90px;
+        line-height: 90px;
+        color: #141414;
+        font-weight: bold;
+        font-size: 24px;
       }
       .text{
         width: 100%;
@@ -230,18 +252,19 @@ export default {
         font-size: 22px;
         line-height: 40px;
         color: #53575a;
-        padding-top: 25px;
         padding-bottom: 35px;
       }
     }
     .time{
       width: 100%;
-      height: 142px;
+      height: 162px;
       background: #fff;
       margin-top: 45px;
       border-top: 1px solid #dfdfdf;
       border-bottom: 1px solid #dfdfdf;
-      position: relative;
+      position: fixed;
+      bottom: 0;
+      // position: relative;
       .p1{
         font-size: 22px;
         padding-left: 20px;
