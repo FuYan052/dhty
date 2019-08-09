@@ -8,17 +8,21 @@ import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import ActivityDetail from '@/pages/activity/ActivityDetail'
+import ClubHome from '@/pages/activity/club/ClubHome'
+import ClubInfo from '@/pages/activity/club/ClubInfo'
+import ClubActivities from '@/pages/activity/club/ClubActivities'
+import ClubMembers from '@/pages/activity/club/ClubMembers'
 import Playground from '@/pages/activity/Playground'
 import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
 import Organization from '@/pages/activity/Organization'
-import Members from '@/pages/activity/Members'
-import ClubInfo from '@/pages/activity/ClubInfo'
+import Members from '@/pages/activity/club/Members'
 import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
 import BMember from '@/pages/activity/badminton/BMember'
 import CompleteInfo from '@/pages/userCenter/myData/CompleteInfo'
+import SelectLabels from '@/pages/userCenter/myData/SelectLabels'
 import ManageHome from '@/pages/userCenter/myManagement/ManageHome'
 import MyActivities from '@/pages/userCenter/myManagement/MyActivities'
 import GroupManagement from '@/pages/userCenter/myManagement/manageGroup/GroupManagement'
@@ -27,6 +31,8 @@ import EditGroupInfo from '@/pages/userCenter/myManagement/manageGroup/EditGroup
 import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/ManageGroupMembers'
 import CreatedGroupList from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupList'
 import JoinCroupList from '@/pages/userCenter/myManagement/manageGroup/JoinCroupList'
+import Mall from '@/pages/mall/Mall'
+import SearchPage from '@/pages/mall/SearchPage'
 import MyOrder from '@/pages/userCenter/myManagement/MyOrder'
 import CommonProblem from '@/pages/userCenter/myManagement/CommonProblem'
 import AddressManage from '@/pages/userCenter/myManagement/AddressManage'
@@ -87,6 +93,30 @@ export default new Router({
       name: 'ActivityDetail',
       component: ActivityDetail,
     },
+    //俱乐部
+    {
+      path: '/clubHome',
+      name: 'ClubHome',
+      component: ClubHome,
+      redirect: '/club/clubInfo',
+      children: [
+        {
+          path: '/club/clubInfo',
+          name: 'ClubInfo',
+          component: ClubInfo
+        },
+        {
+          path: '/club/clubActivities',
+          name: 'ClubActivities',
+          component: ClubActivities
+        },
+        {
+          path: '/club/members',
+          name: 'Members',
+          component: Members,
+        },
+      ]
+    },
     {
       path: '/activitySignUp',
       name: 'ActivitySignUp',
@@ -96,16 +126,6 @@ export default new Router({
       path: '/organization',
       name: 'Organization',
       component: Organization,
-    },
-    {
-      path: '/members',
-      name: 'Members',
-      component: Members,
-    },
-    {
-      path: '/clubInfo',
-      name: 'ClubInfo',
-      component: ClubInfo,
     },
     {
       path: '/badminton/activitiesDetail',
@@ -186,6 +206,22 @@ export default new Router({
       path: '/userCenter/commonProblem',
       name: 'CommonProblem',
       component: CommonProblem,
+    },
+    {
+      path: '/userCenter/selectLabels',
+      name: 'SelectLabels',
+      component: SelectLabels,
+    },
+    // 商城
+    {
+      path: '/mall',
+      name: 'Mall',
+      component: Mall,
+    },
+    {
+      path: '/mall/searchPage',
+      name: 'SearchPage',
+      component: SearchPage,
     },
     // 地址管理
     {

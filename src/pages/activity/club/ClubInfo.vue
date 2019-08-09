@@ -1,7 +1,7 @@
 <template>
   <div class="clubInfo">
     <div class="top">
-      <img src="../../assets/123.jpg" alt="">
+      <img src="../../../assets/123.jpg" alt="">
       <p>千羽千寻羽毛球俱乐部</p>
     </div>
     <!-- <div class="member">

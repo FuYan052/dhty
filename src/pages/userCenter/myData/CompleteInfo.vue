@@ -1,6 +1,18 @@
 <template>
   <!-- 完善个人信息 -->
   <div class="completeInfo" v-title data-title="基本信息">
+    <div class="touxiang">
+      <el-upload
+        class="avatar-uploader"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload">
+        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <i v-else class="el-icon-camera-solid avatar-uploader-icon"></i>
+      </el-upload>
+      <p>点击添加头像</p>
+    </div>
     <ul>
       <li>
         昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称
@@ -19,29 +31,25 @@
         <span class="right">1990-01-08<i class="el-icon-arrow-right"></i></span>
       </li>
       <li>
-        职业类型
+        职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业
         <span class="right">IT技术<i class="el-icon-arrow-right"></i></span>
       </li>
       <li>
-        婚姻状态
-        <span class="right">未婚<i class="el-icon-arrow-right"></i></span>
-      </li>
-      <li>
-        兴&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;趣
-        <span class="right">羽毛球<i class="el-icon-arrow-right"></i></span>
+        所在地区
+        <span class="right">成都<i class="el-icon-arrow-right"></i></span>
       </li>
     </ul>
-    <div class="touxiang">
-      <p>头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像</p>
-      <el-upload
-        class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-        <i v-else class="el-icon-camera-solid avatar-uploader-icon"></i>
-      </el-upload>
+    <div class="label">
+      <p>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签</p>
+      <div class="itemBox">
+        <div class="addBtn" @click="selectLabel"><span class="el-icon-plus"></span></div>
+        <div class="itemLabel" v-for="(item,index) in 5" :key="index">
+          羽毛球
+        </div>
+        <div class="itemLabel" v-for="(item,index) in 3" :key="index">
+          足球
+        </div>
+      </div>
     </div>
     <div class="submit">提交</div>
   </div>
@@ -70,6 +78,11 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return isJPG && isLt2M;
+    },
+    selectLabel() {
+      this.$router.push({
+        path: '/userCenter/selectLabels'
+      })
     }
   }
 }
@@ -80,6 +93,18 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
+    .touxiang{
+      width: 100%;
+      height: 185px;
+      background: #fff;
+      overflow: hidden;
+      p{
+        font-size: 24px;
+        line-height: 60px;
+        color: #a9a9a9;
+        text-align: center;
+      }
+    }
     ul{
       width: 100%;
       height: auto;
@@ -95,23 +120,60 @@ export default {
         span{
           line-height: 94px;
           float: right;
-          color: #a8a8a8;
+          color: #545454;
           i{
             font-weight: bold;
             padding-left: 15px;
+            color: #cbcbcb;
           }
         }
       }
     }
-    .touxiang{
+    .label{
       width: 100%;
-      height: 202px;
+      min-height: 200px;
+      margin-top: 40px;
       background: #fff;
-      margin-top: 38px;
       p{
-        line-height: 60px;
+        width: 100%;
+        height: 94px;
+        line-height: 94px;
         color: #a9a9a9;
+        border-top: 2px solid #f6f6f6;
         padding-left: 30px;
+      }
+      .itemBox{
+        width: 100%;
+        height: auto;
+        padding-left: 40px;
+        .addBtn{
+          width: 100px;
+          height: 46px;
+          line-height: 42px;
+          text-align: center;
+          font-size: 26px;
+          color: #aaaaaa;
+          border: 1px solid #aaaaaa;
+          border-radius: 25px;
+          font-weight: bold;
+          display: inline-block;
+          margin-right: 18px;
+          margin-bottom: 30px;
+        }
+        .itemLabel{
+          display: inline-block;
+          height: 46px;
+          line-height: 42px;
+          border: 1px solid #f9c31b;
+          color: #f9c21f;
+          background: #fcebb8;
+          border-radius: 25px;
+          text-align: center;
+          font-size: 22px;
+          padding: 0 40px;
+          margin-right: 18px;
+          margin-bottom: 30px;
+        }
       }
     }
     .submit{
@@ -131,12 +193,15 @@ export default {
 <style>
    .completeInfo .avatar-uploader{
     display: block;
-    width: 75px;
-    height: 75px;
-    margin-top: 20px;
-    margin-left: 30px;
+    width: 94px;
+    height: 94px;
+    position: relative;
+    margin: 0 auto;
+    margin-top: 25px;
   }
   .completeInfo .avatar-uploader .el-upload {
+    width: 94px;
+    height: 94px;
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
@@ -149,14 +214,14 @@ export default {
   .completeInfo .avatar-uploader-icon {
     font-size: 32px;
     color: #9d9b9e;
-    width: 75px;
-    height: 75px;
-    line-height: 75px;
+    width: 94px;
+    height: 94px;
+    line-height: 94px;
     text-align: center;
   }
   .completeInfo .avatar {
-    width: 75px;
-    height: 75px;
+    width: 94px;
+    height: 94px;
     display: block;
   }
 </style>

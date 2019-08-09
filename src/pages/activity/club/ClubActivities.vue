@@ -1,18 +1,5 @@
 <template>
-  <!-- 活动页 -->
-  <div class="activityHome">
-    <!-- 头部菜单栏 -->
-    <div class="cateNav">
-      <div class="content">
-        <div 
-          class="cateItem"
-          v-for="(item,index) in cateList" 
-          :key="index"
-          :class="{activeCate : currIndex === index}"
-          @click="changeCate(index)"
-          >{{item}}</div>
-      </div>
-    </div>
+  <div class="clubActivities">
     <!-- 日期切换 -->
     <div class="dateList">
       <div class="dateItem" 
@@ -28,25 +15,25 @@
     <!-- 活动详情 -->
     <div class="contentBg">
       <div class="content">
-        <div class="activItem" v-for="(item,index) in 3" :key="index">
+        <div class="activItem" v-for="(item,index) in 2" :key="index">
           <div class="top">
             <div class="title">
-              <img src="../../assets/touxiang.jpg" alt="">
+              <img src="../../../assets/touxiang.jpg" alt="">
               <p class="text">昆仑山人007</p>
               <p class="role">大虎管理员</p>
-              <div class="rightBtn" @click="toSignUp">正在报名</div>
+              <!-- <div class="rightBtn" @click="toSignUp">正在报名</div> -->
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
-              <img src="../../assets/g-img.png" alt="">
+              <img src="../../../assets/g-img.png" alt="">
               <div class="p1"><span><i class="el-icon-house"></i></span>6月26日周三晚19:00，羽毛球约起</div>
               <div class="p1"><span><i class="el-icon-time"></i></span>2019-06-26&nbsp;&nbsp;19:00-21:00</div>
               <div class="p1"><span><i class="el-icon-coin"></i></span>60元/人</div>
             </div>
           </div>
-          <div class="address" @click="toClub">
+          <!-- <div class="address" @click="toClub">
             <span class="span1 el-icon-location"></span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-arrow-right"></span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -55,11 +42,9 @@
 
 <script>
 export default {
-  name: 'ActivityHome',
+  name: 'ClubActivities',
   data() {
     return {
-      cateList: ['羽毛球', '跑步'],
-      currIndex: 0,
       currDateIndex: 0,
       dateList: [
         {
@@ -90,9 +75,6 @@ export default {
     // console.log(this.dateList)
   },
   methods: {
-    changeCate(index) {
-      this.currIndex = index
-    },
     changeDate(index) {
       this.currDateIndex = index
     },
@@ -117,51 +99,16 @@ export default {
       var time = _month + "月"+ _day+ "日"
       return time;
     },
-    toClub() {
-      this.$router.push({
-        path: '/clubHome',
-        name: 'ClubHome',
-      })
-    },
-    // 去报名
-    toSignUp() {
-      this.$router.push({
-        path: '/activityDetail'
-      })
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .activityHome{
+  .clubActivities{
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
     padding-bottom: 20px;
-    .cateNav{
-      width: 100%;
-      height: 94px;
-      background: #fff;
-      .content{
-        width: 100%;
-        height: 94px;
-        padding-left: 10px;
-        .cateItem{
-          padding-top: 30px;
-          font-size: 28px;
-          color: #9e9e9e;
-          display: inline-block;
-          vertical-align: bottom;
-          margin: 0 20px;
-        }
-        .activeCate{
-          color: #3d3d3d;
-          font-size: 42px;
-          border-bottom: 3px solid #fff;
-        }
-      }
-    }
     .dateList{
       width: 100%;
       height: 130px;
@@ -208,7 +155,6 @@ export default {
             height: 378px;
             margin-top: 20px;
             background: #fff;
-            border-top-right-radius: 25px;
             .top{
               width: 100%;
               height: auto;
@@ -321,11 +267,4 @@ export default {
       }
   }
 </style>
-<style>
-  .activItem:nth-of-type(2) .rightBtn {
-    background: #fa8796 !important;
-  }
-  .activItem:nth-of-type(3) .rightBtn {
-    background: #91b9f7 !important;
-  }
-</style>
+
