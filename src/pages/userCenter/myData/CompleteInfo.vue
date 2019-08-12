@@ -43,11 +43,8 @@
       <p>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签</p>
       <div class="itemBox">
         <div class="addBtn" @click="selectLabel"><span class="el-icon-plus"></span></div>
-        <div class="itemLabel" v-for="(item,index) in 5" :key="index">
-          羽毛球
-        </div>
-        <div class="itemLabel" v-for="(item,index) in 3" :key="index">
-          足球
+        <div class="itemLabel" v-for="(item,index) in labelList" :key="index">
+          {{item}}
         </div>
       </div>
     </div>
@@ -61,7 +58,12 @@ export default {
   data() {
     return {
       imageUrl: '',
+      labelList: []
     }
+  },
+  created() {
+    this.labelList =JSON.parse(window.sessionStorage.getItem('labels')) 
+    
   },
   methods: {
     handleAvatarSuccess(res, file) {
@@ -70,14 +72,13 @@ export default {
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
-      }
-      return isJPG && isLt2M;
+      // if (!isJPG) {
+      //   this.$message.error('上传头像图片只能是 JPG 格式!');
+      // }
+      // if (!isLt2M) {
+      //   this.$message.error('上传头像图片大小不能超过 2MB!');
+      // }
+      // return isJPG && isLt2M;
     },
     selectLabel() {
       this.$router.push({

@@ -35,6 +35,7 @@ import Mall from '@/pages/mall/Mall'
 import SearchPage from '@/pages/mall/SearchPage'
 import MyOrder from '@/pages/userCenter/myManagement/MyOrder'
 import CommonProblem from '@/pages/userCenter/myManagement/CommonProblem'
+import Cash from '@/pages/userCenter/myManagement/Cash'
 import AddressManage from '@/pages/userCenter/myManagement/AddressManage'
 import AddAddress from '@/pages/userCenter/myManagement/AddAddress'
 import EditAddress from '@/pages/userCenter/myManagement/EditAddress'
@@ -155,6 +156,11 @@ export default new Router({
       name: 'CompleteInfo',
       component: CompleteInfo,
     },
+    {
+      path: '/userCenter/selectLabels',
+      name: 'SelectLabels',
+      component: SelectLabels,
+    },
     // 我的管理
     {
       path: '/userCenter/manageHome',
@@ -208,9 +214,9 @@ export default new Router({
       component: CommonProblem,
     },
     {
-      path: '/userCenter/selectLabels',
-      name: 'SelectLabels',
-      component: SelectLabels,
+      path: '/userCenter/cash',
+      name: 'Cash',
+      component: Cash,
     },
     // 商城
     {
