@@ -11,13 +11,13 @@
     <div class="admin">
       <div class="title">管理员</div>
       <ul class="ul1">
-        <li>
+        <li @click="memberInfo">
           <img src="../../../assets/touxiang.jpg" alt="">
           <div class="name">无名之辈<span class="el-icon-male"></span></div>
           <div class="role">群主</div>
           <div class="dj">Lv.11</div>
         </li>
-        <li>
+        <li @click="memberInfo">
           <img src="../../../assets/touxiang.jpg" alt="">
           <div class="name">无名之辈<span class="el-icon-female"></span></div>
           <div class="role">管理员</div>
@@ -29,7 +29,7 @@
     <div class="memberList">
       <div class="title">群员</div>
         <ul class="memberItem">
-          <li v-for="(item,index) in memberList" :key="index" >
+          <li v-for="(item,index) in memberList" :key="index" @click="memberInfo">
             <img :src="item.imgPath" alt="">
             <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
             <div class="grade">{{item.grade}}</div>
@@ -88,6 +88,13 @@ export default {
       },
     ]
   },
+  methods: {
+    memberInfo() {
+      this.$router.push({
+        path: '/club/member/memberData'
+      })
+    }
+  }
 }
 </script>
 

@@ -6,11 +6,17 @@ import Register from '@/pages/Register'
 import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
+import ChildrenActivities from '@/pages/activity/ChildrenActivities'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import ActivityDetail from '@/pages/activity/ActivityDetail'
 import ClubHome from '@/pages/activity/club/ClubHome'
 import ClubInfo from '@/pages/activity/club/ClubInfo'
 import ClubActivities from '@/pages/activity/club/ClubActivities'
+import MemberData from '@/pages/activity/club/memberInfo/MemberData'
+import AttendGroupList from '@/pages/activity/club/memberInfo/AttendGroupList'
+import OrganActivies from '@/pages/activity/club/memberInfo/OrganActivies'
+import AttendedActivies from '@/pages/activity/club/memberInfo/AttendedActivies'
+import MotionData from '@/pages/activity/club/memberInfo/MotionData'
 import ClubMembers from '@/pages/activity/club/ClubMembers'
 import Playground from '@/pages/activity/Playground'
 import MapPage from '@/pages/activity/MapPage'
@@ -75,6 +81,11 @@ export default new Router({
     },
     // 活动
     {
+      path: '/childrenActivities',  //儿童活动
+      name: 'ChildrenActivities',
+      component: ChildrenActivities,
+    },
+    {
       path: '/activityHome',
       name: 'ActivityHome',
       component: ActivityHome,
@@ -117,6 +128,31 @@ export default new Router({
           component: Members,
         },
       ]
+    },
+    {
+      path: '/club/member/memberData',
+      name: 'MemberData',
+      component: MemberData,
+    },
+    {
+      path: '/club/member/attendGroupList',
+      name: 'AttendGroupList',
+      component: AttendGroupList,
+    },
+    {
+      path: '/club/member/organActivies',
+      name: 'OrganActivies',
+      component: OrganActivies,
+    },
+    {
+      path: '/club/member/attendedActivies',
+      name: 'AttendedActivies',
+      component: AttendedActivies,
+    },
+    {
+      path: '/club/member/motionData',
+      name: 'MotionData',
+      component: MotionData,
     },
     {
       path: '/activitySignUp',
