@@ -4,7 +4,9 @@ import Vue from 'vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import preview from 'vue-photo-preview'
-import 'vue-photo-preview/dist/skin.css'
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+// import 'vue-photo-preview/dist/skin.css'
 import App from './App'
 import router from './router'
 import store from './store'
@@ -22,8 +24,9 @@ Vue.directive('title', {
 })
 
 Vue.use(ElementUI);
+Vue.use(MintUI)
 // 图片放大查看
-Vue.use(preview)
+// Vue.use(preview)
 
 // 全局导航守卫
 // router.beforeEach((to, from, next) => {

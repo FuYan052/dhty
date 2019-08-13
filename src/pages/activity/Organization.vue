@@ -2,13 +2,17 @@
   <!-- 组织活动 -->
   <div class="organization" v-title data-title="组织活动">
     <ul>
-      <li @click="dialogVisible = true">
-        选择运动种类<span class="el-icon-arrow-right"></span>
+      <li @click="show1">
+        选择运动种类<span class="el-icon-arrow-right"></span><span class="value">羽毛球</span>
       </li>
-      <li>
+      <li @click="show1">
         选择所属群组<span class="el-icon-arrow-right"></span>
       </li>
-      <li>
+      <li class="title" @click="show3">
+        填写标题<span class="el-icon-arrow-right"></span><span class="value">{{value3}}</span>
+        <input type="text" @blur="inputBlur" v-show="isShowInput" v-model="titleValue">
+      </li>
+      <li @click="show4">
         填写时间<span class="el-icon-arrow-right"></span>
       </li>
       <li>
@@ -32,6 +36,40 @@
       </el-input>
     </div>
     <div class="submit">确认发布</div>
+    <!-- 选择器 -->
+    <mt-popup
+      v-model="popupVisible"
+      popup-transition="popup-fade"
+      closeOnClickModal="true" 
+      position="bottom"
+      >
+      <mt-picker 
+        v-show="picker1"
+        :slots="currSlots" 
+        :visibleItemCount='5'
+        :itemHeight='50'
+        showToolbar
+        @change="onValuesChange">
+        <div class="picker-toolbar-title">
+          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+          <div class="usi-btn-sure" @click="popupVisible = !popupVisible">确定</div>
+        </div>
+      </mt-picker>
+      <!-- 选择时间 -->
+      <mt-datetime-picker
+        v-show="picker2"
+        ref="picker"
+        type="datetime"
+        year-format="{value} 年"
+        month-format="{value} 月"
+        date-format="{value} 日"
+        v-model="picker2Value">
+        <div class="picker-toolbar-title">
+          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+          <div class="usi-btn-sure" @click="popupVisible = !popupVisible">确定</div>
+        </div>
+      </mt-datetime-picker>
+    </mt-popup>
 
   </div>
 </template>
@@ -42,11 +80,78 @@ export default {
   data() {
     return {
       textarea1: '',
-      dialogVisible: false
+      titleValue:'',
+      picker1: false,
+      picker2: false,
+      picker2Value: '',
+      value3: '', 
+      isShowInput: false,
+      currSlots: this.slots1,
+      slots1: [
+        {
+          flex: 1,
+          values: ['羽毛球', '跑步'],
+          className: 'slot1',
+          textAlign: 'center'
+        }
+      ],
+      slots4: [
+        
+      ],
+      slots: [
+        {
+          flex: 1,
+          values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+          className: 'slot1',
+          textAlign: 'right'
+        }, {
+          divider: true,
+          content: '—',
+          className: 'slot2'
+        }, {
+          flex: 1,
+          values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+          className: 'slot3',
+          textAlign: 'left'
+        }
+      ],
+      showToolbar: true,
+      popupVisible: false,
     }
   },
-   methods: {
-  }
+  methods: {
+    onValuesChange(picker, values) {
+      // console.log(values)
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
+      }
+    },
+    openPicker() {
+      this.$refs.picker.open();
+    },
+    show1() {
+      this.popupVisible = true
+      this.picker1 = true
+      this.picker2 = false
+      this.currSlots = this.slots1
+    },
+    show3() {
+      this.isShowInput = true
+      if(this.isShowInput) {
+        this.value3 = ''
+      }
+    },
+    show4() {
+      this.popupVisible = true
+      this.picker1 = false
+      this.picker2 = true
+      this.currSlots = this.slots4
+    },
+    inputBlur() {
+      this.isShowInput = false
+      this.value3 = this.titleValue
+    }
+  },
 }
 </script>
 
@@ -57,7 +162,7 @@ export default {
     background: #f2f2f2;
     ul{
       width: 100%;
-      height: 575px;
+      height: auto;
       background: #fff;
       li{
         width: 100%;
@@ -69,9 +174,23 @@ export default {
         span{
           float: right;
           font-weight: bold;
-          display: block;
-          margin-top: 40px;
+          line-height: 94px;
           color: #cdcdcd;
+        }
+        .value{
+          font-weight: normal;
+          padding-right: 15px;
+          color: #868686;
+        }
+      }
+      .title{
+        input{
+          width: 70%;
+          height: 60px;
+          padding-left: 10px;
+          font-size: 24px;
+          border: none;
+          color: #868686;
         }
       }
     }
@@ -86,8 +205,7 @@ export default {
       span{
         float: right;
         font-weight: bold;
-        display: block;
-        margin-top: 40px;
+        line-height: 94px;
         color: #cdcdcd;
       }
     }
@@ -135,5 +253,33 @@ export default {
   outline: none !important;
   border: 2px solid #e1e1e1;
   border-radius: 10px;
+}
+.mint-popup{
+  width: 100%;
+  transition: .3s ease-out;
+}
+.picker{
+  width: 100%;
+  background: #fff;
+}
+.picker-toolbar{
+  height: 70px;
+  padding: 0 60px;
+}
+.picker-toolbar-title{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 70px;
+  line-height: 70px;
+  font-size: 30px;
+}
+.picker-slot{
+  font-size: 27px;
+}
+.usi-btn-cancel,
+.usi-btn-sure {
+  text-align: center;
+  color: #fac31e
 }
 </style>

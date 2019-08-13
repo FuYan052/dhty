@@ -16,7 +16,7 @@ body{
   height: 100%;
 }
 .v-modal{
-  display: none !important;
+  opacity: 0.3;
 }
 *{
   list-style: none;
@@ -75,9 +75,6 @@ table{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  /* text-align: center;
-  color: #2c3e50;
-  margin-top: 60px; */
   font-size: 26px;
   background: #fff;
   font-family: '微软雅黑';

@@ -14,17 +14,18 @@
       <p>点击添加头像</p>
     </div>
     <ul>
-      <li>
+      <li @click="show1">
         昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称
-        <span class="right">忌口先生<i class="el-icon-arrow-right"></i></span>
+        <input type="text" ref="input1" @blur="inputBlur" v-show="isShowInput" v-model="input1Value">
+        <span class="right">{{value1}}<i class="el-icon-arrow-right"></i></span>
       </li>
-      <li>
+      <li @click="show2">
         性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别
-        <span class="right">男<i class="el-icon-arrow-right"></i></span>
+        <span class="right">{{sexValue}}<i class="el-icon-arrow-right"></i></span>
       </li>
-      <li>
+      <li @click="show3">
         身&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高
-        <span class="right">176cm<i class="el-icon-arrow-right"></i></span>
+        <span class="right">{{heightValue}}cm<i class="el-icon-arrow-right"></i></span>
       </li>
       <li>
         生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日
@@ -49,6 +50,27 @@
       </div>
     </div>
     <div class="submit">提交</div>
+    <!-- 选择器 -->
+    <mt-popup
+      v-model="popupVisible"
+      popup-transition="popup-fade"
+      closeOnClickModal="true" 
+      position="bottom"
+      >
+      <mt-picker 
+        :slots="currSlots" 
+        :visibleItemCount='5'
+        :itemHeight='50'
+        showToolbar
+        @change="currChange"
+        >
+        <div class="picker-toolbar-title">
+          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+          <div class="usi-btn-sure" @click="sure">确定</div>
+        </div>
+      </mt-picker>
+    </mt-popup>
+
   </div>
 </template>
 
@@ -58,6 +80,40 @@ export default {
   data() {
     return {
       imageUrl: '',
+      value1: '', 
+      input1Value:'',
+      isShowInput: false,
+      sex: '男',
+      sexValue: '',
+      height: '160',
+      heightValue: '',
+      currSlots: this.slots1,
+      currChange: this.change1,
+      slots1: [
+        {
+          flex: 1,
+          values: ['男', '女'],
+          className: 'slot1',
+          textAlign: 'center'
+        }
+      ],
+      slots2: [
+        {
+          flex: 1,
+          values: ['100', '101','102','103','104', '105','106','107','108', '109','110','111','112'
+          , '113','114','115','116', '117','118','119','120', '121','122','123','124', '125','126'
+          ,'127', '128','129','130', '131','132','133','134', '135','136','137', '138','139','140'
+          ,'150', '151','152','153','154', '155','156','157', '158','159','160', '161','162','163'
+          ,'164', '165','166','167', '168','169','170', '171','172','173','174', '175','176','177'
+          , '178','179','180', '181','182','183','184', '185','186','187', '188','189','190', '191'
+          ,'192','193','194', '195','196','197', '198','199','200'],
+          className: 'slot1',
+          defaultIndex: 51,
+          textAlign: 'center'
+        }
+      ],
+      showToolbar: true,
+      popupVisible: false,
       labelList: []
     }
   },
@@ -79,6 +135,62 @@ export default {
       //   this.$message.error('上传头像图片大小不能超过 2MB!');
       // }
       // return isJPG && isLt2M;
+    },
+    show1() {
+      this.isShowInput = true
+      this.$refs.input1.autofocus = true
+      console.log(this.$refs)
+      if(this.isShowInput) {
+        this.value1 = ''
+      }
+    },
+    inputBlur() {
+      this.isShowInput = false
+      this.value1 = this.input1Value
+    },
+    show2() {
+      this.popupVisible = true
+      this.currSlots = this.slots1
+      this.currChange = this.change1
+    },
+    show3() {
+      this.popupVisible = true
+      this.currSlots = this.slots2
+      this.currChange = this.change2
+    },
+    change1(picker, values) {
+      this.sex = values[0]
+      console.log(this.sex)
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
+      }
+    },
+    change2(picker, values) {
+      this.height = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
+      }
+    },
+    // onValuesChange(picker, values) {
+    //   console.log(values)
+    //   this.sex = values[0]
+    //   if (values[0] > values[1]) {
+    //     picker.setSlotValue(1, values[0]);
+    //   }
+    // },
+    sure() {
+      console.log("ok1")
+      console.log(this.sex)
+      if(this.currChange == this.change1){
+        console.log("ok2")
+        this.sexValue = this.sex
+        console.log(this.sex)
+      }
+      if(this.currChange == this.change2){
+        console.log("ok3")
+        this.heightValue = this.height
+      }
+      this.popupVisible = false
     },
     selectLabel() {
       this.$router.push({
@@ -118,6 +230,15 @@ export default {
         color: #a9a9a9;
         padding: 0 10px;
         border-top: 2px solid #f6f6f6;
+        input{
+          width: 70%;
+          height: 60px;
+          line-height: 40px;
+          padding-left: 10px;
+          font-size: 24px;
+          border: none;
+          color: #868686;
+        }
         span{
           line-height: 94px;
           float: right;
@@ -225,5 +346,33 @@ export default {
     height: 94px;
     display: block;
   }
+  .mint-popup{
+  width: 100%;
+  transition: .3s ease-out;
+}
+.picker{
+  width: 100%;
+  background: #fff;
+}
+.picker-toolbar{
+  height: 70px;
+  padding: 0 60px;
+}
+.picker-toolbar-title{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 70px;
+  line-height: 70px;
+  font-size: 30px;
+}
+.picker-slot{
+  font-size: 27px;
+}
+.usi-btn-cancel,
+.usi-btn-sure {
+  text-align: center;
+  color: #fac31e
+}
 </style>
 
