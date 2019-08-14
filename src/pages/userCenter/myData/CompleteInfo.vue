@@ -35,7 +35,7 @@
         职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业
         <span class="right">IT技术<i class="el-icon-arrow-right"></i></span>
       </li>
-      <li>
+      <li @click="showLocation">
         所在地区
         <span class="right">成都<i class="el-icon-arrow-right"></i></span>
       </li>
@@ -57,8 +57,10 @@
       closeOnClickModal="true" 
       position="bottom"
       >
+      <!-- 性别选择 -->
       <mt-picker 
-        :slots="currSlots" 
+        v-show="sexPicker"
+        :slots="slots1" 
         :visibleItemCount='5'
         :itemHeight='50'
         showToolbar
@@ -69,17 +71,51 @@
           <div class="usi-btn-sure" @click="sure">确定</div>
         </div>
       </mt-picker>
+      <!-- 身高选择 -->
+      <mt-picker 
+        v-show="heightPicker"
+        :slots="slots2" 
+        :visibleItemCount='5'
+        :itemHeight='50'
+        showToolbar
+        @change="currChange"
+        >
+        <div class="picker-toolbar-title">
+          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+          <div class="usi-btn-sure" @click="sure">确定</div>
+        </div>
+      </mt-picker>
+      <!-- 所在地区选择器 -->
+      <mt-picker 
+        v-show="locationPicker"
+        :slots="addressSlots" 
+        :visibleItemCount='5'
+        :itemHeight='50'
+        showToolbar
+        @change="onAddressChange"
+        >
+        <div class="picker-toolbar-title">
+          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+          <div class="usi-btn-sure" @click="sure">确定</div>
+        </div>
+      </mt-picker>
+
     </mt-popup>
 
   </div>
 </template>
 
 <script>
+// 省份城市数据
+import {city, privinceList, cityList} from '../../../../static/js/region'
 export default {
   name: 'CompleteInfo',
   data() {
     return {
       imageUrl: '',
+      sexPicker: false,
+      heightPicker: false,
+      locationPicker: false,
       value1: '', 
       input1Value:'',
       isShowInput: false,
@@ -89,6 +125,14 @@ export default {
       heightValue: '',
       currSlots: this.slots1,
       currChange: this.change1,
+      myprivinceList: [],    //省的数组
+      mycityList: [],        //省对应城市的数组
+      mydistrictList:[],     //区或者县的数组
+      areapicker:'',
+      myAddressPrivince:'',  //最后选中的省或直辖市
+      myAddressCity:'',      //最后选中的城市
+      myAddressDistrict:'',   //最后选中的区或者县
+
       slots1: [
         {
           flex: 1,
@@ -112,6 +156,27 @@ export default {
           textAlign: 'center'
         }
       ],
+      addressSlots: [
+        {
+          flex: 1,
+          defaultIndex: 0,
+          values:privinceList, //省份数组
+          className: '_slot1',
+          textAlign: 'center'
+        },
+        {
+          pider: true,
+          content: '-',
+          className: '_slot2'
+
+        }, {
+          flex: 1,
+          defaultIndex: 0,
+          values: cityList,  //城市数据
+          className: '_slot3',
+          textAlign: 'center'
+        },
+      ],
       showToolbar: true,
       popupVisible: false,
       labelList: []
@@ -119,7 +184,21 @@ export default {
   },
   created() {
     this.labelList =JSON.parse(window.sessionStorage.getItem('labels')) 
-    
+  },
+  watch: {
+    myAddressPrivince(oldval,newval){  //省数据变化后，更新市的显示数据
+      this.areapicker.setSlotValues(2,this.mycityList);
+      this.areapicker.setSlotValue(2, this.mycityList[0]);
+      console.log('选中的省是'+this.myAddressPrivince);
+    },
+    myAddressCity(oldval,newval){    //城市的值改变后，重置区县的数据
+      this.areapicker.setSlotValues(4,this.mydistrictList);
+      this.areapicker.setSlotValue(4,this.mydistrictList[0]);
+      console.log('选中的市是'+this.myAddressCity);
+    },
+    myAddressDistrict(oldval,newval){
+      console.log('选中的区是'+this.myAddressDistrict);
+    }
   },
   methods: {
     handleAvatarSuccess(res, file) {
@@ -148,15 +227,21 @@ export default {
       this.isShowInput = false
       this.value1 = this.input1Value
     },
+    // 显示性别选择
     show2() {
       this.popupVisible = true
-      this.currSlots = this.slots1
-      this.currChange = this.change1
+      this.sexPicker = true
+      this.heightPicker = false
+      this.locationPicker = false
     },
+    // 显示身高选择
     show3() {
       this.popupVisible = true
-      this.currSlots = this.slots2
-      this.currChange = this.change2
+      this.sexPicker = false
+      this.heightPicker = true
+      this.locationPicker = false
+      // this.currSlots = this.slots2
+      // this.currChange = this.change2
     },
     change1(picker, values) {
       this.sex = values[0]
@@ -192,11 +277,59 @@ export default {
       }
       this.popupVisible = false
     },
+    // 显示地区选择
+    showLocation() {
+      this.popupVisible = true
+      this.sexPicker = false
+      this.heightPicker = false
+      this.locationPicker = true
+    },
+    onAddressChange:function(picker, values){
+      this.areapicker = picker;
+      this.mycityList = [];
+      var chooseList = city.filter(function(item){
+        return item.name == values[0];
+      });
+      if(chooseList[0].sub){
+        for(var item of chooseList[0].sub){
+          this.mycityList.push(item.name);
+        }
+        //获取非直辖市数据
+        if(chooseList[0].sub.length>1){
+          var choosedisList=[];
+          if(this.mycityList.indexOf(values[2])>-1 && values[2]!= '其他'){
+            choosedisList = chooseList[0].sub.filter(function(item){
+              return item.name == values[2];
+            });
+              for(var item of choosedisList[0].sub){
+                this.mydistrictList.push(item.name);
+              }
+          }else{
+              this.mydistrictList=[];
+          }
+        }
+        //获取直辖市数据
+        else{
+          for(var item of chooseList[0].sub[0].sub){
+            this.mydistrictList.push(item.name);
+          }
+        }
+      }
+      this.myAddressPrivince = values[0];
+      this.myAddressCity = values[2];
+      this.myAddressDistrict = values[4];
+    },
+
     selectLabel() {
       this.$router.push({
         path: '/userCenter/selectLabels'
       })
     }
+  },
+  mounted() {
+    this.$nextTick(() => { //vue里面全部加载好了再执行的函数 （类似于setTimeout）
+      this.addressSlots[0].defaultIndex = 0
+    })
   }
 }
 </script>
@@ -208,9 +341,10 @@ export default {
     background: #f2f2f2;
     .touxiang{
       width: 100%;
-      height: 185px;
+      height: 210px;
       background: #fff;
       overflow: hidden;
+      padding-top: 15px;
       p{
         font-size: 24px;
         line-height: 60px;
@@ -373,6 +507,12 @@ export default {
 .usi-btn-sure {
   text-align: center;
   color: #fac31e
+}
+._slot1 .picker-item{
+  padding-left: 80px;
+}
+._slot3 .picker-item{
+  padding-right: 80px;
 }
 </style>
 
