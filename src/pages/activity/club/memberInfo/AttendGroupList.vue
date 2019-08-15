@@ -36,7 +36,6 @@ export default {
       height: auto;
       background: #fff;
       padding: 0 20px;
-      // margin-top: 40px;
       li{
         width: 100%;
         height: 110px;

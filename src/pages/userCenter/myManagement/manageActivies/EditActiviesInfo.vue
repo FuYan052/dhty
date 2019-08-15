@@ -1,6 +1,6 @@
 <template>
-  <!-- 组织活动 -->
-  <div class="organization" v-title data-title="组织活动">
+  <!-- 修改活动信息 -->
+  <div class="editActiviesInfo" v-title data-title="修改活动">
     <ul>
       <li @click="show1">
         选择运动种类<span class="el-icon-arrow-right"></span><span class="value">{{typeValue}}</span>
@@ -40,7 +40,7 @@
         v-model="textarea1">
       </el-input>
     </div>
-    <div class="submit" @click="submit">确认发布</div>
+    <div class="submit" @click="submit">保存修改</div>
     <div class="bottom">
       <span class="box" @click="isWeekActivie"><b class="el-icon-check" v-show="isCkecked"></b></span>
       <p class="bottomText">作为俱乐部每周活动安排发布</p>
@@ -113,7 +113,7 @@
 
 <script>
 export default {
-  name: 'Organization',
+  name: 'EditActiviesInfo',
   data() {
     return {
       textarea1: '',  //参与须知
@@ -329,7 +329,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .organization{
+  .editActiviesInfo{
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
@@ -461,7 +461,7 @@ export default {
   }
 </style>
 <style>
-.organization .notes .el-textarea__inner{
+.editActiviesInfo .notes .el-textarea__inner{
   min-height: 110px !important;
   outline: none !important;
   border: 2px solid #e1e1e1;

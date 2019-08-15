@@ -38,6 +38,11 @@
         </el-form-item>
       </el-form>
     </div>
+    <div class="btnBox">
+      <div>保存</div>
+      <div>转让群</div>
+      <div>解散群</div>
+    </div>
   </div>
 </template>
 
@@ -91,7 +96,7 @@ export default {
       width: 100%;
       height: 98px;
       background: #fff;
-      margin-top: 20px;
+      // margin-top: 20px;
       padding-left: 30px;
     }
     .introduction{
@@ -111,6 +116,30 @@ export default {
       margin-top: 40px;
       padding-top: 35px;
       padding-left: 30px;
+    }
+    .btnBox{
+      width: 100%;
+      height: 205px;
+      margin-top: 60px;
+      div{
+        width: 210px;
+        height: 75px;
+        line-height: 75px;
+        text-align: center;
+        color: #fff;
+        font-size: 30px;
+        float: left;
+        background: #0bb090;
+        margin-left: 30px;
+        margin-top: 60px;
+        border-radius: 10px;
+      }
+      div:nth-child(2){
+        background: #f3da1d;
+      }
+      div:nth-child(3){
+        background: #ff8d30;
+      }
     }
   }
 </style>

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import LoginHome from '@/pages/LoginHome'
 import Register from '@/pages/Register'
 import Login from '@/pages/Login'
@@ -17,7 +16,6 @@ import AttendGroupList from '@/pages/activity/club/memberInfo/AttendGroupList'
 import OrganActivies from '@/pages/activity/club/memberInfo/OrganActivies'
 import AttendedActivies from '@/pages/activity/club/memberInfo/AttendedActivies'
 import MotionData from '@/pages/activity/club/memberInfo/MotionData'
-import ClubMembers from '@/pages/activity/club/ClubMembers'
 import Playground from '@/pages/activity/Playground'
 import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
@@ -31,7 +29,11 @@ import CompleteInfo from '@/pages/userCenter/myData/CompleteInfo'
 import SelectLabels from '@/pages/userCenter/myData/SelectLabels'
 import ManageHome from '@/pages/userCenter/myManagement/ManageHome'
 import MyActivities from '@/pages/userCenter/myManagement/MyActivities'
+import EditActiviesInfo from '@/pages/userCenter/myManagement/manageActivies/EditActiviesInfo'
+import CheckPublishSignUp from '@/pages/userCenter/myManagement/manageActivies/CheckPublishSignUp'
+import CheckCompleteSignUp from '@/pages/userCenter/myManagement/manageActivies/CheckCompleteSignUp'
 import GroupManagement from '@/pages/userCenter/myManagement/manageGroup/GroupManagement'
+import CreatedGroupManage from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupManage'
 import CreateGroup from '@/pages/userCenter/myManagement/manageGroup/CreateGroup'
 import EditGroupInfo from '@/pages/userCenter/myManagement/manageGroup/EditGroupInfo'
 import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/ManageGroupMembers'
@@ -208,6 +210,22 @@ export default new Router({
       name: 'MyActivities',
       component: MyActivities,
     },
+    // 活动管理
+    {
+      path: '/userCenter/editActiviesInfo',
+      name: 'EditActiviesInfo',
+      component: EditActiviesInfo,
+    },
+    {
+      path: '/userCenter/checkPublishSignUp',
+      name: 'CheckPublishSignUp',
+      component: CheckPublishSignUp,
+    },
+    {
+      path: '/userCenter/checkCompleteSignUp',
+      name: 'CheckCompleteSignUp',
+      component: CheckCompleteSignUp,
+    },
     // 群组管理
     {
       path: '/userCenter/groupManagement',
@@ -218,6 +236,11 @@ export default new Router({
       path: '/userCenter/groupManagement/createGroup',
       name: 'CreateGroup',
       component: CreateGroup,
+    },
+    {
+      path: '/userCenter/groupManagement/createdGroupManage',
+      name: 'CreatedGroupManage',
+      component: CreatedGroupManage,
     },
     {
       path: '/userCenter/groupManagement/manageGroupMembers',

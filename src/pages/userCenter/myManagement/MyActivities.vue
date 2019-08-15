@@ -11,41 +11,90 @@
         @click="changeCate(item,index)"
         >{{item}}</div>
     </div>
-    <!-- 参加状态 -->
-    <div class="cate2">
-      <div 
-      class="cateItem"
-      :class="{currStyle2 : currIndex2 === index}" 
-      v-for="(item,index) in cateList2" 
-      :key="index"
-      @click="changeCate2(item,index)"
-      >{{item}}</div>
-    </div>
-    <!-- 活动列表 -->
-    <div class="actList">
-      <div class="actiItem" v-for="(item,index) in 5" :key="index">
-        <div class="left">
-          <img src="../../../assets/g-img.png" alt="">
+    <!-- 我参加的活动 -->
+    <div v-show="isjion">
+      <!-- 参加状态 -->
+      <div class="cate2">
+        <div 
+        class="cateItem"
+        :class="{currStyle2 : currIndex2 === index}" 
+        v-for="(item,index) in cateList2" 
+        :key="index"
+        @click="changeCate2(item,index)"
+        >{{item}}</div>
+      </div>
+      <!-- 活动列表 -->
+      <div class="actList">
+        <div class="actiItem" v-for="(item,index) in 5" :key="index">
+          <div class="left">
+            <img src="../../../assets/g-img.png" alt="">
+          </div>
+          <div class="right">
+            <p class="p1">【羽毛球】7月26日周五晚上20:00</p>
+            <div class="text text1">
+              <span class="el-icon-house"></span>成都千羽千寻羽毛球俱乐部
+            </div>
+            <div class="text text2">
+              <span class="el-icon-location-information"></span>中和首创羽毛球馆
+            </div>
+            <div class="text text3">
+              <span class="sp1 el-icon-time"></span>20:00~22:30
+              <span class="sp2 el-icon-coin"></span>25元
+              <span class="sp3 el-icon-user"></span>8/12
+            </div>
+          </div>
+          <div class="cancle">取消</div>
+          <div class="complete">完成</div>
+          <div class="see">查看成绩</div>
         </div>
-        <div class="right">
-          <p class="p1">【羽毛球】7月26日周五晚上20:00</p>
-          <div class="text text1">
-            <span class="el-icon-house"></span>成都千羽千寻羽毛球俱乐部
-          </div>
-          <div class="text text2">
-            <span class="el-icon-location-information"></span>中和首创羽毛球馆
-          </div>
-          <div class="text text3">
-            <span class="sp1 el-icon-time"></span>20:00~22:30
-            <span class="sp2 el-icon-coin"></span>25元
-            <span class="sp3 el-icon-user"></span>8/12
-          </div>
-        </div>
-        <div class="cancle">取消</div>
-        <div class="complete">完成</div>
-        <div class="see">查看成绩</div>
       </div>
     </div>
+    <!-- 我组织的活动 -->
+    <div v-show="!isjion">
+      <!-- 参加状态 -->
+      <div class="cate2">
+        <div 
+          class="cateItem cateItem2"
+          :class="{currStyle2 : currIndex3 === index}" 
+          v-for="(item,index) in cateList3" 
+          :key="index"
+          @click="changeCate3(item,index)"
+          >{{item}}</div>
+      </div>
+      <!-- 活动列表 -->
+      <div class="actList actList2">
+        <div class="actiItem" v-for="(item,index) in 3" :key="index">
+          <div class="left">
+            <img src="../../../assets/g-img.png" alt="">
+          </div>
+          <div class="right">
+            <p class="p1">【羽毛球】7月26日周五晚上20:00</p>
+            <div class="text text1">
+              <span class="el-icon-house"></span>成都千羽千寻羽毛球俱乐部
+            </div>
+            <div class="text text2">
+              <span class="el-icon-location-information"></span>中和首创羽毛球馆
+            </div>
+            <div class="text text3">
+              <span class="sp1 el-icon-time"></span>20:00~22:30
+              <span class="sp2 el-icon-coin"></span>25元
+              <span class="sp3 el-icon-user"></span>8/12
+            </div>
+          </div>
+          <div class="btnWrap">
+            <div class="btn" v-show="isPublish" @click="publishSignUp">查看报名</div>
+            <div class="btn" v-show="isPublish" @click="editActivies">修改</div>
+
+            <div class="btn" v-show="!isPublish" @click="completeSignUp">查看报名</div>
+            <!-- <div class="btn" v-show="!isPublish">填写成绩</div> -->
+          </div>
+          <!-- <div class="cancle">取消 complete</div>  
+          <div class="complete">完成</div>
+          <div class="see">查看成绩</div> -->
+        </div>
+      </div>
+    </div>
+    
     
   </div>
 </template>
@@ -55,18 +104,55 @@ export default {
   name: 'MyActivities',
   data() {
     return {
+      isjion: true,
+      isPublish: true,
       cateList1: ['我参加的','我组织的'],
       currIndex: 0,
       cateList2: ['全部','已预约','进行中','已完成','未能参加'],
+      cateList3: ['已发布','已完成'],
       currIndex2: 0,
+      currIndex3: 0,
     }
   },
   methods:{
     changeCate(item,index) {
       this.currIndex = index
+      if(item === '我参加的') {
+        this.isjion = true
+      }
+      if(item === '我组织的') {
+        this.isjion = false
+      }
     },
     changeCate2(item,index) {
       this.currIndex2 = index
+    },
+    changeCate3(item,index) {
+      this.currIndex3 = index
+      if(item === '已发布') {
+        this.isPublish = true
+      }
+      if(item === '已完成') {
+        this.isPublish = false
+      }
+    },
+    // 修改活动
+    editActivies() {
+      this.$router.push({
+        path: '/userCenter/editActiviesInfo'
+      })
+    },
+    // 已发布的活动查看报名
+    publishSignUp() {
+      this.$router.push({
+        path: '/userCenter/checkPublishSignUp'
+      })
+    },
+    // 已完成的活动查看报名
+    completeSignUp() {
+      this.$router.push({
+        path: '/userCenter/checkCompleteSignUp'
+      })
     },
   }
 }  
@@ -121,6 +207,9 @@ export default {
         color: #9fa0a2;
         font-size: 24px;
       }
+      .cateItem2{
+        width: 50%;
+      }
       .currStyle2{
         color: #1f1b10;
         background: #fdeab0;
@@ -129,11 +218,12 @@ export default {
     .actList{
       width: 100%;
       height: auto;
-      background: #fff;
-      padding-left: 40px;
+      
       .actiItem{
         width: 100%;
-        height: 218px;
+        height: 308px;
+        background: #fff;
+        padding-left: 40px;
         border-top: 1px solid #e2e2e2;
         position: relative;
         .left{
@@ -214,6 +304,37 @@ export default {
       }
       .actiItem:nth-of-type(1){
         border-top: none;
+      }
+    }
+    .actList2{
+      .actiItem{
+        margin-bottom: 10px;
+        border: none;
+      }
+      .btnWrap{
+        width: 100%;
+        height: 90px;
+        padding-right: 40px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-top: 1px solid #f0eded;
+        .btn{
+          width: 140px;
+          height: 45px;
+          line-height: 45px;
+          text-align: center;
+          font-size: 24px;
+          background: #fddf86;
+          color: #6f6f6f;
+          float: right;
+          margin-top: 20px;
+          border-radius: 10px;
+        }
+        .btn:nth-child(2) {
+          background: #fabd8c;
+          margin-right: 30px;
+        }
       }
     }
   }

@@ -14,30 +14,29 @@
       <p>点击添加头像</p>
     </div>
     <ul>
-      <li @click="show1">
+      <li @click="showInput">
         昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称
-        <input type="text" ref="input1" @blur="inputBlur" v-show="isShowInput" v-model="input1Value">
         <span class="right">{{value1}}<i class="el-icon-arrow-right"></i></span>
       </li>
-      <li @click="show2">
+      <li @click="showSexPicker">
         性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别
         <span class="right">{{sexValue}}<i class="el-icon-arrow-right"></i></span>
       </li>
-      <li @click="show3">
+      <li @click="showHeightPicker">
         身&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高
-        <span class="right">{{heightValue}}cm<i class="el-icon-arrow-right"></i></span>
+        <span class="right">{{heightValue}}<i class="el-icon-arrow-right"></i></span>
       </li>
-      <li>
+      <li @click="showBirthdayPicker">
         生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日
-        <span class="right">1990-01-08<i class="el-icon-arrow-right"></i></span>
+        <span class="right">{{birthdayValue}}<i class="el-icon-arrow-right"></i></span>
       </li>
-      <li>
+      <li @click="showprofessionPicker">
         职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业
-        <span class="right">IT技术<i class="el-icon-arrow-right"></i></span>
+        <span class="right">{{professionValue}}<i class="el-icon-arrow-right"></i></span>
       </li>
       <li @click="showLocation">
         所在地区
-        <span class="right">成都<i class="el-icon-arrow-right"></i></span>
+        <span class="right">{{addressValue}}<i class="el-icon-arrow-right"></i></span>
       </li>
     </ul>
     <div class="label">
@@ -57,10 +56,10 @@
       closeOnClickModal="true" 
       position="bottom"
       >
-      <!-- 性别选择 -->
+      <!-- 自定义选择 -->
       <mt-picker 
-        v-show="sexPicker"
-        :slots="slots1" 
+        v-show="commonPicker"
+        :slots="currSlots" 
         :visibleItemCount='5'
         :itemHeight='50'
         showToolbar
@@ -68,37 +67,22 @@
         >
         <div class="picker-toolbar-title">
           <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
-          <div class="usi-btn-sure" @click="sure">确定</div>
+          <div class="usi-btn-sure" @click="currSure">确定</div>
         </div>
       </mt-picker>
-      <!-- 身高选择 -->
-      <mt-picker 
-        v-show="heightPicker"
-        :slots="slots2" 
-        :visibleItemCount='5'
-        :itemHeight='50'
-        showToolbar
-        @change="currChange"
-        >
-        <div class="picker-toolbar-title">
-          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
-          <div class="usi-btn-sure" @click="sure">确定</div>
-        </div>
-      </mt-picker>
-      <!-- 所在地区选择器 -->
-      <mt-picker 
-        v-show="locationPicker"
-        :slots="addressSlots" 
-        :visibleItemCount='5'
-        :itemHeight='50'
-        showToolbar
-        @change="onAddressChange"
-        >
-        <div class="picker-toolbar-title">
-          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
-          <div class="usi-btn-sure" @click="sure">确定</div>
-        </div>
-      </mt-picker>
+      <!-- 日期选择 -->
+      <mt-datetime-picker
+        v-show="!commonPicker"
+        ref="picker"
+        type="date"
+        :startDate='birthdayStartDate'
+        :endDate ='birthdayEndDate'
+        year-format="{value} 年"
+        month-format="{value} 月"
+        date-format="{value} 日"
+        @confirm="handleConfirm"
+        v-model="birthday">
+      </mt-datetime-picker>
 
     </mt-popup>
 
@@ -113,18 +97,21 @@ export default {
   data() {
     return {
       imageUrl: '',
-      sexPicker: false,
-      heightPicker: false,
-      locationPicker: false,
-      value1: '', 
-      input1Value:'',
-      isShowInput: false,
-      sex: '男',
-      sexValue: '',
-      height: '160',
-      heightValue: '',
+      commonPicker: true,
+      value1: '',  //昵称
       currSlots: this.slots1,
-      currChange: this.change1,
+      currChange: this.changeSex,
+      currSure: this.sureSex,
+      sex: '男',
+      sexValue: '',  //确定后的性别选择
+      height: '160',
+      heightValue: '',  //  确定后的身高选择
+      birthdayStartDate: new Date('1930/1/1'),  //生日最小可选择
+      birthdayEndDate: new Date(),  //生日最大可选择
+      birthday: new Date('2000,6,15'),  //默认
+      birthdayValue: '',  //确定后的生日选择
+      profession: '公职人员',
+      professionValue: '',  //确定后职业选择
       myprivinceList: [],    //省的数组
       mycityList: [],        //省对应城市的数组
       mydistrictList:[],     //区或者县的数组
@@ -132,7 +119,7 @@ export default {
       myAddressPrivince:'',  //最后选中的省或直辖市
       myAddressCity:'',      //最后选中的城市
       myAddressDistrict:'',   //最后选中的区或者县
-
+      addressValue: '',
       slots1: [
         {
           flex: 1,
@@ -153,6 +140,15 @@ export default {
           ,'192','193','194', '195','196','197', '198','199','200'],
           className: 'slot1',
           defaultIndex: 51,
+          textAlign: 'center'
+        }
+      ],
+      professionSlots: [
+        {
+          flex: 1,
+          values: ['公职人员', '专职技术人员','办事人员', '商业、服务人员','农林牧渔水利生产人员',
+                   '生产运输人员','军人', '自由职业','创业','学生'],
+          className: 'slotP',
           textAlign: 'center'
         }
       ],
@@ -189,15 +185,15 @@ export default {
     myAddressPrivince(oldval,newval){  //省数据变化后，更新市的显示数据
       this.areapicker.setSlotValues(2,this.mycityList);
       this.areapicker.setSlotValue(2, this.mycityList[0]);
-      console.log('选中的省是'+this.myAddressPrivince);
+      // console.log('选中的省是'+this.myAddressPrivince);
     },
     myAddressCity(oldval,newval){    //城市的值改变后，重置区县的数据
       this.areapicker.setSlotValues(4,this.mydistrictList);
       this.areapicker.setSlotValue(4,this.mydistrictList[0]);
-      console.log('选中的市是'+this.myAddressCity);
+      // console.log('选中的市是'+this.myAddressCity);
     },
     myAddressDistrict(oldval,newval){
-      console.log('选中的区是'+this.myAddressDistrict);
+      // console.log('选中的区是'+this.myAddressDistrict);
     }
   },
   methods: {
@@ -215,74 +211,106 @@ export default {
       // }
       // return isJPG && isLt2M;
     },
-    show1() {
-      this.isShowInput = true
-      this.$refs.input1.autofocus = true
-      console.log(this.$refs)
-      if(this.isShowInput) {
-        this.value1 = ''
-      }
+    // 昵称输入
+    showInput() {
+      this.$messagebox.prompt('请填写昵称').then(({ value, action }) => {
+        // console.log(value)
+        this.value1 = value
+      })
     },
-    inputBlur() {
-      this.isShowInput = false
-      this.value1 = this.input1Value
-    },
-    // 显示性别选择
-    show2() {
+    // 性别选择
+    showSexPicker() {
       this.popupVisible = true
-      this.sexPicker = true
-      this.heightPicker = false
-      this.locationPicker = false
+      this.commonPicker = true
+      this.currSlots = this.slots1
+      this.currChange = this.changeSex
+      this.currSure = this.sureSex
     },
-    // 显示身高选择
-    show3() {
-      this.popupVisible = true
-      this.sexPicker = false
-      this.heightPicker = true
-      this.locationPicker = false
-      // this.currSlots = this.slots2
-      // this.currChange = this.change2
-    },
-    change1(picker, values) {
+    changeSex(picker, values) {
       this.sex = values[0]
-      console.log(this.sex)
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0]);
       }
     },
-    change2(picker, values) {
+    sureSex() {
+      this.popupVisible = !this.popupVisible
+      this.sexValue = this.sex
+      if(this.sexValue !== '女') {
+        this.sexValue = '男'
+      }
+    },
+    // 显示身高选择
+    showHeightPicker() {
+      this.popupVisible = true
+      this.commonPicker = true
+      this.currSlots = this.slots2
+      this.currChange = this.changeHeight
+      this.currSure = this.sureHeight
+    },
+    changeHeight(picker, values) {
       this.height = values[0]
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0]);
       }
     },
-    // onValuesChange(picker, values) {
-    //   console.log(values)
-    //   this.sex = values[0]
-    //   if (values[0] > values[1]) {
-    //     picker.setSlotValue(1, values[0]);
-    //   }
-    // },
-    sure() {
-      console.log("ok1")
-      console.log(this.sex)
-      if(this.currChange == this.change1){
-        console.log("ok2")
-        this.sexValue = this.sex
-        console.log(this.sex)
+    sureHeight() {
+      this.popupVisible = !this.popupVisible
+      this.heightValue = this.height + 'cm'
+      // console.log(this.heightValue)
+    },
+    // 显示生日选择
+    showBirthdayPicker() {
+      this.popupVisible = true
+      this.commonPicker = false
+      // console.log(this.birthdayStartDate)
+    },
+    // 格式化选择的日期
+    formatDate(Time) {
+      var date = Time;
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h = h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      return y + '年' + m + '月' + d+ '日';
+    },
+    handleConfirm(v) {
+      this.popupVisible = !this.popupVisible
+      this.birthday = this.formatDate(v)
+      this.birthdayValue = this.birthday
+      // console.log(this.birthdayValue)
+    },
+    //显示职业选择
+    showprofessionPicker() {
+      this.popupVisible = true
+      this.commonPicker = true
+      this.currSlots = this.professionSlots
+      this.currChange = this.changeProfession
+      this.currSure = this.sureProfession
+    },
+    changeProfession(picker, values) {
+      this.profession = values[0]
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
       }
-      if(this.currChange == this.change2){
-        console.log("ok3")
-        this.heightValue = this.height
-      }
-      this.popupVisible = false
+    },
+    sureProfession() {
+      this.popupVisible = !this.popupVisible
+      this.professionValue = this.profession
+      // console.log(this.professionValue)
     },
     // 显示地区选择
     showLocation() {
       this.popupVisible = true
-      this.sexPicker = false
-      this.heightPicker = false
-      this.locationPicker = true
+      this.commonPicker = true
+      this.currSlots = this.addressSlots
+      this.currChange = this.onAddressChange
+      this.currSure = this.sureAddress
     },
     onAddressChange:function(picker, values){
       this.areapicker = picker;
@@ -319,7 +347,11 @@ export default {
       this.myAddressCity = values[2];
       this.myAddressDistrict = values[4];
     },
-
+    sureAddress() {
+      this.popupVisible = !this.popupVisible
+      this.addressValue = this.myAddressPrivince + this.myAddressCity
+    },
+    // 选择标签
     selectLabel() {
       this.$router.push({
         path: '/userCenter/selectLabels'
@@ -480,6 +512,32 @@ export default {
     height: 94px;
     display: block;
   }
+  .mint-msgbox-btns{
+  height: 70px;
+  line-height: 70px;
+}
+.mint-msgbox-input{
+  padding-top: 40px;
+  padding-bottom: 10px;
+}
+.mint-msgbox-message{
+  font-size: 22px;
+}
+.mint-msgbox-confirm{
+  color: #fac31e
+}
+.mint-msgbox-input input{
+  height: 70px;
+  width: 90%;
+  margin-left: 5%;
+  font-size: 26px;
+}
+.mint-msgbox-header{
+  padding: 20px 0;
+}
+.mint-msgbox-title{
+  font-size: 24px;
+}
   .mint-popup{
   width: 100%;
   transition: .3s ease-out;
@@ -490,7 +548,7 @@ export default {
 }
 .picker-toolbar{
   height: 70px;
-  padding: 0 60px;
+  padding: 0 100px;
 }
 .picker-toolbar-title{
   display: flex;
@@ -498,10 +556,10 @@ export default {
   justify-content: space-between;
   height: 70px;
   line-height: 70px;
-  font-size: 30px;
+  font-size: 24px;
 }
 .picker-slot{
-  font-size: 27px;
+  font-size: 26px;
 }
 .usi-btn-cancel,
 .usi-btn-sure {
@@ -513,6 +571,14 @@ export default {
 }
 ._slot3 .picker-item{
   padding-right: 80px;
+}
+.mint-datetime-action{
+  line-height: 70px;
+  color: #fac31e;
+  font-size: 24px;
+}
+.mint-datetime-picker .picker-toolbar{
+  padding: 0;
 }
 </style>
 
