@@ -1,11 +1,15 @@
 <template>
   <!-- 常见问题 -->
-  <div class="commonProblem">
-    <ul>
-      <li v-for="(item,index) in problemList" :key="index">
+  <div class="commonProblem" v-title data-title="常见问题">
+    <div class="problemItem" v-for="(item,index) in problemList" :key="index">
+      <div class="title" @click="showText(item,index)">
         {{item}}
-      </li>
-    </ul>
+        <span class="el-icon-arrow-down"></span>
+      </div>
+      <div class="detail" v-show="index === i">
+        物流服务 无忧物流 菜鸟网络与速卖通联合推出的官方物流,提供揽收、配送、物流追踪、物流纠纷处理、赔付一站式物流解决方案 线上发货 发货不操心,物流有保障!
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,7 +23,19 @@ export default {
         '2.如何查询场地？',
         '3.如何加入社群？',
         '4.如何查询商品的物流信息？',
-      ]
+      ],
+      isShowDetail: false,
+      i: -1,
+    }
+  },
+  methods:{
+    showText(item,index) {
+      this.isShowDetail = !this.isShowDetail
+      if(this.isShowDetail){
+        this.i = index
+      }else{
+        this.i = -1
+      }
     }
   }
 }
@@ -29,20 +45,36 @@ export default {
   .commonProblem{
     width: 100%;
     min-height: 100vh;
-    background: #e4e4e4;
+    background: #f2f2f2;
     overflow: hidden;
-    ul{
+    .problemItem{
       width: 100%;
       height: auto;
-      li{
+      .title{
         width: 100%;
-        height: 70px;
-        line-height: 70px;
-        border-top: 1px solid #cfcfcf;
-        border-bottom: 1px solid #cfcfcf;
-        margin-top: 20px;
+        height: 94px;
+        font-size: 28px;
+        line-height: 94px;
+        color: #535151;
+        padding: 0 30px;
+        border-top: 1px solid #f1f0f0;
+        border-bottom: 1px solid #f1f0f0;
         background: #fff;
-        padding-left: 5px;
+        span{
+          color: #cbcbcb;
+          line-height: 94px;
+          float: right;
+          color: #a09c9c;
+        }
+      }
+      .detail{
+        width: 100%;
+        height: auto;
+        // height: 200px;
+        font-size: 26px;
+        line-height: 40px;
+        padding: 20px 35px;
+        padding-bottom: 30px;
       }
     }
   }

@@ -1,35 +1,25 @@
 <template>
-  <!-- 管理群成员 -->
-  <div class="manageGroupMembers" v-title data-title="管理群成员">
-    <div class="searchBox">
-      <el-input
-        prefix-icon="el-icon-search"
-        v-model="input2">
-      </el-input>
-    </div>
+  <!-- 转让群 -->
+  <div class="transferGroup" v-title data-title="转让群">
     <ul class="memberItem">
       <li v-for="(item,index) in memberList" :key="index" @click="selected(item,index)">
-        <span class="checkWrap" :class="{selected:selectedList.indexOf(index)>=0}"><i class="el-icon-check"></i></span>
+        <span class="checkWrap" :class="{selected : clickIndex === index}"><i class="el-icon-check"></i></span>
         <img :src="item.imgPath" alt="">
         <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
         <div class="grade">{{item.grade}}</div>
       </li>
     </ul>
-    <div class="btnBox">
-      <div>设为群助理</div>
-      <div>移除</div>
-    </div>
+    <div class="sureBtn">确定</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ManageGroupMembers',
+  name: 'TransferGroup',
   data() {
     return {
-      input2: '',
       memberList: [],
-      selectedList: [],
+      clickIndex: -1,
     }
   },
   created() {
@@ -74,28 +64,17 @@ export default {
   },
   methods: {
     selected(item,index) {
-      let selectedIndex = this.selectedList.indexOf(index)
-      if(selectedIndex >= 0) {
-        this.selectedList.splice(selectedIndex, 1)
-      }else{
-        this.selectedList.push(index)
-      }
-      console.log(this.selectedList)
+      this.clickIndex = index
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .manageGroupMembers{
+  .transferGroup{
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
-    .searchBox{
-      width: 100%;
-      height: 104px;
-      padding: 20px;
-    }
     .memberItem{
       width: 100%;
       height: auto;
@@ -166,44 +145,16 @@ export default {
         }
       }
     }
-    .btnBox{
-      width: 100%;
-      height: 130px;
-      padding: 0 50px;
-      margin-top: 80px;
-      div{
-        width: 222px;
-        height: 75px;
-        line-height: 75px;
-        text-align: center;
-        color: #fff;
-        background: #fac31e;
-        float: left;
-        border-radius: 15px;
-      }
-      div:nth-child(2){
-        float: right;
-        background: #ff8d30;
-      }
+    .sureBtn{
+      width: 222px;
+      height: 75px;
+      line-height: 75px;
+      text-align: center;
+      color: #fff;
+      background: #ff8d30;
+      border-radius: 15px;
+      margin: 0 auto;
+      margin-top: 150px;
     }
   }
 </style>
-<style>
-  .manageGroupMembers .searchBox .el-input__inner{
-    height: 60px !important;
-    border-radius: 10px;
-    padding-left: 70px;
-    font-size: 26px;
-    border: 2px solid #dcdcdc;
-  }
-  .manageGroupMembers .searchBox .el-input__prefix{
-    left: 18px;
-    top: 12px;
-  }
-  .manageGroupMembers .searchBox .el-input__icon{
-    font-size: 35px;
-    font-weight: bold;
-    color: #767676;
-  }
-</style>
-

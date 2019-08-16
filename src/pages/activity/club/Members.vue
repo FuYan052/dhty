@@ -102,7 +102,7 @@ export default {
   .members{
     width: 100%;
     min-height: 100vh;
-    background: #efeef6;
+    background: #f2f2f2;
     .searchBox{
       width: 100%;
       height: 104px;

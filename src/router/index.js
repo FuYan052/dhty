@@ -36,6 +36,7 @@ import GroupManagement from '@/pages/userCenter/myManagement/manageGroup/GroupMa
 import CreatedGroupManage from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupManage'
 import CreateGroup from '@/pages/userCenter/myManagement/manageGroup/CreateGroup'
 import EditGroupInfo from '@/pages/userCenter/myManagement/manageGroup/EditGroupInfo'
+import TransferGroup from '@/pages/userCenter/myManagement/manageGroup/TransferGroup'
 import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/ManageGroupMembers'
 import CreatedGroupList from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupList'
 import JoinCroupList from '@/pages/userCenter/myManagement/manageGroup/JoinCroupList'
@@ -44,6 +45,7 @@ import SearchPage from '@/pages/mall/SearchPage'
 import MyOrder from '@/pages/userCenter/myManagement/MyOrder'
 import CommonProblem from '@/pages/userCenter/myManagement/CommonProblem'
 import Cash from '@/pages/userCenter/myManagement/Cash'
+import AccountDetails from '@/pages/userCenter/myManagement/AccountDetails'
 import AddressManage from '@/pages/userCenter/myManagement/AddressManage'
 import AddAddress from '@/pages/userCenter/myManagement/AddAddress'
 import EditAddress from '@/pages/userCenter/myManagement/EditAddress'
@@ -253,6 +255,11 @@ export default new Router({
       component: EditGroupInfo,
     },
     {
+      path: '/userCenter/groupManagement/transferGroup',
+      name: 'TransferGroup',
+      component: TransferGroup,
+    },
+    {
       path: '/userCenter/createdGroupList',
       name: 'CreatedGroupList',
       component: CreatedGroupList,
@@ -276,6 +283,11 @@ export default new Router({
       path: '/userCenter/cash',
       name: 'Cash',
       component: Cash,
+    },
+    {
+      path: '/userCenter/cash/accountDetails',
+      name: 'AccountDetails',
+      component: AccountDetails,
     },
     // 商城
     {

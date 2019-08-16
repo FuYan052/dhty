@@ -40,7 +40,7 @@
     </div>
     <div class="btnBox">
       <div>保存</div>
-      <div>转让群</div>
+      <div @click="transferGroup">转让群</div>
       <div>解散群</div>
     </div>
   </div>
@@ -81,6 +81,12 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return isJPG && isLt2M;
+    },
+    // 转让群
+    transferGroup() {
+      this.$router.push({
+        path: '/userCenter/groupManagement/transferGroup'
+      })
     }
   }
 }

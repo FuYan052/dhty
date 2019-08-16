@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="btn">提现</div>
-    <div class="record">
+    <div class="record" @click="toDetail">
       账户明细<span class="el-icon-arrow-right"></span>
     </div>
     <p class="careful">
@@ -29,7 +29,14 @@
 
 <script>
 export default {
-  name: 'Cash'
+  name: 'Cash',
+  methods: {
+    toDetail() {
+      this.$router.push({
+        path: '/userCenter/cash/accountDetails'
+      })
+    }
+  }
 }
 </script>
 

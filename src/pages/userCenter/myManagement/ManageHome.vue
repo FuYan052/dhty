@@ -3,11 +3,11 @@
   <div class="manageHome">
     <div class="topBox">
       <p class="userName">张少伟</p>
-      <div class="editIcon"></div>
+      <div class="editIcon"><span class="el-icon-edit"></span></div>
       <img class="tx" src="../../../assets/touxiang.jpg" alt="">
       <p class="info">
         身份：群主
-        <span>即将到账(元)：15.2</span>
+        <span @click="toCash">账户余额(元)：15.2</span>
       </p>
     </div>
     <div class="middleBox">
@@ -53,6 +53,12 @@ export default {
       this.$router.push({
         path: '/userCenter/commonProblem'
       })
+    },
+    // 提现
+    toCash() {
+      this.$router.push({
+        path: '/userCenter/cash'
+      })
     }
   }
 }
@@ -81,9 +87,15 @@ export default {
         height: 68px;
         border-radius: 50%;
         background: #ff5227;
+        padding-left: 12px;
         position: absolute;
         top: 115px;
         right: 80px;
+        span{
+          font-size: 42px;
+          line-height: 68px;
+          color: #fff;
+        }
       }
       .tx{
         width: 140px;
