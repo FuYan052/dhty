@@ -202,13 +202,14 @@ export default {
         .content{
           width: 100%;
           height: auto;
-          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+          // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
           .activItem{
             width: 100%;
             height: 378px;
             margin-top: 20px;
-            background: #fff;
             border-top-right-radius: 25px;
+            background: url("../../assets/bg222.png") no-repeat center;
+            background-size: contain;
             .top{
               width: 100%;
               height: auto;
@@ -219,6 +220,7 @@ export default {
                 img{
                   width: 50px;
                   height: 50px;
+                  background: #fff;
                   float: left;
                   margin-top: 23px;
                   margin-left: 30px;

@@ -1,7 +1,9 @@
 <template>
   <!-- 登录 -->
   <div class="loginHome">
-    <img class="loginBg" src="../assets/loginBg.png" alt="">
+    <div class="imgBox">
+      <img class="loginBg" src="../assets/loginBg.png" alt="">
+    </div>
     <p class="title1">登录大虎体育运动</p>
     <p class="title2">让时代改变你的生活</p>
     <div class="toBotton" @click="doLogin">
@@ -34,11 +36,16 @@ export default {
     min-height: 100vh;
     background: #f4f4f6;
     overflow: hidden;
-    .loginBg{
+    .imgBox{
       width: 470px;
       height: 470px;
       margin: 0 auto;
       margin-top: 80px;
+      background: #fff;
+    }
+    .loginBg{
+      width: 470px;
+      height: 470px;
     }
     .title1{
       font-size: 30px;

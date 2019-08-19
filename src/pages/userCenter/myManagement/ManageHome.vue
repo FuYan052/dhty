@@ -72,7 +72,9 @@ export default {
       width: 100%;
       height: 356px;
       border-bottom: 2px solid #e5aa64;
-      background: #fac31e;
+      // background: #fac31e;
+      background: url("../../../assets/bg111.png") no-repeat center;
+      background-size: contain;
       overflow: hidden;
       padding-right: 80px;
       position: relative;

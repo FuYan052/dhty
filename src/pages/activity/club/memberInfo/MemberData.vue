@@ -2,7 +2,7 @@
   <div class="memberData" v-title data-title="Ta人资料">
     <ul>
       <li @click="toGroupList">所属社群</li>
-      <!-- <li @click="toOrgActivies" >组织的活动</li> -->
+      <li @click="toOrgActivies" >组织的活动</li>
       <li @click="toAttendedActivies" >ta参加过的活动</li>
       <li @click="toMotionData" >ta的运动参数</li>
     </ul>

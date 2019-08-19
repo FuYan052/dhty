@@ -199,7 +199,8 @@ export default {
             height: 50px;
             border-radius: 50%;
             float: left;
-            background: #f8fcfb;
+            background: url("../../../../assets/icon1.png") no-repeat center;
+            background-size: contain;
           }
           p{
             float: left;
@@ -243,7 +244,8 @@ export default {
         .data2{
           .title{
             .icon{
-              background: #72cad8;
+              background: url("../../../../assets/icon2.png") no-repeat center;
+              background-size: contain;
             }
           }
         }
@@ -251,7 +253,8 @@ export default {
           margin-top: 30px;
           .title{
             .icon{
-              background: #fa8798;
+              background: url("../../../../assets/icon3.png") no-repeat center;
+              background-size: contain;
             }
           }
         }
@@ -266,7 +269,8 @@ export default {
         float: left;
         .title{
           .icon{
-            background: #d0c277;
+            background: url("../../../../assets/icon4.png") no-repeat center;
+              background-size: contain;
           }
         }
       }
@@ -274,7 +278,8 @@ export default {
         float: right;
         .title{
           .icon{
-            background: #7a77d0;
+            background: url("../../../../assets/icon5.png") no-repeat center;
+              background-size: contain;
           }
         }
       }

@@ -54,20 +54,20 @@ export default {
     padding-bottom: 70px;
     .tabbar{
       width: 100%;
-      height: 70px;
+      height: 90px;
       background: #fff;
       border-top: 2px solid #cecece;
       position: fixed;
       bottom: 0;
       ul{
         width: 100%;
-        height: 70px;
+        height: 90px;
         padding: 10px 4%;
         li{
           width: 33.3%;
-          height: 50px;
+          height: 70px;
           float: left;
-          line-height: 50px;
+          line-height: 70px;
           text-align: center;
           color: #999999;
         }

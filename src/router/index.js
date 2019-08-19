@@ -25,8 +25,10 @@ import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
 import BMember from '@/pages/activity/badminton/BMember'
+import MyData from '@/pages/userCenter/myData/MyData'
 import CompleteInfo from '@/pages/userCenter/myData/CompleteInfo'
 import SelectLabels from '@/pages/userCenter/myData/SelectLabels'
+import Popularize from '@/pages/userCenter/Popularize'
 import ManageHome from '@/pages/userCenter/myManagement/ManageHome'
 import MyActivities from '@/pages/userCenter/myManagement/MyActivities'
 import EditActiviesInfo from '@/pages/userCenter/myManagement/manageActivies/EditActiviesInfo'
@@ -192,6 +194,11 @@ export default new Router({
     },
     // 我的数据
     {
+      path: '/userCenter/myData',
+      name: 'MyData',
+      component: MyData,
+    },
+    {
       path: '/userCenter/myData/completeInfo',
       name: 'CompleteInfo',
       component: CompleteInfo,
@@ -206,6 +213,11 @@ export default new Router({
       path: '/userCenter/manageHome',
       name: 'ManageHome',
       component: ManageHome,
+    },
+    {
+      path: '/userCenter/popularize',
+      name: 'Popularize',
+      component: Popularize,
     },
     {
       path: '/userCenter/myActivities',
