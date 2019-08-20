@@ -8,9 +8,7 @@
            <p>运动0分，消耗0千卡</p>
            <p>距离达成目标还差8000步</p>
          </div>
-         <div class="right" ref="circle" id="circle1">
-           
-         </div>
+         <div class="right" ref="circle" id="circle1"></div>
        </div>
        <div class="bottom">
          <div>
@@ -39,8 +37,11 @@
       </div>
     </div>
     <!-- 运动统计图 -->
-    <div class="chartWrap">
-
+    <div class="wrap">
+      <div class="more" @click="toMore">更多<span class="el-icon-arrow-right"></span></div>
+      <div class="chartWrap" id="chartWrap">
+      
+      </div>
     </div>
     <!-- 健康数据 -->
     <p class="healthTitle">健康数据</p>
@@ -92,20 +93,200 @@
 </template>
 
 <script>
+// 引入 ECharts 主模块
+var echarts = require('echarts/lib/echarts');
+// 引入饼状图
+require('echarts/lib/chart/pie');
+// 引入柱状图
+require('echarts/lib/chart/bar');
 export default {
   name: 'MyData',
   data() {
     return {
       cateList: ['跑步','羽毛球'],
       currIndex: 0,
+      dateList: []
     }
   },
+  created() {
+    for(let i = -6; i<=0; i++){
+      const result = this.findDate(i)
+      this.dateList.push(result) 
+    }
+    // console.log(this.dateList)
+  },
   mounted() {
-    
+    // 环形进度条
+    var myChart = echarts.init(document.getElementById('circle1'));
+      var e = 40
+      myChart.setOption({
+      tooltip: {},
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        show:false
+      },
+      color: ["#fd6905","#e9e9e9"],
+      series: [
+        {
+          name:'',
+          type:'pie',
+          radius: ['50%', '70%'],
+          avoidLabelOverlap: true,
+          hoverAnimation:false,
+          label: {
+            normal: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              show: false
+            }
+          },
+          labelLine: {
+            normal: {
+              show: false
+            }
+          },
+          data:[
+            {value:e, name:''},
+            {value:100-e, name:''}
+          ]
+        }
+      ]
+    });
+    // 条形统计图
+    var myChart2 = echarts.init(document.getElementById('chartWrap'));
+    var dataAxis = this.dateList;
+    var data = [0.8, 1.2, 0.2, 1.7, 0.6, 2.3, 0.7];
+    var yMax = 0;
+    var dataShadow = [];
+    for (var i = 0; i < data.length; i++) {
+      dataShadow.push(yMax);
+    }
+    // 条形统计图配置
+    myChart2.setOption({
+      grid: {
+        left: '8%',
+        right: '10%',
+        bottom: '10%',
+        containLabel: true
+      },
+      xAxis: {
+        type : 'category',
+        data: dataAxis,
+        axisLabel: {
+          inside: false,
+          textStyle: {
+            color: '#737272'
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLine: {
+          show: false
+        },
+        z: 10
+      },
+      yAxis: {
+        name : '时长 (/h)',
+        nameLocation: 'end',
+        nameTextStyle:{
+          color: '#737272',
+        },
+        axisLine: {
+          show: false
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          textStyle: {
+            color: '#999999'
+          }
+        }
+      },
+      dataZoom: [
+        {
+          type: 'inside'
+        }
+      ],
+      series: [
+        { // For shadow
+          type: 'bar',
+          itemStyle: {
+            normal: {color: 'rgba(0,0,0,0.05)'}
+          },
+          barGap:'-95%',
+          barCategoryGap:'77%',
+          data: dataShadow,
+        },
+        {
+          type: 'bar',
+          itemStyle: {
+            normal: {
+              color: new echarts.graphic.LinearGradient(
+                0, 0, 0, 1,
+                [
+                  {offset: 0.1, color: '#b3d5f2'},
+                  {offset: 0.5, color: '#67b7fa'},
+                  {offset: 1, color: '#b1d4f4'}
+                  // {offset: 0, color: '#83bff6'},
+                  // {offset: 0.5, color: '#188df0'},
+                  // {offset: 1, color: '#188df0'}
+                ]
+              )
+            },
+            emphasis: {
+              color: new echarts.graphic.LinearGradient(
+                0, 0, 0, 1,
+                [
+                  {offset: 0, color: '#6fa1ed'},
+                  {offset: 0.7, color: '#6ca3f7'},
+                  {offset: 1, color: '#83bff6'}
+                  // {offset: 0, color: '#2378f7'},
+                  // {offset: 0.7, color: '#2378f7'},
+                  // {offset: 1, color: '#83bff6'}
+                ]
+              )
+            }
+          },
+          data: data
+        }
+      ]
+    })
   },
   methods: {
     changeCate(item,index) {
       this.currIndex = index
+    },
+    // 获取当前日期及后面范围内的日期
+    findDate(aa) {
+      var date1 = new Date()
+      var time1 = date1.getFullYear() + "-" + (date1.getMonth()+1) + "-" + date1.getDate()
+      var date2 = new Date(date1)
+      date2.setDate(date1.getDate()+aa)
+      var _month = date2.getMonth()+1
+      var _day = date2.getDate()
+      if(_month < 10){
+        _month = "0" + _month
+      }else{
+         _month = date2.getMonth()+1
+      }
+      if(_day < 10){
+        _day = "0" + _day
+      }else{
+         _day = date2.getDate()
+      }
+      var time = _month + "/"+ _day
+      return time;
+    },
+    // 查看更多统计
+    toMore() {
+      this.$router.push({
+        path: '/userCenter/myData/more'
+      })
     }
   }
 }
@@ -130,11 +311,11 @@ export default {
         width: 100%;
         height: 232px;
         border-bottom: 1px solid #efefef;
-        padding: 0 55px;
-        padding-top: 40px;
         .left{
-          width: 70%;
+          width: 60%;
           float: left;
+          padding-left: 55px;
+          padding-top: 40px;
           h6{
           font-size: 60px;
           line-height: 60px;
@@ -150,10 +331,12 @@ export default {
           }
         }
         .right{
-          width: 130px;
-          height: 130px;
+          width: 220px;
+          height: 220px;
+          padding-top: 20px;
+          padding-right: 30px;
           float: right;
-          border: 1px solid red;
+          // border: 1px solid red;
         }
       }
       .bottom{
@@ -204,14 +387,31 @@ export default {
         background: #fff;
       }
     }
-    .chartWrap{
+    .wrap{
       width: 710px;
       height: 445px;
       margin: 0 auto;
-      border-radius: 18px;
       margin-top: 27px;
       background: #fff;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+      position: relative;
+      .more{
+        width: 100px;
+        height: 80px;
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 24px;
+        color: #ababab;
+        span{
+          padding-left: 10px;
+        }
+      }
+      .chartWrap{
+        width: 710px;
+        height: 445px;
+        border-radius: 18px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+      }
     }
     .healthTitle{
       font-size: 27px;

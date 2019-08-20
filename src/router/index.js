@@ -17,6 +17,7 @@ import OrganActivies from '@/pages/activity/club/memberInfo/OrganActivies'
 import AttendedActivies from '@/pages/activity/club/memberInfo/AttendedActivies'
 import MotionData from '@/pages/activity/club/memberInfo/MotionData'
 import Playground from '@/pages/activity/Playground'
+import PlaygroundDetail from '@/pages/activity/PlaygroundDetail'
 import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
 import Organization from '@/pages/activity/Organization'
@@ -26,6 +27,7 @@ import BShow from '@/pages/activity/badminton/BShow'
 import BActivities from '@/pages/activity/badminton/BActivities'
 import BMember from '@/pages/activity/badminton/BMember'
 import MyData from '@/pages/userCenter/myData/MyData'
+import MyDataDetail from '@/pages/userCenter/myData/MyDataDetail'
 import CompleteInfo from '@/pages/userCenter/myData/CompleteInfo'
 import SelectLabels from '@/pages/userCenter/myData/SelectLabels'
 import Popularize from '@/pages/userCenter/Popularize'
@@ -100,6 +102,11 @@ export default new Router({
       path: '/playground',
       name: 'Playground',
       component: Playground,
+    },
+    {
+      path: '/playgroundDetail',
+      name: 'PlaygroundDetail',
+      component: PlaygroundDetail,
     },
     {
       path: '/mapPage',
@@ -197,6 +204,11 @@ export default new Router({
       path: '/userCenter/myData',
       name: 'MyData',
       component: MyData,
+    },
+    {
+      path: '/userCenter/myData/more',
+      name: 'MyDataDetail',
+      component: MyDataDetail,
     },
     {
       path: '/userCenter/myData/completeInfo',

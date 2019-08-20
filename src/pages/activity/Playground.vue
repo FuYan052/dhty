@@ -15,7 +15,7 @@
     </div>
     <div class="contentWrap">
       <div class="groundItem" v-for="(item,index) in 3" :key="index">
-         <div class="g_top">
+         <div class="g_top" @click="toDetail">
            <div class="g_top_left">
              <!-- 07月29日&nbsp;&nbsp; -->
              19:00——20:00
@@ -25,10 +25,10 @@
            </div>
          </div>
          <div class="g_detail">
-           <p class="g_name">
+           <p class="g_name" @click="toDetail">
              成都千羽千寻羽毛球俱乐部<span>16.46km</span>
            </p>
-           <img class="g_img" src="../../assets/g-img.png" alt="">
+           <img @click="toDetail" class="g_img" src="../../assets/g-img.png" alt="">
            <div class="g_bottom g_admin">
              <img src="../../assets/touxiang.jpg" alt="">
              <p>大虎管理员<span>杨洋然</span></p>
@@ -60,6 +60,11 @@ export default {
   methods: {
     changeCate(item,index) {
       this.currIndex = index
+    },
+    toDetail() {
+      this.$router.push({
+        path: '/playgroundDetail'
+      })
     },
     toMap() {
       const location = {

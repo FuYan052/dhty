@@ -96,7 +96,7 @@ export default {
     changeDate(index) {
       this.currDateIndex = index
     },
-    // 获取当前日期及后面方伟范围内的日期
+    // 获取当前日期及后面范围内的日期
     findDate(aa) {
       var date1 = new Date()
       var time1 = date1.getFullYear() + "-" + (date1.getMonth()+1) + "-" + date1.getDate()
