@@ -30,7 +30,7 @@
     <!-- 活动 -->
     <div class="wrap3">
       <p class="title">活动</p>
-      <div class="actItem" v-for="(item,index) in 2" :key="index">
+      <div class="actItem" v-for="(item,index) in 2" :key="index" @click="toActDetail">
         <img src="../../assets/g-img.png" alt="">
         <div class="right">
           <p class="p1">【羽毛球】8月6日上午9:00-12:00</p>
@@ -58,6 +58,13 @@ export default {
         params: location
       })
       window.sessionStorage.setItem('location',JSON.stringify(location))
+    },
+    toActDetail() {
+       this.$router.push({
+        path: '/activityDetail',
+        // name: 'MapPage',
+        // params: location
+      })
     }
   }
 }
@@ -68,6 +75,7 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
+    padding-bottom: 50px;
     .topImg{
       width: 100%;
       height: 440px;
@@ -210,7 +218,8 @@ export default {
       color: #fff;
       font-size: 30px;
       background: #29cb90;
-      margin: 50px auto;
+      margin: 0 auto;
+      margin-top: 50px;
       border-radius: 50px;
     }
   }

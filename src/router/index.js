@@ -21,6 +21,7 @@ import PlaygroundDetail from '@/pages/activity/PlaygroundDetail'
 import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
 import Organization from '@/pages/activity/Organization'
+import MapSelection from '@/pages/activity/MapSelection'
 import Members from '@/pages/activity/club/Members'
 import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
 import BShow from '@/pages/activity/badminton/BShow'
@@ -178,6 +179,11 @@ export default new Router({
       component: Organization,
     },
     {
+      path: '/mapSelection',
+      name: 'MapSelection',
+      component: MapSelection,
+    },
+    {
       path: '/badminton/activitiesDetail',
       name: 'ActivitiesDetail',
       component: ActivitiesDetail,
@@ -198,7 +204,7 @@ export default new Router({
           component: BMember
         }
       ]
-    },
+    },  
     // 我的数据
     {
       path: '/userCenter/myData',

@@ -31,119 +31,162 @@ export default {
     return {
       cateList: ['日','周','月','年'],
       currIndex: 0,
-      dateList: []
+      // dayList: [],
+      dayList: ['06:00','07:00','08:00','09:00','10:00','11:00','12:00',
+                '13:00','14:00','15:00','16:00','17:00','18:00','19:00',
+                '20:00','21:00','22:00','23:00','00:00'],
+      dayData: [0, 1.2, 0, 0, 0, 0, 0, 1.7, 0, 0, 0, 0, 1.2, 0, 1.7, 1.7, 0, 1.2, 0],
+      weekList: ['周一','周二','周三','周四','周五','周六','周日'],
+      weekData: [0.8, 1.2, 0.2, 1.7, 0.6, 2.3, 0.7],
+      monthList: ['7/1','7/2','7/3','7/4','7/5','7/6','7/7','7/8','7/9','7/10','7/11',
+                  '7/12','7/13','7/14','7/15','7/16','7/17','7/18','7/19','7/20','7/21',
+                  '7/22','7/23','7/24','7/25','7/26','7/27','7/28','7/29','7/30','7/31'],
+      monthData: [0.2, 1.7, 0.6, 2.3, 0.7,1.5, 1.7, 0.6, 2.3, 0.7,1.5, 1.7, 0.6, 2.3, 0.7,1.5
+                  , 1.7, 0.6, 2.3, 0.7,1.5, 1.7, 0.6, 2.3, 0.7,1.5, 1.7, 0.6, 2.3, 0.7,1.5],
+      yearList: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+      yearData: [],
+      yearData: [0.8, 1.2, 0.2, 1.7, 0.6, 2.3,0.8, 1.2, 0.2, 1.7, 0.6, 2.3],
+      currList: [],
+      currData: []
     }
   },
   created() {
-    for(let i = -6; i<=0; i++){
-      const result = this.findDate(i)
-      this.dateList.push(result) 
-    }
+    // for(let i = -6; i<=0; i++){
+    //   const result = this.findDate(i)
+    //   this.weekList.push(result) 
+    // }
+    
   },
   mounted() {
-    var dataAxis = this.dateList;
-    var data = [0.8, 1.2, 0.2, 1.7, 0.6, 2.3, 0.7];
-    var yMax = 0;
-    var dataShadow = [];
-    for (var i = 0; i < data.length; i++) {
-      dataShadow.push(yMax);
-    }
-    var myChart = echarts.init(document.getElementById('box'));
-    myChart.setOption({
-      grid: {
-        left: '8%',
-        right: '10%',
-        bottom: '10%',
-        containLabel: true
-      },
-      xAxis: {
-        type : 'category',
-        data: dataAxis,
-        axisLabel: {
-          inside: false,
-          textStyle: {
-            color: '#737272'
-          }
-        },
-        axisTick: {
-          show: false
-        },
-        axisLine: {
-          show: false
-        },
-        z: 10
-      },
-      yAxis: {
-        name : '时长 (/h)',
-        nameLocation: 'end',
-        nameTextStyle:{
-          color: '#737272',
-        },
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          textStyle: {
-            color: '#999999'
-          }
-        }
-      },
-      dataZoom: [
-        {
-          type: 'inside'
-        }
-      ],
-      series: [
-        { // For shadow
-          type: 'bar',
-          itemStyle: {
-            normal: {color: 'rgba(0,0,0,0.05)'}
-          },
-          barGap:'-95%',
-          barCategoryGap:'77%',
-          data: dataShadow,
-        },
-        {
-          type: 'bar',
-          itemStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(
-                0, 0, 0, 1,
-                [
-                  {offset: 0.1, color: '#b3d5f2'},
-                  {offset: 0.5, color: '#67b7fa'},
-                  {offset: 1, color: '#b1d4f4'}
-                  // {offset: 0, color: '#83bff6'},
-                  // {offset: 0.5, color: '#188df0'},
-                  // {offset: 1, color: '#188df0'}
-                ]
-              )
-            },
-            emphasis: {
-              color: new echarts.graphic.LinearGradient(
-                0, 0, 0, 1,
-                [
-                  {offset: 0, color: '#6fa1ed'},
-                  {offset: 0.7, color: '#6ca3f7'},
-                  {offset: 1, color: '#83bff6'}
-                  // {offset: 0, color: '#2378f7'},
-                  // {offset: 0.7, color: '#2378f7'},
-                  // {offset: 1, color: '#83bff6'}
-                ]
-              )
-            }
-          },
-          data: data
-        }
-      ]
-    })
+    this.currList = this.dayList
+    this.currData = this.dayData
+    this.chart()
   },
   methods: {
+    // 统计图
+    chart() {
+      var dataAxis = this.currList;
+      var data = this.currData;
+      var yMax = 0;
+      var dataShadow = [];
+      for (var i = 0; i < data.length; i++) {
+        dataShadow.push(yMax);
+      }
+      var myChart = echarts.init(document.getElementById('box'));
+      myChart.setOption({
+        grid: {
+          left: '7%',
+          right: '5%',
+          bottom: '10%',
+          containLabel: true
+        },
+        xAxis: {
+          type : 'category',
+          data: dataAxis,
+          axisLabel: {
+            inside: false,
+            textStyle: {
+              color: '#737272'
+            }
+          },
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            show: false
+          },
+          z: 10
+        },
+        yAxis: {
+          name : '时长 (/h)',
+          nameLocation: 'end',
+          nameTextStyle:{
+            color: '#737272',
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#999999'
+            }
+          }
+        },
+        dataZoom: [
+          {
+            type: 'inside'
+          }
+        ],
+        series: [
+          { // For shadow
+            type: 'bar',
+            itemStyle: {
+              normal: {color: 'rgba(0,0,0,0.05)'}
+            },
+            barGap:'-95%',
+            barCategoryGap:'77%',
+            data: dataShadow,
+          },
+          {
+            type: 'bar',
+            itemStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0, 0, 0, 1,
+                  [
+                    {offset: 0.1, color: '#b3d5f2'},
+                    {offset: 0.5, color: '#67b7fa'},
+                    {offset: 1, color: '#b1d4f4'}
+                    // {offset: 0, color: '#83bff6'},
+                    // {offset: 0.5, color: '#188df0'},
+                    // {offset: 1, color: '#188df0'}
+                  ]
+                )
+              },
+              emphasis: {
+                color: new echarts.graphic.LinearGradient(
+                  0, 0, 0, 1,
+                  [
+                    {offset: 0, color: '#6fa1ed'},
+                    {offset: 0.7, color: '#6ca3f7'},
+                    {offset: 1, color: '#83bff6'}
+                    // {offset: 0, color: '#2378f7'},
+                    // {offset: 0.7, color: '#2378f7'},
+                    // {offset: 1, color: '#83bff6'}
+                  ]
+                )
+              }
+            },
+            data: data
+          }
+        ]
+      })
+    },
     changeCate(item,index) {
       this.currIndex = index
+      if(index === 0) {
+        this.currList = this.dayList
+        this.currData = this.dayData
+        this.chart()
+      }
+      if(index === 1) {
+        this.currList = this.weekList
+        this.currData = this.weekData
+        this.chart()
+      }
+      if(index === 2) {
+        this.currList = this.monthList
+        this.currData = this.monthData
+        this.chart()
+      }
+      if(index === 3) {
+        this.currList = this.yearList
+        this.currData = this.yearData
+        this.chart()
+      }
     },
     // 获取当前日期及后面范围内的日期
     findDate(aa) {

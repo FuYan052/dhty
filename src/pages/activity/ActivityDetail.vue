@@ -18,7 +18,7 @@
         <span class="span1">组&nbsp;&nbsp;织&nbsp;&nbsp;者：</span>17602848628(楠少轻狂)<a href="tel://15096762111"><span class="span2 el-icon-phone-outline"><b>拨打</b></span></a>
       </li>
       <li>
-        <span class="span1">俱&nbsp;&nbsp;乐&nbsp;&nbsp;部：</span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-house"><b>查看</b></span>
+        <span class="span1">俱&nbsp;&nbsp;乐&nbsp;&nbsp;部：</span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-house" @click="toClub"><b>查看</b></span>
       </li>
       <li>
         <span class="span1">报名人数：</span>4/16
@@ -73,7 +73,7 @@ export default {
       isChecked: true,  //是否勾选免责条款
       disabled: false,  //报名按钮是否能点击
       content: '',  //倒计时内容
-      endTime: '1565092516'
+      endTime: '1567127270'
     }
   },
   mounted() {
@@ -93,6 +93,13 @@ export default {
         params: location
       })
       window.sessionStorage.setItem('location',JSON.stringify(location))
+    },
+    toClub() {
+       this.$router.push({
+        path: '/club/clubInfo',
+        // name: 'MapPage',
+        // params: location
+      })
     },
     checked() {
       this.isChecked = !this.isChecked
