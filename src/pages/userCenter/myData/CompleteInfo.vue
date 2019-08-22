@@ -197,19 +197,24 @@ export default {
     }
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      // if (!isJPG) {
-      //   this.$message.error('上传头像图片只能是 JPG 格式!');
-      // }
-      // if (!isLt2M) {
-      //   this.$message.error('上传头像图片大小不能超过 2MB!');
-      // }
-      // return isJPG && isLt2M;
+      const isLt2M = file.size / 1024 / 1024 < 3;
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 3MB!');
+      }
+      if(isJPG && isLt2M) {
+        this.$indicator.open('上传中...');
+      }
+      return isJPG && isLt2M;
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      this.$indicator.close();
     },
     // 昵称输入
     showInput() {
@@ -579,6 +584,12 @@ export default {
 }
 .mint-datetime-picker .picker-toolbar{
   padding: 0;
+}
+.mint-indicator-wrapper{
+  padding: 20px 40px !important;
+}
+.mint-indicator-text{
+  font-size: 20px;
 }
 </style>
 

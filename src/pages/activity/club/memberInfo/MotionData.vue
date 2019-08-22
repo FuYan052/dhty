@@ -54,7 +54,7 @@
           <div class="icon"></div>
           <p class="titleText">{{currtitle.title5}}</p>
         </div>
-        <p v-show="!isRun" class="value_sm">70%</p>
+        <p v-show="!isRun" class="value_sm _empty">暂无</p>
         <p v-show="isRun" class="value_sm">135<span>步/分钟</span></p>
       </div>
     </div>
@@ -175,6 +175,12 @@ export default {
           font-weight: normal;
           color: #616161;
         }
+      }
+      ._empty{
+        font-size: 22px;
+        padding-left: 20px;
+        font-weight: normal;
+        color: #616161;
       }
     }
     .top{

@@ -15,8 +15,8 @@ export default {
   name: 'MapPage',
   data() {
     return {
-      longitude:104.057150,//经度
-      latitude:30.558120,//纬度
+      longitude:104.065840,//经度
+      latitude:30.657420,//纬度
       long: '',
       lat: '',
       selectedPoint: ''
@@ -27,7 +27,7 @@ export default {
     // this.lat = JSON.parse(window.sessionStorage.getItem('location')).lat
   },
   mounted() {
-    this.showMap(30.626650,103.974780);
+    this.showMap(30.657420,104.065840);
   },
   methods:{
     // 获取当前位置经纬度
@@ -102,11 +102,15 @@ export default {
       sure() {
         if(this.selectedPoint !== '') {
           // console.log(this.selectedPoint)
+          window.sessionStorage.setItem('placeId',this.selectedPoint.id)
+          window.sessionStorage.setItem('placeName',this.selectedPoint.name)
+          
           this.$router.push({
             path: '/organization',
-            name: 'Organization',
-            params: this.selectedPoint
+            // name: 'Organization',
+            // params: this.selectedPoint
           })
+          
         }else{
           this.$toast({
             message: '请选择地点',

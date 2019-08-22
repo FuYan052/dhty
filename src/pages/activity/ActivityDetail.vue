@@ -23,7 +23,7 @@
       <li>
         <span class="span1">报名人数：</span>4/16
       </li>
-      <li class="num">
+      <li class="list" @click="toList">
         <span class="span1">已&nbsp;&nbsp;报&nbsp;&nbsp;名：</span><span class="span2 el-icon-arrow-right"></span>
         <div class="imgBox">
           <img src="../../assets/touxiang.jpg" alt="">
@@ -95,10 +95,16 @@ export default {
       window.sessionStorage.setItem('location',JSON.stringify(location))
     },
     toClub() {
-       this.$router.push({
+      this.$router.push({
         path: '/club/clubInfo',
         // name: 'MapPage',
         // params: location
+      })
+    },
+    // 报名列表
+    toList() {
+      this.$router.push({
+        path: '/signUpList',
       })
     },
     checked() {
@@ -223,7 +229,7 @@ export default {
       li:nth-of-type(1) {
         border-top: none;
       }
-      .num{
+      .list{
         .imgBox{
           width: 490px;
           height: 100px;

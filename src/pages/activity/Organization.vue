@@ -20,8 +20,8 @@
         <span class="el-icon-arrow-right"></span>
         <span class="value">{{startTimeValue}}{{endTimeValue}}</span>
       </li>
-      <li>
-        填写地点<span class="el-icon-arrow-right"></span>
+      <li @click="selectPlace">
+        填写地点<span class="el-icon-arrow-right"></span><span class="value">{{placeName}}</span>
       </li>
       <li @click="inputNumber">
         填写人数<span class="el-icon-arrow-right"></span><span class="value">{{number}}</span>
@@ -134,6 +134,8 @@ export default {
       endTime: '',  //选择的结束时间
       endTimeValue: '',  //显示的格式化的结束时间
       startDate: '',  //可选日期当天以后
+      placeId: '',  //选择的地点id
+      placeName: '',  //选择的地点名字
       number: '',  //人数
       phone: '',  //联系方式
       cost: '',  //费用
@@ -161,6 +163,17 @@ export default {
   },
   created() {
     this.startDate = new Date()  //当天日期
+    this.typeValue = window.sessionStorage.getItem('typeValue')  //存sessionStorage是为了防止选择场地后返回页面被刷新，之前选择项被清空
+    this.groupTypeValue = window.sessionStorage.getItem('groupTypeValue')
+    this.titleValue = window.sessionStorage.getItem('titleValue')
+    this.formatDateValue = window.sessionStorage.getItem('formatDateValue')
+    this.startTimeValue = window.sessionStorage.getItem('startTimeValue')
+    this.endTimeValue = window.sessionStorage.getItem('endTimeValue')
+    this.placeId = window.sessionStorage.getItem('placeId')
+    this.placeName = window.sessionStorage.getItem('placeName')
+    this.number = window.sessionStorage.getItem('number')
+    this.phone = window.sessionStorage.getItem('phone')
+    this.cost = window.sessionStorage.getItem('cost')
   },
   methods: {
     onValuesChange1(picker, values) {
@@ -204,6 +217,7 @@ export default {
       this.$messagebox.prompt('请填写标题').then(({ value, action }) => {
         // console.log(value)
         this.titleValue = value
+        window.sessionStorage.setItem('titleValue',this.titleValue)
       })
     },
     showDate() {
@@ -238,6 +252,7 @@ export default {
       if(this.typeValue !== '跑步' && this.typeValue !== '儿童活动'){
         this.typeValue = '羽毛球'
       }
+      window.sessionStorage.setItem('typeValue',this.typeValue)
     },
     sure2() {
       // console.log(this.groupType)
@@ -246,6 +261,7 @@ export default {
       if(this.groupTypeValue !== '个人'){
         this.groupTypeValue = '大虎管理员'
       }
+      window.sessionStorage.setItem('groupTypeValue',this.groupTypeValue)
     },
     // 格式化选择的日期
     formatDate(Time) {
@@ -267,31 +283,42 @@ export default {
       this.formatDateValue = this.dateValue
       this.popupVisible = !this.popupVisible
       // console.log(this.dateValue)
+      window.sessionStorage.setItem('formatDateValue',this.formatDateValue)
     },
     handleConfirmStart(v) {
       this.popupVisible = !this.popupVisible
       this.startTime = v
       this.startTimeValue = this.startTime
       // console.log(this.startTimeValue)
+      window.sessionStorage.setItem('startTimeValue',this.startTime)
     },
     handleConfirmEnd(v) {
       this.popupVisible = !this.popupVisible
       this.endTime = v
       this.endTimeValue = '~' + this.endTime
       // console.log(v)
+      window.sessionStorage.setItem('endTimeValue',this.endTimeValue)
+    },
+    // 填写地点
+    selectPlace() {
+      this.$router.push({
+        path: '/mapSelection'
+      })
     },
     // 填写人数
     inputNumber() {
       this.$messagebox.prompt('请填写人数').then(({ value, action }) => {
         // console.log(value)
         this.number = value
+        window.sessionStorage.setItem('number',this.number)
       })
     },
-    // 填写人数
+    // 填写联系方式
     inputPhone() {
       this.$messagebox.prompt('请填写联系方式').then(({ value, action }) => {
         // console.log(value)
         this.phone = value
+        window.sessionStorage.setItem('phone',this.phone)
       })
     },
     // 填写费用
@@ -299,6 +326,7 @@ export default {
       this.$messagebox.prompt('请填写费用').then(({ value, action }) => {
         // console.log(value)
         this.cost = value
+        window.sessionStorage.setItem('cost',this.cost)
       })
     },
     // 确认发布按钮

@@ -20,6 +20,7 @@ import Playground from '@/pages/activity/Playground'
 import PlaygroundDetail from '@/pages/activity/PlaygroundDetail'
 import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
+import SignUpList from '@/pages/activity/SignUpList'
 import Organization from '@/pages/activity/Organization'
 import MapSelection from '@/pages/activity/MapSelection'
 import Members from '@/pages/activity/club/Members'
@@ -174,7 +175,12 @@ export default new Router({
       component: ActivitySignUp,
     },
     {
-      path: '/organization',
+      path: '/signUpList',
+      name: 'SignUpList',
+      component: SignUpList,
+    },
+    {
+      path: '/organization',  //组织活动
       name: 'Organization',
       component: Organization,
     },
@@ -233,7 +239,7 @@ export default new Router({
       component: ManageHome,
     },
     {
-      path: '/userCenter/popularize',
+      path: '/userCenter/popularize',  //马上推广
       name: 'Popularize',
       component: Popularize,
     },

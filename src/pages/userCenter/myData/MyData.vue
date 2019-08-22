@@ -1,29 +1,32 @@
 <template>
   <!-- 我的数据 -->
   <div class="myData" v-title data-title="我的数据">
-    <div class="topBox">
-       <div class="top">
-         <div class="left">
-           <h6>8901.2</h6>
-           <p>运动0分，消耗0千卡</p>
-           <p>距离达成目标还差8000步</p>
-         </div>
-         <div class="right" ref="circle" id="circle1"></div>
-       </div>
-       <div class="bottom">
-         <div>
-           <p class="p1">运动时间</p>
-           <p class="p2">1705.95</p>
-         </div>
-         <div>
-           <p class="p1">运动步数</p>
-           <p class="p2">4800.00</p>
-         </div>
-         <div>
-           <p class="p1">消耗卡路里</p>
-           <p class="p2">13</p>
-         </div>
-       </div>
+    <div class="bgBox">
+      <div class="topBox">
+        <div class="top">
+          <div class="peopleBox"></div>
+          <div class="left">
+            <h6>8901.2</h6>
+            <p>运动0分，消耗0千卡</p>
+            <p>距离达成目标还差8000步</p>
+          </div>
+          <div class="right" ref="circle" id="circle1"></div>
+        </div>
+        <div class="bottom">
+          <div>
+            <p class="p1">运动时间</p>
+            <p class="p2">1705.95</p>
+          </div>
+          <div>
+            <p class="p1">运动步数</p>
+            <p class="p2">4800.00</p>
+          </div>
+          <div>
+            <p class="p1">消耗卡路里</p>
+            <p class="p2">13</p>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- 切换运动类型 -->
     <div class="cate">
@@ -47,43 +50,43 @@
     <p class="healthTitle">健康数据</p>
     <ul class="healthData">
       <li>
-        <div class="iconBox">
+        <div class="iconBox" @click="toDetail">
           <img src="../../../assets/shuimian.png" alt="">
         </div>
         <p>睡眠</p>
       </li>
       <li>
-        <div class="iconBox">
+        <div class="iconBox" @click="toDetail">
           <img src="../../../assets/tizhong.png" alt="">
         </div>
         <p>体重</p>
       </li>
       <li>
-        <div class="iconBox">
+        <div class="iconBox" @click="toDetail">
           <img src="../../../assets/xueya.png" alt="">
         </div>
         <p>压力</p>
       </li>
       <li>
-        <div class="iconBox">
+        <div class="iconBox" @click="toDetail">
           <img src="../../../assets/xinlv.png" alt="">
         </div>
         <p>心率</p>
       </li>
       <li>
-        <div class="iconBox">
+        <div class="iconBox" @click="toDetail">
           <img src="../../../assets/tizhong.png" alt="">
         </div>
         <p>血氧饱和度</p>
       </li>
       <li>
-        <div class="iconBox">
+        <div class="iconBox" @click="toDetail">
           <img src="../../../assets/shuimian.png" alt="">
         </div>
         <p>血压</p>
       </li>
       <li>
-        <div class="iconBox">
+        <div class="iconBox" @click="toDetail">
           <img src="../../../assets/xinlv.png" alt="">
         </div>
         <p>血糖</p>
@@ -287,6 +290,16 @@ export default {
       this.$router.push({
         path: '/userCenter/myData/more'
       })
+    },
+    // 查看健康数据
+    toDetail() {
+      this.$messagebox({
+        title: '提示',
+        message: '抱歉，暂时没有数据！',
+        showCancelButton: false,
+        confirmButtonText: '知道了'
+      });
+      // this.$messagebox.alert("抱歉，暂时没有数据！");
     }
   }
 }
@@ -299,71 +312,90 @@ export default {
     background: #fdfbfc;
     overflow: hidden;
     padding-bottom: 80px;
-    .topBox{
-      width: 715px;
-      height: 424px;
-      background: #fff;
-      margin: 0 auto;
-      margin-top: 214px;
-      border-radius: 18px;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-      .top{
-        width: 100%;
-        height: 232px;
-        border-bottom: 1px solid #efefef;
-        .left{
-          width: 60%;
-          float: left;
-          padding-left: 55px;
-          padding-top: 40px;
-          h6{
-          font-size: 60px;
-          line-height: 60px;
-          color: #fb6801;
+    .bgBox{
+      width: 100%;
+      height: auto;
+      background: url("../../../assets/originBg.png") no-repeat center;
+      background-size: 100% 80%;
+      background-position: 0 0;
+      overflow: hidden;
+      .topBox{
+        width: 715px;
+        height: 424px;
+        background: #fff;
+        margin: 0 auto;
+        margin-top: 214px;
+        border-radius: 18px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        .top{
+          width: 100%;
+          height: 232px;
+          border-bottom: 1px solid #efefef;
+          position: relative;
+          .peopleBox{
+            width: 35px;
+            height: 55px;
+            float: right;
+            background: url("../../../assets/people.png") no-repeat center;
+            background-size: contain;
+            position: absolute;
+            top: 40%;
+            right: 15%;
+            z-index: 99;
           }
-          p{
-            font-size: 22px;
-            line-height: 40px;
-            color: #969696;
+          .left{
+            width: 60%;
+            float: left;
+            padding-left: 55px;
+            padding-top: 40px;
+            h6{
+            font-size: 60px;
+            line-height: 60px;
+            color: #fb6801;
+            }
+            p{
+              font-size: 22px;
+              line-height: 40px;
+              color: #969696;
+            }
+            p:nth-of-type(1){
+              margin-top: 20px;
+            }
           }
-          p:nth-of-type(1){
-            margin-top: 20px;
-          }
-        }
-        .right{
-          width: 220px;
-          height: 220px;
-          padding-top: 20px;
-          padding-right: 30px;
-          float: right;
-          // border: 1px solid red;
-        }
-      }
-      .bottom{
-        width: 100%;
-        height: 180px;
-        div{
-          width: 33%;
-          height: 70px;
-          float: left;
-          text-align: center;
-          margin-top: 50px;
-          .p1{
-            font-size: 22px;
-            line-height: 22px;
-            color: #8d888e;
-          }
-          .p2{
-            font-size: 22px;
-            line-height: 22px;
-            font-weight: bold;
-            color: #181b20;
-            margin-top: 25px;
+          .right{
+            width: 220px;
+            height: 220px;
+            padding-top: 20px;
+            padding-right: 30px;
+            float: right;
           }
         }
-        div:nth-of-type(2){
-          border-left: 2px solid #f1f1f1;
-          border-right: 2px solid #f1f1f1;
+        .bottom{
+          width: 100%;
+          height: 180px;
+          div{
+            width: 33%;
+            height: 70px;
+            float: left;
+            text-align: center;
+            margin-top: 50px;
+            .p1{
+              font-size: 22px;
+              line-height: 22px;
+              color: #8d888e;
+            }
+            .p2{
+              font-size: 22px;
+              line-height: 22px;
+              font-weight: bold;
+              color: #181b20;
+              margin-top: 25px;
+            }
+          }
+          div:nth-of-type(2){
+            border-left: 2px solid #f1f1f1;
+            border-right: 2px solid #f1f1f1;
+          }
         }
       }
     }
@@ -396,12 +428,13 @@ export default {
       position: relative;
       .more{
         width: 100px;
-        height: 80px;
+        height: 50px;
         position: absolute;
         top: 20px;
         right: 30px;
         font-size: 24px;
         color: #ababab;
+        z-index: 99;
         span{
           padding-left: 10px;
         }
@@ -455,4 +488,19 @@ export default {
       }
     }
   }
+</style>
+<style>
+ .mint-msgbox{
+   width: 65% !important;
+ }
+ .mint-msgbox-content{
+   padding: 40px 0;
+ }
+ .mint-msgbox-message{
+   font-size: 26px;
+   color: rgb(122, 120, 120);
+ }
+ .mint-msgbox-btns{
+   height: 70px;
+ }
 </style>

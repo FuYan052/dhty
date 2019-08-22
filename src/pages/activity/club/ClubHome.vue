@@ -1,6 +1,6 @@
 <template>
   <!-- 俱乐部 -->
-  <div class="clubHome">
+  <div class="clubHome" v-title data-title="俱乐部">
     <router-view></router-view>
     <div class="tabbar">
       <ul>
