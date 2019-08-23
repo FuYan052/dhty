@@ -46,6 +46,17 @@
 <script>
 export default {
   name: 'PlaygroundDetail',
+  data() {
+    return {
+
+    }
+  },
+  created() {
+    // 获取场馆详情
+    // this.$http.getPlaygroundDetail(params).then(rersp => {
+    //   console.log(resp)
+    // })
+  },
   methods: {
     toMap() {
       const location = {

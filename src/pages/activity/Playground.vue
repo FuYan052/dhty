@@ -57,7 +57,30 @@ export default {
       zoom: 3,
     }
   },
+  created() {
+    // 获取用户当前位置
+    // var myLatLng = new qq.maps.LatLng(myLatitude, myLongitude);
+    // console.log(myLatLng)
+    var geolocation = new qq.maps.Geolocation("ECMBZ-7HAK4-I3ZUO-D4BX7-WMD25-NSB6S", "公众号-体育"); 
+    // var positionNum = 0;
+    var options = {timeout: 8000};
+    geolocation.getLocation(this.showPosition, this.showErr, options);
+
+    // 获取场馆列表
+    // this.$http.getPlaygroundList(params).then(resp => {
+    //   console.log(resp)
+    // })
+
+  },
   methods: {
+     
+     showPosition(position) {
+        console.log(position)
+     },
+     showErr() { 
+        //TODO 如果出错了调用此方法 
+    },
+ 
     changeCate(item,index) {
       this.currIndex = index
     },
@@ -68,8 +91,10 @@ export default {
     },
     toMap() {
       const location = {
-        lat: 30.558120,
-        lng: 104.057150
+        lat: 30.5702,
+        lng: 104.06476
+        // lat: 30.558120,
+        // lng: 104.057150
       }
       this.$router.push({
         path: '/mapPage',

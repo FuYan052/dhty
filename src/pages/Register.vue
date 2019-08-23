@@ -63,8 +63,8 @@ export default {
     };
     return {
       ruleForm: {
-        phoneNum: '',
-        inputPassword: '',
+        phoneNum: '18884027431',
+        inputPassword: '123456',
       },
       disabled: false,
       content: '获取验证码',
@@ -84,15 +84,18 @@ export default {
     }
   },
   methods: {
+    // 获取验证码
     getCode() {  
       this.totalTime = 60
+      this.$http.postCode(this.ruleForm.phoneNum).then(resp => {
+        console.log(resp)
+      })
       this.timer = setInterval(() => {
         this.totalTime--
         this.content = this.totalTime + 's后重新发送'
         this.disabled = true
-        console.log(this.totalTime)
+        // console.log(this.totalTime)
         if(this.totalTime <= 0){
-          console.log('ending')
           this.content = '获取验证码'
           this.disabled = false
           clearInterval(this.timer)
@@ -108,16 +111,18 @@ export default {
     },
     // 提交注册信息
     doRegister() {
-      console.log(this.rule1)
-      console.log(this.rule2)
       if(this.rule1 && this.rule2 && this.checkCode !== ''){
         const params = {
           phone: this.ruleForm.phoneNum,
-          password: this.ruleForm.inputPassword,
-          checkCode: this.checkCode
+          authCode: this.checkCode,
+          passWord: this.ruleForm.inputPassword,
         }
         console.log(params)
-        console.log("注册成功:" + params)
+        this.$http.postRegister(params).then(resp => {
+          console.log(params)
+        })
+        // console.log(params)
+        // console.log("注册成功:" + params)
       }else{
         this.$message({
           showClose: true,

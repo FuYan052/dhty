@@ -16,6 +16,17 @@
 <script>
 export default {
   name: 'JoinCroupList',
+  data() {
+    return{
+
+    }
+  },
+  created() {
+    // 获取参加的群列表
+    // this.$http.getJoinedGroup(params).then(resp => {
+    //   console.log(resp)
+    // })
+  },
   methods: {
     
   }

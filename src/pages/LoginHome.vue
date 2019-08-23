@@ -20,6 +20,9 @@ export default {
     //   console.log(resp)
     // })
   },
+  mounted() {
+    this.$toast('请先登录！');
+  },
   methods: {
     doLogin() {
       this.$router.push({
@@ -74,4 +77,8 @@ export default {
     }
   }
 </style>
-
+<style>
+  .mint-toast-text{
+    font-size: 26px;
+  }
+</style>

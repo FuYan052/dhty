@@ -39,7 +39,7 @@
       </el-form>
     </div>
     <!-- 确认按钮 -->
-    <div class="submitBtn">完成创建</div>
+    <div class="submitBtn" @click="create">完成创建</div>
   </div>
 </template>
 
@@ -84,6 +84,12 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
       this.$indicator.close();
     },
+    // 创建
+    create() {
+      // this.$http.createGroup(params).then(resp => {
+      //   console.log(resp)
+      // })
+    }
   }
 }
 </script>

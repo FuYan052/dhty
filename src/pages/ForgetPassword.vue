@@ -113,13 +113,14 @@ export default {
     },
     getCode() {  
       this.totalTime = 60
+      this.$http.postCode(this.ruleForm.phoneNum).then(resp => {
+        console.log(resp)
+      })
       this.timer = setInterval(() => {
         this.totalTime--
         this.content = this.totalTime + 's后重新发送'
         this.disabled = true
-        console.log(this.totalTime)
         if(this.totalTime <= 0){
-          console.log('ending')
           this.content = '获取验证码'
           this.disabled = false
           clearInterval(this.timer)
@@ -133,6 +134,12 @@ export default {
           passWord: this.ruleForm.inputRePassword,
           code: this.code,
         }
+        this.$http.postForgetPassword(params).then(resp => {
+          // console.log(resp)
+          if(resp.status == 200) {
+            this.$toast('密码修改成功！');
+          }
+        })
         console.log(params)
       } else {
         this.$message({

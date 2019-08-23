@@ -82,19 +82,7 @@ export default {
     }
   },
   methods: {
-    getCode() {
-      this.totalTime = 60
-      this.timer = setInterval(() => {
-        this.totalTime--
-        this.content = this.totalTime + 's后重新发送'
-        console.log(this.totalTime)
-        if(this.totalTime <= 0){
-          console.log('ending')
-          this.content = '获取验证码'
-          clearInterval(this.timer)
-        }
-      },1000)
-    },
+
     // 输入值合法时的回调
     callback1() {
       this.rule1 = true
@@ -106,8 +94,11 @@ export default {
       if(this.rule1 && this.rule2){
         const params = {
           phone: this.ruleForm.phoneNum,
-          password: this.ruleForm.inputPassword
+          passWord: this.ruleForm.inputPassword
         }
+        this.$http.postLoginForPassword(params).then(resp => {
+          console.log(resp)
+        })
         console.log(params)
       }else{
         this.$message({

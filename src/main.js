@@ -29,18 +29,21 @@ Vue.use(MintUI)
 // Vue.use(preview)
 
 // 全局导航守卫
-// router.beforeEach((to, from, next) => {
-//   if (to.path === '/userCenter') {
-//     next();
-//   } else {
-//     let t = localStorage.getItem('ufo-token');
-//     if (t === 'null' || t === '' && to.path != '/login') {
-//       next('/login');
-//     } else {
-//       next();
-//     }
-//   }
-// });
+//设置白名单，指不需要登录就可以直接进入的页面
+var whiteList = ["/home","/home/login","/home/register","/home/loginForCode","/home/forgetPassword"]
+router.beforeEach((to, from, next) => {
+  // let hasToken = localStorage.getItem('ty-token');
+  let hasToken = true
+  if (hasToken) {
+    next()
+  }else {
+    if (whiteList.indexOf(to.path) !== -1) {
+        next()//这里是即将进入的页面是白名单的页面就直接进入
+    } else { 
+      next('/home' )//这里是即将进入的页面不是白名单的页面又没有token的情况下重定向到登录页面进行登录操作
+    } 
+  }
+});
 
 /* eslint-disable no-new */
 new Vue({
@@ -50,11 +53,8 @@ new Vue({
   components: { App },
   template: '<App/>',
   created() {
-    if(window.localStorage.getItem('ufo-token') === null){
-      window.localStorage.setItem('ufo-token','')
-    }
-    if(window.localStorage.getItem('type') === null){
-      window.localStorage.setItem('type','')
+    if(window.localStorage.getItem('ty-token') === null){
+      window.localStorage.setItem('ty-token','')
     }
   }
 })

@@ -3,7 +3,10 @@ import { Message } from 'element-ui'
 
 // 创建axios实例
 const ajax = axios.create({
-  baseURL: 'http://192.168.0.122:9000/'
+  baseURL: 'http://192.168.0.114:9000/',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
 })
 
 // 模拟登录数据 
@@ -18,9 +21,10 @@ const ajax3 = axios.create({
 ajax.interceptors.request.use(config => {
   console.log(config)
   // Do something before request is sent
-  if (localStorage.getItem('ufo-token')) {
-    config.headers.common['token'] = localStorage.getItem('ufo-token'); //让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+  if (localStorage.getItem('ty-token')) {
+    config.headers.common['token'] = localStorage.getItem('ty-token'); //让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
   }
+  // config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
   return config
 }, error => {
   // Do something with request error
@@ -71,13 +75,141 @@ ajax.interceptors.response.use(resp => {
     return Promise.reject(error)
   })
 
-// 登录
-export const postLogin = (params) => {
-  return ajax.post(`/v1/rest/login/doLogin?phone=${params.phoneNum}&passWord=${params.password}`)
+// 获取验证码
+export const postCode = (params) => {
+  return ajax.post(`/v1/rest/public/bgxsendcode?phone=${params}`)
+}  
+// 校验验证码
+// export const checkCode = (params) => {
+//   return ajax.post(`/public_controller/bgxisphonecode?phone=${params.phoneNum}&verifyCode=${params.verifyCode}`)
+// }
+// 注册
+export const postRegister = (params) => {
+  return ajax.post(`/v1/rest/login/register?phone=${params.phone}&authCode=${params.authCode}&passWord=${params.passWord}`)
 }
-// export const postLogin = () => {
-//   return ajax.post(`/167512/api/login`)
-// }
-// export const getInfo = () => {
-//   return ajax3.post(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET`)
-// }
+// 手机密码登录
+export const postLoginForPassword = (params) => {
+  return ajax.post(`/v1/rest/login/login?phone=${params.phone}&passWord=${params.passWord}`)
+}
+// 验证码登录
+export const postLoginForCode = (params) => {
+  return ajax.post(`/v1/rest/login/authCodeLogin?phone=${params.phone}&authCode=${params.code}`)
+}
+// 忘记密码
+export const postForgetPassword = (params) => {
+  return ajax.post(`/v1/rest/login/authCodeLogin?phone=${params.phone}&authCode=${params.code}&passWord=${params.passWord}`)
+}
+
+// 场地
+// 场地详情
+export const getPlaygroundDetail = (params) => {
+  return ajax.get(`/v1/rest/venue/venueDetails?id=${params}`)
+}
+// 场地列表
+export const getPlaygroundList = (params) => {
+  return ajax.get(`/v1/rest/venue/venueList?id=${params}`)
+}
+
+// 我的管理
+// 我参加的社群
+export const getJoinedGroup = (params) => {
+  return ajax.get(`/v1/rest/management/JoinedGroup?id=${params}`)
+}
+// 创建社群
+export const createGroup = (params) => {
+  return ajax.post(`/v1/rest/management/createGroup?id=${params}`)
+}
+// 解散群
+export const disbandmentGroup = (params) => {
+  return ajax.get(`/v1/rest/management/disbandmentGroup?groupId=${params}`)
+}
+// 我创建的群
+export const createGroupList = (params) => {
+  return ajax.get(`/v1/rest/management/groupList?groupId=${params}`)
+}
+// 我参加的活动
+export const participatedActivity = (params) => {
+  return ajax.get(`/v1/rest/management/participatedActivity?userId=${params}`)
+}
+// 设为管理员、移除管理员、移除群成员
+export const setInfo = (params) => {
+  return ajax.get(`/v1/rest/management/setInfo?type=${params.type}&groupId=${params.groupId}&userId=${params.userId}`)
+}
+// 转让群
+export const transferGroup = (params) => {
+  return ajax.get(`/v1/rest/management/transferGroup?groupId=${params.groupId}&qId=${params.qId}&cId=${params.cId}`)
+}
+// 修改社群
+export const updateGroup = (params) => {
+  return ajax.post(`/v1/rest/management/updateGroup?id=${params.id}&userId=${params.userId}&name=${params.name}&content=${params.content}&logo=${params.logo}`)
+}
+
+// 我的数据
+// 查询所有标签
+export const findAllLabel = (params) => {
+  return ajax.get(`/v1/rest/mydata/findAllLabel?groupId=${params}`)
+}
+// 创建新标签
+export const createLabel = (params) => {
+  return ajax.get(`/v1/rest/mydata/createLabel?groupId=${params}`)
+}
+// 完善信息
+export const completeInfo = (params) => {
+  return ajax.post(`/v1/rest/mydata/savePersonalInformation?groupId=${params}`)
+}
+
+// 我要参与
+// 活动详情
+export const activitiesDetail = (params) => {
+  return ajax.get(`/v1/rest/login/activitiesDetailInfo?groupId=${params}`)
+}
+// 活动列表
+export const activitiesList = (params) => {
+  return ajax.get(`/v1/rest/login/activitiesList?type=${params.type}&time=${params.time}&keyWord=${params.keyWord}`)
+}
+// 申请加入社群
+export const applyJoinGroup = (params) => {
+  return ajax.get(`/v1/rest/login/applyJoinGroup?groupId=${params.groupId}&userId=${params.userId}`)
+}
+// Ta参加过的活动
+export const attendedActivities = (params) => {
+  return ajax.get(`/v1/rest/login/attendedActivities?id=${params.id}&type=${params.type}`)
+}
+// 获取场地信息
+export const getVenueInfo = (params) => {
+  return ajax.get(`/v1/rest/login/getVenueInfo?type=${params}`)
+}
+// 群活动
+export const groupActivity = (params) => {
+  return ajax.get(`/v1/rest/login/groupActivity?id=${params.id}&time=${params.time}`)
+}
+// 群详情
+export const groupDetailInfo = (params) => {
+  return ajax.get(`/v1/rest/login/groupDetailInfo?id=${params}`)
+}
+// 社群列表
+export const groupList = (params) => {
+  return ajax.get(`/v1/rest/login/groupList?id=${params}`)
+}
+// 群成员
+export const groupMembers = (params) => {
+  return ajax.get(`/v1/rest/login/groupMembers?groupId=${params.groupId}&keyWord=${params.keyWord}`)
+}
+// Ta人资料
+export const informationOthers = (params) => {
+  return ajax.get(`/v1/rest/login/informationOthers?id=${params}`)
+}
+// Ta的活动参数
+export const motionParameters = (params) => {
+  return ajax.get(`/v1/rest/login/motionParameters?id=${params}&type=${params.type}`)
+}
+// 组织的活动
+export const organizedActivities = (params) => {
+  return ajax.get(`/v1/rest/login/organizedActivities?groupId=${params}`)
+}
+// 创建组织活动
+export const organizingActivities = (params) => {
+  return ajax.post(`/v1/rest/login/organizingActivities?groupId=${params}`)
+}
+
+
