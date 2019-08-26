@@ -75,19 +75,19 @@
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/tizhong.png" alt="">
+          <img src="../../../assets/xybhd.png" alt="">
         </div>
         <p>血氧饱和度</p>
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/shuimian.png" alt="">
+          <img src="../../../assets/xy.png" alt="">
         </div>
         <p>血压</p>
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/xinlv.png" alt="">
+          <img src="../../../assets/xt.png" alt="">
         </div>
         <p>血糖</p>
       </li>

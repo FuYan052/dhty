@@ -98,7 +98,6 @@
     
   </div>
 </template>
-
 <script>
 export default {
   name: 'MyActivities',
@@ -113,6 +112,17 @@ export default {
       currIndex2: 0,
       currIndex3: 0,
     }
+  },
+  created() {
+    // 我参加的活动
+    // this.$http.participatedActivity(params).then(resp => {
+    //   console.log(resp)
+    // })
+
+    // 我组织的活动
+    // this.$http.organizedActivities(params).then(resp => {
+    //   console.log(resp)
+    // })
   },
   methods:{
     changeCate(item,index) {

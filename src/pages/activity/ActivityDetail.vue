@@ -76,6 +76,11 @@ export default {
       endTime: '1567127270'
     }
   },
+  created() {
+    // this.$http.activitiesDetail(params).then(resp => {
+    //   console.log(resp)
+    // })
+  },
   mounted() {
     this.countdowm(this.endTime)
     console.log(new Date().getTime())

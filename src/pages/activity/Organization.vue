@@ -29,6 +29,9 @@
       <li @click="inputPhone">
         填写联系方式<span class="el-icon-arrow-right"></span><span class="value">{{phone}}</span>
       </li>
+      <li @click="lastTime">
+        报名截止时间<span class="el-icon-arrow-right"></span><span class="value">{{showLastTimeValue}}</span>
+      </li>
     </ul>
     <div class="cost" @click="inputCost">填写参加费用 <span class="el-icon-arrow-right"></span><span class="value">{{cost}}</span></div>
     <div class="notes">
@@ -107,6 +110,15 @@
         v-model="endTime"
         @confirm="handleConfirmEnd">
       </mt-datetime-picker>
+      <!-- 报名截止时间 -->
+      <mt-datetime-picker
+        v-show="lastTimePicker"
+        ref="picker"
+        type="datetime"
+        :startDate="startDate"
+        v-model="lastTimeValue"
+        @confirm="handleConfirmLastTime">
+      </mt-datetime-picker>
     </mt-popup>
   </div>
 </template>
@@ -122,6 +134,7 @@ export default {
       datePicker: false,
       startTimePicker: false,
       endTimePicker: false,
+      lastTimePicker: false,
       type: '羽毛球', //默认运动类型
       typeValue: '', //选择的运动类型
       groupType: '大虎管理员', //默认所属群组
@@ -138,6 +151,8 @@ export default {
       placeName: '',  //选择的地点名字
       number: '',  //人数
       phone: '',  //联系方式
+      lastTimeValue: '',  //报名截止时间  //此格式传给后端
+      showLastTimeValue: '',  //报名截止时间  //此格式用于前端显示
       cost: '',  //费用
       currSlots: this.slots1,
       slots1: [
@@ -162,17 +177,23 @@ export default {
     }
   },
   created() {
+    // 可选群列表
+    // this.$http.groupList().then(resp => {
+    //   console.log(resp)
+    // })
+
     this.startDate = new Date()  //当天日期
     this.typeValue = window.sessionStorage.getItem('typeValue')  //存sessionStorage是为了防止选择场地后返回页面被刷新，之前选择项被清空
     this.groupTypeValue = window.sessionStorage.getItem('groupTypeValue')
     this.titleValue = window.sessionStorage.getItem('titleValue')
     this.formatDateValue = window.sessionStorage.getItem('formatDateValue')
     this.startTimeValue = window.sessionStorage.getItem('startTimeValue')
-    this.endTimeValue = window.sessionStorage.getItem('endTimeValue')
+    this.endTime = window.sessionStorage.getItem('endTime')
     this.placeId = window.sessionStorage.getItem('placeId')
     this.placeName = window.sessionStorage.getItem('placeName')
     this.number = window.sessionStorage.getItem('number')
     this.phone = window.sessionStorage.getItem('phone')
+    this.showLastTimeValue = window.sessionStorage.getItem('lastTimeValue')
     this.cost = window.sessionStorage.getItem('cost')
   },
   methods: {
@@ -278,6 +299,21 @@ export default {
       minute = minute < 10 ? ('0' + minute) : minute;
       return y + '年' + m + '月' + d+ '日';
     },
+    // 转化日期时间
+    formatDate2(Time) {
+      var date = Time;
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h = h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      return y + '年' + m + '月' + d + '日'+ h + ":" + minute;
+    },
     handleConfirmDate(v) {
       this.dateValue = this.formatDate(v)
       this.formatDateValue = this.dateValue
@@ -297,7 +333,7 @@ export default {
       this.endTime = v
       this.endTimeValue = '~' + this.endTime
       // console.log(v)
-      window.sessionStorage.setItem('endTimeValue',this.endTimeValue)
+      window.sessionStorage.setItem('endTime',this.endTime)
     },
     // 填写地点
     selectPlace() {
@@ -321,6 +357,23 @@ export default {
         window.sessionStorage.setItem('phone',this.phone)
       })
     },
+    // 报名截止时间
+    lastTime() {
+      this.popupVisible = true
+      this.picker1 = false
+      this.picker2 = false
+      this.datePicker = false
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.lastTimePicker = true
+    },
+    handleConfirmLastTime(v) {
+      this.showLastTimeValue = this.formatDate2(v)
+      this.popupVisible = !this.popupVisible
+      this.lastTimeValue = v
+      // console.log(this.showLastTimeValue)
+      window.sessionStorage.setItem('lastTimeValue',this.showLastTimeValue)
+    },
     // 填写费用
     inputCost() {
       this.$messagebox.prompt('请填写费用').then(({ value, action }) => {
@@ -331,22 +384,51 @@ export default {
     },
     // 确认发布按钮
     submit() {
-      console.log("ok")
       const params = {
         type: this.typeValue,
         group: this.groupTypeValue,
         title: this.titleValue,
-        date: this.dateValue,
+        date: this.formatDateValue,
         startTime: this.startTimeValue,
-        endTime: this.endTimeValue,
-        place: '',
+        endTime: this.endTime,
+        place: this.placeName,
         number: this.number,
         phone: this.phone,
         cost: this.cost,
         notes: this.textarea1,
+        lastTime: this.lastTimeValue,
         isWeekly: this.isCkecked
       }
       console.log(params)
+      window.sessionStorage.removeItem("cost")
+      window.sessionStorage.removeItem("endTime")
+      window.sessionStorage.removeItem("formatDateValue")
+      window.sessionStorage.removeItem("groupTypeValue")
+      window.sessionStorage.removeItem("number")
+      window.sessionStorage.removeItem("phone")
+      window.sessionStorage.removeItem("placeId")
+      window.sessionStorage.removeItem("placeName")
+      window.sessionStorage.removeItem("startTimeValue")
+      window.sessionStorage.removeItem("lastTimeValue")
+      window.sessionStorage.removeItem("titleValue")
+      window.sessionStorage.removeItem("typeValue")
+      // 提交后台
+      // this.$http.organizingActivities(params).then(resp => {
+      //   console.log(resp)
+      //   if(resp.status == 200) {
+          // window.sessionStorage.removeItem("cost")
+          // window.sessionStorage.removeItem("endTime")
+          // window.sessionStorage.removeItem("formatDateValue")
+          // window.sessionStorage.removeItem("groupTypeValue")
+          // window.sessionStorage.removeItem("number")
+          // window.sessionStorage.removeItem("phone")
+          // window.sessionStorage.removeItem("placeId")
+          // window.sessionStorage.removeItem("placeName")
+          // window.sessionStorage.removeItem("startTimeValue")
+          // window.sessionStorage.removeItem("titleValue")
+          // window.sessionStorage.removeItem("typeValue")
+      //   }
+      // })
     },
     // 是否为周活动
     isWeekActivie() {

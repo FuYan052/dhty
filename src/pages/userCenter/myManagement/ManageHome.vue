@@ -3,11 +3,11 @@
   <div class="manageHome">
     <div class="topBox">
       <p class="userName">张少伟</p>
-      <div class="editIcon"><span class="el-icon-edit"></span></div>
+      <div class="editIcon" @click="toCompleteInfo"><span class="el-icon-edit"></span></div>
       <img class="tx" src="../../../assets/touxiang.jpg" alt="">
       <p class="info">
         身份：群主
-        <span @click="toCash">账户余额(元)：15.2</span>
+        <span @click="toCash">账户余额(元)：15.2 <b class="el-icon-arrow-right"></b></span>
       </p>
     </div>
     <div class="middleBox">
@@ -49,6 +49,12 @@ export default {
     }
   },
   methods: {
+    // 完善信息
+    toCompleteInfo() {
+      this.$router.push({
+        path: '/userCenter/myData/completeInfo'
+      })
+    },
     toProblem() {
       this.$router.push({
         path: '/userCenter/commonProblem'
@@ -76,7 +82,7 @@ export default {
       background: url("../../../assets/bg111.png") no-repeat center;
       background-size: contain;
       overflow: hidden;
-      padding-right: 80px;
+      padding-right: 60px;
       position: relative;
       .userName{
         color: #fff;
@@ -108,13 +114,16 @@ export default {
         margin-top: 26px;
       }
       .info{
-        width: 385px;
+        width: 410px;
         float: right;
         margin-top: 120px;
         color: #656565;
         font-size: 22px;
         span{
           float: right;
+          b{
+            padding-left: 5px;
+          }
         }
       }
     }

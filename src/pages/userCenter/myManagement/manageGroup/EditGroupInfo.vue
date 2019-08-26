@@ -39,9 +39,9 @@
       </el-form>
     </div>
     <div class="btnBox">
-      <div>保存</div>
+      <div @click="save">保存</div>
       <div @click="transferGroup">转让群</div>
-      <div>解散群</div>
+      <div @click="disbandment">解散群</div>
     </div>
   </div>
 </template>
@@ -86,11 +86,27 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
       this.$indicator.close();
     },
+    // 保存
+    save() {
+      // this.$http.updateGroup(params).then(resp => {
+      //   console.log(resp)
+      // })
+    },
+    // 解散群
+    disbandment() {
+      // this.$http.disbandmentGroup(params).then(resp => {
+      //   console.log(resp)
+      // })
+    },
     // 转让群
     transferGroup() {
-      this.$router.push({
-        path: '/userCenter/groupManagement/transferGroup'
-      })
+      // this.$http.transferGroup(params).then(resp => {
+      //   console.log(resp)
+      // })
+
+      // this.$router.push({
+      //   path: '/userCenter/groupManagement/transferGroup'
+      // })
     }
   }
 }

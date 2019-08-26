@@ -361,8 +361,14 @@ export default {
       this.$router.push({
         path: '/userCenter/selectLabels'
       })
+    },
+    // 提交信息
+    submit() {
+      // this.$http.completeInfo(params).then(resp => {
+      //   console.log(resp)
+      // })
     }
-  },
+  },  
   mounted() {
     this.$nextTick(() => { //vue里面全部加载好了再执行的函数 （类似于setTimeout）
       this.addressSlots[0].defaultIndex = 0

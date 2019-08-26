@@ -2,7 +2,7 @@
   <!-- 注册 -->
   <div class="register">
     <div class="top">
-      <span></span>
+      <!-- <span></span> -->
     </div>
     <p class="name">注册</p>
     <div class="wrap">

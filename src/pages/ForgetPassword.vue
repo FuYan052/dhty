@@ -2,7 +2,7 @@
   <!-- 忘记密码 -->
   <div class="forgetPassword">
     <div class="top">
-      <span></span>
+      <!-- <span></span> -->
     </div>
     <p class="name">忘记密码</p>
     <div class="wrap">

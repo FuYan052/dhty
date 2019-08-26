@@ -87,6 +87,14 @@ export default {
         grade: 'Lv.11'
       },
     ]
+
+    // 群成员
+    // this.$http.groupMembers(params).then(resp => {
+    //   console.log(resp)
+    //   if(resp.status == 200) {
+    //     this.memberList = resp.data
+    //   }
+    // })
   },
   methods: {
     memberInfo() {

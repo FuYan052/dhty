@@ -34,6 +34,11 @@ export default {
     }
   },
   created() {
+    // 获取所有标签
+    // this.$http.findAllLabel(params).then(resp => {
+    //   console.log(resp)
+    // })
+
     this.labelList = ['羽毛球','单身汪','萌萌哒','吃货','小鲜肉','强迫症','乐观主义','老实小孩','跑步','宝妈宝爸','逗比'
     ,'泡吧','老腊肉','感性','冒险王','健身','时尚达人','美食家','白富美','随性','乒乓球'
     ,'吃吃喝喝','小说','高富帅','坚强','能歌善舞','文艺','铲屎官','油腻大叔','简单','瑜伽','热血','改装车','老干部','单纯'
@@ -86,6 +91,11 @@ export default {
       this.$refs.input.focus()
     },
     toAdd() {
+      // 创建并提交后台
+      // this.$http.createLabel(params).then(resp => {
+      //   console.log(resp)
+      // })
+
       this.isShow = false
       this.labelList.unshift(this.addValue)
       this.selectedList.push(this.addValue)

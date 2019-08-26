@@ -1,7 +1,7 @@
 <template>
   <div class="loginForCode">
     <div class="top">
-      <span></span>
+      <!-- <span></span> -->
     </div>
     <p class="name">登录</p>
     <div class="wrap">

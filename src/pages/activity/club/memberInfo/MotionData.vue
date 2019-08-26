@@ -88,6 +88,10 @@ export default {
   },
   created() {
     this.currtitle = this.badmintonDataTitle
+    // 运动参数
+    // this.$http.motionParameters(params).then(resp => {
+    //   console.log(resp)
+    // })
   },
   methods: {
     changeCate(item,index) {

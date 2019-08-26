@@ -24,10 +24,6 @@ import SignUpList from '@/pages/activity/SignUpList'
 import Organization from '@/pages/activity/Organization'
 import MapSelection from '@/pages/activity/MapSelection'
 import Members from '@/pages/activity/club/Members'
-import ActivitiesDetail from '@/pages/activity/badminton/ActivitiesDetail'
-import BShow from '@/pages/activity/badminton/BShow'
-import BActivities from '@/pages/activity/badminton/BActivities'
-import BMember from '@/pages/activity/badminton/BMember'
 import MyData from '@/pages/userCenter/myData/MyData'
 import MyDataDetail from '@/pages/userCenter/myData/MyDataDetail'
 import CompleteInfo from '@/pages/userCenter/myData/CompleteInfo'
@@ -189,28 +185,6 @@ export default new Router({
       name: 'MapSelection',
       component: MapSelection,
     },
-    {
-      path: '/badminton/activitiesDetail',
-      name: 'ActivitiesDetail',
-      component: ActivitiesDetail,
-      children: [
-        {
-          path: '/badminton/activitiesDetail/bShow',
-          name: 'BShow',
-          component: BShow
-        },
-        {
-          path: '/badminton/activitiesDetail/bActivities',
-          name: 'BActivities',
-          component: BActivities
-        },
-        {
-          path: '/badminton/activitiesDetail/bMember',
-          name: 'BMember',
-          component: BMember
-        }
-      ]
-    },  
     // 我的数据
     {
       path: '/userCenter/myData',

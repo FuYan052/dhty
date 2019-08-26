@@ -19,8 +19,16 @@ export default {
   name: 'AttendGroupList',
   data() {
     return {
-
+      groupList: ''
     }
+  },
+  created() {
+    // this.$http.groupList(params).then(resp => {
+    //   console.log(resp)
+    //   if(resp.staus == 200) {
+    //     this.groupList = resp.data
+    //   }
+    // })
   }
 }
 </script>

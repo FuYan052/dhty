@@ -1,15 +1,15 @@
 <template>
   <div class="clubInfo">
     <div class="top">
-      <img src="../../../assets/123.jpg" alt="">
-      <p>千羽千寻羽毛球俱乐部</p>
+      <img :src="clubInfo.logo" alt="">
+      <p>{{clubInfo.name}}</p>
     </div>
     <!-- <div class="member">
       <img v-for="(item,index) in 10" :key="index" src="../../assets/touxiang.jpg" alt="">
       <span class="el-icon-arrow-right"></span>
     </div> -->
     <div class="join">
-      <div class="joinBtn">申请加入俱乐部</div>
+      <div class="joinBtn" @click="toJoin">申请加入俱乐部</div>
     </div>
     <!-- 活动时刻表 -->
     <div class="activList">
@@ -34,7 +34,7 @@
     <!-- 俱乐部简介 -->
     <div class="introd">
       <div class="title">俱乐部简介</div>
-      <p>羽毛球是一项室内、室外都可以进行的体育运动。依据参与的人数，可以分为单打与双打，羽毛球是一项室内、室外都可以进行的体育运动。依据参与的人数，可以分为单打与双打，及新兴的3打3。羽毛球拍由：拍面、拍杆、拍柄及拍框与拍杆的接头构成。一支球拍的长度不超过680毫米，其中球拍柄与球拍杆长度不超过41厘米，拍框长度为28厘米，宽为23厘米，随着科学技术的发展</p>
+      <p>{{clubInfo.content}}</p>
       <!-- <img src="../../assets/code.png" alt=""> -->
     </div>
   </div>
@@ -42,7 +42,36 @@
 
 <script>
 export default {
-  name: 'ClubInfo'
+  name: 'ClubInfo',
+  data() {
+    return {
+      clubInfo: ''
+    }
+  },
+  created() {
+    // 群id
+    const groupId = window.sessionStorage.getItem('groupDetailId')
+    console.log(groupId)
+    // 群详情
+    this.$http.groupDetailInfo(groupId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.clubInfo = resp.data
+      }
+    })
+  },
+  methods: {
+    // 申请加入俱乐部
+    toJoin() {
+      const params = {
+        groupId: '',
+        userId: ''
+      }
+      // this.$http.applyJoinGroup(params).then(resp => {
+      //   console.log(resp)
+      // })
+    }
+  }
 }
 </script>
 
@@ -54,7 +83,8 @@ export default {
     .top{
       width: 100%;
       height: 250px;
-      background: #546b8d;
+      background:url("../../../assets/clubBg.png") no-repeat center;
+      background-size: contain;
       border-bottom: 3px solid #06a182;
       overflow: hidden;
       img{

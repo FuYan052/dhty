@@ -97,7 +97,7 @@ export const postLoginForCode = (params) => {
 }
 // 忘记密码
 export const postForgetPassword = (params) => {
-  return ajax.post(`/v1/rest/login/authCodeLogin?phone=${params.phone}&authCode=${params.code}&passWord=${params.passWord}`)
+  return ajax.post(`/v1/rest/login/resetPassword?phone=${params.phone}&authCode=${params.code}&passWord=${params.passWord}`)
 }
 
 // 场地
@@ -107,7 +107,7 @@ export const getPlaygroundDetail = (params) => {
 }
 // 场地列表
 export const getPlaygroundList = (params) => {
-  return ajax.get(`/v1/rest/venue/venueList?id=${params}`)
+  return ajax.get(`/v1/rest/venue/venueList?type=${params.type}&name=${params.name}&lon=${params.lon}&lat=${params.lat}`)
 }
 
 // 我的管理
@@ -165,7 +165,7 @@ export const activitiesDetail = (params) => {
 }
 // 活动列表
 export const activitiesList = (params) => {
-  return ajax.get(`/v1/rest/login/activitiesList?type=${params.type}&time=${params.time}&keyWord=${params.keyWord}`)
+  return ajax.get(`/v1/rest/login/activitiesList?type=${params.type}&time=${params.time}`)
 }
 // 申请加入社群
 export const applyJoinGroup = (params) => {
@@ -175,7 +175,7 @@ export const applyJoinGroup = (params) => {
 export const attendedActivities = (params) => {
   return ajax.get(`/v1/rest/login/attendedActivities?id=${params.id}&type=${params.type}`)
 }
-// 获取场地信息
+// 获取场地信息  /////////////
 export const getVenueInfo = (params) => {
   return ajax.get(`/v1/rest/login/getVenueInfo?type=${params}`)
 }
@@ -209,7 +209,7 @@ export const organizedActivities = (params) => {
 }
 // 创建组织活动
 export const organizingActivities = (params) => {
-  return ajax.post(`/v1/rest/login/organizingActivities?groupId=${params}`)
+  return ajax.post(`/v1/rest/login/organizingActivities?id=${params.id}&type=${params.type}&type=${params.type}&groupId=${params.groupId}`)
 }
 
 

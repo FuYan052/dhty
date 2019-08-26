@@ -1,4 +1,5 @@
 <template>
+  <!-- 社群活动 -->
   <div class="clubActivities">
     <!-- 日期切换 -->
     <div class="dateList">
@@ -6,10 +7,10 @@
         v-for="(item,index) in dateList" 
         :key="index"
         :class="{activeDate : currDateIndex === index}"
-        @click="changeDate(index)"
+        @click="changeDate(index,item.date1)"
         >
         <p class="p p1">{{item.date2}}</p>
-        <p class="p p2">{{item.date1}}</p>
+        <p class="p p2">{{item.date1.month}}月{{item.date1.day}}日<span v-show="index === 3">~</span></p>
       </div>
     </div>
     <!-- 活动详情 -->
@@ -63,7 +64,9 @@ export default {
           date1: '',
           date2: '两天后'
         },
-      ]
+      ],
+      time: '2019-06-28',
+      activList: []
     }
   },
   created() {
@@ -71,12 +74,37 @@ export default {
       const result = this.findDate(i)
       this.dateList[i].date1 = result
     }
-    this.dateList[3].date1 = this.dateList[3].date1 + '~'
     // console.log(this.dateList)
+
+    const params = {
+      id: window.sessionStorage.getItem('groupDetailId'),
+      time: this.time
+    }
+    // 获取社群活动
+    this.$http.groupActivity(params).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.activList = resp.data
+      }
+    })
   },
   methods: {
-    changeDate(index) {
+    changeDate(index,clickDate) {
       this.currDateIndex = index
+      console.log(clickDate.year + '-' + clickDate.month +'-'+ clickDate.day)
+      // this.time = clickDate.year + '-' + clickDate.month +'-'+ clickDate.day   //实际动态日期
+      const params = {
+        id: window.sessionStorage.getItem('groupDetailId'),
+        time: this.time
+      }
+      console.log(params)
+      // 活动列表
+      this.$http.groupActivity(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.activList = resp.data
+        }
+      })
     },
     // 获取当前日期及后面方伟范围内的日期
     findDate(aa) {
@@ -84,6 +112,7 @@ export default {
       var time1 = date1.getFullYear() + "-" + (date1.getMonth()+1) + "-" + date1.getDate()
       var date2 = new Date(date1)
       date2.setDate(date1.getDate()+aa)
+      var _year = date2.getFullYear()
       var _month = date2.getMonth()+1
       var _day = date2.getDate()
       if(_month < 10){
@@ -96,8 +125,13 @@ export default {
       }else{
          _day = date2.getDate()
       }
-      var time = _month + "月"+ _day+ "日"
-      return time;
+      var time = _month + "-"+ _day+ ""
+      var _dateObj = {
+        year: _year,
+        month: _month,
+        day: _day
+      }
+      return _dateObj;
     },
     // 去报名
     toSignUp() {

@@ -32,6 +32,17 @@
 <script>
 export default {
   name: 'OrganActivies',
+  data() {
+    return {
+
+    }
+  },
+  created() {
+    // 组织的活动
+    // this.$http.organizedActivities(params).then(resp => {
+    //   console.log(resp)
+    // })
+  },
   methods: {
     toClub() {
       this.$router.push({

@@ -14,35 +14,33 @@
       </div>
     </div>
     <div class="contentWrap">
-      <div class="groundItem" v-for="(item,index) in 3" :key="index">
-         <div class="g_top" @click="toDetail">
+      <div class="groundItem" v-for="(item,index) in playGroungList" :key="index">
+         <div class="g_top" @click="toDetail(item.id)">
            <div class="g_top_left">
-             <!-- 07月29日&nbsp;&nbsp; -->
-             19:00——20:00
+             {{item.time}}
            </div>
            <div class="g_top_right">
-             <span class="el-icon-coin"></span>25元/小时
+             <span class="el-icon-coin"></span>{{item.cost}}元/小时
            </div>
          </div>
          <div class="g_detail">
-           <p class="g_name" @click="toDetail">
-             成都千羽千寻羽毛球俱乐部<span>16.46km</span>
+           <p class="g_name" @click="toDetail(item.id)">
+             {{item.name}}<span>{{item.distance}}km</span>
            </p>
-           <img @click="toDetail" class="g_img" src="../../assets/g-img.png" alt="">
+           <img @click="toDetail(item.id)" class="g_img" :src="item.image" alt="">
            <div class="g_bottom g_admin">
-             <img src="../../assets/touxiang.jpg" alt="">
-             <p>大虎管理员<span>杨洋然</span></p>
-             <div class="icon"><a href="tel://15096762111"><span class="el-icon-phone"></span></a></div>
+             <img :src="item.userImage" alt="">
+             <p>{{item.userType}}<span>{{item.userName}}</span></p>
+             <div class="icon"><a :href="'tel:' + item.userPhone"><span class="el-icon-phone"></span></a></div>
            </div>
            <div class="g_bottom g_address">
-             <img src="../../assets/g-img.png" alt="">
-             <p>成都市武侯区益州大道555号</p>
-             <div class="icon" @click="toMap"><span class="el-icon-location"></span></div>
+             <div class="img"><span class="el-icon-s-home"></span></div>
+             <p>{{item.address}}</p>
+             <div class="icon" @click="toMap(item.lat,item.lon)"><span class="el-icon-location"></span></div>
            </div>
          </div>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -55,6 +53,12 @@ export default {
       currIndex: 0,
       address: '',
       zoom: 3,
+      // currLon: '',
+      // currLat: '',
+      currLon: '104.057150',
+      currLat: '30.5702',
+      type: 'sportsKinds_01',
+      playGroungList: []
     }
   },
   created() {
@@ -65,17 +69,28 @@ export default {
     // var positionNum = 0;
     var options = {timeout: 8000};
     geolocation.getLocation(this.showPosition, this.showErr, options);
-
+  },
+  beforeMount() {
     // 获取场馆列表
-    // this.$http.getPlaygroundList(params).then(resp => {
-    //   console.log(resp)
-    // })
-
+    const params = {
+      type: this.type,
+      name:'',
+      lon: this.currLon,
+      lat: this.currLat
+    }
+    this.$http.getPlaygroundList(params).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.playGroungList = resp.data
+        // console.log(this.playGroungList)
+      }
+    })
   },
   methods: {
-     
-     showPosition(position) {
-        console.log(position)
+    showPosition(position) {
+      console.log(position)
+      this.currLon = position.lng
+      this.currLat = position.lat
      },
      showErr() { 
         //TODO 如果出错了调用此方法 
@@ -83,18 +98,36 @@ export default {
  
     changeCate(item,index) {
       this.currIndex = index
-    },
-    toDetail() {
-      this.$router.push({
-        path: '/playgroundDetail'
+      if(index === 0) {
+        this.type = 'sportsKinds_01'
+      }
+      if(index === 1) {
+        this.type = 'sportsKinds_02'
+      }
+      const params = {
+        type: this.type,
+        name:'',
+        lon: this.currLon,
+        lat: this.currLat
+      }
+      this.$http.getPlaygroundList(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.playGroungList = resp.data
+          // console.log(this.playGroungList)
+        }
       })
     },
-    toMap() {
+    toDetail(id) {
+      window.sessionStorage.setItem('playGroundDetail',id)
+      this.$router.push({
+        path: '/playgroundDetail',
+      })
+    },
+    toMap(lat,lon) {
       const location = {
-        lat: 30.5702,
-        lng: 104.06476
-        // lat: 30.558120,
-        // lng: 104.057150
+        lat: lat,
+        lng: lon
       }
       this.$router.push({
         path: '/mapPage',
@@ -213,11 +246,16 @@ export default {
               margin-top: 12px;
             }
             p{
+              width: 80%;
               font-size: 23px;
               line-height: 73px;
               float: left;
               margin-left: 25px;
               color: #2b2b2b;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
             }
             .icon{
               width: 25px;
@@ -241,8 +279,18 @@ export default {
             }
           }
           .g_address{
-            img{
+            .img{
               border-radius: 25%;
+              width: 50px;
+              height: 50px;
+              float: left;
+              margin-top: 12px;
+              span{
+                font-size: 40px;
+                color: #2f9f87;
+                line-height: 50px;
+                text-align: center;
+              }
             }
           }
           .mapBox{

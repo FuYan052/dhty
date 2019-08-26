@@ -16,8 +16,8 @@
       </li>
     </ul>
     <div class="btnBox">
-      <div>设为群助理</div>
-      <div>移除</div>
+      <div @click="handle1">设为群助理</div>
+      <div @click="handle2">移除</div>
     </div>
   </div>
 </template>
@@ -81,6 +81,18 @@ export default {
         this.selectedList.push(index)
       }
       console.log(this.selectedList)
+    },
+    // 设为群助理
+    handle1() {
+      this.$http.setInfo(params).then(resp => {
+        console.log(resp)
+      })
+    },
+    // 移除
+    handle2() {
+      this.$http.setInfo(params).then(resp => {
+        console.log(resp)
+      })
     }
   }
 }

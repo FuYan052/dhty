@@ -19,33 +19,33 @@
         v-for="(item,index) in dateList" 
         :key="index"
         :class="{activeDate : currDateIndex === index}"
-        @click="changeDate(index)"
+        @click="changeDate(index,item.date1)"
         >
         <p class="p p1">{{item.date2}}</p>
-        <p class="p p2">{{item.date1}}</p>
+        <p class="p p2">{{item.date1.month}}月{{item.date1.day}}日<span v-show="index === 3">~</span></p>
       </div>
     </div>
     <!-- 活动详情 -->
     <div class="contentBg">
       <div class="content">
-        <div class="activItem" v-for="(item,index) in 3" :key="index">
+        <div class="activItem" v-for="(item,index) in activList" :key="index">
           <div class="top">
             <div class="title">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <p class="text">昆仑山人007</p>
-              <p class="role">大虎管理员</p>
-              <div class="rightBtn" @click="toSignUp">正在报名</div>
+              <img :src="item.image" alt="">
+              <p class="text">{{item.nickName}}</p>
+              <p class="role">{{item.type}}</p>
+              <div class="rightBtn" @click="toSignUp">{{item.osState}}</div>
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
               <img src="../../assets/g-img.png" alt="">
-              <div class="p1"><span><i class="el-icon-house"></i></span>6月26日周三晚19:00，羽毛球约起</div>
-              <div class="p1"><span><i class="el-icon-time"></i></span>2019-06-26&nbsp;&nbsp;19:00-21:00</div>
-              <div class="p1"><span><i class="el-icon-coin"></i></span>60元/人</div>
+              <div class="p1"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
+              <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
+              <div class="p1"><span><i class="el-icon-coin"></i></span>{{item.cost}}元/人</div>
             </div>
           </div>
-          <div class="address" @click="toClub">
-            <span class="span1 el-icon-location"></span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-arrow-right"></span>
+          <div class="address" @click="toClub(item.groupId)">
+            <span class="span1 el-icon-location"></span>{{item.groupName}}<span class="span2 el-icon-arrow-right"></span>
           </div>
         </div>
       </div>
@@ -78,7 +78,10 @@ export default {
           date1: '',
           date2: '两天后'
         },
-      ]
+      ],
+      type: 'sportsKinds_01',
+      time: '2019-06-28',
+      activList: []
     }
   },
   created() {
@@ -86,15 +89,59 @@ export default {
       const result = this.findDate(i)
       this.dateList[i].date1 = result
     }
-    this.dateList[3].date1 = this.dateList[3].date1 + '~'
     // console.log(this.dateList)
+    // 获取活动列表
+    // this.time = this.dateList[0].date1.year + '-' + this.dateList[0].date1.month +'-'+ this.dateList[0].date1.day  //实际动态日期
+    const params = {
+      type: this.type,
+      time: this.time
+    }
+    console.log(params)
+    this.$http.activitiesList(params).then(resp => {
+      if(resp.status == 200) {
+        this.activList = resp.data
+      }
+      console.log(resp)
+    })
   },
   methods: {
     changeCate(index) {
       this.currIndex = index
+      if(index === 0) {
+        this.type = 'sportsKinds_01'
+      }
+      if(index === 1) {
+        this.type = 'sportsKinds_02'
+      }
+      const params = {
+        type: this.type,
+        time: this.time
+      }
+      console.log(params)
+      // 活动列表
+      this.$http.activitiesList(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.activList = resp.data
+        }
+      })
     },
-    changeDate(index) {
+    changeDate(index,clickDate) {
+      console.log(index,clickDate)
       this.currDateIndex = index
+      // this.time = clickDate.year + '-' + clickDate.month +'-'+ clickDate.day   //实际动态日期
+      const params = {
+        type: this.type,
+        time: this.time
+      }
+      console.log(params)
+      // 活动列表
+      this.$http.activitiesList(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.activList = resp.data
+        }
+      })
     },
     // 获取当前日期及后面范围内的日期
     findDate(aa) {
@@ -102,6 +149,7 @@ export default {
       var time1 = date1.getFullYear() + "-" + (date1.getMonth()+1) + "-" + date1.getDate()
       var date2 = new Date(date1)
       date2.setDate(date1.getDate()+aa)
+      var _year = date2.getFullYear()
       var _month = date2.getMonth()+1
       var _day = date2.getDate()
       if(_month < 10){
@@ -114,10 +162,17 @@ export default {
       }else{
          _day = date2.getDate()
       }
-      var time = _month + "月"+ _day+ "日"
-      return time;
+      var time = _month + "-"+ _day+ ""
+      var _dateObj = {
+        year: _year,
+        month: _month,
+        day: _day
+      }
+      return _dateObj;
     },
-    toClub() {
+    toClub(id) {
+      console.log(id)
+      window.sessionStorage.setItem('groupDetailId',id)
       this.$router.push({
         path: '/clubHome',
         name: 'ClubHome',

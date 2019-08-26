@@ -17,6 +17,17 @@
 <script>
 export default {
   name: 'CreatedGroupList',
+  data() {
+    return {
+
+    }
+  },
+  created() {
+    // 获取创建的群
+    // this.$http.createGroupList(params).then(resp => {
+    //   console.log(resp)
+    // })
+  },
   methods: {
     handle() {
       this.$router.push({

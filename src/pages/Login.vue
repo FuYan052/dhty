@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="top">
-      <span></span>
+      <!-- <span></span> -->
     </div>
     <p class="name">登录</p>
     <div class="wrap">
@@ -32,7 +32,7 @@
           <span @click="doReset">忘记密码</span>
         </p>
         <div class="changeType">
-          <img src="../assets/phoneBg.png" alt=""  @click="handleChangeType">
+          <img src="../assets/loginPhone.png" alt=""  @click="handleChangeType">
           <p>手机验证码登录</p>
         </div>
     </div>

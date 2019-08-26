@@ -48,6 +48,11 @@ export default {
       currIndex: 0,
     }
   },
+  created() {
+    // this.$http.attendedActivities(params).then(resp => {
+    //   console.log(resp)
+    // })
+  },
   methods: {
     changeCate(item,index) {
       this.currIndex = index

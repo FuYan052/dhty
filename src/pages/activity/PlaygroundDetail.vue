@@ -2,11 +2,11 @@
   <!-- 场馆详情 -->
   <div class="playgroundDetail" v-title data-title="场馆详情">
     <div class="topImg">
-      <img src="../../assets/g-img.png" alt="">
+      <img :src="playgroundInfo.image" alt="">
     </div>
     <div class="wrap1">
       <div class="title">
-        成都千羽千寻羽毛球俱乐部
+        {{playgroundInfo.name}}
         <span>
           <img src="../../assets/crown.png" alt="">
         </span>
@@ -14,9 +14,9 @@
       <!-- 地址 -->
       <div class="address">
         <div class="left">
-          武侯区益州大道中段888号智地哥谭2栋1单元1507（紧邻环球中心、会展中心）
+          {{playgroundInfo.address}}
         </div>
-        <div class="right" @click="toMap">
+        <div class="right" @click="toMap(playgroundInfo.lat,playgroundInfo.lon)">
           <span class="el-icon-map-location"></span>
           <p>地图/导航</p>
         </div>
@@ -24,22 +24,22 @@
     </div>
     <!-- 开放时间 -->
     <div class="wrap2">
-      <p>开放时间：早9:00——晚8:00</p>
-      <p>费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用：25元/人</p>
+      <p>开放时间：{{playgroundInfo.time}}</p>
+      <p>费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用：{{playgroundInfo.cost}}元/人</p>
     </div>
     <!-- 活动 -->
     <div class="wrap3">
       <p class="title">活动</p>
-      <div class="actItem" v-for="(item,index) in 2" :key="index" @click="toActDetail">
-        <img src="../../assets/g-img.png" alt="">
+      <div class="actItem" v-for="(item,index) in actiList" :key="index" @click="toActDetail">
+        <img :src="playgroundInfo.image" alt="">
         <div class="right">
-          <p class="p1">【羽毛球】8月6日上午9:00-12:00</p>
-          <p class="p2">成都爱羽羽毛球俱乐部<span>已有18人报名</span></p>
+          <p class="p1">{{item.title}}</p>
+          <p class="p2">{{item.groupName}}<span></span></p>
         </div>
       </div>
     </div>
     <!-- 立即联系 -->
-    <a class="contact" href="tel://15096762111">立即联系</a>
+    <a class="contact" :href="'tel:' + playgroundInfo.userPhone">立即联系</a>
   </div>
 </template>
 
@@ -48,20 +48,30 @@ export default {
   name: 'PlaygroundDetail',
   data() {
     return {
-
+      id: '',
+      playgroundInfo: '',
+      actiList: []
     }
   },
   created() {
+    // 获取场馆id
+    this.id = window.sessionStorage.getItem("playGroundDetail")
+
     // 获取场馆详情
-    // this.$http.getPlaygroundDetail(params).then(rersp => {
-    //   console.log(resp)
-    // })
+    this.$http.getPlaygroundDetail(this.id).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.playgroundInfo = resp.data
+        this.actiList = this.playgroundInfo.venueActivitiesVoList
+      }
+      console.log(this.playgroundInfo)
+    })
   },
   methods: {
-    toMap() {
+    toMap(lat,lon) {
       const location = {
-        lat: 30.558120,
-        lng: 104.057150
+        lat: lat,
+        lng: lon
       }
       this.$router.push({
         path: '/mapPage',
@@ -73,8 +83,6 @@ export default {
     toActDetail() {
        this.$router.push({
         path: '/activityDetail',
-        // name: 'MapPage',
-        // params: location
       })
     }
   }
