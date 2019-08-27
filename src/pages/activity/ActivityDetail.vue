@@ -2,45 +2,31 @@
   <div class="activityDetail" v-title data-title="活动详情">
     <div class="topTitle">
       <p class="p1">活动主题：</p>
-      <p class="p2">俱乐部俱乐部活动晚俱乐部活动晚活动7月22日周一浩然俱乐部活动晚上俱乐部活动晚7:00周一浩然俱乐部活动周一浩然俱乐部活动</p>
+      <p class="p2">{{theDetail.title}}</p>
     </div>
     <ul>
       <li>
-        <span class="span1">活动时间：</span>2019-06-26&nbsp;&nbsp;19:00-21:00
+        <span class="span1">活动时间：</span>{{theDetail.time}}&nbsp;&nbsp;{{theDetail.timeStart}}-{{theDetail.timeEnd}}
       </li>
       <li>
-        <span class="span1">报名费用：</span>￥180
+        <span class="span1">报名费用：</span>￥{{theDetail.cost}}
       </li>
       <li>
-        <span class="span1">活动地点：</span>中和首创羽毛球馆<span class="span2 el-icon-location-information" @click="toMap"><b>导航</b></span>
+        <span class="span1">活动地点：</span>{{theDetail.venueName}}<span class="span2 el-icon-location-information" @click="toMap"><b>导航</b></span>
       </li>
       <li>
-        <span class="span1">组&nbsp;&nbsp;织&nbsp;&nbsp;者：</span>17602848628(楠少轻狂)<a href="tel://15096762111"><span class="span2 el-icon-phone-outline"><b>拨打</b></span></a>
+        <span class="span1">组&nbsp;&nbsp;织&nbsp;&nbsp;者：</span>{{theDetail.phone}}({{theDetail.nickName}})<a :href="'tel:' + theDetail.phone"><span class="span2 el-icon-phone-outline"><b>拨打</b></span></a>
       </li>
       <li>
-        <span class="span1">俱&nbsp;&nbsp;乐&nbsp;&nbsp;部：</span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-house" @click="toClub"><b>查看</b></span>
+        <span class="span1">俱&nbsp;&nbsp;乐&nbsp;&nbsp;部：</span>{{theDetail.groupName}}<span class="span2 el-icon-house" @click="toClub"><b>查看</b></span>
       </li>
       <li>
-        <span class="span1">报名人数：</span>4/16
+        <span class="span1">报名人数：</span>{{peopleLength}}/{{theDetail.people}}
       </li>
       <li class="list" @click="toList">
         <span class="span1">已&nbsp;&nbsp;报&nbsp;&nbsp;名：</span><span class="span2 el-icon-arrow-right"></span>
         <div class="imgBox">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
-          <img src="../../assets/touxiang.jpg" alt="">
+          <img v-for="(it,ind) in theDetail.enrolledVoList" :key="ind" :src="it.image" alt="">
         </div>
       </li>
     </ul>
@@ -50,7 +36,7 @@
         活动详情：
       </div>
       <div class="text">
-        活跃在高新区中和首创的一直俱乐部，创建两年时间拥有700位会员球友，每天都有活动，分级对抗，美女多多，每周五还有免费八人转奖品赛，精美奖品免费带回家！！！
+        {{theDetail.content}}
       </div>
     </div>
     <!-- 报名截止 -->
@@ -70,27 +56,37 @@ export default {
   name: 'ActivityDetail',
   data() {
     return {
+      theDetail: '',
+      lat: '',
+      lon: '',
+      groupId: '',
+      peopleLength: '',  //已报名人数
       isChecked: true,  //是否勾选免责条款
       disabled: false,  //报名按钮是否能点击
       content: '',  //倒计时内容
-      endTime: '1567127270'
+      endTime: ''
     }
   },
   created() {
-    // this.$http.activitiesDetail(params).then(resp => {
-    //   console.log(resp)
-    // })
-  },
-  mounted() {
-    this.countdowm(this.endTime)
-    console.log(new Date().getTime())
-    console.log(new Date(1565092516 * 1000))
+    const activityDetailId = window.sessionStorage.getItem('activityDetailId')
+    this.$http.activitiesDetail(activityDetailId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.theDetail = resp.data
+        this.lat = resp.data.lat
+        this.lon = resp.data.lon
+        this.peopleLength = resp.data.enrolledVoList.length
+        this.groupId = resp.data.groupId
+        this.endTime = resp.data.endTime / 1000
+        this.countdowm(this.endTime) //执行倒计时函数
+      }
+    })
   },
   methods: {
     toMap() {
       const location = {
-        lat: 30.558120,
-        lng: 104.057150
+        lat: this.lat,
+        lng: this.lon
       }
       this.$router.push({
         path: '/mapPage',
@@ -100,10 +96,9 @@ export default {
       window.sessionStorage.setItem('location',JSON.stringify(location))
     },
     toClub() {
+      window.sessionStorage.setItem("groupDetailId",this.groupId)
       this.$router.push({
         path: '/club/clubInfo',
-        // name: 'MapPage',
-        // params: location
       })
     },
     // 报名列表
@@ -114,13 +109,17 @@ export default {
     },
     checked() {
       this.isChecked = !this.isChecked
-      console.log(this.isChecked)
+      // console.log(this.isChecked)
     },
     submit() {
-      // console.log("ok")
-      this.$router.push({
-        path: '/activitySignUp'
-      })
+      if(this.isChecked) {
+        this.$router.push({
+          path: '/activitySignUp'
+        })
+      }else{
+        this.$toast("请阅读《免责条款》！")
+      }
+      
     },
     // 倒计时
     countdowm(timestamp) {
@@ -189,7 +188,7 @@ export default {
       .p2{
         font-size: 21px;
         color: #636363;
-        float: right;
+        // float: right;
         line-height: 42px;
         padding-left: 115px;
       }

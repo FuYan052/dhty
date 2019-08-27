@@ -43,14 +43,16 @@ export default {
   name: 'MemberData',
   data() {
     return {
-      labelList: ['羽毛球','老干部','能歌善舞','健身','美食家','健身','美食家']
+      labelList: ['羽毛球','老干部','能歌善舞','健身','美食家','健身','美食家'],
+      userInfoId: ''
     }
   },
   created() {
+    this.userInfoId = window.sessionStorage.getItem('userInfoId')
     // ta人资料
-    // this.$http.informationOthers(params).then(resp => {
-    //   console.log(resp)
-    // })
+    this.$http.informationOthers(this.userInfoId).then(resp => {
+      console.log(resp)
+    })
   },
   methods: {
     toGroupList() {

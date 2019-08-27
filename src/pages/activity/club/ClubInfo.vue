@@ -4,10 +4,6 @@
       <img :src="clubInfo.logo" alt="">
       <p>{{clubInfo.name}}</p>
     </div>
-    <!-- <div class="member">
-      <img v-for="(item,index) in 10" :key="index" src="../../assets/touxiang.jpg" alt="">
-      <span class="el-icon-arrow-right"></span>
-    </div> -->
     <div class="join">
       <div class="joinBtn" @click="toJoin">申请加入俱乐部</div>
     </div>
@@ -20,14 +16,9 @@
         <span>场馆</span>
       </div>
       <ul>
-        <li>
-          <div class="week">周一</div>
-          <div class="actItem">14:00-16:00<span>星空体育馆</span></div>
-          <div class="actItem">14:00-16:00<span>星空体育馆</span></div>
-        </li>
-        <li>
-          <div class="week">周一</div>
-          <div class="actItem">14:00-16:00<span>星空体育馆</span></div>
+        <li v-for="(item,index) in activiList" :key="index">
+          <div class="week">{{item.time|filtersDay}}</div>
+          <div class="actItem">{{item.timeStart}}-{{item.timeEnd}}<span>{{item.name}}</span></div>
         </li>
       </ul>
     </div>
@@ -35,41 +26,59 @@
     <div class="introd">
       <div class="title">俱乐部简介</div>
       <p>{{clubInfo.content}}</p>
-      <!-- <img src="../../assets/code.png" alt=""> -->
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'ClubInfo',
   data() {
     return {
-      clubInfo: ''
+      clubInfo: '',
+      activiList: [],  //群活动列表
+      groupId: ''
     }
   },
   created() {
     // 群id
-    const groupId = window.sessionStorage.getItem('groupDetailId')
-    console.log(groupId)
+    this.groupId = window.sessionStorage.getItem('groupDetailId')
     // 群详情
-    this.$http.groupDetailInfo(groupId).then(resp => {
-      console.log(resp)
+    this.$http.groupDetailInfo(this.groupId).then(resp => {
+      // console.log(resp)
       if(resp.status == 200) {
         this.clubInfo = resp.data
+        this.activiList = resp.data.oavoList
+        console.log(this.activiList)
       }
     })
+  },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
+  },
+  filters: {
+    // 将日期转化为星期
+    filtersDay: function (day) {
+      const days = ['日', '一', '二', '三', '四', '五', '六'];
+      let dateT = day ? new Date(day) : new Date();    
+      return `周${days[dateT.getDay()]}`;
+    }
   },
   methods: {
     // 申请加入俱乐部
     toJoin() {
       const params = {
-        groupId: '',
-        userId: ''
+        groupId: this.groupId,
+        userId: this.userId
       }
-      // this.$http.applyJoinGroup(params).then(resp => {
-      //   console.log(resp)
-      // })
+      this.$http.applyJoinGroup(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.$toast("申请加入成功！")
+        }
+      })
     }
   }
 }

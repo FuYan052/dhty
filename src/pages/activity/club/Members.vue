@@ -1,27 +1,22 @@
 <template>
   <!-- 群组成员 -->
   <div class="members" v-title data-title="群组成员">
-    <div class="searchBox">
+    <!-- <div class="searchBox">
       <el-input
         prefix-icon="el-icon-search"
+        @change="search"
         v-model="input3">
       </el-input>
-    </div>
+    </div> -->
     <!-- 管理员 -->
     <div class="admin">
       <div class="title">管理员</div>
       <ul class="ul1">
-        <li @click="memberInfo">
-          <img src="../../../assets/touxiang.jpg" alt="">
-          <div class="name">无名之辈<span class="el-icon-male"></span></div>
-          <div class="role">群主</div>
-          <div class="dj">Lv.11</div>
-        </li>
-        <li @click="memberInfo">
-          <img src="../../../assets/touxiang.jpg" alt="">
-          <div class="name">无名之辈<span class="el-icon-female"></span></div>
-          <div class="role">管理员</div>
-          <div class="dj">Lv.11</div>
+        <li @click="memberInfo(item.id)" v-for="(item,index) in memberList1" :key="index">
+          <img :src="item.image" alt="">
+          <div class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></div>
+          <div class="role">{{item.state}}</div>
+          <div class="dj">Lv.{{item.level}}</div>
         </li>
       </ul>
     </div>
@@ -29,10 +24,13 @@
     <div class="memberList">
       <div class="title">群员</div>
         <ul class="memberItem">
-          <li v-for="(item,index) in memberList" :key="index" @click="memberInfo">
-            <img :src="item.imgPath" alt="">
+          <li 
+            v-for="(item,index) in memberList2" 
+            :key="index" 
+            @click="memberInfo(item.id)">
+            <img :src="item.image" alt="">
             <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
-            <div class="grade">{{item.grade}}</div>
+            <div class="grade">Lv.{{item.level}}</div>
           </li>
       </ul>
     </div>
@@ -45,59 +43,27 @@ export default {
   data() {
     return {
       input3: '',
-      memberList: [],
+      memberList1: [],
+      memberList2: []
     }
   },
   created() {
-    this.memberList = [
-      {
-        imgPath: require('../../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-    ]
-
+    const params = {
+      groupId: window.sessionStorage.getItem('groupDetailId'),
+      keyWord: ''
+    }
     // 群成员
-    // this.$http.groupMembers(params).then(resp => {
-    //   console.log(resp)
-    //   if(resp.status == 200) {
-    //     this.memberList = resp.data
-    //   }
-    // })
+    this.$http.groupMembers(params).then(resp => {
+      // console.log(resp)
+      if(resp.status == 200) {
+        this.memberList1 = resp.data.gMemersVo1One
+        this.memberList2 = resp.data.gMemersVo1Two
+      }
+    })
   },
   methods: {
-    memberInfo() {
+    memberInfo(id) {
+      window.sessionStorage.setItem('userInfoId',id)
       this.$router.push({
         path: '/club/member/memberData'
       })

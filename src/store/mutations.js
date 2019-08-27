@@ -2,7 +2,10 @@ export default {
   changeLoginStatus (state, loginStatus) {
     state.isLogin = loginStatus
   },
-  changeType(state, status) {
+  changeUserId(state, status) {
+    state.type = status;
+  },
+  changeUserPhone(state, status) {
     state.type = status;
   },
   changeToken(state, status) {

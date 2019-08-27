@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'Login',
   data() {
@@ -81,8 +82,20 @@ export default {
       rule2: false
     }
   },
+  computed: {
+    ...mapState(['isLogin'])
+  },
+  watch: {
+    isLogin () {
+      // 当isLogin为true的时候，执行跳转
+      // const {
+      //   from = '/home'
+      // } = this.$route.params
+      // this.$router.push(from)
+    }
+  },
   methods: {
-
+    ...mapMutations(['changeLoginStatus','changeUserId','changeUserPhone','changeToken']),
     // 输入值合法时的回调
     callback1() {
       this.rule1 = true
@@ -98,6 +111,15 @@ export default {
         }
         this.$http.postLoginForPassword(params).then(resp => {
           console.log(resp)
+          if(resp.status == 200) {
+            window.localStorage.setItem('userId', resp.data.id)
+            window.localStorage.setItem('userPhone', resp.data.phone)
+            window.localStorage.setItem('ty-token', resp.data.token)
+            this.changeLoginStatus(true)
+            this.changeUserId(resp.data.id)
+            this.changeUserPhone(resp.data.phone)
+            this.changeToken(resp.data.token)
+          }
         })
         console.log(params)
       }else{

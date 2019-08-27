@@ -34,12 +34,12 @@
               <img :src="item.image" alt="">
               <p class="text">{{item.nickName}}</p>
               <p class="role">{{item.type}}</p>
-              <div class="rightBtn" @click="toSignUp">{{item.osState}}</div>
+              <div class="rightBtn" @click="toSignUp(item.id)">{{item.osState}}</div>
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
               <img src="../../assets/g-img.png" alt="">
-              <div class="p1"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
+              <div class="p1 title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
               <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
               <div class="p1"><span><i class="el-icon-coin"></i></span>{{item.cost}}元/人</div>
             </div>
@@ -81,6 +81,7 @@ export default {
       ],
       type: 'sportsKinds_01',
       time: '2019-06-28',
+      isTwoDaysLater: false,  //是否为两天后的日期，传给后端做判断标识
       activList: []
     }
   },
@@ -91,15 +92,19 @@ export default {
     }
     // console.log(this.dateList)
     // 获取活动列表
-    // this.time = this.dateList[0].date1.year + '-' + this.dateList[0].date1.month +'-'+ this.dateList[0].date1.day  //实际动态日期
+    this.time = this.dateList[0].date1.year + '-' + this.dateList[0].date1.month +'-'+ this.dateList[0].date1.day  //实际动态日期
     const params = {
       type: this.type,
-      time: this.time
+      time: this.time,
+      isTwoDaysLater: this.isTwoDaysLater
     }
     console.log(params)
     this.$http.activitiesList(params).then(resp => {
       if(resp.status == 200) {
         this.activList = resp.data
+      }else{
+        this.$toast("获取列表失败!")
+        this.activList = []
       }
       console.log(resp)
     })
@@ -115,7 +120,8 @@ export default {
       }
       const params = {
         type: this.type,
-        time: this.time
+        time: this.time,
+        isTwoDaysLater: this.isTwoDaysLater
       }
       console.log(params)
       // 活动列表
@@ -123,16 +129,24 @@ export default {
         console.log(resp)
         if(resp.status == 200) {
           this.activList = resp.data
+        }else{
+          this.$toast("获取列表失败!")
+          this.activList = []
         }
       })
     },
     changeDate(index,clickDate) {
-      console.log(index,clickDate)
+      if(index === 3){
+        this.isTwoDaysLater = true
+      }else{
+        this.isTwoDaysLater = false
+      }
       this.currDateIndex = index
-      // this.time = clickDate.year + '-' + clickDate.month +'-'+ clickDate.day   //实际动态日期
+      this.time = clickDate.year + '-' + clickDate.month +'-'+ clickDate.day   //实际动态日期
       const params = {
         type: this.type,
-        time: this.time
+        time: this.time,
+        isTwoDaysLater: this.isTwoDaysLater
       }
       console.log(params)
       // 活动列表
@@ -140,6 +154,9 @@ export default {
         console.log(resp)
         if(resp.status == 200) {
           this.activList = resp.data
+        }else{
+          this.$toast("获取列表失败!")
+          this.activList = []
         }
       })
     },
@@ -179,9 +196,10 @@ export default {
       })
     },
     // 去报名
-    toSignUp() {
+    toSignUp(id) {
+      window.sessionStorage.setItem('activityDetailId',id)
       this.$router.push({
-        path: '/activityDetail'
+        path: '/activityDetail',
       })
     }
   }
@@ -347,6 +365,13 @@ export default {
                       float: left;
                     }
                   }
+                }
+                .title{
+                  height: 37px;
+                  overflow: hidden;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
                 }
                 .p1:nth-of-type(1){
                   margin-top: 30px;

@@ -60,6 +60,7 @@
       <mt-picker 
         v-show="picker1"
         :slots="currSlots" 
+        value-key="name"
         :visibleItemCount='5'
         :itemHeight='50'
         showToolbar
@@ -73,6 +74,7 @@
       <mt-picker 
         v-show="picker2"
         :slots="currSlots" 
+        value-key="name"
         :visibleItemCount='5'
         :itemHeight='50'
         showToolbar
@@ -124,6 +126,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Organization',
   data() {
@@ -155,32 +158,45 @@ export default {
       showLastTimeValue: '',  //报名截止时间  //此格式用于前端显示
       cost: '',  //费用
       currSlots: this.slots1,
-      slots1: [
-        {
-          flex: 1,
-          values: ['羽毛球', '跑步','儿童活动'],
-          className: 'slot1',
-          textAlign: 'center'
-        }
-      ],
-      slots2: [
-        {
-          flex: 1,
-          values: ['大虎管理员', '个人'],
-          className: 'slot1',
-          textAlign: 'center'
-        }
-      ],
+      slotsValues1: [],
+      slotsValues2: [],
+      // slots1: [
+      //   {
+      //     flex: 1,
+      //     // values: ['羽毛球', '跑步','儿童活动'],
+      //     values: [],
+      //     className: 'slot1',
+      //     textAlign: 'center'
+      //   }
+      // ],
+      // slots2: [
+      //   {
+      //     flex: 1,
+      //     values: ['大虎管理员', '个人'],
+      //     className: 'slot1',
+      //     textAlign: 'center'
+      //   }
+      // ],
       showToolbar: true,
       popupVisible: false,
       isCkecked: false,   //是否为周活动
     }
   },
   created() {
-    // 可选群列表
-    // this.$http.groupList().then(resp => {
-    //   console.log(resp)
-    // })
+    // 获取运动类型
+    this.$http.findDictList('sportsKinds').then(resp => {
+      // console.log(resp)
+      if(resp.status == 200) {
+        this.slotsValues1 = resp.data
+      }
+    })
+    // 获取群组列表
+    this.$http.getGroupList('1').then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.slotsValues2 = resp.data
+      }
+    })
 
     this.startDate = new Date()  //当天日期
     this.typeValue = window.sessionStorage.getItem('typeValue')  //存sessionStorage是为了防止选择场地后返回页面被刷新，之前选择项被清空
@@ -195,6 +211,37 @@ export default {
     this.phone = window.sessionStorage.getItem('phone')
     this.showLastTimeValue = window.sessionStorage.getItem('lastTimeValue')
     this.cost = window.sessionStorage.getItem('cost')
+  },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
+
+    dataList1() {
+      let slots1 = [
+        {
+          flex: 1,
+          // values: ['羽毛球', '跑步','儿童活动'],
+          values: this.slotsValues1,
+          className: 'slot1',
+          textAlign: 'center',
+          // defaultIndex: -1
+        }
+      ]
+      return slots1
+    },
+    dataList2() {
+      let slots2 = [
+        {
+          flex: 1,
+          values: this.slotsValues2,
+          className: 'slot1',
+          textAlign: 'center',
+          // defaultIndex: -1
+        }
+      ]
+      return slots2
+    },
+
   },
   methods: {
     onValuesChange1(picker, values) {
@@ -220,7 +267,7 @@ export default {
       this.datePicker = false
       this.startTimePicker = false
       this.endTimePicker = false
-      this.currSlots = this.slots1
+      this.currSlots = this.dataList1
     },
     //显示所属群组选择项
     show2() {
@@ -231,7 +278,7 @@ export default {
       this.datePicker = false
       this.startTimePicker = false
       this.endTimePicker = false
-      this.currSlots = this.slots2
+      this.currSlots = this.dataList2
     },
     //显示标题填写框
     show3() {
@@ -269,20 +316,27 @@ export default {
     },
     sure1() {
       this.popupVisible = !this.popupVisible
-      this.typeValue = this.type
-      if(this.typeValue !== '跑步' && this.typeValue !== '儿童活动'){
-        this.typeValue = '羽毛球'
+      if(this.type === undefined){
+        this.type = this.dataList1[0].values[0]
+        this.typeValue = this.type.name
+      }else{
+        this.typeValue = this.type.name
       }
+      console.log(this.type)
       window.sessionStorage.setItem('typeValue',this.typeValue)
+      window.sessionStorage.setItem('typeId',this.type.skey)
     },
     sure2() {
-      // console.log(this.groupType)
       this.popupVisible = !this.popupVisible
-      this.groupTypeValue = this.groupType
-      if(this.groupTypeValue !== '个人'){
-        this.groupTypeValue = '大虎管理员'
+      if(this.groupType === undefined){
+        this.groupType = this.dataList2[0].values[0]
+        this.groupTypeValue = this.groupType.name
+      }else{
+        this.groupTypeValue = this.groupType.name
       }
+      console.log(this.groupType)
       window.sessionStorage.setItem('groupTypeValue',this.groupTypeValue)
+      window.sessionStorage.setItem('groupTypeId',this.groupType.id)
     },
     // 格式化选择的日期
     formatDate(Time) {
@@ -297,7 +351,8 @@ export default {
       var minute = date.getMinutes();
       var second = date.getSeconds();
       minute = minute < 10 ? ('0' + minute) : minute;
-      return y + '年' + m + '月' + d+ '日';
+      return y + '-' + m + '-' + d;
+      // return y + '年' + m + '月' + d+ '日';
     },
     // 转化日期时间
     formatDate2(Time) {
@@ -385,50 +440,48 @@ export default {
     // 确认发布按钮
     submit() {
       const params = {
-        type: this.typeValue,
-        group: this.groupTypeValue,
+        userId: this.userId,
+        type: window.sessionStorage.getItem('typeId'),
+        groupId: window.sessionStorage.getItem('groupTypeId'),
         title: this.titleValue,
-        date: this.formatDateValue,
-        startTime: this.startTimeValue,
-        endTime: this.endTime,
-        place: this.placeName,
-        number: this.number,
+        time: this.formatDateValue,
+        timeStart: this.startTimeValue,
+        timeEnd: this.endTime,
+        venueId: this.placeId,
+        people: this.number,
         phone: this.phone,
         cost: this.cost,
-        notes: this.textarea1,
-        lastTime: this.lastTimeValue,
-        isWeekly: this.isCkecked
+        content: this.textarea1,
+        endTime: this.lastTimeValue.getTime(),
+        flag: this.isCkecked
       }
       console.log(params)
-      window.sessionStorage.removeItem("cost")
-      window.sessionStorage.removeItem("endTime")
-      window.sessionStorage.removeItem("formatDateValue")
-      window.sessionStorage.removeItem("groupTypeValue")
-      window.sessionStorage.removeItem("number")
-      window.sessionStorage.removeItem("phone")
-      window.sessionStorage.removeItem("placeId")
-      window.sessionStorage.removeItem("placeName")
-      window.sessionStorage.removeItem("startTimeValue")
-      window.sessionStorage.removeItem("lastTimeValue")
-      window.sessionStorage.removeItem("titleValue")
-      window.sessionStorage.removeItem("typeValue")
+      
       // 提交后台
-      // this.$http.organizingActivities(params).then(resp => {
-      //   console.log(resp)
-      //   if(resp.status == 200) {
-          // window.sessionStorage.removeItem("cost")
-          // window.sessionStorage.removeItem("endTime")
-          // window.sessionStorage.removeItem("formatDateValue")
-          // window.sessionStorage.removeItem("groupTypeValue")
-          // window.sessionStorage.removeItem("number")
-          // window.sessionStorage.removeItem("phone")
-          // window.sessionStorage.removeItem("placeId")
-          // window.sessionStorage.removeItem("placeName")
-          // window.sessionStorage.removeItem("startTimeValue")
-          // window.sessionStorage.removeItem("titleValue")
-          // window.sessionStorage.removeItem("typeValue")
-      //   }
-      // })
+      this.$http.organizingActivities(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.$toast("提交成功！")
+          this.$router.push({
+            path: '/userCenter/myActivities'
+          })
+          // 清除sessionStorage里的字段
+          window.sessionStorage.removeItem("cost")
+          window.sessionStorage.removeItem("endTime")
+          window.sessionStorage.removeItem("formatDateValue")
+          window.sessionStorage.removeItem("groupTypeValue")
+          window.sessionStorage.removeItem("typeId")
+          window.sessionStorage.removeItem("groupTypeId")
+          window.sessionStorage.removeItem("number")
+          window.sessionStorage.removeItem("phone")
+          window.sessionStorage.removeItem("placeId")
+          window.sessionStorage.removeItem("placeName")
+          window.sessionStorage.removeItem("startTimeValue")
+          window.sessionStorage.removeItem("lastTimeValue")
+          window.sessionStorage.removeItem("titleValue")
+          window.sessionStorage.removeItem("typeValue")
+        }
+      })
     },
     // 是否为周活动
     isWeekActivie() {

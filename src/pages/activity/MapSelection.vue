@@ -19,32 +19,46 @@ export default {
       latitude:30.657420,//纬度
       long: '',
       lat: '',
+      list: [],
       selectedPoint: ''
     }
   },
   created() {
+    // const typeId = window.sessionStorage.getItem('typeId')
+    // this.$http.getVenueInfo(typeId).then(resp => {
+    //   console.log(resp)
+    //   if(resp.status == 200) {
+    //     this.list = resp.data
+    //   }
+    // })
+
     // this.long = JSON.parse(window.sessionStorage.getItem('location')).lng
     // this.lat = JSON.parse(window.sessionStorage.getItem('location')).lat
   },
+  // beforeMount() {
+  //   this.showMap(30.657420,104.065840);
+  // },
   mounted() {
     this.showMap(30.657420,104.065840);
   },
   methods:{
     // 获取当前位置经纬度
-    getLocation() {
-      var geocoder = new qq.maps.Geocoder();
-      geocoder.getLocation("中国四川省成都市武侯区益州大道中段555号");
-      geocoder.setComplete(function(result) {
-        //获取到的经纬度存储在result.detail.location对象中
-          var latitude = result.detail.location.lat;
-          var longitude = result.detail.location.lng;
-          // console.log(latitude,longitude)
-      });
-      geocoder.setError(function() {
-        console.log("获取定位失败！")
-          //获取经纬度失败（可能是因为输入的地址不对）
-      });
-    },
+    // getLocation() {
+    //   var geocoder = new qq.maps.Geocoder();
+    //   geocoder.getLocation("中国四川省成都市武侯区益州大道中段555号");
+    //   geocoder.setComplete(function(result) {
+    //     //获取到的经纬度存储在result.detail.location对象中
+    //       var latitude = result.detail.location.lat;
+    //       var longitude = result.detail.location.lng;
+    //       // console.log(latitude,longitude)
+    //   });
+    //   geocoder.setError(function() {
+    //     console.log("获取定位失败！")
+    //       //获取经纬度失败（可能是因为输入的地址不对）
+    //   });
+    // },
+
+
       // 调用腾讯地图
       showMap(latitude, longitude){
         var map = new qq.maps.Map(document.getElementById("mapBox"),{    //地图部分初始化
@@ -56,29 +70,24 @@ export default {
             }
         });
         var info = new qq.maps.InfoWindow({ map: map });      //添加提示窗
-        var result = { 
-          "code":0, 
-          "msg":"success", 
-          "data":[ 
-            {"id":1,"name":"蛟龙羽毛球馆","locate":"四川省成都市双流区双楠大道下段22号","latitude":"30.603260", "longitude":"103.914230"}, 
-            {"id":2,"name":"凌飞羽毛球馆","locate":"四川省成都市双流区华阳镇华府大道二段748号附15号","latitude":"30.526540", "longitude":"104.032990"},
-            {"id":3,"name":"百灵鸟吉翔羽毛球馆","locate":"四川省成都市武侯区武兴五路219号","latitude":"30.626650", "longitude":"103.974780"}, 
-            {"id":4,"name":"中航工业成飞体育馆","locate":"四川省成都市武侯区高攀路26号","latitude":"30.698750", "longitude":"103.960240"}, 
-            {"id":5,"name":"先锋羽毛球馆","locate":"四川省成都市成华区一环路东三段170号附17","latitude":"30.660762", "longitude":"104.101340"}, 
-            {"id":6,"name":"1906羽毛球馆","locate":"四川省成都市武侯区高攀路26号","latitude":"30.613970", "longitude":"104.083350"}]};
-        //result中数据 用于显示标记、和标记点击时的提示信息
-        if(result.code==0 && result.msg=="success"){
-          const that = this
-            for(let i=0; i<result.data.length; i++){
-                let data = result.data[i];
+
+        const typeId = window.sessionStorage.getItem('typeId')
+        this.$http.getVenueInfo(typeId).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.list = resp.data
+
+            const that = this
+            for(let i=0; i<this.list.length; i++){
+                let data = this.list[i];
                 let marker = new qq.maps.Marker({ 
-                  position: new qq.maps.LatLng(data.latitude, data.longitude), 
+                  position: new qq.maps.LatLng(data.lat, data.lon), 
                   map: map });    //创建标记
                   // console.log(marker)
                   //***将必要的数据存入每一个对应的marker对象
                   marker.id = data.id;
                   marker.name = data.name;
-                  marker.locate = data.locate;
+                  marker.locate = data.address;
                   
                   qq.maps.event.addListener(marker, 'click', function() {    //获取标记的点击事件
                     let _this = marker
@@ -96,8 +105,25 @@ export default {
                 
             }
           }else{
-              layer.open({ content: "获取失败", skin: 'msg', time: 2 });
+            this.$toast('获取列表失败！')
           }
+        })
+        // console.log(this.list)
+        
+        // var result = { 
+        //   "code":0, 
+        //   "msg":"success", 
+        //   "data": this.list,
+        //   "data":[ 
+        //     {"id":1,"name":"蛟龙羽毛球馆","locate":"四川省成都市双流区双楠大道下段22号","latitude":"30.603260", "longitude":"103.914230"}, 
+        //     {"id":2,"name":"凌飞羽毛球馆","locate":"四川省成都市双流区华阳镇华府大道二段748号附15号","latitude":"30.526540", "longitude":"104.032990"},
+        //     {"id":3,"name":"百灵鸟吉翔羽毛球馆","locate":"四川省成都市武侯区武兴五路219号","latitude":"30.626650", "longitude":"103.974780"}, 
+        //     {"id":4,"name":"中航工业成飞体育馆","locate":"四川省成都市武侯区高攀路26号","latitude":"30.698750", "longitude":"103.960240"}, 
+        //     {"id":5,"name":"先锋羽毛球馆","locate":"四川省成都市成华区一环路东三段170号附17","latitude":"30.660762", "longitude":"104.101340"}, 
+        //     {"id":6,"name":"1906羽毛球馆","locate":"四川省成都市武侯区高攀路26号","latitude":"30.613970", "longitude":"104.083350"}]};
+        // result中数据 用于显示标记、和标记点击时的提示信息
+          // const that = this
+            
       },
       sure() {
         if(this.selectedPoint !== '') {

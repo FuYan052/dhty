@@ -364,6 +364,9 @@ export default {
     },
     // 提交信息
     submit() {
+      const params = {
+        
+      }
       // this.$http.completeInfo(params).then(resp => {
       //   console.log(resp)
       // })

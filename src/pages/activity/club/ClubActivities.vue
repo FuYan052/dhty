@@ -15,27 +15,24 @@
     </div>
     <!-- 活动详情 -->
     <div class="list">
-      <div class="activItem" v-for="(item,index) in 3" :key="index">
+      <div class="activItem" v-for="(item,index) in activList" :key="index">
           <div class="top">
             <div class="title">
-              <img src="../../../assets/touxiang.jpg" alt="">
-              <p class="text">昆仑山人007</p>
-              <p class="role">大虎管理员</p>
-              <div class="rightBtn" @click="toSignUp">正在报名</div>
+              <img :src="item.image" alt="">
+              <p class="text">{{item.nickName}}</p>
+              <p class="role">{{item.type}}</p>
+              <div class="rightBtn" @click="toSignUp">{{item.osState}}</div>
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
-              <img src="../../../assets/g-img.png" alt="">
-              <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>6月26日周三晚19:00，羽毛球约起</div>
-              <div class="p1"><span><i class="el-icon-time"></i></span>2019-06-26&nbsp;&nbsp;19:00-21:00</div>
-              <div class="p1"><span><i class="el-icon-location-outline"></i></span>锦城公园</div>
-              <div class="p1"><span><i class="el-icon-phone-outline"></i></span>18867592546</div>
-              <div class="p1"><span><i class="el-icon-coin"></i></span>60元/人</div>
+              <img :src="item.venueImage" alt="">
+              <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
+              <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
+              <div class="p1"><span><i class="el-icon-location-outline"></i></span>{{item.venueName}}</div>
+              <div class="p1"><span><i class="el-icon-phone-outline"></i></span>{{item.phone}}</div>
+              <div class="p1"><span><i class="el-icon-coin"></i></span>{{item.cost}}元/人</div>
             </div>
           </div>
-          <!-- <div class="address" @click="toClub">
-            <span class="span1 el-icon-location"></span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-arrow-right"></span>
-          </div> -->
         </div>
     </div>
   </div>
@@ -66,6 +63,7 @@ export default {
         },
       ],
       time: '2019-06-28',
+      isTwoDaysLater: false,  //是否为两天后的日期，传给后端做判断标识
       activList: []
     }
   },
@@ -75,27 +73,38 @@ export default {
       this.dateList[i].date1 = result
     }
     // console.log(this.dateList)
-
+    this.time = this.dateList[0].date1.year + '-' + this.dateList[0].date1.month +'-'+ this.dateList[0].date1.day  //实际动态日期
     const params = {
       id: window.sessionStorage.getItem('groupDetailId'),
-      time: this.time
+      time: this.time,
+      isTwoDaysLater: this.isTwoDaysLater
     }
     // 获取社群活动
     this.$http.groupActivity(params).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
         this.activList = resp.data
+      }else{
+        this.$toast("获取列表失败!")
+        this.activList = []
       }
     })
   },
   methods: {
     changeDate(index,clickDate) {
+      if(index === 3){
+        this.isTwoDaysLater = true
+      }else{
+        this.isTwoDaysLater = false
+      }
+      console.log(this.isTwoDaysLater)
       this.currDateIndex = index
-      console.log(clickDate.year + '-' + clickDate.month +'-'+ clickDate.day)
-      // this.time = clickDate.year + '-' + clickDate.month +'-'+ clickDate.day   //实际动态日期
+      // console.log(clickDate.year + '-' + clickDate.month +'-'+ clickDate.day)
+      this.time = clickDate.year + '-' + clickDate.month +'-'+ clickDate.day   //实际动态日期
       const params = {
         id: window.sessionStorage.getItem('groupDetailId'),
-        time: this.time
+        time: this.time,
+        isTwoDaysLater: this.isTwoDaysLater
       }
       console.log(params)
       // 活动列表
@@ -103,6 +112,9 @@ export default {
         console.log(resp)
         if(resp.status == 200) {
           this.activList = resp.data
+        }else{
+          this.$toast("获取列表失败!")
+          this.activList = []
         }
       })
     },
