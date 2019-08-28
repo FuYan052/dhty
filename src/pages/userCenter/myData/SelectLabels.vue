@@ -5,8 +5,8 @@
         <span 
           v-for="(it,ind) in item" 
           :key="ind" @click="selected(it,ind)"
-          :class="{selected:selectedList.indexOf(it)>=0}"
-        >{{it}}</span>
+          :class="{selected:selectedListIds.indexOf(it.id)>=0}"
+        >{{it.name}}</span>
       </li>
     </ul>
     <div class="btnBox">
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'SelectLabels',
   data() {
@@ -29,24 +30,43 @@ export default {
       resultList1: [], 
       resultList2: [], //变成二维数组渲染,用于渲染
       selectedList: [],
+      selectedListIds: [],
       isShow: false,
       addValue: ''
     }
   },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
+  },
   created() {
-    // 获取所有标签
-    // this.$http.findAllLabel(params).then(resp => {
-    //   console.log(resp)
-    // })
+    // 从完善信息页传过来的标签集合
+    
+    var _Ids =JSON.parse(window.sessionStorage.getItem('labels'))
+    this.selectedList = _Ids
+    for(let i=0; i<_Ids.length; i++) {
+      let currLab = _Ids[i]
+      this.selectedListIds.push(currLab.id)
+    }
 
-    this.labelList = ['羽毛球','单身汪','萌萌哒','吃货','小鲜肉','强迫症','乐观主义','老实小孩','跑步','宝妈宝爸','逗比'
-    ,'泡吧','老腊肉','感性','冒险王','健身','时尚达人','美食家','白富美','随性','乒乓球'
-    ,'吃吃喝喝','小说','高富帅','坚强','能歌善舞','文艺','铲屎官','油腻大叔','简单','瑜伽','热血','改装车','老干部','单纯'
-    ,'旅游','宅家','自驾游','傻白甜','户外','卖萌','电竞']
-    this.sliceArr1()
-    this.sliceArr2()
+    this.getAllList()
   },
   methods: {
+    // 获取所有标签
+    getAllList() {
+      this.labelList = []
+      this.resultList1 = []
+      this.resultList2 = []
+      // this.$http.findAllLabel(this.userId).then(resp => {
+      this.$http.findAllLabel('250').then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.labelList = resp.data
+          this.sliceArr1()
+          this.sliceArr2()
+        }
+      })
+    },
     sliceArr1() {
       let n = 7
       let len = this.labelList.length
@@ -57,7 +77,6 @@ export default {
         result.push(newList)
         this.resultList1 = result
       }
-      // console.log(result)
     },
     sliceArr2 () {
       for(let i = 0; i < this.resultList1.length; i++) {
@@ -76,14 +95,22 @@ export default {
     },
     //选择标签
     selected(it,ind) {
-      console.log(it,ind)
-      let selectedIndex = this.selectedList.indexOf(it)
-      if(selectedIndex >= 0) {
-        this.selectedList.splice(selectedIndex, 1)
+      // 选中的标签集合
+      // let selectedIndex = this.selectedList.indexOf(it)
+      // if(selectedIndex >= 0) {
+      //   this.selectedList.splice(selectedIndex, 1)
+      // }else{
+      //   this.selectedList.push(it)
+      // }
+
+      // 选中的标签id集合
+      let selectedIdIndex = this.selectedListIds.indexOf(it.id)
+      if(selectedIdIndex >= 0) {
+        this.selectedListIds.splice(selectedIdIndex, 1)
       }else{
-        this.selectedList.push(it)
+        this.selectedListIds.push(it.id)
       }
-      // console.log(this.selectedList)
+      // console.log(this.selectedListIds)
     },
     //创建新标签
     showAddBox() {
@@ -92,29 +119,55 @@ export default {
     },
     toAdd() {
       // 创建并提交后台
-      // this.$http.createLabel(params).then(resp => {
-      //   console.log(resp)
-      // })
-
-      this.isShow = false
-      this.labelList.unshift(this.addValue)
-      this.selectedList.push(this.addValue)
-      this.resultList1 = []
-      this.resultList2 = []
-      this.sliceArr1()
-      this.sliceArr2()
-      this.addValue = ''
+      const params = {
+        labelName: this.addValue,
+        userId: '250'
+        // userId: this.userId
+      }
+      this.$http.createLabel(params).then(resp => {
+        // console.log(resp)
+        if(resp.status == 200) {
+        this.isShow = false
+        this.$toast("创建成功")
+        }
+        if(!this.isShow) {  //创建标签成功之后获取新的标签列表
+          this.getAllList()
+        }
+      })
+      // this.selectedList = []
     },
     //保存
     saveSelectLabels() {
       this.$router.push({
         path: '/userCenter/myData/completeInfo',
-        name: 'CompleteInfo',
-        params: {
-          selected: this.selectedList
+      })
+      // var _labelIds = []
+      // for(let i=0; i<this.selectedList.length; i++) {
+      //   let currLab = JSON.parse(JSON.stringify(this.selectedList[i]))
+      //   _labelIds.push(currLab.id)
+      // }
+      const labelIds = this.selectedListIds.join(',')  //用逗号隔开连成字符串传给后端
+      window.sessionStorage.setItem('labelIds',labelIds)
+      // window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
+      const params = {
+        id: window.sessionStorage.getItem('infoId'),
+        labelId: labelIds
+      }
+      console.log(params)
+      this.$http.completeInfo(params).then(resp => {
+        // console.log(resp)
+        if(resp.status == 200) {
+          // window.sessionStorage.removeItem('address')
+          // window.sessionStorage.removeItem('birthday')
+          // window.sessionStorage.removeItem('height')
+          // window.sessionStorage.removeItem('imgUrl')
+          window.sessionStorage.removeItem('labelIds')
+          // window.sessionStorage.removeItem('labels')
+          // window.sessionStorage.removeItem('nickName')
+          // window.sessionStorage.removeItem('profession')
+          // window.sessionStorage.removeItem('sex')
         }
       })
-      window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
     }
   }
 }

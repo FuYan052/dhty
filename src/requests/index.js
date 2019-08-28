@@ -9,13 +9,17 @@ const ajax = axios.create({
   }
 })
 
+const ajax2 = axios.create({
+  baseURL: 'http://192.168.0.114:9000/',
+  headers: {
+    'Content-Type': "application/json;charset=UTF-8",
+    'token': window.localStorage.getItem('ty-token')
+  },
+})
 // 模拟登录数据 
 // const ajax = axios.create({
 //   baseURL: 'http://rap2api.taobao.org/app/mock'
 // })
-const ajax3 = axios.create({
-
-})
 
 // request拦截器
 ajax.interceptors.request.use(config => {
@@ -75,37 +79,37 @@ ajax.interceptors.response.use(resp => {
     return Promise.reject(error)
   })
 
-// 获取验证码
+// 获取验证码  ok
 export const postCode = (params) => {
   return ajax.post(`/v1/rest/public/bgxsendcode?phone=${params}`)
 }  
-// 校验验证码
+// 校验验证码  
 // export const checkCode = (params) => {
 //   return ajax.post(`/public_controller/bgxisphonecode?phone=${params.phoneNum}&verifyCode=${params.verifyCode}`)
 // }
-// 注册
+// 注册  ok
 export const postRegister = (params) => {
   return ajax.post(`/v1/rest/login/register?phone=${params.phone}&authCode=${params.authCode}&passWord=${params.passWord}`)
 }
-// 手机密码登录
+// 手机密码登录  ok
 export const postLoginForPassword = (params) => {
   return ajax.post(`/v1/rest/login/login?phone=${params.phone}&passWord=${params.passWord}`)
 }
-// 验证码登录
+// 验证码登录  ok
 export const postLoginForCode = (params) => {
   return ajax.post(`/v1/rest/login/authCodeLogin?phone=${params.phone}&authCode=${params.code}`)
 }
-// 忘记密码
+// 忘记密码  ok
 export const postForgetPassword = (params) => {
   return ajax.post(`/v1/rest/login/resetPassword?phone=${params.phone}&authCode=${params.code}&passWord=${params.passWord}`)
 }
 
 // 场地
-// 场地详情
+// 场地详情  ok
 export const getPlaygroundDetail = (params) => {
   return ajax.get(`/v1/rest/venue/venueDetails?id=${params}`)
 }
-// 场地列表
+// 场地列表  ok
 export const getPlaygroundList = (params) => {
   return ajax.get(`/v1/rest/venue/venueList?type=${params.type}&name=${params.name}&lon=${params.lon}&lat=${params.lat}`)
 }
@@ -115,17 +119,17 @@ export const getPlaygroundList = (params) => {
 export const getJoinedGroup = (params) => {
   return ajax.get(`/v1/rest/management/JoinedGroup?id=${params}`)
 }
-// 创建社群
+// 创建社群  ok
 export const createGroup = (params) => {
-  return ajax.post(`/v1/rest/management/createGroup?id=${params}`)
+  return ajax.post(`/v1/rest/management/createGroup?userId=${params.userId}&name=${params.name}&content=${params.content}&logo=${params.logo}`)
 }
 // 解散群
 export const disbandmentGroup = (params) => {
   return ajax.get(`/v1/rest/management/disbandmentGroup?groupId=${params}`)
 }
-// 我创建的群
+// 我创建的群  ok
 export const createGroupList = (params) => {
-  return ajax.get(`/v1/rest/management/groupList?groupId=${params}`)
+  return ajax.get(`/v1/rest/management/groupList?id=${params}`)
 }
 // 我参加的活动
 export const participatedActivity = (params) => {
@@ -145,21 +149,25 @@ export const updateGroup = (params) => {
 }
 
 // 我的数据
-// 查询所有标签
+// 查询现有待完善信息
+export const findPersonalInformation = (params) => {
+  return ajax.get(`/v1/rest/mydata/findPersonalInformation?userId=${params}`)
+}
+// 查询所有标签  ok
 export const findAllLabel = (params) => {
-  return ajax.get(`/v1/rest/mydata/findAllLabel?groupId=${params}`)
+  return ajax.get(`/v1/rest/mydata/findAllLabel?userId=${params}`)
 }
-// 创建新标签
+// 创建新标签  ok
 export const createLabel = (params) => {
-  return ajax.get(`/v1/rest/mydata/createLabel?groupId=${params}`)
+  return ajax.get(`/v1/rest/mydata/createLabel?labelName=${params.labelName}&userId=${params.userId}`)
 }
-// 完善信息
+// 完善信息  ok
 export const completeInfo = (params) => {
-  return ajax.post(`/v1/rest/mydata/savePersonalInformation`,params)
+  return ajax2.post(`/v1/rest/mydata/savePersonalInformation`,params)
 }
 
 // 我要参与
-// 活动详情
+// 活动详情  ok
 export const activitiesDetail = (params) => {
   return ajax.get(`/v1/rest/login/activitiesDetailInfo?id=${params}`)
 }
@@ -167,7 +175,7 @@ export const activitiesDetail = (params) => {
 export const activitiesList = (params) => {
   return ajax.get(`/v1/rest/login/activitiesList?type=${params.type}&time=${params.time}&isTwoDaysLater=${params.isTwoDaysLater}`)
 }
-// 申请加入社群
+// 申请加入社群  ok
 export const applyJoinGroup = (params) => {
   return ajax.get(`/v1/rest/login/applyJoinGroup?groupId=${params.groupId}&userId=${params.userId}`)
 }
@@ -191,7 +199,7 @@ export const groupDetailInfo = (params) => {
 export const groupList = (params) => {
   return ajax.get(`/v1/rest/login/groupList?id=${params}`)
 }
-// 群成员
+// 群成员  ok
 export const groupMembers = (params) => {
   return ajax.get(`/v1/rest/login/groupMembers?groupId=${params.groupId}&keyWord=${params.keyWord}`)
 }
@@ -211,7 +219,7 @@ export const organizedActivities = (params) => {
 export const getGroupList = (params) => {
   return ajax.get(`/v1/rest/login/getGroupList?id=${params}`)
 }
-// 创建组织活动
+// 创建组织活动  ok
 export const organizingActivities = (params) => {
   return ajax.post(`/v1/rest/login/organizingActivities?userId=${params.userId}&type=${params.type}&groupId=${params.groupId}&title=${params.title}&time=${params.time}
   &timeStart=${params.timeStart}&timeEnd=${params.timeEnd}&venueId=${params.venueId}&people=${params.people}&cost=${params.cost}&phone=${params.phone}&content=${params.content}
@@ -221,6 +229,10 @@ export const organizingActivities = (params) => {
 // 根据父集查询子集数据字典
 export const findDictList = (params) => {
   return ajax.get(`/v1/rest/public/findDictList?skey=${params}`)
+}
+// 上传图片  ok
+export const postUpolad = (params) => {
+  return ajax.post(`/v1/rest/file/uploadOSS`,params)
 }
 
 

@@ -2,11 +2,11 @@
   <!-- 我创建的群列表 -->
   <div class="createdGroupList" v-title data-title="我创建的群">
     <ul>
-      <li v-for="(item,index) in 3" :key="index" @click="handle">
-        <img src="../../../../assets/g-img.png" alt="">
+      <li v-for="(item,index) in createdGroupList" :key="index" @click="handle(item,index)">
+        <img :src="item.logo" alt="">
         <div class="text">
-          <p>飞羽羽毛球社区</p>
-          <p>共参加过5次活动</p>
+          <p>{{item.name}}</p>
+          <p>共参加过{{item.count}}次活动</p>
         </div>
         <span class="el-icon-arrow-right"></span>
       </li>
@@ -15,21 +15,30 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'CreatedGroupList',
   data() {
     return {
-
+      createdGroupList: []
     }
+  },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
   },
   created() {
     // 获取创建的群
-    // this.$http.createGroupList(params).then(resp => {
-    //   console.log(resp)
-    // })
+    this.$http.createGroupList(this.userId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.createdGroupList = resp.data
+      }
+    })
   },
   methods: {
-    handle() {
+    handle(item,index) {
+      window.sessionStorage.setItem('handleGroupId',item.id)
       this.$router.push({
         path: '/userCenter/groupManagement/createdGroupManage'
       })

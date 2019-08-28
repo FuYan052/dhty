@@ -28,10 +28,12 @@
         <el-form-item label="社群LOGO" prop="introd">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="none"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
+            :before-upload="beforeAvatarUpload"
+            ref="upload"
+            :http-request="uploadSectionFile">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -44,6 +46,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'CreateGroup',
   data() {
@@ -62,6 +65,10 @@ export default {
           ],
         }
     }
+  },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
   },
   methods: {
     // 上传图片
@@ -82,13 +89,46 @@ export default {
     // 上传成功
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      this.$indicator.close();
+    },
+    uploadSectionFile(file) {
+      this.formData = new FormData()
+      this.formData.append('file', file.file);
+      console.log("1111")
+      console.log(file)
+      this.$http.postUpolad(this.formData).then((resp) => {
+        console.log(resp);
+        console.log('上传成功');
+        if (resp.status == 200) {
+          this.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
+          window.sessionStorage.setItem('imgUrl',this.imageUrl)
+          this.$indicator.close();
+          this.$toast('头像上传成功');
+        } else {
+          this.$toast('头像上传失败');
+        }
+      });
+    },
+    handlePictureCardPreview(file) {
+      this.imageUrl = file.url;
+      console.log(imageUrl)
     },
     // 创建
     create() {
-      // this.$http.createGroup(params).then(resp => {
-      //   console.log(resp)
-      // })
+      const params = {
+        userId: this.userId,
+        name: this.ruleForm.name,
+        content: this.ruleForm.introd,
+        logo: this.imageUrl
+      }
+      this.$http.createGroup(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.$toast('创建成功！')
+          this.$router.push({
+            path: '/userCenter/createdGroupList'
+          })
+        }
+      })
     }
   }
 }
