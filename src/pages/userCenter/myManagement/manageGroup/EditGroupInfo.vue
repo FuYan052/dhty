@@ -28,10 +28,12 @@
         <el-form-item label="社群LOGO" prop="introd">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="none"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
+            :before-upload="beforeAvatarUpload"
+            ref="upload"
+            :http-request="uploadSectionFile">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -51,6 +53,7 @@ export default {
   name: 'EditGroupInfo',
   data() {
     return {
+      groupId: '',
       ruleForm: {
         name: '',
         introd: ''
@@ -66,10 +69,23 @@ export default {
         }
     }
   },
+  created() {
+    // 获取待修改的信息
+    this.groupId = window.sessionStorage.getItem('handleGroupId')
+    this.$http.updateGroupInfo(this.groupId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.ruleForm.name = resp.data.name
+        this.ruleForm.introd = resp.data.content
+        this.imageUrl = resp.data.logo
+      }
+    })
+  },
   methods: {
+    // 上传图片
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      const isLt2M = file.size / 1024 / 1024 < 3;
       if (!isJPG) {
         this.$message.error('上传头像图片只能是 JPG 格式!');
       }
@@ -84,29 +100,63 @@ export default {
     // 上传成功
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      this.$indicator.close();
+    },
+    uploadSectionFile(file) {
+      this.formData = new FormData()
+      this.formData.append('file', file.file);
+      // console.log("1111")
+      console.log(file)
+      this.$http.postUpolad(this.formData).then((resp) => {
+        // console.log(resp);
+        // console.log('上传成功');
+        if (resp.status == 200) {
+          this.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
+          window.sessionStorage.setItem('imgUrl',this.imageUrl)
+          this.$indicator.close();
+          this.$toast('头像上传成功');
+        } else {
+          this.$toast('头像上传失败');
+        }
+      });
+    },
+    handlePictureCardPreview(file) {
+      this.imageUrl = file.url;
+      // console.log(imageUrl)
     },
     // 保存
     save() {
-      // this.$http.updateGroup(params).then(resp => {
-      //   console.log(resp)
-      // })
+      const params = {
+        userId: this.userId,
+        id: this.groupId,
+        name: this.ruleForm.name,
+        content: this.ruleForm.introd,
+        logo: this.imageUrl
+      }
+      this.$http.createGroup(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.$toast('修改成功！')
+        }
+      })
     },
     // 解散群
     disbandment() {
-      // this.$http.disbandmentGroup(params).then(resp => {
-      //   console.log(resp)
-      // })
+      this.$messagebox.confirm('确定要解散此群?').then(action => {
+        this.$http.disbandmentGroup(this.groupId).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast("解散成功！")
+          }else{
+            this.$toast("操作失败！")
+          }
+        })
+      })
     },
     // 转让群
     transferGroup() {
-      // this.$http.transferGroup(params).then(resp => {
-      //   console.log(resp)
-      // })
-
-      // this.$router.push({
-      //   path: '/userCenter/groupManagement/transferGroup'
-      // })
+      this.$router.push({
+        path: '/userCenter/groupManagement/transferGroup'
+      })
     }
   }
 }
@@ -230,5 +280,17 @@ export default {
     width: 100px;
     height: 100px;
     display: block;
+  }
+  .mint-msgbox {
+    width: 60%;
+  }
+  .mint-msgbox-message{
+    color: rgb(22, 21, 21);
+  }
+  .mint-msgbox-content{
+    padding: 30px 10px;
+  }
+  .mint-msgbox-btns{
+    height: 60px;
   }
 </style>

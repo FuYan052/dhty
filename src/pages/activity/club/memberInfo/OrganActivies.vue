@@ -3,26 +3,26 @@
   <div class="organActivies">
     <!-- 活动列表 -->
     <div class="list">
-      <div class="activItem" v-for="(item,index) in 5" :key="index">
+      <div class="activItem" v-for="(item,index) in list" :key="index">
           <div class="top">
             <div class="title">
               <!-- <img src="../../../../assets/touxiang.jpg" alt=""> -->
-              <p class="text">跑步</p>
+              <p class="text">{{item.type}}</p>
               <!-- <p class="role">大虎管理员</p> -->
               <!-- <div class="rightBtn" @click="toSignUp">正在报名</div> -->
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
               <img src="../../../../assets/g-img.png" alt="">
-              <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>6月26日周三晚19:00，羽毛球约起</div>
-              <div class="p1"><span><i class="el-icon-time"></i></span>2019-06-26&nbsp;&nbsp;19:00-21:00</div>
-              <div class="p1"><span><i class="el-icon-location-outline"></i></span>锦城公园</div>
-              <div class="p1"><span><i class="el-icon-phone-outline"></i></span>18867592546</div>
-              <div class="p1"><span><i class="el-icon-coin"></i></span>60元/人</div>
+              <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
+              <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
+              <div class="p1"><span><i class="el-icon-location-outline"></i></span>{{item.venueName}}</div>
+              <div class="p1"><span><i class="el-icon-phone-outline"></i></span>{{item.phone}}</div>
+              <div class="p1"><span><i class="el-icon-coin"></i></span>{{item.cost}}元/人</div>
             </div>
           </div>
-          <div class="address" @click="toClub">
-            <span class="span1 el-icon-location"></span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-arrow-right"></span>
+          <div class="address" @click="toClub(item.groupId)">
+            <span class="span1 el-icon-location"></span>{{item.groupName}}<span class="span2 el-icon-arrow-right"></span>
           </div>
         </div>
     </div>
@@ -34,17 +34,22 @@ export default {
   name: 'OrganActivies',
   data() {
     return {
-
+      list: []
     }
   },
   created() {
+    const userInfoId = window.sessionStorage.getItem('userInfoId')
     // 组织的活动
-    // this.$http.organizedActivities(params).then(resp => {
-    //   console.log(resp)
-    // })
+    this.$http.organizedActivities(userInfoId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.list = resp.data
+      }
+    })
   },
   methods: {
-    toClub() {
+    toClub(id) {
+      window.sessionStorage.setItem('groupDetailId',id)
       this.$router.push({
         path: '/clubHome',
         name: 'ClubHome',

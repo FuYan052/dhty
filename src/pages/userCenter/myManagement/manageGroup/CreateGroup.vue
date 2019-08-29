@@ -93,11 +93,11 @@ export default {
     uploadSectionFile(file) {
       this.formData = new FormData()
       this.formData.append('file', file.file);
-      console.log("1111")
-      console.log(file)
+      // console.log("1111")
+      // console.log(file)
       this.$http.postUpolad(this.formData).then((resp) => {
-        console.log(resp);
-        console.log('上传成功');
+        // console.log(resp);
+        // console.log('上传成功');
         if (resp.status == 200) {
           this.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
           window.sessionStorage.setItem('imgUrl',this.imageUrl)
@@ -110,11 +110,12 @@ export default {
     },
     handlePictureCardPreview(file) {
       this.imageUrl = file.url;
-      console.log(imageUrl)
+      // console.log(imageUrl)
     },
     // 创建
     create() {
       const params = {
+        id: '',
         userId: this.userId,
         name: this.ruleForm.name,
         content: this.ruleForm.introd,

@@ -4,67 +4,73 @@
     <ul class="memberItem">
       <li v-for="(item,index) in memberList" :key="index" @click="selected(item,index)">
         <span class="checkWrap" :class="{selected : clickIndex === index}"><i class="el-icon-check"></i></span>
-        <img :src="item.imgPath" alt="">
+        <img :src="item.image" alt="">
         <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
-        <div class="grade">{{item.grade}}</div>
+        <div class="grade">Lv.{{item.level}}</div>
       </li>
     </ul>
-    <div class="sureBtn">确定</div>
+    <div class="sureBtn" @click="sure">确定</div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'TransferGroup',
   data() {
     return {
+      memberList1: [],
+      memberList2: [],
       memberList: [],
       clickIndex: -1,
+      toUserId: ''  //被转让者id
     }
   },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
+  },
   created() {
-    this.memberList = [
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-    ]
+    // 获取转让群员列表
+    this.groupId = window.sessionStorage.getItem('handleGroupId')
+    const params = {
+      groupId: this.groupId,
+      keyWord: ''
+    }
+    this.$http.groupMembers(params).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.memberList1 = resp.data.gMemersVo1One
+        this.memberList2 = resp.data.gMemersVo1Two
+        this.memberList = this.memberList1.concat(this.memberList2)
+        // 过滤自己本身
+        this.memberList = this.memberList.filter(item => {
+          return item.id != this.userId
+        })
+      }
+    })
   },
   methods: {
+    // 选择群员
     selected(item,index) {
       this.clickIndex = index
+      this.toUserId = item.id
+    },
+    // 确定
+    sure() {
+      const params = {
+        groupId: this.groupId,
+        qId: this.userId,
+        cId: this.toUserId
+      }
+      this.$http.transferGroup(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.$toast("转让成功！")
+        }else{
+          this.$toast("操作失败！")
+        }
+      })
     }
   }
 }

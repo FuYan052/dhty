@@ -221,11 +221,8 @@ export default {
     ...mapState(['userId']),
   },
   created() {
-    
-
     this.getInfo()
     this.getAllList()
-
   },
   watch: {
     myAddressPrivince(oldval,newval){  //省数据变化后，更新市的显示数据
@@ -244,6 +241,8 @@ export default {
   },
   methods: {
     getInfo() {
+      this.showlabelList = []
+      this.selectedListIds = []
       // 获取信息
       this.$http.findPersonalInformation('250').then(resp => {
       // this.$http.findPersonalInformation(this.userId).then(resp => {
@@ -258,6 +257,13 @@ export default {
           this.professionValue = resp.data.occupation
           this.addressValue = resp.data.region
           this.showlabelList = resp.data.labelVoList
+
+          this.selectedList = resp.data.labelVoList
+          var _Ids = resp.data.labelVoList
+          for(let i=0; i<_Ids.length; i++) {
+            let currLab = _Ids[i]
+            this.selectedListIds.push(currLab.id)
+          }
         }
       })
     },
@@ -288,7 +294,6 @@ export default {
         // console.log('上传成功');
         if (resp.status == 200) {
           this.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
-          window.sessionStorage.setItem('imgUrl',this.imageUrl)
           this.$indicator.close();
           this.$toast('头像上传成功');
         } else {
@@ -305,7 +310,6 @@ export default {
       this.$messagebox.prompt('请填写昵称').then(({ value, action }) => {
         // console.log(value)
         this.value1 = value
-        window.sessionStorage.setItem('nickName',this.value1)
       })
     },
     // 性别选择
@@ -465,13 +469,14 @@ export default {
         console.log(resp)
         if(resp.status == 200) {
           this.$toast('保存成功！')
-          
+          this.getInfo()
         }
       })
     },
 
 
     //选择标签界面相关方法
+
     // 获取所有标签
     getAllList() {
       // this.labelList = []
@@ -530,7 +535,8 @@ export default {
       }else{
         this.selectedListIds.push(it.id)
       }
-      // console.log(this.selectedListIds)
+      console.log(this.selectedListIds)
+      
     },
     //创建新标签
     showAddBox() {
@@ -559,8 +565,20 @@ export default {
     //保存选择的标签
     saveSelectLabels() {
       this.isInfoPage = true
+      this.showlabelList = []
+      console.log(this.selectedListIds)
+      for(let i=0; i<this.selectedList.length; i++){
+        let currLabel = this.selectedList[i]
+        for(let j=0; j<this.selectedListIds.length; j++) {
+          if(currLabel.id === this.selectedListIds[j]) {
+            this.showlabelList.push(currLabel)
+          }
+        }
+      }
+      console.log(this.showlabelList)
+
       this.labelsId = this.selectedListIds.join(',')  //用逗号隔开连成字符串传给后端
-      this.showlabelList = this.selectedList
+      // this.showlabelList = this.selectedList
     }
   },  
   mounted() {

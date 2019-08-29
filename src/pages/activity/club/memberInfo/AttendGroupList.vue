@@ -1,12 +1,12 @@
 <template>
-  <!-- ta的社群列表 -->
+  <!-- ta的所属社群列表 -->
   <div class="attendGroupList" v-title data-title="所属社群">
     <ul>
-      <li v-for="(item,index) in 3" :key="index">
-        <img src="../../../../assets/g-img.png" alt="">
+      <li v-for="(item,index) in groupList" :key="index" @click="toGroupDetail(item)">
+        <img :src="item.logo" alt="">
         <div class="text">
-          <p>飞羽羽毛球社区</p>
-          <p>共参加过5次活动</p>
+          <p>{{item.name}}</p>
+          <p>共参加过{{item.count}}次活动</p>
         </div>
         <span class="el-icon-arrow-right"></span>
       </li>
@@ -23,12 +23,22 @@ export default {
     }
   },
   created() {
-    // this.$http.groupList(params).then(resp => {
-    //   console.log(resp)
-    //   if(resp.staus == 200) {
-    //     this.groupList = resp.data
-    //   }
-    // })
+    const userInfoId = window.sessionStorage.getItem('userInfoId')
+    this.$http.groupList(userInfoId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.groupList = resp.data
+      }
+    })
+  },
+  methods: {
+    toGroupDetail(item) {
+      console.log(item)
+      window.sessionStorage.setItem('groupDetailId',item.id)
+      this.$router.push({
+        path: '/clubHome'
+      })
+    }
   }
 }
 </script>

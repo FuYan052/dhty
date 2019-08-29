@@ -1,15 +1,15 @@
 <template>
   <div class="memberData" v-title data-title="Ta人资料">
     <div class="topBox">
-      <img src="../../../../assets/touxiang.jpg" alt="">
+      <img :src="infoData.image" alt="">
       <div class="right">
-        <p class="name">幸运女孩<span>四川成都&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;女</span></p>
-        <div class="dj">Lv.13</div>
+        <p class="name">{{infoData.nickName}}<span>{{infoData.region}}&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;{{infoData.sex}}</span></p>
+        <div class="dj">Lv.{{infoData.level}}</div>
       </div>
     </div>
     <div class="labelBox">
       <div class="itemLabel" v-for="(item,index) in labelList" :key="index">
-        {{item}}
+        {{item.name}}
       </div>
     </div>
     <ul class="menu">
@@ -43,7 +43,8 @@ export default {
   name: 'MemberData',
   data() {
     return {
-      labelList: ['羽毛球','老干部','能歌善舞','健身','美食家','健身','美食家'],
+      infoData: '',
+      labelList: [],
       userInfoId: ''
     }
   },
@@ -52,6 +53,10 @@ export default {
     // ta人资料
     this.$http.informationOthers(this.userInfoId).then(resp => {
       console.log(resp)
+      if(resp.status == 200) {
+        this.infoData = resp.data
+        this.labelList = resp.data.labelVoList
+      }
     })
   },
   methods: {
@@ -134,7 +139,8 @@ export default {
     }
     .labelBox{
       width: 100%;
-      min-height: 180px;
+      min-height: 20px;
+      // min-height: 180px;
       background: #fff;
       margin-top: 1px;
       padding-top: 20px;

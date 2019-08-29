@@ -2,11 +2,11 @@
   <!-- 参加的群列表 -->
   <div class="joinCroupList" v-title data-title="我参加的群">
     <ul>
-      <li v-for="(item,index) in 3" :key="index" @click="handle">
-        <img src="../../../../assets/g-img.png" alt="">
+      <li v-for="(item,index) in groupList" :key="index" @click="handle(item.id)">
+        <img :src="item.logo" alt="">
         <div class="text">
-          <p>飞羽羽毛球社区</p>
-          <p>共参加过5次活动</p>
+          <p>{{item.name}}</p>
+          <p>共参加过{{item.count}}次活动</p>
         </div>
       </li>
     </ul>
@@ -14,21 +14,36 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'JoinCroupList',
   data() {
     return{
-
+      groupList: []
     }
+  },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
   },
   created() {
     // 获取参加的群列表
-    // this.$http.getJoinedGroup(params).then(resp => {
-    //   console.log(resp)
-    // })
+    this.$http.getJoinedGroup(this.userId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.groupList = resp.data
+      }else{
+        this.$toast("获取列表失败！")
+      }
+    })
   },
   methods: {
-    
+    handle(groupId) {
+      window.sessionStorage.setItem('groupDetailId',groupId)
+      this.$router.push({
+        path: '/clubHome'
+      })
+    }
   }
 }
 </script>

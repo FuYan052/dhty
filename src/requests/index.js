@@ -115,15 +115,15 @@ export const getPlaygroundList = (params) => {
 }
 
 // 我的管理
-// 我参加的社群
+// 我参加的社群  ok
 export const getJoinedGroup = (params) => {
-  return ajax.get(`/v1/rest/management/JoinedGroup?id=${params}`)
+  return ajax.get(`/v1/rest/management/JoinedGroup?userId=${params}`)
 }
 // 创建社群  ok
 export const createGroup = (params) => {
-  return ajax.post(`/v1/rest/management/createGroup?userId=${params.userId}&name=${params.name}&content=${params.content}&logo=${params.logo}`)
+  return ajax2.post(`/v1/rest/management/createGroup`,params)
 }
-// 解散群
+// 解散群  ok
 export const disbandmentGroup = (params) => {
   return ajax.get(`/v1/rest/management/disbandmentGroup?groupId=${params}`)
 }
@@ -131,22 +131,30 @@ export const disbandmentGroup = (params) => {
 export const createGroupList = (params) => {
   return ajax.get(`/v1/rest/management/groupList?id=${params}`)
 }
-// 我参加的活动
+// 我参加的活动  ok
 export const participatedActivity = (params) => {
-  return ajax.get(`/v1/rest/management/participatedActivity?userId=${params}`)
+  return ajax.get(`/v1/rest/management/participatedActivity?state=${params.state}&userId=${params.userId}`)
 }
-// 设为管理员、移除管理员、移除群成员
+// 我组织的活动  ok
+export const myOrganization = (params) => {
+  return ajax.get(`/v1/rest/management/myOrganization?state=${params.state}&userId=${params.userId}`)
+}
+// 设为管理员、移除管理员、移除群成员  ok
 export const setInfo = (params) => {
   return ajax.get(`/v1/rest/management/setInfo?type=${params.type}&groupId=${params.groupId}&userId=${params.userId}`)
 }
-// 转让群
+// 转让群  ok
 export const transferGroup = (params) => {
   return ajax.get(`/v1/rest/management/transferGroup?groupId=${params.groupId}&qId=${params.qId}&cId=${params.cId}`)
 }
-// 修改社群
-export const updateGroup = (params) => {
-  return ajax.post(`/v1/rest/management/updateGroup?id=${params.id}&userId=${params.userId}&name=${params.name}&content=${params.content}&logo=${params.logo}`)
+// 查询要修改的群信息  ok
+export const updateGroupInfo = (params) => {
+  return ajax.get(`/v1/rest/management/findGroup?id=${params}`)
 }
+// 修改社群
+// export const updateGroup = (params) => {
+//   return ajax2.post(`/v1/rest/management/updateGroup`,params)
+// }
 
 // 我的数据
 // 查询现有待完善信息
@@ -179,23 +187,23 @@ export const activitiesList = (params) => {
 export const applyJoinGroup = (params) => {
   return ajax.get(`/v1/rest/login/applyJoinGroup?groupId=${params.groupId}&userId=${params.userId}`)
 }
-// Ta参加过的活动
+// Ta参加过的活动  ok
 export const attendedActivities = (params) => {
   return ajax.get(`/v1/rest/login/attendedActivities?id=${params.id}&type=${params.type}`)
 }
-// 获取场地信息  /////////////
+// 获取场地信息  ok
 export const getVenueInfo = (params) => {
   return ajax.get(`/v1/rest/login/getVenueInfo?type=${params}`)
 }
-// 群活动
+// 群活动  ok
 export const groupActivity = (params) => {
   return ajax.get(`/v1/rest/login/groupActivity?id=${params.id}&time=${params.time}&isTwoDaysLater=${params.isTwoDaysLater}`)
 }
-// 群详情
+// 群详情 ok
 export const groupDetailInfo = (params) => {
   return ajax.get(`/v1/rest/login/groupDetailInfo?id=${params}`)
 }
-// 社群列表
+// ta所属社群列表  ok
 export const groupList = (params) => {
   return ajax.get(`/v1/rest/login/groupList?id=${params}`)
 }
@@ -203,17 +211,17 @@ export const groupList = (params) => {
 export const groupMembers = (params) => {
   return ajax.get(`/v1/rest/login/groupMembers?groupId=${params.groupId}&keyWord=${params.keyWord}`)
 }
-// Ta人资料
+// Ta人资料  ok
 export const informationOthers = (params) => {
   return ajax.get(`/v1/rest/login/informationOthers?id=${params}`)
 }
 // Ta的活动参数
 export const motionParameters = (params) => {
-  return ajax.get(`/v1/rest/login/motionParameters?id=${params}&type=${params.type}`)
+  return ajax.get(`/v1/rest/login/motionParameters?id=${params.id}&type=${params.type}`)
 }
-// 组织的活动
+// ta组织的活动  ok
 export const organizedActivities = (params) => {
-  return ajax.get(`/v1/rest/login/organizedActivities?`)
+  return ajax.get(`/v1/rest/login/organizedActivities?id=${params}`)
 }
 // 创建活动获取社群列表
 export const getGroupList = (params) => {
@@ -221,11 +229,8 @@ export const getGroupList = (params) => {
 }
 // 创建组织活动  ok
 export const organizingActivities = (params) => {
-  return ajax.post(`/v1/rest/login/organizingActivities?userId=${params.userId}&type=${params.type}&groupId=${params.groupId}&title=${params.title}&time=${params.time}
-  &timeStart=${params.timeStart}&timeEnd=${params.timeEnd}&venueId=${params.venueId}&people=${params.people}&cost=${params.cost}&phone=${params.phone}&content=${params.content}
-  &flag=${params.flag}&endTime=${params.endTime}`)
+  return ajax2.post(`/v1/rest/login/organizingActivities`,params)
 }
-
 // 根据父集查询子集数据字典
 export const findDictList = (params) => {
   return ajax.get(`/v1/rest/public/findDictList?skey=${params}`)

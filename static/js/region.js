@@ -767,7 +767,8 @@ const city = [
     "name": "北京市",
     "sub": [
       {
-        "name": "北京市",
+        "name": "",
+        // "name": "北京市",
         "sub": [
           {
             "name": "东城区"
@@ -836,7 +837,8 @@ const city = [
     "name": "上海市",
     "sub": [
       {
-        "name": "上海市",
+        "name": "",
+        // "name": "上海市",
         "sub": [
           {
             "name": "黄浦区"
@@ -907,7 +909,8 @@ const city = [
     "name": "天津市",
     "sub": [
       {
-        "name": "天津市",
+        "name": "",
+        // "name": "天津市",
         "sub": [
           {
             "name": "和平区"
@@ -978,7 +981,8 @@ const city = [
     "name": "重庆市",
     "sub": [
       {
-        "name": "重庆市",
+        "name": "",
+        // "name": "重庆市",
         "sub": [
           {
             "name": "渝中区"

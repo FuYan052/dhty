@@ -8,7 +8,7 @@
         :class="{activeCate : currIndex === index}"
         @click="changeCate(item,index)"
         > 
-        {{item}}
+        {{item.name}}
       </div>
     </div>
     <div class="top">
@@ -17,9 +17,9 @@
           <div class="icon"></div>
           <p class="titleText">{{currtitle.title1}}</p>
         </div>
-        <p class="value1">3306<span>分钟</span></p>
+        <p class="value1">{{dataInfo.totalTime}}<span>分钟</span></p>
         <p class="total">累计消耗</p>
-        <p class="value1_2">7083<span>千卡</span></p>
+        <p class="value1_2">{{dataInfo.cumulativeConsumption}}<span>千卡</span></p>
       </div>
       <div class="right">
         <div class="data_sm data2">
@@ -27,16 +27,18 @@
             <div class="icon"></div>
             <p class="titleText">{{currtitle.title2}}</p>
           </div>
-          <p v-show="!isRun" class="value_sm">120<span>公里/小时</span></p>
-          <p v-show="isRun" class="value_sm">3′48″</p>
+          <p v-show="!isRun" class="value_sm">{{dataInfo.maximum}}<span>公里/小时</span></p>
+          <p v-show="isRun" class="value_sm">{{dataInfo.bestPace}}</p>
+          <!-- <p v-show="isRun" class="value_sm">3′48″</p> -->
         </div>
         <div class="data_sm data3">
           <div class="title">
             <div class="icon"></div>
             <p class="titleText">{{currtitle.title3}}</p>
           </div>
-          <p v-show="!isRun" class="value_sm">58<span>次/分钟</span></p>
-          <p v-show="isRun" class="value_sm">5′49″</p>
+          <p v-show="!isRun" class="value_sm">{{dataInfo.heartRate}}<span>次/分钟</span></p>
+          <p v-show="isRun" class="value_sm">{{dataInfo.averageSpeed}}</p>
+          <!-- <p v-show="isRun" class="value_sm">5′49″</p> -->
         </div>
       </div>
     </div>
@@ -46,8 +48,8 @@
           <div class="icon"></div>
           <p class="titleText">{{currtitle.title4}}</p>
         </div>
-        <p v-show="!isRun" class="value_sm">66<span>场</span></p>
-        <p v-show="isRun" class="value_sm">15674.3<span>千米</span></p>
+        <p v-show="!isRun" class="value_sm">{{dataInfo.totalNumber}}<span>场</span></p>
+        <p v-show="isRun" class="value_sm">{{dataInfo.cumulatiVemileage}}<span>千米</span></p>
       </div>
       <div class="data_sm data5">
         <div class="title">
@@ -55,7 +57,7 @@
           <p class="titleText">{{currtitle.title5}}</p>
         </div>
         <p v-show="!isRun" class="value_sm _empty">暂无</p>
-        <p v-show="isRun" class="value_sm">135<span>步/分钟</span></p>
+        <p v-show="isRun" class="value_sm">{{dataInfo.averageFrequency}}<span>步/分钟</span></p>
       </div>
     </div>
   </div>
@@ -66,8 +68,9 @@ export default {
   name: 'MotionData',
   data() {
     return {
-      cateList: ['羽毛球','跑步'],
+      cateList: [],
       currIndex: 0,
+      dataInfo: '',
       badmintonDataTitle:{
         title1: '运动总时长',
         title2: '最大挥拍速度',
@@ -87,11 +90,33 @@ export default {
     }
   },
   created() {
+    // 获取活动类型
+    this.$http.findDictList('sportsKinds').then(resp => {
+      // console.log(resp)
+      if(resp.status == 200) {
+        this.cateList = resp.data
+
+        const params = {
+          id: window.sessionStorage.getItem('userInfoId'),
+          type: this.cateList[0].skey
+        }
+        // 运动参数
+        this.$http.motionParameters(params).then(resp => {
+          // console.log(resp)
+          if(resp.status == 200){
+            this.dataInfo = resp.data[0]
+            console.log(this.dataInfo)
+          }else{
+            this.$toast('获取数据失败！')
+          }
+        })
+      }else{
+        this.$toast('获取分类失败！')
+      }
+    })
+
     this.currtitle = this.badmintonDataTitle
-    // 运动参数
-    // this.$http.motionParameters(params).then(resp => {
-    //   console.log(resp)
-    // })
+    
   },
   methods: {
     changeCate(item,index) {
@@ -104,6 +129,20 @@ export default {
         this.currtitle = this.runDataTitle
         this.isRun = true
       }
+      const params = {
+        id: window.sessionStorage.getItem('userInfoId'),
+        type: item.skey
+      }
+      // 运动参数
+      this.$http.motionParameters(params).then(resp => {
+        // console.log(resp)
+        if(resp.status == 200){
+          this.dataInfo = resp.data[0]
+          console.log(this.dataInfo)
+        }else{
+          this.$toast('获取数据失败！')
+        }
+      })
     },
   }
 }
