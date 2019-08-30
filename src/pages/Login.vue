@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login" v-title data-title="登录">
     <div class="top">
       <!-- <span></span> -->
     </div>
@@ -94,6 +94,9 @@ export default {
       // this.$router.push(from)
     }
   },
+  created() {
+    console.log(this.$router)
+  },
   methods: {
     ...mapMutations(['changeLoginStatus','changeUserId','changeUserPhone','changeToken']),
     // 输入值合法时的回调
@@ -119,6 +122,8 @@ export default {
             this.changeUserId(resp.data.id)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
+            this.$toast("登录成功！")
+            this.$router.go(-2);
           }
         })
         console.log(params)

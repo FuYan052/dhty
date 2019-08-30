@@ -157,7 +157,7 @@ export const updateGroupInfo = (params) => {
 // }
 
 // 我的数据
-// 查询现有待完善信息
+// 查询现有待完善信息  ok
 export const findPersonalInformation = (params) => {
   return ajax.get(`/v1/rest/mydata/findPersonalInformation?userId=${params}`)
 }
@@ -215,7 +215,7 @@ export const groupMembers = (params) => {
 export const informationOthers = (params) => {
   return ajax.get(`/v1/rest/login/informationOthers?id=${params}`)
 }
-// Ta的活动参数
+// Ta的活动参数  ok
 export const motionParameters = (params) => {
   return ajax.get(`/v1/rest/login/motionParameters?id=${params.id}&type=${params.type}`)
 }
@@ -223,7 +223,7 @@ export const motionParameters = (params) => {
 export const organizedActivities = (params) => {
   return ajax.get(`/v1/rest/login/organizedActivities?id=${params}`)
 }
-// 创建活动获取社群列表
+// 创建活动获取社群列表  ok
 export const getGroupList = (params) => {
   return ajax.get(`/v1/rest/login/getGroupList?id=${params}`)
 }
@@ -231,7 +231,7 @@ export const getGroupList = (params) => {
 export const organizingActivities = (params) => {
   return ajax2.post(`/v1/rest/login/organizingActivities`,params)
 }
-// 根据父集查询子集数据字典
+// 根据父集查询子集数据字典  ok
 export const findDictList = (params) => {
   return ajax.get(`/v1/rest/public/findDictList?skey=${params}`)
 }

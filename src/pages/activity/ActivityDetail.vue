@@ -23,7 +23,7 @@
       <li>
         <span class="span1">报名人数：</span>{{peopleLength}}/{{theDetail.people}}
       </li>
-      <li class="list" @click="toList">
+      <li class="list">
         <span class="span1">已&nbsp;&nbsp;报&nbsp;&nbsp;名：</span><span class="span2 el-icon-arrow-right"></span>
         <div class="imgBox">
           <img v-for="(it,ind) in theDetail.enrolledVoList" :key="ind" :src="it.image" alt="">
@@ -64,7 +64,8 @@ export default {
       isChecked: true,  //是否勾选免责条款
       disabled: false,  //报名按钮是否能点击
       content: '',  //倒计时内容
-      endTime: ''
+      endTime: '',
+      isTosignUp: '',
     }
   },
   created() {
@@ -81,6 +82,8 @@ export default {
         this.countdowm(this.endTime) //执行倒计时函数
       }
     })
+    console.log(this.content)
+    console.log(this.isTosignUp)
   },
   methods: {
     toMap() {
@@ -102,23 +105,29 @@ export default {
       })
     },
     // 报名列表
-    toList() {
-      this.$router.push({
-        path: '/signUpList',
-      })
-    },
+    // toList() {
+    //   this.$router.push({
+    //     path: '/signUpList',
+    //   })
+    // },
     checked() {
       this.isChecked = !this.isChecked
       // console.log(this.isChecked)
     },
     submit() {
-      if(this.isChecked) {
-        this.$router.push({
-          path: '/activitySignUp'
-        })
+      console.log(this.isTosignUp)
+      if(this.isTosignUp) {
+        if(this.isChecked) {
+          this.$router.push({
+            path: '/activitySignUp'
+          })
+        }else{
+          this.$toast("请阅读《免责条款》！")
+        }
       }else{
-        this.$toast("请阅读《免责条款》！")
+        this.$toast("报名已结束！")
       }
+      
       
     },
     // 倒计时
@@ -147,12 +156,16 @@ export default {
             format =`${min}分${sec}秒`;
           }
           self.content = format;
-        }
-        else{
+          self.isTosignUp = true
+        } else{
+          self.isTosignUp = false
           clearInterval(timer);
-          self.content = self.endText;
+          self.content = '报名结束';
           self._callback();
         }
+        // if(self.content == '') {
+        //   self.content = '报名结束'
+        // }
       },1000)
     },
     _callback(){

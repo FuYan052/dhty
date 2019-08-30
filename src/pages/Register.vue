@@ -1,6 +1,6 @@
 <template>
   <!-- 注册 -->
-  <div class="register">
+  <div class="register" v-title data-title="注册">
     <div class="top">
       <!-- <span></span> -->
     </div>
@@ -33,7 +33,7 @@
           注册
         </div>
         <p class="agreement">
-          注册即表示同意<span>《大虎体育用户协议》</span>
+          注册即表示同意<span @click="toAgreement">《来虎体育用户协议》</span>
         </p>
     </div>
   </div>
@@ -84,6 +84,12 @@ export default {
     }
   },
   methods: {
+    // 用户协议
+    toAgreement() {
+      this.$router.push({
+        path: '/home/register/userAgreement'
+      })
+    },
     // 获取验证码
     getCode() {  
       this.totalTime = 60

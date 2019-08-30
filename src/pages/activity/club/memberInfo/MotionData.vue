@@ -5,7 +5,7 @@
       <div class="cateItem" 
         v-for="(item,index) in cateList" 
         :key="index"
-        :class="{activeCate : currIndex === index}"
+        :class="{activeCate : currIndex == index}"
         @click="changeCate(item,index)"
         > 
         {{item.name}}
@@ -105,6 +105,9 @@ export default {
           // console.log(resp)
           if(resp.status == 200){
             this.dataInfo = resp.data[0]
+            if(this.dataInfo === undefined) {
+              this.dataInfo = ''
+            }
             console.log(this.dataInfo)
           }else{
             this.$toast('获取数据失败！')
@@ -121,6 +124,7 @@ export default {
   methods: {
     changeCate(item,index) {
       this.currIndex = index
+      console.log(index)
       if(index === 0) {
         this.currtitle = this.badmintonDataTitle
         this.isRun = false
@@ -133,11 +137,15 @@ export default {
         id: window.sessionStorage.getItem('userInfoId'),
         type: item.skey
       }
+      console.log(params)
       // 运动参数
       this.$http.motionParameters(params).then(resp => {
         // console.log(resp)
         if(resp.status == 200){
           this.dataInfo = resp.data[0]
+          if(this.dataInfo === undefined) {
+            this.dataInfo = ''
+          }
           console.log(this.dataInfo)
         }else{
           this.$toast('获取数据失败！')

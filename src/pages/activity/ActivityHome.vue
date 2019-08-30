@@ -403,10 +403,10 @@ export default {
   }
 </style>
 <style>
-  .activItem:nth-of-type(2) .rightBtn {
+  /* .activItem:nth-of-type(2) .rightBtn {
     background: #fa8796 !important;
   }
   .activItem:nth-of-type(3) .rightBtn {
     background: #91b9f7 !important;
-  }
+  } */
 </style>

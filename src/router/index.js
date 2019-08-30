@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import LoginHome from '@/pages/LoginHome'
 import Register from '@/pages/Register'
+import UserAgreement from '@/pages/UserAgreement'
 import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
 import ForgetPassword from '@/pages/ForgetPassword'
@@ -69,6 +70,11 @@ export default new Router({
       path: '/home/register',
       name: 'Register',
       component: Register,
+    },
+    {
+      path: '/home/register/userAgreement',  // 用户协议
+      name: 'UserAgreement',
+      component: UserAgreement,
     },
     {
       path: '/home/login',

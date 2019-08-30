@@ -32,8 +32,8 @@ Vue.use(MintUI)
 //设置白名单，指不需要登录就可以直接进入的页面
 var whiteList = ["/home","/home/login","/home/register","/home/loginForCode","/home/forgetPassword"]
 router.beforeEach((to, from, next) => {
-  // let hasToken = localStorage.getItem('ty-token');
-  let hasToken = true
+  let hasToken = localStorage.getItem('ty-token');
+  // let hasToken = true
   if (hasToken) {
     next()
   }else {

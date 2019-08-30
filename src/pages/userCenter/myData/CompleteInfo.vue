@@ -244,15 +244,14 @@ export default {
       this.showlabelList = []
       this.selectedListIds = []
       // 获取信息
-      this.$http.findPersonalInformation('250').then(resp => {
-      // this.$http.findPersonalInformation(this.userId).then(resp => {
+      this.$http.findPersonalInformation(this.userId).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
           this.infoId = resp.data.id
           this.imageUrl = resp.data.image
           this.value1 = resp.data.name
           this.sexValue = resp.data.sex
-          this.heightValue = resp.data.height
+          this.heightValue = resp.data.height + 'cm'
           this.birthdayValue = resp.data.birthday
           this.professionValue = resp.data.occupation
           this.addressValue = resp.data.region
@@ -264,6 +263,8 @@ export default {
             let currLab = _Ids[i]
             this.selectedListIds.push(currLab.id)
           }
+          // this.labelsId = this.selectedListIds
+          this.labelsId = this.selectedListIds.join(',')
         }
       })
     },
@@ -453,8 +454,7 @@ export default {
     submit() {
       const params = {
         id: this.infoId,
-        // userId: this.userId,
-        userId: '250',
+        userId: this.userId,
         image: this.imageUrl,
         name: this.value1,
         sex: this.sexValue,
@@ -470,6 +470,12 @@ export default {
         if(resp.status == 200) {
           this.$toast('保存成功！')
           this.getInfo()
+          const _this = this
+          setTimeout(function() {
+            _this.$router.push({
+              path: '/userCenter/manageHome'
+            })
+          },2000)
         }
       })
     },
@@ -482,8 +488,7 @@ export default {
       // this.labelList = []
       this.resultList1 = []
       this.resultList2 = []
-      // this.$http.findAllLabel(this.userId).then(resp => {
-      this.$http.findAllLabel('250').then(resp => {
+      this.$http.findAllLabel(this.userId).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
           this.labelList = resp.data
@@ -547,8 +552,7 @@ export default {
       // 创建并提交后台
       const params = {
         labelName: this.addValue,
-        userId: '250'
-        // userId: this.userId
+        userId: this.userId
       }
       this.$http.createLabel(params).then(resp => {
         // console.log(resp)
@@ -566,7 +570,6 @@ export default {
     saveSelectLabels() {
       this.isInfoPage = true
       this.showlabelList = []
-      console.log(this.selectedListIds)
       for(let i=0; i<this.selectedList.length; i++){
         let currLabel = this.selectedList[i]
         for(let j=0; j<this.selectedListIds.length; j++) {
@@ -575,9 +578,8 @@ export default {
           }
         }
       }
-      console.log(this.showlabelList)
-
       this.labelsId = this.selectedListIds.join(',')  //用逗号隔开连成字符串传给后端
+      // this.labelsId = this.selectedListIds  //用逗号隔开连成字符串传给后端
       // this.showlabelList = this.selectedList
     }
   },  
