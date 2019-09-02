@@ -205,6 +205,9 @@ export default {
     this.formatDateValue = window.sessionStorage.getItem('formatDateValue')
     this.startTimeValue = window.sessionStorage.getItem('startTimeValue')
     this.endTime = window.sessionStorage.getItem('endTime')
+    if(this.endTime !== null) {
+      this.endTimeValue = '~' + this.endTime
+    }
     this.placeId = window.sessionStorage.getItem('placeId')
     this.placeName = window.sessionStorage.getItem('placeName')
     this.number = window.sessionStorage.getItem('number')
@@ -365,9 +368,11 @@ export default {
       var h = date.getHours();
       h = h < 10 ? ('0' + h) : h;
       var minute = date.getMinutes();
-      var second = date.getSeconds();
       minute = minute < 10 ? ('0' + minute) : minute;
-      return y + '年' + m + '月' + d + '日'+ h + ":" + minute;
+      var second = date.getSeconds();
+      second = second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d + " " +  h + ":" + minute;
+      // return y + '-' + m + '-' + d + " " +  h + ":" + minute + ":" + second;
     },
     handleConfirmDate(v) {
       this.dateValue = this.formatDate(v)
@@ -423,10 +428,19 @@ export default {
       this.lastTimePicker = true
     },
     handleConfirmLastTime(v) {
+      console.log(this.formatDate2(v))
       this.showLastTimeValue = this.formatDate2(v)
       this.popupVisible = !this.popupVisible
-      this.lastTimeValue = v
+      this.lastTimeValue = this.formatDate2(v)
       // console.log(this.showLastTimeValue)
+      const maxDateTime = new Date(this.formatDateValue + ' ' + this.endTime).getTime()
+      const last = new Date(this.lastTimeValue).getTime()
+      if(last > maxDateTime) {
+        this.$toast("报名截止时间不得大于活动结束时间！")
+        this.showLastTimeValue = this.formatDateValue + ' ' + this.endTime
+        this.lastTimeValue = this.formatDateValue + ' ' + this.endTime
+        console.log(this.lastTimeValue)
+      }
       window.sessionStorage.setItem('lastTimeValue',this.showLastTimeValue)
     },
     // 填写费用
@@ -452,10 +466,13 @@ export default {
         phone: this.phone,
         cost: this.cost,
         content: this.textarea1,
-        endTime: this.lastTimeValue.getTime(),
+        // endTime: this.lastTimeValue.getTime(),
+        // endTime: new Date(this.lastTimeValue),
+        endTime: this.lastTimeValue,
         flag: this.isCkecked
       }
       console.log(params)
+      console.log(new Date(this.lastTimeValue).getTime())
       
       // 提交后台
       this.$http.organizingActivities(params).then(resp => {

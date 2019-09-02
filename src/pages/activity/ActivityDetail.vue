@@ -78,7 +78,7 @@ export default {
         this.lon = resp.data.lon
         this.peopleLength = resp.data.enrolledVoList.length
         this.groupId = resp.data.groupId
-        this.endTime = resp.data.endTime / 1000
+        this.endTime = (new Date(resp.data.endTime).getTime()) / 1000
         this.countdowm(this.endTime) //执行倒计时函数
       }
     })
@@ -199,7 +199,7 @@ export default {
         font-weight: bold;
       }
       .p2{
-        font-size: 21px;
+        font-size: 24px;
         color: #636363;
         // float: right;
         line-height: 42px;
@@ -289,7 +289,7 @@ export default {
         width: 100%;
         height: auto;
         padding-right: 40px;
-        font-size: 22px;
+        font-size: 24px;
         line-height: 40px;
         color: #53575a;
         padding-bottom: 35px;
