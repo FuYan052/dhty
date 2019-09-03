@@ -127,6 +127,8 @@ export default {
         .dj{
           width: 130px;
           height: 40px;
+          padding-left: 15px;
+          margin-left: 10px;
           font-size: 16px;
           line-height: 40px;
           text-align: center;
@@ -134,6 +136,19 @@ export default {
           margin-top: 30px;
           background: #7974d2;
           border-radius: 20px;
+          position: relative;
+        }
+        .dj::before{
+          content: '';
+          display: block;
+          width: 42px;
+          height: 48px;
+          position: absolute;
+          top: -4px;
+          left: -12px;
+          z-index: 9;
+          background: url("../../../../assets/level.png") no-repeat center;
+          background-size: contain;
         }
       }
     }

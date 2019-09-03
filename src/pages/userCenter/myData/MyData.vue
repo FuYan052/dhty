@@ -2,11 +2,16 @@
   <!-- 我的数据 -->
   <div class="myData" v-title data-title="我的数据">
     <div class="bgBox">
+      <div class="userBox">
+        <img src="../../../assets/touxiang.jpg" alt="">
+        <div class="name">得之我幸</div>
+        <div class="level">Lv.3</div>
+      </div>
       <div class="topBox">
         <div class="top">
           <div class="peopleBox"></div>
           <div class="left">
-            <h6>8901.2</h6>
+            <h6>3306</h6>
             <p>运动0分，消耗0千卡</p>
             <p>距离达成目标还差8000步</p>
           </div>
@@ -15,15 +20,15 @@
         <div class="bottom">
           <div>
             <p class="p1">运动时间</p>
-            <p class="p2">1705.95</p>
+            <p class="p2">1705.95<span>分钟</span></p>
           </div>
           <div>
             <p class="p1">运动步数</p>
-            <p class="p2">4800.00</p>
+            <p class="p2">4800</p>
           </div>
           <div>
             <p class="p1">消耗卡路里</p>
-            <p class="p2">13</p>
+            <p class="p2">133<span>KJ</span></p>
           </div>
         </div>
       </div>
@@ -312,6 +317,38 @@ export default {
     background: #fdfbfc;
     overflow: hidden;
     padding-bottom: 80px;
+    .userBox{
+      width: 100%;
+      height: 70px;
+      margin-top: 60px;
+      img{
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        float: left;
+        margin-left: 17px;
+      }
+      .name{
+        font-size: 23px;
+        line-height: 70px;
+        float: left;
+        margin-left: 20px;
+        color: #fff6e9;
+      }
+      .level{
+        width: 40px;
+        height: 20px;
+        font-size: 14px;
+        background: #fec602;
+        color: #fffef9;
+        line-height: 20px;
+        text-align: center;
+        float: left;
+        margin-top: 25px;
+        margin-left: 15px;
+        border-radius: 10px;
+      }
+    }
     .bgBox{
       width: 100%;
       height: auto;
@@ -324,7 +361,7 @@ export default {
         height: 424px;
         background: #fff;
         margin: 0 auto;
-        margin-top: 214px;
+        margin-top: 30px;
         border-radius: 18px;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         .top{
@@ -379,14 +416,23 @@ export default {
             float: left;
             text-align: center;
             margin-top: 50px;
+            p{
+              span{
+                font-size: 18px;
+                line-height: 24px;
+                color: #302f30;
+                font-weight: normal;
+                padding-left: 5px;
+              }
+            }
             .p1{
               font-size: 22px;
               line-height: 22px;
               color: #8d888e;
             }
             .p2{
-              font-size: 22px;
-              line-height: 22px;
+              font-size: 24px;
+              line-height: 24px;
               font-weight: bold;
               color: #181b20;
               margin-top: 25px;

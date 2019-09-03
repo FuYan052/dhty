@@ -181,7 +181,7 @@ export const activitiesDetail = (params) => {
 }
 // 活动列表
 export const activitiesList = (params) => {
-  return ajax.get(`/v1/rest/login/activitiesList?type=${params.type}&time=${params.time}&isTwoDaysLater=${params.isTwoDaysLater}`)
+  return ajax.get(`/v1/rest/login/activitiesList?type=${params.type}&time=${params.time}&keyWord=${params.keyWord}&isTwoDaysLater=${params.isTwoDaysLater}`)
 }
 // 申请加入社群  ok
 export const applyJoinGroup = (params) => {

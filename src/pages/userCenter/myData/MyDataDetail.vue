@@ -74,6 +74,12 @@ export default {
       }
       var myChart = echarts.init(document.getElementById('box'));
       myChart.setOption({
+        tooltip : {
+          trigger: 'axis',
+          axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
         grid: {
           left: '7%',
           right: '5%',
@@ -140,9 +146,6 @@ export default {
                     {offset: 0.1, color: '#b3d5f2'},
                     {offset: 0.5, color: '#67b7fa'},
                     {offset: 1, color: '#b1d4f4'}
-                    // {offset: 0, color: '#83bff6'},
-                    // {offset: 0.5, color: '#188df0'},
-                    // {offset: 1, color: '#188df0'}
                   ]
                 )
               },
@@ -153,9 +156,6 @@ export default {
                     {offset: 0, color: '#6fa1ed'},
                     {offset: 0.7, color: '#6ca3f7'},
                     {offset: 1, color: '#83bff6'}
-                    // {offset: 0, color: '#2378f7'},
-                    // {offset: 0.7, color: '#2378f7'},
-                    // {offset: 1, color: '#83bff6'}
                   ]
                 )
               }

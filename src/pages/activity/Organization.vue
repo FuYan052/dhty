@@ -428,20 +428,20 @@ export default {
       this.lastTimePicker = true
     },
     handleConfirmLastTime(v) {
-      console.log(this.formatDate2(v))
+      console.log(v)
       this.showLastTimeValue = this.formatDate2(v)
       this.popupVisible = !this.popupVisible
       this.lastTimeValue = this.formatDate2(v)
-      // console.log(this.showLastTimeValue)
+      console.log(this.lastTimeValue)
       const maxDateTime = new Date(this.formatDateValue + ' ' + this.endTime).getTime()
       const last = new Date(this.lastTimeValue).getTime()
       if(last > maxDateTime) {
         this.$toast("报名截止时间不得大于活动结束时间！")
         this.showLastTimeValue = this.formatDateValue + ' ' + this.endTime
         this.lastTimeValue = this.formatDateValue + ' ' + this.endTime
-        console.log(this.lastTimeValue)
+        // console.log(this.lastTimeValue)
       }
-      window.sessionStorage.setItem('lastTimeValue',this.showLastTimeValue)
+      window.sessionStorage.setItem('lastTimeValue',this.lastTimeValue)
     },
     // 填写费用
     inputCost() {
@@ -467,13 +467,11 @@ export default {
         cost: this.cost,
         content: this.textarea1,
         // endTime: this.lastTimeValue.getTime(),
-        // endTime: new Date(this.lastTimeValue),
-        endTime: this.lastTimeValue,
+        endTime: window.sessionStorage.getItem('lastTimeValue'),
+        // endTime: this.lastTimeValue,
         flag: this.isCkecked
       }
       console.log(params)
-      console.log(new Date(this.lastTimeValue).getTime())
-      
       // 提交后台
       this.$http.organizingActivities(params).then(resp => {
         console.log(resp)

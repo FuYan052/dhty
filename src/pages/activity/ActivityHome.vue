@@ -25,6 +25,14 @@
         <p class="p p2">{{item.date1.month}}月{{item.date1.day}}日<span v-show="index === 3">~</span></p>
       </div>
     </div>
+    <!-- 搜索框 -->
+    <div class="searchBox">
+      <el-input
+        prefix-icon="el-icon-search"
+        @change="search1"
+        v-model="inputText">
+      </el-input>
+    </div>
     <!-- 活动详情 -->
     <div class="contentBg">
       <div class="content">
@@ -58,6 +66,7 @@ export default {
   name: 'ActivityHome',
   data() {
     return {
+      inputText: '',
       cateList: ['羽毛球', '跑步'],
       currIndex: 0,
       currDateIndex: 0,
@@ -96,6 +105,7 @@ export default {
     const params = {
       type: this.type,
       time: this.time,
+      keyWord: '',
       isTwoDaysLater: this.isTwoDaysLater
     }
     console.log(params)
@@ -110,6 +120,27 @@ export default {
     })
   },
   methods: {
+    // 搜索
+    search1() {
+      console.log(this.inputText)
+        const params = {
+        type: this.type,
+        time: this.time,
+        keyWord: this.inputText,
+        isTwoDaysLater: this.isTwoDaysLater
+      }
+      console.log(params)
+      this.$http.activitiesList(params).then(resp => {
+        if(resp.status == 200) {
+          this.activList = resp.data
+        }else{
+          this.$toast("获取列表失败!")
+          this.activList = []
+        }
+        console.log(resp)
+      })
+    },
+    // 切换分类
     changeCate(index) {
       this.currIndex = index
       if(index === 0) {
@@ -121,6 +152,7 @@ export default {
       const params = {
         type: this.type,
         time: this.time,
+        keyWord: '',
         isTwoDaysLater: this.isTwoDaysLater
       }
       console.log(params)
@@ -146,6 +178,7 @@ export default {
       const params = {
         type: this.type,
         time: this.time,
+        keyWord: '',
         isTwoDaysLater: this.isTwoDaysLater
       }
       console.log(params)
@@ -269,6 +302,11 @@ export default {
         left: 78px;
       }
     }
+    .searchBox{
+      width: 100%;
+      height: 104px;
+      padding: 20px;
+    }
     .contentBg{
         width: 100%;
         padding: 0 25px;
@@ -278,7 +316,6 @@ export default {
           .activItem{
             width: 100%;
             height: 378px;
-            margin-top: 20px;
             // background: #fff;
             background: url("../../assets/bg222.png") no-repeat center;
             background-size: contain;
@@ -403,10 +440,20 @@ export default {
   }
 </style>
 <style>
-  /* .activItem:nth-of-type(2) .rightBtn {
-    background: #fa8796 !important;
+  .activityHome .searchBox .el-input__inner{
+    height: 60px !important;
+    border-radius: 10px;
+    padding-left: 70px;
+    font-size: 26px;
+    border: 2px solid #dcdcdc;
   }
-  .activItem:nth-of-type(3) .rightBtn {
-    background: #91b9f7 !important;
-  } */
+  .activityHome .searchBox .el-input__prefix{
+    left: 18px;
+    top: 12px;
+  }
+  .activityHome .searchBox .el-input__icon{
+    font-size: 35px;
+    font-weight: bold;
+    color: #767676;
+  }
 </style>

@@ -211,7 +211,7 @@ export default {
       }
       if(item === '已完成') {
         this.isPublish = false
-        this.state2 = '3'
+        this.state2 = '5'
         this.getList2()
       }
     },

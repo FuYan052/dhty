@@ -17,7 +17,7 @@
           <div class="icon"></div>
           <p class="titleText">{{currtitle.title1}}</p>
         </div>
-        <p class="value1">{{dataInfo.totalTime}}<span>分钟</span></p>
+        <p class="value1">{{dataInfo.totalTime | isNull}}<span>分钟</span></p>
         <p class="total">累计消耗</p>
         <p class="value1_2">{{dataInfo.cumulativeConsumption}}<span>千卡</span></p>
       </div>
@@ -94,7 +94,7 @@ export default {
     this.$http.findDictList('sportsKinds').then(resp => {
       // console.log(resp)
       if(resp.status == 200) {
-        this.cateList = resp.data
+        this.cateList = resp.data.slice(0,2)
 
         const params = {
           id: window.sessionStorage.getItem('userInfoId'),
@@ -117,9 +117,15 @@ export default {
         this.$toast('获取分类失败！')
       }
     })
-
     this.currtitle = this.badmintonDataTitle
-    
+  },
+  filters: {
+    isNull: function(v) {
+      if(v === null) {
+        v = '0'
+      }
+      return v
+    }
   },
   methods: {
     changeCate(item,index) {

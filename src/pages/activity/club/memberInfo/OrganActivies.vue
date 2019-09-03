@@ -44,6 +44,9 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.list = resp.data
+        if(resp.data.length == 0) {
+          this.$toast("暂无活动！")
+        }
       }
     })
   },
