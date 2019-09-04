@@ -2,17 +2,17 @@
   <!-- 我的管理 -->
   <div class="manageHome">
     <div class="topBox">
-      <p class="userName">张少伟</p>
+      <p class="userName">{{info.nickName}}</p>
       <div class="editIcon" @click="toCompleteInfo"><span class="el-icon-edit"></span></div>
-      <img class="tx" src="../../../assets/touxiang.jpg" alt="">
+      <img class="tx" :src="info.image" alt="">
       <p class="info">
-        身份：群主
-        <span @click="toCash">账户余额(元)：15.2 <b class="el-icon-arrow-right"></b></span>
+        身份：{{info.type}}
+        <span @click="toCash">账户余额(元)：{{info.accountBalance}} <b class="el-icon-arrow-right"></b></span>
       </p>
     </div>
     <div class="middleBox">
-      <div>累计收益：141元</div>
-      <div>即将到账：15.5元</div>
+      <div>累计收益：{{info.accumulatedIncome}}元</div>
+      <div>即将到账：{{info.upcomingAccount}}元</div>
     </div>
     <div class="emptyBg"></div>
     <ul>
@@ -24,10 +24,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'ManageHome',
   data() {
     return {
+      info: '',
       menuList: [
         {
           name: '群组管理',
@@ -37,16 +39,31 @@ export default {
           name: '我的活动',
           path: '/userCenter/myActivities'
         },
-        {
-          name: '我的订单',
-          path: '/userCenter/MyOrder'
-        },
-        {
-          name: '地址管理',
-          path: '/userCenter/addressManagement' 
-        },
+        // {
+        //   name: '我的订单',
+        //   path: '/userCenter/MyOrder'
+        // },
+        // {
+        //   name: '地址管理',
+        //   path: '/userCenter/addressManagement' 
+        // },
       ]
     }
+  },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
+  },
+  created() {
+    // 获取信息
+    this.$http.myManagementInfo(this.userId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.info = resp.data
+      }else{
+        this.$toast("获取信息失败！")
+      }
+    })
   },
   methods: {
     // 完善信息
@@ -82,7 +99,7 @@ export default {
       background: url("../../../assets/bg111.png") no-repeat center;
       background-size: contain;
       overflow: hidden;
-      padding-right: 60px;
+      padding-right: 30px;
       position: relative;
       .userName{
         color: #fff;
@@ -114,7 +131,7 @@ export default {
         margin-top: 26px;
       }
       .info{
-        width: 410px;
+        width: 460px;
         float: right;
         margin-top: 120px;
         color: #656565;
@@ -152,7 +169,7 @@ export default {
     }
     ul{
       width: 100%;
-      height: 345px;
+      height: auto;
       padding: 0 35px;
       li{
         width: 658px; 

@@ -251,7 +251,11 @@ export default {
           this.imageUrl = resp.data.image
           this.value1 = resp.data.name
           this.sexValue = resp.data.sex
-          this.heightValue = resp.data.height + 'cm'
+          if(resp.data.height !== null) {
+            this.heightValue = resp.data.height + 'cm'
+          }else{
+            this.heightValue = resp.data.height
+          }
           this.birthdayValue = resp.data.birthday
           this.professionValue = resp.data.occupation
           this.addressValue = resp.data.region

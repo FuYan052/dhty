@@ -32,6 +32,9 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.groupList = resp.data
+        if(resp.data.length == 0) {
+          this.$toast('暂无社群！')
+        }
       }else{
         this.$toast("获取列表失败！")
       }

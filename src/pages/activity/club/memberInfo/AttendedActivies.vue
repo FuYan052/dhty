@@ -46,17 +46,19 @@ export default {
   created() {
     // 获取活动类型
     this.$http.findDictList('sportsKinds').then(resp => {
-      // console.log(resp)
+      console.log(resp)
       if(resp.status == 200) {
-        this.cateList = resp.data
-
+        this.cateList = resp.data.slice(0,2)
         const params = {
           id: window.sessionStorage.getItem('userInfoId'),
           type: this.cateList[0].skey
         }
         this.$http.attendedActivities(params).then(resp => {
-          // console.log(resp)
+          console.log(resp)
           this.actList = resp.data
+          if(resp.data.length == 0) {
+            this.$toast('暂无活动!')
+          }
         })
       }else{
         this.$toast('获取列表失败！')

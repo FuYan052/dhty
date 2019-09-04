@@ -19,7 +19,7 @@
         </div>
         <p class="value1">{{dataInfo.totalTime | isNull}}<span>分钟</span></p>
         <p class="total">累计消耗</p>
-        <p class="value1_2">{{dataInfo.cumulativeConsumption}}<span>千卡</span></p>
+        <p class="value1_2">{{dataInfo.cumulativeConsumption | isNull}}<span>千卡</span></p>
       </div>
       <div class="right">
         <div class="data_sm data2">
@@ -48,8 +48,8 @@
           <div class="icon"></div>
           <p class="titleText">{{currtitle.title4}}</p>
         </div>
-        <p v-show="!isRun" class="value_sm">{{dataInfo.totalNumber}}<span>场</span></p>
-        <p v-show="isRun" class="value_sm">{{dataInfo.cumulatiVemileage}}<span>千米</span></p>
+        <p v-show="!isRun" class="value_sm">{{dataInfo.totalNumber | isNull}}<span>场</span></p>
+        <p v-show="isRun" class="value_sm">{{dataInfo.cumulatiVemileage | isNull}}<span>千米</span></p>
       </div>
       <div class="data_sm data5">
         <div class="title">

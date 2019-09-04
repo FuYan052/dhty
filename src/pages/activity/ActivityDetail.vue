@@ -66,6 +66,7 @@ export default {
       content: '',  //倒计时内容
       endTime: '',
       isTosignUp: '',
+      state: ''  //后端传过来为2时，则表示人员已满，不能报名
     }
   },
   created() {
@@ -76,6 +77,7 @@ export default {
         this.theDetail = resp.data
         this.lat = resp.data.lat
         this.lon = resp.data.lon
+        this.state = resp.data.state
         this.peopleLength = resp.data.enrolledVoList.length
         this.groupId = resp.data.groupId
         this.endTime = (new Date(resp.data.endTime).getTime()) / 1000
@@ -116,19 +118,21 @@ export default {
     },
     submit() {
       console.log(this.isTosignUp)
-      if(this.isTosignUp) {
-        if(this.isChecked) {
-          this.$router.push({
-            path: '/activitySignUp'
-          })
-        }else{
-          this.$toast("请阅读《免责条款》！")
-        }
+      if(this.state == 2) {
+        this.$toast("抱歉，人员已满！")
       }else{
-        this.$toast("报名已结束！")
+        if(this.isTosignUp && this.state !== 2) {
+          if(this.isChecked) {
+            this.$router.push({
+              path: '/activitySignUp'
+            })
+          }else{
+            this.$toast("请阅读《免责条款》！")
+          }
+        }else{
+          this.$toast("报名已结束！")
+        }
       }
-      
-      
     },
     // 倒计时
     countdowm(timestamp) {

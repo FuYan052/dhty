@@ -115,6 +115,10 @@ export const getPlaygroundList = (params) => {
 }
 
 // 我的管理
+// 用户中心
+export const myManagementInfo = (params) => {
+  return ajax.get(`/v1/rest/management/myManagement?userId=${params}`)
+}
 // 我参加的社群  ok
 export const getJoinedGroup = (params) => {
   return ajax.get(`/v1/rest/management/JoinedGroup?userId=${params}`)

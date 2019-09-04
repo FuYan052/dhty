@@ -146,6 +146,9 @@ export default {
           console.log(resp)
           if(resp.status == 200) {
             this.$toast("解散成功！")
+            this.$router.push({
+              path: '/userCenter/createdGroupList'
+            })
           }else{
             this.$toast("操作失败！")
           }

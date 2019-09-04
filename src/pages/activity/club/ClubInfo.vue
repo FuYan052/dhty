@@ -5,7 +5,7 @@
       <p>{{clubInfo.name}}</p>
     </div>
     <div class="join">
-      <div class="joinBtn" @click="toJoin">申请加入俱乐部</div>
+      <div class="joinBtn" @click="toJoin">申请加入社群</div>
     </div>
     <!-- 活动时刻表 -->
     <div class="activList">
@@ -16,10 +16,18 @@
         <span>场馆</span>
       </div>
       <ul>
-        <li v-for="(item,index) in activiList" :key="index">
+        <!-- <li v-for="(item,index) in activiList" :key="index">
           <div class="week">{{item.time|filtersDay}}</div>
           <div class="actItem">{{item.timeStart}}-{{item.timeEnd}}<span>{{item.name}}</span></div>
+        </li> -->
+        <li  v-for="(item,index) in activiList" :key="index">
+          <div class="week">{{item.weekName}}</div>
+          <div class="actItem" v-for="(it,ind) in item.sub" :key="ind">{{it.timeStart}}-{{it.timeEnd}}<span>{{it.name}}</span></div>
         </li>
+        <!-- <li>
+          <div class="week">周一</div>
+          <div class="actItem">14:00-16:00<span>星空体育馆</span></div>
+        </li> -->
       </ul>
     </div>
     <!-- 俱乐部简介 -->
@@ -46,7 +54,7 @@ export default {
     this.groupId = window.sessionStorage.getItem('groupDetailId')
     // 群详情
     this.$http.groupDetailInfo(this.groupId).then(resp => {
-      // console.log(resp)
+      console.log(resp)
       if(resp.status == 200) {
         this.clubInfo = resp.data
         this.activiList = resp.data.oavoList
@@ -60,11 +68,11 @@ export default {
   },
   filters: {
     // 将日期转化为星期
-    filtersDay: function (day) {
-      const days = ['日', '一', '二', '三', '四', '五', '六'];
-      let dateT = day ? new Date(day) : new Date();    
-      return `周${days[dateT.getDay()]}`;
-    }
+    // filtersDay: function (day) {
+    //   const days = ['日', '一', '二', '三', '四', '五', '六'];
+    //   let dateT = day ? new Date(day) : new Date();    
+    //   return `周${days[dateT.getDay()]}`;
+    // }
   },
   methods: {
     // 申请加入俱乐部

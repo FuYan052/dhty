@@ -23,11 +23,11 @@
       <p class="title">ta的装备<span class="el-icon-arrow-right"></span></p>
       <ul class="equListBox">
         <li v-for="(item,index) in 6" :key="index">
-          <img src="../../../../assets/g-img.png" alt="">
+          <img src="../../../../assets/touxiang.jpg" alt="">
         </li>
       </ul>
       <div class="buyUrl">
-        <img src="../../../../assets/g-img.png" alt="">
+        <img src="../../../../assets/touxiang.jpg" alt="">
         <div class="_right">
           <p class="_title">实用的实用的实用的实用的用的实用的</p>
           <p class="price"><span class="span1">￥</span>5190<span class="span2">￥8190</span></p>

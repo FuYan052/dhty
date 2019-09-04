@@ -2,7 +2,7 @@
   <!-- 提现 -->
   <div class="cash" v-title data-title="提现">
     <p class="p1">虎币（个）</p>
-    <p class="p2">14809</p>
+    <p class="p2">0</p>
     <div class="cate">
       <div>
         <p>正在提取中（个）</p>
@@ -10,7 +10,7 @@
       </div>
       <div>
         <p>可提取虎币（个）</p>
-        <p>14809</p>
+        <p>0</p>
       </div>
       <div>
         <p>待结算（个）</p>

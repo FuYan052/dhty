@@ -12,6 +12,12 @@
         {{item}}
       </div>
     </div>
+    <!-- 当前信息 -->
+    <div class="currData">
+      <p class="time">{{time}}</p>
+      <p class="name" v-show="isclick">{{name}}</p>
+      <p class="value" v-show="isclick"><span>{{value}}</span>h</p>
+    </div>
     <!-- 统计图 -->
     <div class="box" id="box">
 
@@ -24,11 +30,17 @@
 var echarts = require('echarts/lib/echarts');
 // 引入柱状图
 require('echarts/lib/chart/bar');
-
+// 引入提示框和title组件，图例
+require('echarts/lib/component/tooltip')
 export default {
   name: 'MyDataDetail',
   data() {
     return {
+      isclick: false,
+      isYear: false,
+      time: '',
+      name: '',
+      value: '',
       cateList: ['日','周','月','年'],
       currIndex: 0,
       // dayList: [],
@@ -51,11 +63,8 @@ export default {
     }
   },
   created() {
-    // for(let i = -6; i<=0; i++){
-    //   const result = this.findDate(i)
-    //   this.weekList.push(result) 
-    // }
-    
+    // 当前日期
+    this.time = this.formatDate(new Date())
   },
   mounted() {
     this.currList = this.dayList
@@ -63,6 +72,75 @@ export default {
     this.chart()
   },
   methods: {
+    // 格式化日期
+    formatDate(date) { 
+      var myyear = date.getFullYear(); 
+      var mymonth = date.getMonth()+1; 
+      var myweekday = date.getDate(); 
+      if(mymonth < 10){ 
+          mymonth = "0" + mymonth; 
+        } 
+      if(myweekday < 10){ 
+          myweekday = "0" + myweekday; 
+      } 
+      return (myyear+"年"+mymonth + "月" + myweekday + '日'); 
+    },
+    // 获取当前周的周一
+    getWeekStartDate() { 
+      var date1 = new Date() //当前日期 
+      var nowDayOfWeek = date1.getDay(); //今天本周的第几天 
+      var date2 = new Date(date1)
+      date2.setDate(date1.getDate()+(0 - nowDayOfWeek + 1))
+      var _year = date2.getFullYear()
+      var _month = date2.getMonth()+1
+      var _day = date2.getDate()
+      if(_month < 10){
+        _month = "0" + _month
+      }else{
+         _month = date2.getMonth()+1
+      }
+      if(_day < 10){
+        _day = "0" + _day
+      }else{
+         _day = date2.getDate()
+      }
+      var time = _year + '年' + _month + "月" +  _day + "日"
+      return time;
+    },
+    // 获取当前周的周日
+    getWeekEndDate() {
+      var date1 = new Date() //当前日期 
+      var nowDayOfWeek = date1.getDay(); //今天本周的第几天 
+      var date2 = new Date(date1)
+      date2.setDate(date1.getDate()+(7 - nowDayOfWeek))
+      var _year = date2.getFullYear()
+      var _month = date2.getMonth()+1
+      var _day = date2.getDate()
+      if(_month < 10){
+        _month = "0" + _month
+      }else{
+         _month = date2.getMonth()+1
+      }
+      if(_day < 10){
+        _day = "0" + _day
+      }else{
+         _day = date2.getDate()
+      }
+      var time = '至' + _day + "日"
+      return time;
+    },
+    // 获取当前月
+    getCurrMonth() {
+      var date1  = new Date()
+      var _year = date1.getFullYear()
+      var _month = date1.getMonth()+1
+      if(_month < 10){
+        _month = "0" + _month
+      }else{
+         _month = date1.getMonth()+1
+      }
+      return _year + '年' + _month + "月"
+    },
     // 统计图
     chart() {
       var dataAxis = this.currList;
@@ -74,12 +152,6 @@ export default {
       }
       var myChart = echarts.init(document.getElementById('box'));
       myChart.setOption({
-        tooltip : {
-          trigger: 'axis',
-          axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-            type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
         grid: {
           left: '7%',
           right: '5%',
@@ -164,50 +236,52 @@ export default {
           }
         ]
       })
+      // 点击柱状图
+      const that = this
+      that.name = ''
+      that.value = ''
+      myChart.on('click',function(params) {
+        that.isclick = true
+        // console.log(params)
+        that.name = params.name
+        that.value = params.value 
+        if(that.isYear) {
+          that.name = params.name + '月'
+        }
+      })
     },
     changeCate(item,index) {
+      this.isclick = false
       this.currIndex = index
       if(index === 0) {
+        this.isYear = false
+        this.time = this.formatDate(new Date())
         this.currList = this.dayList
         this.currData = this.dayData
         this.chart()
       }
       if(index === 1) {
+        this.isYear = false
+        this.time = this.formatDate(new Date())
+        this.time = this.getWeekStartDate() + this.getWeekEndDate()
         this.currList = this.weekList
         this.currData = this.weekData
         this.chart()
       }
       if(index === 2) {
+        this.isYear = false
+        this.time = this.getCurrMonth()
         this.currList = this.monthList
         this.currData = this.monthData
         this.chart()
       }
       if(index === 3) {
+        this.isYear = true
+        this.time = new Date().getFullYear() + '年'
         this.currList = this.yearList
         this.currData = this.yearData
         this.chart()
       }
-    },
-    // 获取当前日期及后面范围内的日期
-    findDate(aa) {
-      var date1 = new Date()
-      var time1 = date1.getFullYear() + "-" + (date1.getMonth()+1) + "-" + date1.getDate()
-      var date2 = new Date(date1)
-      date2.setDate(date1.getDate()+aa)
-      var _month = date2.getMonth()+1
-      var _day = date2.getDate()
-      if(_month < 10){
-        _month = "0" + _month
-      }else{
-         _month = date2.getMonth()+1
-      }
-      if(_day < 10){
-        _day = "0" + _day
-      }else{
-         _day = date2.getDate()
-      }
-      var time = _month + "/"+ _day
-      return time;
     },
   }
 }
@@ -236,11 +310,29 @@ export default {
         border-bottom: 3px solid #f96e35;
       }
     }
+    .currData{
+      width: 100%;
+      height: auto;
+      // border: 1px solid red;
+      margin-top: 20px;
+      padding-top: 10px;
+      p{
+        text-align: center;
+        font-size: 24px;
+        line-height: 40px;
+        color: rgb(107, 105, 105);
+        span{
+          font-size: 30px;
+          padding-right: 10px;
+          color: #539ee0;
+        }
+      }
+    }
     .box{
       width: 100%;
       height: 430px;
       // border: 1px solid red;
-      margin-top: 40px;
+      // margin-top: 20px;
     }
   }
 </style>

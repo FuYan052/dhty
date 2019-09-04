@@ -192,7 +192,7 @@ export default {
   }
   .createGroup .groupName .el-input__inner{
     height: 50px;
-    margin-top: 25px;
+    margin-top: 18px;
     font-size: 26px;
     border: none;
   }
