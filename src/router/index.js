@@ -127,10 +127,10 @@ export default new Router({
       path: '/clubHome',
       name: 'ClubHome',
       component: ClubHome,
-      redirect: '/club/clubInfo',
+      redirect: '/club/clubInfo/:id',
       children: [
         {
-          path: '/club/clubInfo',
+          path: '/club/clubInfo/:id',
           name: 'ClubInfo',
           component: ClubInfo
         },
@@ -306,31 +306,31 @@ export default new Router({
       component: AccountDetails,
     },
     // 商城
-    {
-      path: '/mall',
-      name: 'Mall',
-      component: Mall,
-    },
-    {
-      path: '/mall/searchPage',
-      name: 'SearchPage',
-      component: SearchPage,
-    },
+    // {
+    //   path: '/mall',
+    //   name: 'Mall',
+    //   component: Mall,
+    // },
+    // {
+    //   path: '/mall/searchPage',
+    //   name: 'SearchPage',
+    //   component: SearchPage,
+    // },
     // 地址管理
-    {
-      path: '/userCenter/addressManagement',
-      name: 'AddressManage',
-      component: AddressManage,
-    },
-    {
-      path: '/addressManagement/addAddress',
-      name: 'AddAddress',
-      component: AddAddress,
-    },
-    {
-      path: '/addressManagement/editAddress',
-      name: 'EditAddress',
-      component: EditAddress,
-    },
+    // {
+    //   path: '/userCenter/addressManagement',
+    //   name: 'AddressManage',
+    //   component: AddressManage,
+    // },
+    // {
+    //   path: '/addressManagement/addAddress',
+    //   name: 'AddAddress',
+    //   component: AddAddress,
+    // },
+    // {
+    //   path: '/addressManagement/editAddress',
+    //   name: 'EditAddress',
+    //   component: EditAddress,
+    // },
   ]
 })

@@ -236,14 +236,20 @@ export default {
           .actItem{
             width: 580px;
             height: 99px;
-            line-height: 99px;
+            line-height: 96px;
             margin-left: 130px;
             border-top: 1px dashed #e7e7e7;
             font-size: 22px;
-            padding-left: 60px;
+            padding-left: 40px;
             span{
-              display: inline-block;
-              margin-left: 160px;
+              display: block;
+              width: 350px;
+              height: 96px;
+              float: right;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 3;
             }
           }
           .actItem:nth-of-type(2){

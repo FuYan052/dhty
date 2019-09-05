@@ -62,7 +62,7 @@ export default {
       // 调用腾讯地图
       showMap(latitude, longitude){
         var map = new qq.maps.Map(document.getElementById("mapBox"),{    //地图部分初始化
-            zoom: 11,               //设置地图缩放级别
+            zoom: 12,               //设置地图缩放级别
             center: new qq.maps.LatLng(latitude, longitude),     //设置中心点
             zoomControl: false,    //不启用缩放控件
             mapTypeControlOptions: {  //设置控件的地图类型为普通街道地图

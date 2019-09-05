@@ -2,7 +2,7 @@
   <!-- 登录 -->
   <div class="loginHome">
     <div class="imgBox">
-      <img class="loginBg" src="../assets/loginBg.png" alt="">
+      <img class="loginBg" src="../assets/loginHome.jpg" alt="">
     </div>
     <p class="title1">登录大虎体育运动</p>
     <p class="title2">让时代改变你的生活</p>
@@ -41,14 +41,15 @@ export default {
     overflow: hidden;
     .imgBox{
       width: 470px;
-      height: 470px;
+      height: auto;
       margin: 0 auto;
-      margin-top: 80px;
-      background: #fff;
+      margin-top: 180px;
+      // background: #fff;
     }
     .loginBg{
       width: 470px;
-      height: 470px;
+      // height: 470px;
+      height: auto;
     }
     .title1{
       font-size: 30px;

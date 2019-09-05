@@ -29,8 +29,9 @@ Vue.use(MintUI)
 // Vue.use(preview)
 
 // 全局导航守卫
-//设置白名单，指不需要登录就可以直接进入的页面
-var whiteList = ["/home","/home/login","/home/register","/home/loginForCode","/home/forgetPassword"]
+// var whiteList = ["/home","/home/login","/home/register","/home/loginForCode","/home/forgetPassword"]
+//设置名单，需要登录才可以进入的页面
+var whiteList = ["/userCenter/popularize","/userCenter/manageHome","/userCenter/myData"]
 router.beforeEach((to, from, next) => {
   let hasToken = localStorage.getItem('ty-token');
   // let hasToken = true
@@ -38,9 +39,9 @@ router.beforeEach((to, from, next) => {
     next()
   }else {
     if (whiteList.indexOf(to.path) !== -1) {
-        next()//这里是即将进入的页面是白名单的页面就直接进入
+      next('/home' )//这里是即将进入的页面是名单中的页面就直接进入
     } else { 
-      next('/home' )//这里是即将进入的页面不是白名单的页面又没有token的情况下重定向到登录页面进行登录操作
+      next()//这里是即将进入的页面不是白名单的页面又没有token的情况下重定向到登录页面进行登录操作
     } 
   }
 });

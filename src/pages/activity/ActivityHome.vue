@@ -67,6 +67,7 @@ export default {
   data() {
     return {
       inputText: '',
+      activityType: '1',
       cateList: ['羽毛球', '跑步'],
       currIndex: 0,
       currDateIndex: 0,
@@ -103,6 +104,7 @@ export default {
     // 获取活动列表
     this.time = this.dateList[0].date1.year + '-' + this.dateList[0].date1.month +'-'+ this.dateList[0].date1.day  //实际动态日期
     const params = {
+      activityType: this.activityType,
       type: this.type,
       time: this.time,
       keyWord: '',
@@ -125,6 +127,7 @@ export default {
       console.log(this.inputText)
         const params = {
         type: this.type,
+        activityType: this.activityType,
         time: this.time,
         keyWord: this.inputText,
         isTwoDaysLater: this.isTwoDaysLater
@@ -151,6 +154,7 @@ export default {
       }
       const params = {
         type: this.type,
+        activityType: this.activityType,
         time: this.time,
         keyWord: '',
         isTwoDaysLater: this.isTwoDaysLater
@@ -177,6 +181,7 @@ export default {
       this.time = clickDate.year + '-' + clickDate.month +'-'+ clickDate.day   //实际动态日期
       const params = {
         type: this.type,
+        activityType: this.activityType,
         time: this.time,
         keyWord: '',
         isTwoDaysLater: this.isTwoDaysLater
@@ -224,7 +229,7 @@ export default {
       console.log(id)
       window.sessionStorage.setItem('groupDetailId',id)
       this.$router.push({
-        path: '/clubHome',
+        path: `/club/clubInfo/:${id}`,
         name: 'ClubHome',
       })
     },

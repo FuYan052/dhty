@@ -1,5 +1,5 @@
 <template>
-  <!-- 儿童活动 -->
+   <!-- 儿童活动 -->
   <div class="childrenActivities" v-title data-title="儿童活动">
     <!-- 头部菜单栏 -->
     <div class="cateNav">
@@ -19,33 +19,41 @@
         v-for="(item,index) in dateList" 
         :key="index"
         :class="{activeDate : currDateIndex === index}"
-        @click="changeDate(index)"
+        @click="changeDate(index,item.date1)"
         >
         <p class="p p1">{{item.date2}}</p>
-        <p class="p p2">{{item.date1}}</p>
+        <p class="p p2">{{item.date1.month}}月{{item.date1.day}}日<span v-show="index === 3">~</span></p>
       </div>
+    </div>
+    <!-- 搜索框 -->
+    <div class="searchBox">
+      <el-input
+        prefix-icon="el-icon-search"
+        @change="search1"
+        v-model="inputText">
+      </el-input>
     </div>
     <!-- 活动详情 -->
     <div class="contentBg">
       <div class="content">
-        <div class="activItem" v-for="(item,index) in 3" :key="index">
+        <div class="activItem" v-for="(item,index) in activList" :key="index">
           <div class="top">
             <div class="title">
-              <img src="../../assets/touxiang.jpg" alt="">
-              <p class="text">昆仑山人007</p>
-              <p class="role">大虎管理员</p>
-              <div class="rightBtn" @click="toSignUp">正在报名</div>
+              <img :src="item.image" alt="">
+              <p class="text">{{item.nickName}}</p>
+              <p class="role">{{item.type}}</p>
+              <div class="rightBtn" @click="toSignUp(item.id)">{{item.osState}}</div>
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
               <img src="../../assets/g-img.png" alt="">
-              <div class="p1"><span><i class="el-icon-house"></i></span>6月26日周三晚19:00，羽毛球约起</div>
-              <div class="p1"><span><i class="el-icon-time"></i></span>2019-06-26&nbsp;&nbsp;19:00-21:00</div>
-              <div class="p1"><span><i class="el-icon-coin"></i></span>60元/人</div>
+              <div class="p1 title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
+              <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
+              <div class="p1"><span><i class="el-icon-coin"></i></span>{{item.cost}}元/人</div>
             </div>
           </div>
-          <div class="address" @click="toClub">
-            <span class="span1 el-icon-location"></span>成都千羽千寻羽毛球俱乐部<span class="span2 el-icon-arrow-right"></span>
+          <div class="address" @click="toClub(item.groupId)">
+            <span class="span1 el-icon-location"></span>{{item.groupName}}<span class="span2 el-icon-arrow-right"></span>
           </div>
         </div>
       </div>
@@ -58,6 +66,8 @@ export default {
   name: 'ChildrenActivities',
   data() {
     return {
+      inputText: '',
+      activityType: '2',
       cateList: ['羽毛球', '跑步'],
       currIndex: 0,
       currDateIndex: 0,
@@ -78,7 +88,11 @@ export default {
           date1: '',
           date2: '两天后'
         },
-      ]
+      ],
+      type: 'sportsKinds_01',
+      time: '2019-06-28',
+      isTwoDaysLater: false,  //是否为两天后的日期，传给后端做判断标识
+      activList: []
     }
   },
   created() {
@@ -86,22 +100,111 @@ export default {
       const result = this.findDate(i)
       this.dateList[i].date1 = result
     }
-    this.dateList[3].date1 = this.dateList[3].date1 + '~'
     // console.log(this.dateList)
+    // 获取活动列表
+    this.time = this.dateList[0].date1.year + '-' + this.dateList[0].date1.month +'-'+ this.dateList[0].date1.day  //实际动态日期
+    const params = {
+      activityType: this.activityType,
+      type: this.type,
+      time: this.time,
+      keyWord: '',
+      isTwoDaysLater: this.isTwoDaysLater
+    }
+    console.log(params)
+    this.$http.activitiesList(params).then(resp => {
+      if(resp.status == 200) {
+        this.activList = resp.data
+      }else{
+        this.$toast("获取列表失败!")
+        this.activList = []
+      }
+      console.log(resp)
+    })
   },
   methods: {
+    // 搜索
+    search1() {
+      console.log(this.inputText)
+        const params = {
+        type: this.type,
+        activityType: this.activityType,
+        time: this.time,
+        keyWord: this.inputText,
+        isTwoDaysLater: this.isTwoDaysLater
+      }
+      console.log(params)
+      this.$http.activitiesList(params).then(resp => {
+        if(resp.status == 200) {
+          this.activList = resp.data
+        }else{
+          this.$toast("获取列表失败!")
+          this.activList = []
+        }
+        console.log(resp)
+      })
+    },
+    // 切换分类
     changeCate(index) {
       this.currIndex = index
+      if(index === 0) {
+        this.type = 'sportsKinds_01'
+      }
+      if(index === 1) {
+        this.type = 'sportsKinds_02'
+      }
+      const params = {
+        type: this.type,
+        activityType: this.activityType,
+        time: this.time,
+        keyWord: '',
+        isTwoDaysLater: this.isTwoDaysLater
+      }
+      console.log(params)
+      // 活动列表
+      this.$http.activitiesList(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.activList = resp.data
+        }else{
+          this.$toast("获取列表失败!")
+          this.activList = []
+        }
+      })
     },
-    changeDate(index) {
+    changeDate(index,clickDate) {
+      if(index === 3){
+        this.isTwoDaysLater = true
+      }else{
+        this.isTwoDaysLater = false
+      }
       this.currDateIndex = index
+      this.time = clickDate.year + '-' + clickDate.month +'-'+ clickDate.day   //实际动态日期
+      const params = {
+        type: this.type,
+        activityType: this.activityType,
+        time: this.time,
+        keyWord: '',
+        isTwoDaysLater: this.isTwoDaysLater
+      }
+      console.log(params)
+      // 活动列表
+      this.$http.activitiesList(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          this.activList = resp.data
+        }else{
+          this.$toast("获取列表失败!")
+          this.activList = []
+        }
+      })
     },
-    // 获取当前日期及后面方伟范围内的日期
+    // 获取当前日期及后面范围内的日期
     findDate(aa) {
       var date1 = new Date()
       var time1 = date1.getFullYear() + "-" + (date1.getMonth()+1) + "-" + date1.getDate()
       var date2 = new Date(date1)
       date2.setDate(date1.getDate()+aa)
+      var _year = date2.getFullYear()
       var _month = date2.getMonth()+1
       var _day = date2.getDate()
       if(_month < 10){
@@ -114,19 +217,27 @@ export default {
       }else{
          _day = date2.getDate()
       }
-      var time = _month + "月"+ _day+ "日"
-      return time;
+      var time = _month + "-"+ _day+ ""
+      var _dateObj = {
+        year: _year,
+        month: _month,
+        day: _day
+      }
+      return _dateObj;
     },
-    toClub() {
+    toClub(id) {
+      console.log(id)
+      window.sessionStorage.setItem('groupDetailId',id)
       this.$router.push({
         path: '/clubHome',
         name: 'ClubHome',
       })
     },
     // 去报名
-    toSignUp() {
+    toSignUp(id) {
+      window.sessionStorage.setItem('activityDetailId',id)
       this.$router.push({
-        path: '/activityDetail'
+        path: '/activityDetail',
       })
     }
   }
@@ -196,20 +307,24 @@ export default {
         left: 78px;
       }
     }
+    .searchBox{
+      width: 100%;
+      height: 104px;
+      padding: 20px;
+    }
     .contentBg{
         width: 100%;
         padding: 0 25px;
         .content{
           width: 100%;
           height: auto;
-          // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
           .activItem{
             width: 100%;
             height: 378px;
-            margin-top: 20px;
-            border-top-right-radius: 25px;
+            // background: #fff;
             background: url("../../assets/bg222.png") no-repeat center;
             background-size: contain;
+            border-top-right-radius: 25px;
             .top{
               width: 100%;
               height: auto;
@@ -220,7 +335,6 @@ export default {
                 img{
                   width: 50px;
                   height: 50px;
-                  background: #fff;
                   float: left;
                   margin-top: 23px;
                   margin-left: 30px;
@@ -294,6 +408,13 @@ export default {
                     }
                   }
                 }
+                .title{
+                  height: 37px;
+                  overflow: hidden;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+                }
                 .p1:nth-of-type(1){
                   margin-top: 30px;
                 }
@@ -324,10 +445,20 @@ export default {
   }
 </style>
 <style>
-  .activItem:nth-of-type(2) .rightBtn {
-    background: #fa8796 !important;
+  .childrenActivities .searchBox .el-input__inner{
+    height: 60px !important;
+    border-radius: 10px;
+    padding-left: 70px;
+    font-size: 26px;
+    border: 2px solid #dcdcdc;
   }
-  .activItem:nth-of-type(3) .rightBtn {
-    background: #91b9f7 !important;
+  .childrenActivities .searchBox .el-input__prefix{
+    left: 18px;
+    top: 12px;
+  }
+  .childrenActivities .searchBox .el-input__icon{
+    font-size: 35px;
+    font-weight: bold;
+    color: #767676;
   }
 </style>

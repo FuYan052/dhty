@@ -95,9 +95,10 @@ export default {
           width: 60px;
           height: 60px;
           border-radius: 50%;
-          border: 1px solid #ecc039;
           float: left;
           margin-top: 50px;
+          background: url("../../../assets/accountIcon.png") no-repeat center;
+          background-size: contain;
         }
         .text{
           width: 55%;

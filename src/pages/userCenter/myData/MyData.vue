@@ -11,7 +11,7 @@
         <div class="top">
           <div class="peopleBox"></div>
           <div class="left">
-            <h6>3306</h6>
+            <h6>{{total}}</h6>
             <p>运动0分，消耗0千卡</p>
             <p>距离达成目标还差8000步</p>
           </div>
@@ -111,6 +111,7 @@ export default {
   name: 'MyData',
   data() {
     return {
+      total: 3306, //步数
       cateList: ['跑步','羽毛球'],
       currIndex: 0,
       dateList: []
@@ -126,9 +127,9 @@ export default {
   mounted() {
     // 环形进度条
     var myChart = echarts.init(document.getElementById('circle1'));
-      var e = 40
+      var e = (this.total / 8000) * 100
       myChart.setOption({
-      tooltip: {},
+      // tooltip: {},
       legend: {
         orient: 'vertical',
         x: 'left',

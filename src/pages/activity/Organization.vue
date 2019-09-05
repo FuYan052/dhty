@@ -5,6 +5,9 @@
       <li @click="show1">
         选择运动种类<span class="el-icon-arrow-right"></span><span class="value">{{typeValue}}</span>
       </li>
+      <li @click="showActivityType">
+        选择活动类型<span class="el-icon-arrow-right"></span><span class="value">{{activityTypeValue}}</span>
+      </li>
       <li @click="show2">
         选择所属群组<span class="el-icon-arrow-right"></span><span class="value">{{groupTypeValue}}</span>
       </li>
@@ -70,6 +73,19 @@
           <div class="usi-btn-sure"  @click="sure1">确定</div>
         </div>
       </mt-picker>
+      <!-- 选择活动类型 -->
+      <mt-picker 
+        v-show="activityTypePicker"
+        :slots="activityTypeSlots" 
+        :visibleItemCount='5'
+        :itemHeight='50'
+        showToolbar
+        @change="ChangeactivityType">
+        <div class="picker-toolbar-title">
+          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+          <div class="usi-btn-sure"  @click="sureActivityType">确定</div>
+        </div>
+      </mt-picker>
       <!-- 选择所属群组 -->
       <mt-picker 
         v-show="picker2"
@@ -133,6 +149,7 @@ export default {
     return {
       textarea1: '',  //参与须知
       picker1: false,
+      activityTypePicker: false,
       picker2: false,
       datePicker: false,
       startTimePicker: false,
@@ -140,6 +157,9 @@ export default {
       lastTimePicker: false,
       type: '羽毛球', //默认运动类型
       typeValue: '', //选择的运动类型
+      activityType: '', //默认活动类型
+      activityTypeValue: '', //选择的活动类型
+      activityTypeId: '',
       groupType: '大虎管理员', //默认所属群组
       groupTypeValue: '', //选择的所属群组
       titleValue:'',  //标题内容
@@ -160,26 +180,16 @@ export default {
       currSlots: this.slots1,
       slotsValues1: [],
       slotsValues2: [],
-      // slots1: [
-      //   {
-      //     flex: 1,
-      //     // values: ['羽毛球', '跑步','儿童活动'],
-      //     values: [],
-      //     className: 'slot1',
-      //     textAlign: 'center'
-      //   }
-      // ],
-      // slots2: [
-      //   {
-      //     flex: 1,
-      //     values: ['大虎管理员', '个人'],
-      //     className: 'slot1',
-      //     textAlign: 'center'
-      //   }
-      // ],
       showToolbar: true,
       popupVisible: false,
       isCkecked: false,   //是否为周活动
+      activityTypeSlots: [{
+        flex: 1,
+        values: ['成人活动', '儿童活动','亲子活动'],
+        className: 'slot6',
+        textAlign: 'center',
+        // defaultIndex: -1
+      }]
     }
   },
   created() {
@@ -200,6 +210,7 @@ export default {
 
     this.startDate = new Date()  //当天日期
     this.typeValue = window.sessionStorage.getItem('typeValue')  //存sessionStorage是为了防止选择场地后返回页面被刷新，之前选择项被清空
+    this.activityTypeValue = window.sessionStorage.getItem('activityType')  
     this.groupTypeValue = window.sessionStorage.getItem('groupTypeValue')
     this.titleValue = window.sessionStorage.getItem('titleValue')
     this.formatDateValue = window.sessionStorage.getItem('formatDateValue')
@@ -254,6 +265,13 @@ export default {
         picker.setSlotValue(1, values[0]);
       }
     },
+    ChangeactivityType(picker, values) {
+      this.activityType = values[0]
+      // console.log(this.activityType)
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
+      }
+    },
     onValuesChange2(picker, values) {
       this.groupType = values[0]
       // console.log(this.groupType)
@@ -265,6 +283,7 @@ export default {
     show1() {
       this.popupVisible = true
       this.picker1 = true
+      this.activityTypePicker = false
       this.picker2 = false
       this.picker3 = false
       this.datePicker = false
@@ -272,10 +291,22 @@ export default {
       this.endTimePicker = false
       this.currSlots = this.dataList1
     },
+    //显示活动类型选择项
+    showActivityType() {
+      this.popupVisible = true
+      this.activityTypePicker = true
+      this.picker1 = false
+      this.picker2 = false
+      this.picker3 = false
+      this.datePicker = false
+      this.startTimePicker = false
+      this.endTimePicker = false
+    },
     //显示所属群组选择项
     show2() {
       this.popupVisible = true
       this.picker1 = false
+      this.activityTypePicker = false
       this.picker2 = true
       this.picker3 = false
       this.datePicker = false
@@ -294,6 +325,7 @@ export default {
     showDate() {
       this.popupVisible = true
       this.picker1 = false
+      this.activityTypePicker = false
       this.picker2 = false
       this.datePicker = true
       this.endTimePicker = false
@@ -303,6 +335,7 @@ export default {
     showStartTime() {
       this.popupVisible = true
       this.picker1 = false
+      this.activityTypePicker = false
       this.picker2 = false
       this.datePicker = false
       this.endTimePicker = false
@@ -312,6 +345,7 @@ export default {
     showEndTime() {
       this.popupVisible = true
       this.picker1 = false
+      this.activityTypePicker = false
       this.picker2 = false
       this.datePicker = false
       this.startTimePicker = false
@@ -328,6 +362,24 @@ export default {
       console.log(this.type)
       window.sessionStorage.setItem('typeValue',this.typeValue)
       window.sessionStorage.setItem('typeId',this.type.skey)
+    },
+    sureActivityType() {
+      this.popupVisible = !this.popupVisible
+      this.activityTypeValue = this.activityType
+      // console.log(this.activityType)
+      
+      // console.log(this.type)
+      if(this.activityTypeValue === '成人活动'){
+        this.activityTypeId = '1'
+      }
+      if(this.activityTypeValue === '儿童活动'){
+        this.activityTypeId = '2'
+      }
+      if(this.activityTypeValue === '亲子活动'){
+        this.activityTypeId = '3'
+      }
+      window.sessionStorage.setItem('activityType',this.activityType)
+      window.sessionStorage.setItem('activityTypeId',this.activityTypeId)
     },
     sure2() {
       this.popupVisible = !this.popupVisible
@@ -457,6 +509,7 @@ export default {
         userId: this.userId,
         type: window.sessionStorage.getItem('typeId'),
         groupId: window.sessionStorage.getItem('groupTypeId'),
+        activityType: window.sessionStorage.getItem('activityTypeId'),
         title: this.titleValue,
         time: this.formatDateValue,
         timeStart: this.startTimeValue,
@@ -495,6 +548,8 @@ export default {
           window.sessionStorage.removeItem("lastTimeValue")
           window.sessionStorage.removeItem("titleValue")
           window.sessionStorage.removeItem("typeValue")
+          window.sessionStorage.removeItem("activityType")
+          window.sessionStorage.removeItem("activityTypeId")
         }
       })
     },
