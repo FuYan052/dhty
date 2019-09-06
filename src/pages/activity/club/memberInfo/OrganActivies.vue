@@ -54,8 +54,7 @@ export default {
     toClub(id) {
       window.sessionStorage.setItem('groupDetailId',id)
       this.$router.push({
-        path: '/clubHome',
-        name: 'ClubHome',
+        path: `/club/clubInfo/${id}`,
       })
     },
   }

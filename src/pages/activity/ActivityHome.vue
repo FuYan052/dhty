@@ -46,7 +46,7 @@
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
-              <img src="../../assets/g-img.png" alt="">
+              <img :src="item.venueImage" alt="">
               <div class="p1 title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
               <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
               <div class="p1"><span><i class="el-icon-coin"></i></span>{{item.cost}}元/人</div>
@@ -70,7 +70,7 @@ export default {
       activityType: '1',
       cateList: ['羽毛球', '跑步'],
       currIndex: 0,
-      currDateIndex: 0,
+      currDateIndex: 0, 
       dateList: [
         {
           date1: '',
@@ -114,6 +114,9 @@ export default {
     this.$http.activitiesList(params).then(resp => {
       if(resp.status == 200) {
         this.activList = resp.data
+        if(this.activList.length == 0) {
+          this.$toast('没有活动哦！')
+        }
       }else{
         this.$toast("获取列表失败!")
         this.activList = []
@@ -136,6 +139,9 @@ export default {
       this.$http.activitiesList(params).then(resp => {
         if(resp.status == 200) {
           this.activList = resp.data
+          if(this.activList.length == 0) {
+            this.$toast('没有活动哦！')
+          }
         }else{
           this.$toast("获取列表失败!")
           this.activList = []
@@ -165,6 +171,9 @@ export default {
         console.log(resp)
         if(resp.status == 200) {
           this.activList = resp.data
+          if(this.activList.length == 0) {
+            this.$toast('没有活动哦！')
+          }
         }else{
           this.$toast("获取列表失败!")
           this.activList = []
@@ -192,6 +201,9 @@ export default {
         console.log(resp)
         if(resp.status == 200) {
           this.activList = resp.data
+          if(this.activList.length == 0) {
+            this.$toast('没有活动哦！')
+          }
         }else{
           this.$toast("获取列表失败!")
           this.activList = []
@@ -229,8 +241,7 @@ export default {
       console.log(id)
       window.sessionStorage.setItem('groupDetailId',id)
       this.$router.push({
-        path: `/club/clubInfo/:${id}`,
-        name: 'ClubHome',
+        path: `/club/clubInfo/${id}`,
       })
     },
     // 去报名
@@ -325,6 +336,7 @@ export default {
             background: url("../../assets/bg222.png") no-repeat center;
             background-size: contain;
             border-top-right-radius: 25px;
+            margin-bottom: 20px;
             .top{
               width: 100%;
               height: auto;

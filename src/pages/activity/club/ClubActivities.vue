@@ -21,7 +21,7 @@
               <img :src="item.image" alt="">
               <p class="text">{{item.nickName}}</p>
               <p class="role">{{item.type}}</p>
-              <div class="rightBtn" @click="toSignUp">{{item.osState}}</div>
+              <div class="rightBtn" @click="toSignUp(item.id)">{{item.osState}}</div>
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
@@ -146,7 +146,8 @@ export default {
       return _dateObj;
     },
     // 去报名
-    toSignUp() {
+    toSignUp(id) {
+      window.sessionStorage.setItem('activityDetailId',id)
       this.$router.push({
         path: '/activityDetail'
       })

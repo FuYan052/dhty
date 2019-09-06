@@ -3,9 +3,9 @@
   <div class="myData" v-title data-title="我的数据">
     <div class="bgBox">
       <div class="userBox">
-        <img src="../../../assets/touxiang.jpg" alt="">
-        <div class="name">得之我幸</div>
-        <div class="level">Lv.3</div>
+        <img :src="myInfo.image" alt="">
+        <div class="name">{{myInfo.nickName}}</div>
+        <div class="level">Lv.{{myInfo.level}}</div>
       </div>
       <div class="topBox">
         <div class="top">
@@ -101,6 +101,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 // 引入 ECharts 主模块
 var echarts = require('echarts/lib/echarts');
 // 引入饼状图
@@ -114,10 +115,23 @@ export default {
       total: 3306, //步数
       cateList: ['跑步','羽毛球'],
       currIndex: 0,
-      dateList: []
+      dateList: [],
+      myInfo: '',
     }
   },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
+  },
   created() {
+    // 获取信息
+    this.$http.informationOthers(this.userId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.myInfo = resp.data
+      }
+    })
+    // 计算日期
     for(let i = -6; i<=0; i++){
       const result = this.findDate(i)
       this.dateList.push(result) 

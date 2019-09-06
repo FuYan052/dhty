@@ -40,6 +40,7 @@
     <div class="notes">
       <span>参与须知</span>
       <el-input
+        class="textarea1"
         type="textarea"
         autosize
         placeholder="请输入内容"
@@ -201,7 +202,7 @@ export default {
       }
     })
     // 获取群组列表
-    this.$http.getGroupList('1').then(resp => {
+    this.$http.getGroupList(this.userId).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
         this.slotsValues2 = resp.data
@@ -506,6 +507,7 @@ export default {
     // 确认发布按钮
     submit() {
       const params = {
+        id: '',
         userId: this.userId,
         type: window.sessionStorage.getItem('typeId'),
         groupId: window.sessionStorage.getItem('groupTypeId'),
@@ -647,7 +649,6 @@ export default {
         line-height: 60px;
         color: #a9a9a9;
       }
-      
     }
     .submit{
       width: 710px;
@@ -758,5 +759,8 @@ export default {
   line-height: 70px;
   color: #fac31e;
   font-size: 24px;
+}
+.textarea1{
+  font-size: 23px;
 }
 </style>

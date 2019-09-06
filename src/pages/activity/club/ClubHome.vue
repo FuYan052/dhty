@@ -26,10 +26,12 @@ export default {
   },
   methods: {
     changeTab(index) {
+      console.log()
       this.currtabIndex = index
+      const groupId = window.sessionStorage.getItem('groupDetailId')
       if(index === 0) {
         this.$router.push({
-          path: '/club/clubInfo'
+          path: `/club/clubInfo/${groupId}`
         })
       }
       if(index === 1) {

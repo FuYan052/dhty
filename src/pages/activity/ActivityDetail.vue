@@ -103,7 +103,7 @@ export default {
     toClub() {
       window.sessionStorage.setItem("groupDetailId",this.groupId)
       this.$router.push({
-        path: '/club/clubInfo',
+        path: `/club/clubInfo/${this.groupId}`,
       })
     },
     // 报名列表

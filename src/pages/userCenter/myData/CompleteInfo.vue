@@ -663,6 +663,7 @@ export default {
         width: 100%;
         height: auto;
         padding-left: 40px;
+        font-size: 0;
         .addBtn{
           width: 100px;
           height: 46px;
@@ -676,9 +677,11 @@ export default {
           display: inline-block;
           margin-right: 18px;
           margin-bottom: 30px;
+          vertical-align: top;
         }
         .itemLabel{
           display: inline-block;
+          width: 120px;
           height: 46px;
           line-height: 42px;
           border: 1px solid #f9c31b;
@@ -687,9 +690,10 @@ export default {
           border-radius: 25px;
           text-align: center;
           font-size: 22px;
-          padding: 0 40px;
+          // padding: 0 40px;
           margin-right: 18px;
           margin-bottom: 30px;
+          vertical-align: top;
         }
       }
     }

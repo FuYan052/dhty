@@ -39,7 +39,7 @@ export default {
       console.log(item)
       window.sessionStorage.setItem('groupDetailId',item.id)
       this.$router.push({
-        path: '/clubHome'
+        path: `/club/clubInfo/${item.id}`
       })
     }
   }

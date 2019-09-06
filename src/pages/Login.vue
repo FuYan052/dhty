@@ -267,6 +267,7 @@ export default {
 </style>
 <style>
 .login .el-input__inner{
+  font-size: 24px;
   height: 100px;
   line-height: 100px;
   padding: 0;

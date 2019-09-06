@@ -43,15 +43,9 @@ import TransferGroup from '@/pages/userCenter/myManagement/manageGroup/TransferG
 import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/ManageGroupMembers'
 import CreatedGroupList from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupList'
 import JoinCroupList from '@/pages/userCenter/myManagement/manageGroup/JoinCroupList'
-import Mall from '@/pages/mall/Mall'
-import SearchPage from '@/pages/mall/SearchPage'
-import MyOrder from '@/pages/userCenter/myManagement/MyOrder'
 import CommonProblem from '@/pages/userCenter/myManagement/CommonProblem'
 import Cash from '@/pages/userCenter/myManagement/Cash'
 import AccountDetails from '@/pages/userCenter/myManagement/AccountDetails'
-import AddressManage from '@/pages/userCenter/myManagement/AddressManage'
-import AddAddress from '@/pages/userCenter/myManagement/AddAddress'
-import EditAddress from '@/pages/userCenter/myManagement/EditAddress'
 
 Vue.use(Router)
 
@@ -285,11 +279,11 @@ export default new Router({
       name: 'JoinCroupList',
       component: JoinCroupList,
     },
-    {
-      path: '/userCenter/MyOrder',
-      name: 'MyOrder',
-      component: MyOrder,
-    },
+    // {
+    //   path: '/userCenter/MyOrder',
+    //   name: 'MyOrder',
+    //   component: MyOrder,
+    // },
     {
       path: '/userCenter/commonProblem',
       name: 'CommonProblem',

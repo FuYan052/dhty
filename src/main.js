@@ -31,7 +31,7 @@ Vue.use(MintUI)
 // 全局导航守卫
 // var whiteList = ["/home","/home/login","/home/register","/home/loginForCode","/home/forgetPassword"]
 //设置名单，需要登录才可以进入的页面
-var whiteList = ["/userCenter/popularize","/userCenter/manageHome","/userCenter/myData"]
+var whiteList = ["/organization","/userCenter/popularize","/userCenter/manageHome","/userCenter/myData"]
 router.beforeEach((to, from, next) => {
   let hasToken = localStorage.getItem('ty-token');
   // let hasToken = true
@@ -46,6 +46,9 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+router.afterEach((to,from,next) => {
+  window.scrollTo(0,0);
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

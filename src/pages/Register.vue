@@ -63,8 +63,8 @@ export default {
     };
     return {
       ruleForm: {
-        phoneNum: '18884027431',
-        inputPassword: '123456',
+        phoneNum: '',
+        inputPassword: '',
       },
       disabled: false,
       content: '获取验证码',
@@ -126,6 +126,12 @@ export default {
         console.log(params)
         this.$http.postRegister(params).then(resp => {
           console.log(params)
+          if(resp.status == 200) {
+            this.$toast('注册成功！')
+            this.$router.push({
+              path: '/home/login'
+            })
+          }
         })
         // console.log(params)
         // console.log("注册成功:" + params)
@@ -270,6 +276,7 @@ export default {
   line-height: 100px;
   padding: 0;
   border: none;
+  font-size: 24px;
 }
 .register .el-form-item__error {
   top: 75%;

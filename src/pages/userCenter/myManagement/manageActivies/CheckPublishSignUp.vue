@@ -20,44 +20,47 @@ export default {
     }
   },
   created() {
-    this.memberList = [
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-    ]
+    if(this.memberList.length == 0) {
+      this.$toast("暂无人员报名！")
+    }
+    // this.memberList = [
+    //   {
+    //     imgPath: require('../../../../assets/touxiang.jpg'),
+    //     name: '张三',
+    //     sex: '男',
+    //     grade: 'Lv.11'
+    //   },
+    //   {
+    //     imgPath: require('../../../../assets/touxiang.jpg'),
+    //     name: '李四',
+    //     sex: '男',
+    //     grade: 'Lv.11'
+    //   },
+    //   {
+    //     imgPath: require('../../../../assets/touxiang.jpg'),
+    //     name: '小丸子',
+    //     sex: '女',
+    //     grade: 'Lv.11'
+    //   },
+    //   {
+    //     imgPath: require('../../../../assets/touxiang.jpg'),
+    //     name: '张三',
+    //     sex: '男',
+    //     grade: 'Lv.11'
+    //   },
+    //   {
+    //     imgPath: require('../../../../assets/touxiang.jpg'),
+    //     name: '李四',
+    //     sex: '男',
+    //     grade: 'Lv.11'
+    //   },
+    //   {
+    //     imgPath: require('../../../../assets/touxiang.jpg'),
+    //     name: '小丸子',
+    //     sex: '女',
+    //     grade: 'Lv.11'
+    //   },
+    // ]
   },
 }
 </script>

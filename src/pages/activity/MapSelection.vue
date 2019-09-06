@@ -131,11 +131,12 @@ export default {
           window.sessionStorage.setItem('placeId',this.selectedPoint.id)
           window.sessionStorage.setItem('placeName',this.selectedPoint.name)
           
-          this.$router.push({
-            path: '/organization',
-            // name: 'Organization',
-            // params: this.selectedPoint
-          })
+          // this.$router.push({
+          //   path: '/organization',
+          //   // name: 'Organization',
+          //   // params: this.selectedPoint
+          // })
+          this.$router.go(-1)
           
         }else{
           this.$toast({

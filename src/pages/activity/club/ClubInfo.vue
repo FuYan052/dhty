@@ -16,18 +16,10 @@
         <span>场馆</span>
       </div>
       <ul>
-        <!-- <li v-for="(item,index) in activiList" :key="index">
-          <div class="week">{{item.time|filtersDay}}</div>
-          <div class="actItem">{{item.timeStart}}-{{item.timeEnd}}<span>{{item.name}}</span></div>
-        </li> -->
         <li  v-for="(item,index) in activiList" :key="index">
           <div class="week">{{item.weekName}}</div>
           <div class="actItem" v-for="(it,ind) in item.sub" :key="ind">{{it.timeStart}}-{{it.timeEnd}}<span>{{it.name}}</span></div>
         </li>
-        <!-- <li>
-          <div class="week">周一</div>
-          <div class="actItem">14:00-16:00<span>星空体育馆</span></div>
-        </li> -->
       </ul>
     </div>
     <!-- 俱乐部简介 -->
@@ -51,14 +43,16 @@ export default {
   },
   created() {
     // 群id
-    this.groupId = window.sessionStorage.getItem('groupDetailId')
+    // this.groupId = window.sessionStorage.getItem('groupDetailId')
+    this.groupId = this.$route.params.id
+    window.sessionStorage.setItem('groupDetailId',this.$route.params.id)
+    // console.log(this.groupId)
     // 群详情
     this.$http.groupDetailInfo(this.groupId).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
         this.clubInfo = resp.data
         this.activiList = resp.data.oavoList
-        console.log(this.activiList)
       }
     })
   },
@@ -66,27 +60,27 @@ export default {
     // 用户id
     ...mapState(['userId']),
   },
-  filters: {
-    // 将日期转化为星期
-    // filtersDay: function (day) {
-    //   const days = ['日', '一', '二', '三', '四', '五', '六'];
-    //   let dateT = day ? new Date(day) : new Date();    
-    //   return `周${days[dateT.getDay()]}`;
-    // }
-  },
   methods: {
     // 申请加入俱乐部
     toJoin() {
-      const params = {
-        groupId: this.groupId,
-        userId: this.userId
-      }
-      this.$http.applyJoinGroup(params).then(resp => {
-        console.log(resp)
-        if(resp.status == 200) {
-          this.$toast(resp.info)
+      // 判断是否登录
+      const hasToken = localStorage.getItem('ty-token');
+      if(hasToken) {
+        const params = {
+          groupId: this.groupId,
+          userId: this.userId
         }
-      })
+        this.$http.applyJoinGroup(params).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast(resp.info)
+          }
+        })
+      }else{
+        this.$router.push({
+          path: '/home'
+        })
+      }
     }
   }
 }

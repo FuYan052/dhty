@@ -2,12 +2,13 @@
   <!-- 登录 -->
   <div class="loginHome">
     <div class="imgBox">
-      <img class="loginBg" src="../assets/loginHome.jpg" alt="">
+      <img class="loginBg" src="../assets/LOGO1.png" alt="">
     </div>
-    <p class="title1">登录大虎体育运动</p>
-    <p class="title2">让时代改变你的生活</p>
-    <div class="toBotton" @click="doLogin">
-      登录/注册
+    <div class="Btn toLoginBotton" @click="doLogin">
+      手机号登录
+    </div>
+    <div class="Btn toRegisterBotton" @click="doRegister">
+      注册
     </div>
   </div>
 </template>
@@ -29,6 +30,11 @@ export default {
         path: '/home/login'
       })
     },
+    doRegister() {
+      this.$router.push({
+        path: '/home/register'
+      })
+    }
   }
 }
 </script>
@@ -37,44 +43,36 @@ export default {
   .loginHome{
     width: 100%;
     min-height: 100vh;
-    background: #f4f4f6;
+    background: url("../assets/homeBg.jpg") no-repeat center;
+    background-size: cover;
     overflow: hidden;
     .imgBox{
-      width: 470px;
-      height: auto;
+      width: 168px;
+      height: 175px;
       margin: 0 auto;
-      margin-top: 180px;
-      // background: #fff;
+      margin-top: 258px;
+      img{
+        width: 168px;
+        height: 175px;
+      }
     }
-    .loginBg{
-      width: 470px;
-      // height: 470px;
-      height: auto;
-    }
-    .title1{
-      font-size: 30px;
-      text-align: center;
-      margin-top: 50px;
-      color: #28282a;
-      letter-spacing: 1px;
-    }
-    .title2{
-      font-size: 24px;
-      text-align: center;
-      margin-top: 25px;
-      color: #8f8f91;
-      letter-spacing: 1px;
-    }
-    .toBotton{
-      width: 330px;
+    .Btn{
+      width: 580px;
       height: 80px;
       line-height: 80px;
       text-align: center;
       letter-spacing: 1px;
-      color: #fff;
-      background: #fac31e;
+      font-size: 30px;
+      color: #e59d25;
+      border: 2px solid #e79c25;
       border-radius: 40px;
-      margin: 80px auto;
+      margin: 0 auto;
+    }
+    .toLoginBotton{
+      margin-top: 185px;
+    }
+    .toRegisterBotton{
+      margin-top: 36px;
     }
   }
 </style>

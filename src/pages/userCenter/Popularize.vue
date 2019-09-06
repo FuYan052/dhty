@@ -9,29 +9,47 @@
         indicator-position="outside"
         @change='changeGroup'
         >
-        <el-carousel-item v-for="item in 4" :key="item">
+        <el-carousel-item v-for="(item,index) in groupList" :key="index">
           <h3 class="small">
-            <img ref="codeImg" id="img" :src="imgUrl" alt="">
+            <img ref="codeImg" id="img" :src="item.path" alt="">
           </h3>
         </el-carousel-item>
     </el-carousel>
     </div>
     <div class="info">
-      <img src="../../assets/touxiang.jpg" alt="">
-      <p>飞羽社区</p>
+      <p>
+        <span class="img"><img :src="groupInfo.logo" alt=""></span>
+        <span class="name">{{groupInfo.name}}</span>
+      </p>
     </div>
     <div class="saveBtn"></div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Popularize',
   data() {
     return {
       imgUrl: require("../../assets/code.png"),
-      downloadImg: ''
+      downloadImg: '',
+      groupList: '',
+      groupIndex: '',
+      groupInfo: ''
     }
+  },
+  computed: {
+    // 用户id
+    ...mapState(['userId']),
+  },
+  created() {
+    this.$http.getPopularize(this.userId).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.groupList = resp.data
+      }
+    })
   },
   mounted () {
     // console.log(this.$refs.codeImg)
@@ -39,7 +57,9 @@ export default {
   },
   methods: {
     changeGroup(v) {
-      console.log(v)
+      // console.log(v)
+      this.groupIndex = v
+      this.groupInfo = this.groupList[this.groupIndex]
     }
   }
 }
@@ -67,23 +87,34 @@ export default {
       }
     }
     .info{
-      width: 420px;
+      width: 100%;
       height: 80px;
       margin: 0 auto;
       margin-top: 130px;
-      padding-left: 8%;
-      img{
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        float: left;
-      }
+      padding-left: 7%;
       p{
-        font-size: 30px;
-        float: left;
-        line-height: 80px;
+        width: 100%;
+        font-size: 0;
+        text-align: center;
+        padding-right: 10%;
         color: #fff;
-        margin-left: 30px;
+        .img{
+          width: 80px;
+          height: 80px;
+          display: inline-block;
+          margin-right: 15px;
+          img{
+            width: 80px;
+            height: 80px;
+            float: left;
+            border-radius: 50%;
+          }
+        }
+        .name{
+          font-size: 30px;
+          line-height: 80px;
+          vertical-align: top;
+        }
       }
     }
     .saveBtn{

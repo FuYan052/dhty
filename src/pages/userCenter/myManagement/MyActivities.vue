@@ -94,7 +94,7 @@
           </div>
           <div class="btnWrap">
             <div class="btn" v-show="isPublish" @click="publishSignUp">查看报名</div>
-            <div class="btn" v-show="isPublish" @click="editActivies">修改</div>
+            <div class="btn" v-show="isPublish" @click="editActivies(item.id)">修改</div>
 
             <div class="btn" v-show="!isPublish" @click="completeSignUp">查看报名</div>
             <!-- <div class="btn" v-show="!isPublish">填写成绩</div> -->
@@ -216,7 +216,8 @@ export default {
       }
     },
     // 修改活动
-    editActivies() {
+    editActivies(id) {
+      window.sessionStorage.setItem('editGroupId',id)
       this.$router.push({
         path: '/userCenter/editActiviesInfo'
       })

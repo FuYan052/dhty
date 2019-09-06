@@ -213,6 +213,7 @@ export default {
   line-height: 100px;
   padding: 0;
   border: none;
+  font-size: 24px;
 }
 .loginForCode .el-form-item__error {
   top: 75%;

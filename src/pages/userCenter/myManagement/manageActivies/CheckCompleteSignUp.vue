@@ -1,5 +1,5 @@
 <template>
-  <!-- 已发布活动查看报名 -->
+  <!-- 已完成活动查看报名 -->
   <div class="checkCompleteSignUp" v-title data-title="查看报名">
     <ul class="memberItem">
         <li v-for="(item,index) in memberList" :key="index">
