@@ -1,12 +1,31 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+      <!-- 需要缓存视图的组件 -->
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <!-- 不需要缓存视图的组件 -->
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods: {
+
+  },
+  mounted() {
+    // const params = {
+    //   grant_type: 'client_credential',
+    //   appid: 'wxd3d4d3045a1213a1',
+    //   secret: 'cb78c2c273d6b6e46634dded46fda369'
+    // }
+    // this.$http.getWXUserInfo(params).then(resp => {
+    //   console.log(resp)
+    // })
+  },
+
 }
 </script>
 
@@ -69,13 +88,16 @@ textarea{
 table{
     border-collapse:collapse
 }
+.mint-toast-text {
+  font-size: 22px !important;
+}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  font-size: 26px;
+  font-size: 28px;
   background: #fff;
   font-family: '微软雅黑';
 }

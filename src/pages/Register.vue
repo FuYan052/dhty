@@ -1,13 +1,6 @@
 <template>
   <!-- 注册 -->
   <div class="register" v-title data-title="注册">
-    <div class="top">
-      <!-- <span></span> -->
-    </div>
-    <p class="name">注册</p>
-    <div class="wrap">
-      中国<span>+86</span>
-    </div>
     <div class="registerInfo">
         <ul>
           <li>
@@ -20,21 +13,23 @@
           <li class="passWord">
              <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
                 <el-form-item label="" prop="inputPassword">
-                  <el-input type="password" placeholder="请输入6-16位的密码" show-password v-model="ruleForm.inputPassword"></el-input>
+                  <el-input type="password" placeholder="请输入6-16位的密码" v-model="ruleForm.inputPassword"></el-input>
                 </el-form-item>
               </el-form>
           </li>
           <li class="hqyzm">
             <input type="text" v-model="checkCode" placeholder="请输入验证码" placeholder-class="placeholderStyle">
-            <el-button class="yzm" :disabled='disabled' @click="getCode">{{content}}</el-button>
+            <el-button class="yzm" :disabled='disabled' @click="getCode1">{{content}}</el-button>
           </li>
         </ul>
         <div class="registerBtn" @click="doRegister">
           注册
         </div>
-        <p class="agreement">
-          注册即表示同意<span @click="toAgreement">《来虎体育用户协议》</span>
-        </p>
+        <img class="logoImg" src="../assets/logoImg.png" alt="">
+    </div>
+    <div class="agreement">
+      <span class="radiu" :class="{raiduChecked : isChecked}" @click="handleAgree"><i class="el-icon-check" v-show="isChecked"></i></span>
+      我同意并认可<span class="_mark" @click="toAgreement">《来虎用户协议》</span>
     </div>
   </div>
 </template>
@@ -46,7 +41,7 @@ export default {
     let validPhone=(rule,value,callback)=>{
       let reg=/[0-9]{11}/
       if(!reg.test(value)){callback(
-        new Error('账号必须是11位的手机号'))
+        new Error('请输入11位的手机号！'))
         this.rule1 = false
       }else{
         this.callback1()
@@ -55,7 +50,7 @@ export default {
     let validPassword=(rule,value,callback)=>{
       let reg=/[0-9a-zA-Z]{6,16}/
       if(!reg.test(value)){callback(
-        new Error('密码必须是6-16位'))
+        new Error('请输入6-16位的密码'))
         this.rule2 = false
       }else{
         this.callback2()
@@ -81,6 +76,7 @@ export default {
       },
       rule1: false,  //当输入不合法时无法注册
       rule2: false,  //当输入不合法时无法注册
+      isChecked: false,  //是否同意用户协议
     }
   },
   methods: {
@@ -91,22 +87,28 @@ export default {
       })
     },
     // 获取验证码
-    getCode() {  
-      this.totalTime = 60
-      this.$http.postCode(this.ruleForm.phoneNum).then(resp => {
-        console.log(resp)
-      })
-      this.timer = setInterval(() => {
-        this.totalTime--
-        this.content = this.totalTime + 's后重新发送'
-        this.disabled = true
-        // console.log(this.totalTime)
-        if(this.totalTime <= 0){
-          this.content = '获取验证码'
-          this.disabled = false
-          clearInterval(this.timer)
-        }
-      },1000)
+    getCode1() {  
+      if(this.rule1) {
+        this.totalTime = 60
+        this.$http.postCode(this.ruleForm.phoneNum).then(resp => {
+          console.log(resp)
+          // if(resp.status == 200) {
+          //   this.$toast('获取短信验证码！')
+          // }
+        })
+        this.timer = setInterval(() => {
+          this.totalTime--
+          this.content = this.totalTime + '秒'
+          this.disabled = true
+          if(this.totalTime <= 0){
+            this.content = '获取验证码'
+            this.disabled = false
+            clearInterval(this.timer)
+          }
+        },1000)
+      }else{
+        this.$toast('手机号格式不正确！')
+      }
     },
     // 输入值合法时的回调
     callback1 () {
@@ -115,9 +117,17 @@ export default {
     callback2 () {
       this.rule2 = true
     },
+    handleAgree() {
+      this.isChecked = !this.isChecked
+    },
+    toAgreement() {
+      this.$router.push({
+        path: '/home/register/userAgreement'
+      })
+    },
     // 提交注册信息
     doRegister() {
-      if(this.rule1 && this.rule2 && this.checkCode !== ''){
+      if(this.rule1 && this.rule2 && this.checkCode !== '' && this.isChecked){
         const params = {
           phone: this.ruleForm.phoneNum,
           authCode: this.checkCode,
@@ -133,14 +143,13 @@ export default {
             })
           }
         })
-        // console.log(params)
-        // console.log("注册成功:" + params)
       }else{
-        this.$message({
-          showClose: true,
-          message: '请输入正确的信息及验证码！',
-          type: 'warning'
-        });
+        if(!this.rule1 || this.code === '') {
+          this.$toast('请输入正确的信息！')
+        }
+        else if(!this.isChecked) {
+          this.$toast('请阅读来虎用户协议！')
+        }
       }
     }
   }
@@ -151,69 +160,30 @@ export default {
   .register{
     width: 100%;
     min-height: 100vh;
-    .top{
-      width: 100%;
-      height: 94px;
-      padding-left: 30px;
-      padding-top: 33px;
-      span{
-        display: block;
-        width: 20px;
-        height: 31px;
-        background: url("../assets/backBg.png") no-repeat center;
-        background-size: 100% 100%;
-      }
-    }
-    .name{
-      font-size: 38px;
-      text-align: center;
-      color: #303030;
-      margin-top: 11px;
-    }
-    .wrap{
-      width: 92%;
-      height: 120px;
-      line-height: 120px;
-      margin: 0 auto;
-      margin-top: 40px;
-      border-bottom: 1px solid #f3f3f3;
-      span{
-        float: right;
-      }
-    }
+    background: #f2f2f2;
+    overflow: hidden;
+    padding: 0 80px;
     .registerInfo{
-      width: 92%;
+      width: 100%;
       min-height: 600px;
-      margin: 0 auto;
+      margin-top: 160px;
       // border: 1px solid red;
       ul{
         width: 100%;
         height: auto;
         li{
           width: 100%;
-          height: 120px;
-          border-bottom: 1px solid #f3f3f3;
-          padding-top: 10px;
+          height: 118px;
+          border-bottom: 1px solid #d7d7d7;
+          padding-top: 30px;
           input{
             width: 60%;
             height: 100px;
-            line-height: 100px;
+            line-height: 120px;
             float: left;
-            font-size: 26px;
+            font-size: 27px;
             border: none;
             outline: none;
-          }
-          input:-ms-input-placeholder{
-            color: #cbcbcb;
-            letter-spacing: 1px;
-          }
-          input::-moz-placeholder{
-            color: #cbcbcb;
-            letter-spacing: 1px;
-          }
-          input::-webkit-input-placeholder{
-            color: #cbcbcb;
-            letter-spacing: 1px;
           }
         }
         .passWord{
@@ -229,34 +199,41 @@ export default {
         .hqyzm{
           .yzm{
             width: 160px;
-            height: 48px;
-            border: 1px solid #fac31e;
-            color: #fac31e;
-            border-radius: 25px;
+            height: 60px;
+            border: 1px solid #c8c8c8;
+            color: #fff;
+            border-radius: 90px;
             text-align: center;
             float: right;
-            margin-top: 30px;
-            background: #fff;
-            font-size: 20px;
+            // margin-top: 20px;
+            background: #c8c8c8;
+            font-size: 22px;
             span{
-              line-height: 43px;
-              font-size: 20px;
+              line-height: 60px;
+              font-size: 22px;
             }
           }
         }
       }
       .registerBtn{
         width: 100%;
-        height: 80px;
+        height: 94px;
         background: #fac31e;
         color: #fff;
-        line-height: 80px;
+        line-height: 94px;
         text-align: center;
-        margin-top: 170px;
-        letter-spacing: 30px;
-        border-radius: 40px;
-        margin-bottom: 35px;
+        margin-top: 116px;
+        letter-spacing: 2px;
+        border-radius: 14px;
         padding-left: 15px;
+        font-size: 30px;
+      }
+      .logoImg{
+        width: 81px;
+        height: 113px;
+        margin: 0 auto;
+        margin-top: 282px;
+        margin-bottom: 65px;
       }
       .agreement{
         font-size: 20px;
@@ -268,18 +245,74 @@ export default {
         }
       }
     }
+    .agreement{
+      width: 100%;
+      // height: 34px;
+      text-align: center;
+      font-size: 26px;
+      margin-top: 65px;
+      line-height: 32px; 
+      vertical-align: middle;
+      .radiu{
+        display: inline-block;
+        width: 30px;
+        height:30px;
+        border-radius: 50%;
+        border: 1px solid #fac31e;
+        vertical-align: top;
+        padding-top: 2px;
+        i{
+          font-size: 26px;
+          color: #fff;
+          vertical-align: top;
+          text-align: center;
+        }
+      }
+      .raiduChecked{
+        background: #fac31e;
+      }
+      ._mark{
+        color: #fac31e;
+      }
+    }
   }
 </style>
 <style>
 .register .el-input__inner{
-  height: 100px;
-  line-height: 100px;
+  font-size: 32px;
+  height: 80px;
   padding: 0;
   border: none;
-  font-size: 24px;
+  background: #f2f2f2;
 }
 .register .el-form-item__error {
-  top: 75%;
+  top: 35%;
+  right: 0;
+  left: auto;
+  font-size: 22px;
+  color: red;
+}
+.register .el-icon-view{
+  font-size: 26px;
+  line-height: 105px;
+}
+.register ul li input{
+  background: #f2f2f2;
+  height: 80px !important;
+  font-size: 32px;
+  /* border: 1px solid red !important; */
+}
+.register input:-ms-input-placeholder{
+  color: #909090;
+  font-size: 32px;
+}
+.register input::-moz-placeholder{
+  color: #909090;
+  font-size: 32px;
+}
+.register input::-webkit-input-placeholder{
+  color: #909090;
+  font-size: 32px;
 }
 </style>
 

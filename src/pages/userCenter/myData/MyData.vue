@@ -124,6 +124,21 @@ export default {
     ...mapState(['userId']),
   },
   created() {
+    // // 获取信息
+    // this.$http.informationOthers(this.userId).then(resp => {
+    //   console.log(resp)
+    //   if(resp.status == 200) {
+    //     this.myInfo = resp.data
+    //   }
+    // })
+    // // 计算日期
+    // for(let i = -6; i<=0; i++){
+    //   const result = this.findDate(i)
+    //   this.dateList.push(result) 
+    // }
+    // console.log(this.dateList)
+  },
+  mounted() {
     // 获取信息
     this.$http.informationOthers(this.userId).then(resp => {
       console.log(resp)
@@ -136,9 +151,6 @@ export default {
       const result = this.findDate(i)
       this.dateList.push(result) 
     }
-    // console.log(this.dateList)
-  },
-  mounted() {
     // 环形进度条
     var myChart = echarts.init(document.getElementById('circle1'));
       var e = (this.total / 8000) * 100

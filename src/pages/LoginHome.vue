@@ -2,10 +2,10 @@
   <!-- 登录 -->
   <div class="loginHome">
     <div class="imgBox">
-      <img class="loginBg" src="../assets/LOGO1.png" alt="">
+      <!-- <img class="loginBg" src="../assets/LOGO1.png" alt=""> -->
     </div>
     <div class="Btn toLoginBotton" @click="doLogin">
-      手机号登录
+      登录
     </div>
     <div class="Btn toRegisterBotton" @click="doRegister">
       注册
@@ -21,17 +21,22 @@ export default {
     //   console.log(resp)
     // })
   },
+  // beforeRouteEnter:(to,from,next)=>{
+  //   console.log(to)
+  //   console.log(from)
+  //   // console.log(to)
+  // },
   mounted() {
     this.$toast('请先登录！');
   },
   methods: {
     doLogin() {
-      this.$router.push({
+      this.$router.replace({
         path: '/home/login'
       })
     },
     doRegister() {
-      this.$router.push({
+      this.$router.replace({
         path: '/home/register'
       })
     }
@@ -51,10 +56,12 @@ export default {
       height: 175px;
       margin: 0 auto;
       margin-top: 258px;
-      img{
-        width: 168px;
-        height: 175px;
-      }
+      background: url("../assets/LOGO1.png") no-repeat center;
+      background-size: contain;
+      // img{
+      //   width: 168px;
+      //   height: 175px;
+      // }
     }
     .Btn{
       width: 580px;
@@ -62,11 +69,16 @@ export default {
       line-height: 80px;
       text-align: center;
       letter-spacing: 1px;
-      font-size: 30px;
-      color: #e59d25;
+      font-size: 34px;
+      color: #ffbc00;
       border: 2px solid #e79c25;
       border-radius: 40px;
       margin: 0 auto;
+    }
+    .toLoginBotton {
+      background: #ffbc00;
+      color: #fff;
+      border: none;
     }
     .toLoginBotton{
       margin-top: 185px;

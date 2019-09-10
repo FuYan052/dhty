@@ -29,19 +29,19 @@ Vue.use(MintUI)
 // Vue.use(preview)
 
 // 全局导航守卫
-// var whiteList = ["/home","/home/login","/home/register","/home/loginForCode","/home/forgetPassword"]
-//设置名单，需要登录才可以进入的页面
-var whiteList = ["/organization","/userCenter/popularize","/userCenter/manageHome","/userCenter/myData"]
 router.beforeEach((to, from, next) => {
+  // console.log(to)
   let hasToken = localStorage.getItem('ty-token');
   // let hasToken = true
   if (hasToken) {
     next()
   }else {
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (to.meta.requireAuth) {
+      // console.log("缓存路径")
+      window.sessionStorage.setItem('routerPath',to.fullPath)
       next('/home' )//这里是即将进入的页面是名单中的页面就直接进入
     } else { 
-      next()//这里是即将进入的页面不是白名单的页面又没有token的情况下重定向到登录页面进行登录操作
+      next()
     } 
   }
 });

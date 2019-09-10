@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import LoginHome from '@/pages/LoginHome'
 import Register from '@/pages/Register'
+import RegisterUserInfo from '@/pages/RegisterUserInfo'
 import UserAgreement from '@/pages/UserAgreement'
 import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
@@ -64,6 +65,11 @@ export default new Router({
       path: '/home/register',
       name: 'Register',
       component: Register,
+    },
+    {
+      path: '/home/register/registerUserInfo',
+      name: 'RegisterUserInfo',
+      component: RegisterUserInfo,
     },
     {
       path: '/home/register/userAgreement',  // 用户协议
@@ -179,6 +185,10 @@ export default new Router({
       path: '/organization',  //组织活动
       name: 'Organization',
       component: Organization,
+      meta: {
+        requireAuth: true,
+        keepAlive: true 
+      }
     },
     {
       path: '/mapSelection',
@@ -190,94 +200,148 @@ export default new Router({
       path: '/userCenter/myData',
       name: 'MyData',
       component: MyData,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/myData/more',
       name: 'MyDataDetail',
       component: MyDataDetail,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/myData/completeInfo',
       name: 'CompleteInfo',
       component: CompleteInfo,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/selectLabels',
       name: 'SelectLabels',
       component: SelectLabels,
+      meta: {
+        requireAuth: true
+      }
     },
     // 我的管理
     {
       path: '/userCenter/manageHome',
       name: 'ManageHome',
       component: ManageHome,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/popularize',  //马上推广
       name: 'Popularize',
       component: Popularize,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/myActivities',
       name: 'MyActivities',
       component: MyActivities,
+      meta: {
+        requireAuth: true
+      }
     },
     // 活动管理
     {
       path: '/userCenter/editActiviesInfo',
       name: 'EditActiviesInfo',
       component: EditActiviesInfo,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/checkPublishSignUp',
       name: 'CheckPublishSignUp',
       component: CheckPublishSignUp,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/checkCompleteSignUp',
       name: 'CheckCompleteSignUp',
       component: CheckCompleteSignUp,
+      meta: {
+        requireAuth: true
+      }
     },
     // 群组管理
     {
       path: '/userCenter/groupManagement',
       name: 'GroupManagement',
       component: GroupManagement,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/groupManagement/createGroup',
       name: 'CreateGroup',
       component: CreateGroup,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/groupManagement/createdGroupManage',
       name: 'CreatedGroupManage',
       component: CreatedGroupManage,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/groupManagement/manageGroupMembers',
       name: 'ManageGroupMembers',
       component: ManageGroupMembers,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/groupManagement/editGroupInfo',
       name: 'EditGroupInfo',
       component: EditGroupInfo,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/groupManagement/transferGroup',
       name: 'TransferGroup',
       component: TransferGroup,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/createdGroupList',
       name: 'CreatedGroupList',
       component: CreatedGroupList,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/joinCroupList',
       name: 'JoinCroupList',
       component: JoinCroupList,
+      meta: {
+        requireAuth: true
+      }
     },
     // {
     //   path: '/userCenter/MyOrder',
@@ -288,16 +352,25 @@ export default new Router({
       path: '/userCenter/commonProblem',
       name: 'CommonProblem',
       component: CommonProblem,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/cash',
       name: 'Cash',
       component: Cash,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/userCenter/cash/accountDetails',
       name: 'AccountDetails',
       component: AccountDetails,
+      meta: {
+        requireAuth: true
+      }
     },
     // 商城
     // {

@@ -12,6 +12,16 @@
           @click="changeCate(index)"
           >{{item}}</div>
       </div>
+      <div class="searchWrap">
+        <!-- 搜索框 -->
+        <div class="searchBox" v-show="isShowSearch">
+          <el-input
+            @change="search1"
+            v-model="inputText">
+          </el-input>
+        </div>
+      </div>
+      <div class="showSearch" @click="showSearch"><span class="el-icon-search"></span></div>
     </div>
     <!-- 日期切换 -->
     <div class="dateList">
@@ -26,23 +36,23 @@
       </div>
     </div>
     <!-- 搜索框 -->
-    <div class="searchBox">
+    <!-- <div class="searchBox" v-show="isShowSearch">
       <el-input
         prefix-icon="el-icon-search"
         @change="search1"
         v-model="inputText">
       </el-input>
-    </div>
+    </div> -->
     <!-- 活动详情 -->
     <div class="contentBg">
       <div class="content">
         <div class="activItem" v-for="(item,index) in activList" :key="index">
-          <div class="top">
+          <div class="top" @click="toSignUp(item.id)">
             <div class="title">
               <img :src="item.image" alt="">
               <p class="text">{{item.nickName}}</p>
               <p class="role">{{item.type}}</p>
-              <div class="rightBtn" @click="toSignUp(item.id)">{{item.osState}}</div>
+              <div class="rightBtn">{{item.osState}}</div>
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
@@ -67,6 +77,7 @@ export default {
   data() {
     return {
       inputText: '',
+      isShowSearch: false,
       activityType: '1',
       cateList: ['羽毛球', '跑步'],
       currIndex: 0,
@@ -125,6 +136,10 @@ export default {
     })
   },
   methods: {
+    showSearch() {
+      this.isShowSearch = !this.isShowSearch
+      this.inputText = ''
+    },
     // 搜索
     search1() {
       console.log(this.inputText)
@@ -152,6 +167,7 @@ export default {
     // 切换分类
     changeCate(index) {
       this.currIndex = index
+      this.isShowSearch = false
       if(index === 0) {
         this.type = 'sportsKinds_01'
       }
@@ -180,7 +196,9 @@ export default {
         }
       })
     },
+    // 切换日期
     changeDate(index,clickDate) {
+      this.isShowSearch = false
       if(index === 3){
         this.isTwoDaysLater = true
       }else{
@@ -260,17 +278,18 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
-    padding-bottom: 20px;
+    padding-bottom: 40px;
     .cateNav{
       width: 100%;
       height: 94px;
       background: #fff;
+      position: relative;
       .content{
         width: 100%;
         height: 94px;
         padding-left: 10px;
         .cateItem{
-          padding-top: 30px;
+          padding-top: 40px;
           font-size: 28px;
           color: #9e9e9e;
           display: inline-block;
@@ -278,9 +297,34 @@ export default {
           margin: 0 20px;
         }
         .activeCate{
-          color: #3d3d3d;
-          font-size: 42px;
+          color: #000000;
+          font-size: 44px;
           border-bottom: 3px solid #fff;
+          font-weight: 600;
+          line-height: 40px;
+        }
+      }
+      .searchWrap{
+        width: 60%;
+        height: 80px;
+        position: absolute;
+        right: 0;
+        top: 20px;
+        .searchBox{
+          width: 100%;
+          height: 80px;
+          padding-right: 20px;
+          margin-top: 8px;
+        }
+      }
+      .showSearch{
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        right: 30px;
+        top: 40px;
+        span{
+          font-size: 40px;
         }
       }
     }
@@ -291,21 +335,34 @@ export default {
       .dateItem{
         width: 25%;
         height: 130px;
-        padding-top: 30px;
+        padding-top: 35px;
         float: left;
         text-align: center;
         position: relative;
         .p{
-          color: #928d93;
+          color: #000000;
         }
         .p1{
-          font-size: 20px;
-          padding-bottom: 15px;
+          font-size: 24px;
+          line-height: 34px;
         }
         .p2{
-          font-size: 18px;
-          line-height: 26px;
+          font-size: 26px;
+          line-height: 45px;
         }
+      }
+      .dateItem::after{
+        display: block;
+        content: '';
+        width: 4px;
+        height: 50px;
+        border-right: 1px solid #e6e6e6;
+        position: absolute;
+        top: 45px;
+        right: 0;
+      }
+      .dateItem:nth-of-type(4)::after{
+        display: none;
       }
       .activeDate::before{
         display: block;
@@ -317,11 +374,6 @@ export default {
         bottom: 1px;
         left: 78px;
       }
-    }
-    .searchBox{
-      width: 100%;
-      height: 104px;
-      padding: 20px;
     }
     .contentBg{
         width: 100%;
@@ -336,7 +388,7 @@ export default {
             background: url("../../assets/bg222.png") no-repeat center;
             background-size: contain;
             border-top-right-radius: 25px;
-            margin-bottom: 20px;
+            margin-top: 20px;
             .top{
               width: 100%;
               height: auto;
@@ -460,9 +512,9 @@ export default {
   .activityHome .searchBox .el-input__inner{
     height: 60px !important;
     border-radius: 10px;
-    padding-left: 70px;
+    padding-left: 20px;
     font-size: 26px;
-    border: 2px solid #dcdcdc;
+    border: 1px solid #ccc;
   }
   .activityHome .searchBox .el-input__prefix{
     left: 18px;
@@ -470,7 +522,7 @@ export default {
   }
   .activityHome .searchBox .el-input__icon{
     font-size: 35px;
-    font-weight: bold;
+    /* font-weight: bold; */
     color: #767676;
   }
 </style>

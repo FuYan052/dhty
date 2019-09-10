@@ -1,13 +1,6 @@
 <template>
   <!-- 忘记密码 -->
-  <div class="forgetPassword">
-    <div class="top">
-      <!-- <span></span> -->
-    </div>
-    <p class="name">忘记密码</p>
-    <div class="wrap">
-      中国<span>+86</span>
-    </div>
+  <div class="forgetPassword" v-title data-title="忘记密码">
     <div class="resetPassword">
         <ul>
           <li>
@@ -20,24 +13,24 @@
           <li class="passWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
                 <el-form-item label="" prop="inputPassword">
-                  <el-input type="password" placeholder="请输入6-16位的新密码" show-password v-model="ruleForm.inputPassword"></el-input>
+                  <el-input type="password" placeholder="请输入6-16位的新密码" v-model="ruleForm.inputPassword"></el-input>
                 </el-form-item>
               </el-form>
           </li>
           <li class="passWord">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
                 <el-form-item label="" prop="inputRePassword">
-                  <el-input type="password" placeholder="确认新密码" show-password v-model="ruleForm.inputRePassword"></el-input>
+                  <el-input type="password" placeholder="确认新密码" v-model="ruleForm.inputRePassword"></el-input>
                 </el-form-item>
               </el-form>
           </li>
           <li class="hqyzm">
             <input type="text" v-model="code" placeholder="请输入验证码" placeholder-class="placeholderStyle">
-            <el-button class="yzm" :disabled='disabled' @click="getCode">{{content}}</el-button>
+            <el-button class="yzm" :disabled='disabled' @click="getCode3">{{content}}</el-button>
           </li>
         </ul>
         <div class="resetBtn" @click="resetPassword">
-          重置密码
+          确认
         </div>
     </div>
   </div>
@@ -50,7 +43,7 @@ export default {
      let validPhone=(rule,value,callback)=>{
       let reg=/[0-9]{11}/
       if(!reg.test(value)){callback(
-        new Error('账号必须是11位的手机号'))
+        new Error('请输入11位手机号！'))
         this.rule1 = false
       }else{
         this.callback1()
@@ -59,7 +52,7 @@ export default {
     let validPassword=(rule,value,callback)=>{
       let reg=/[0-9a-zA-Z]{6,16}/
       if(!reg.test(value)){callback(
-        new Error('密码必须是6-16位'))
+        new Error('请输入6-16位的密码！'))
         this.rule2 = false
       }else{
         this.callback2()
@@ -111,21 +104,25 @@ export default {
     callback3() {
       this.rule3 = true
     },
-    getCode() {  
-      this.totalTime = 60
-      this.$http.postCode(this.ruleForm.phoneNum).then(resp => {
-        console.log(resp)
-      })
-      this.timer = setInterval(() => {
-        this.totalTime--
-        this.content = this.totalTime + 's后重新发送'
-        this.disabled = true
-        if(this.totalTime <= 0){
-          this.content = '获取验证码'
-          this.disabled = false
-          clearInterval(this.timer)
-        }
-      },1000)
+    getCode3() {  
+      if(this.rule1) {
+        this.totalTime = 60
+        this.$http.postCode(this.ruleForm.phoneNum).then(resp => {
+          console.log(resp)
+        })
+        this.timer = setInterval(() => {
+          this.totalTime--
+          this.content = this.totalTime + '秒'
+          this.disabled = true
+          if(this.totalTime <= 0){
+            this.content = '获取验证码'
+            this.disabled = false
+            clearInterval(this.timer)
+          }
+        },1000)
+      }else{
+        this.$toast('手机号格式不正确！')
+      }
     },
     resetPassword() {
       if(this.rule1 && this.rule2 && this.rule3 && this.code !== '') {
@@ -157,69 +154,30 @@ export default {
   .forgetPassword{
     width: 100%;
     min-height: 100vh;
-    .top{
-      width: 100%;
-      height: 94px;
-      padding-left: 30px;
-      padding-top: 33px;
-      span{
-        display: block;
-        width: 20px;
-        height: 31px;
-        background: url("../assets/backBg.png") no-repeat center;
-        background-size: 100% 100%;
-      }
-    }
-    .name{
-      font-size: 38px;
-      text-align: center;
-      color: #303030;
-      margin-top: 11px;
-    }
-    .wrap{
-      width: 92%;
-      height: 120px;
-      line-height: 120px;
-      margin: 0 auto;
-      margin-top: 40px;
-      border-bottom: 1px solid #f3f3f3;
-      span{
-        float: right;
-      }
-    }
+    background: #f2f2f2;
+    overflow: hidden;
+    padding: 0 80px;
     .resetPassword{
-      width: 92%;
+      width: 100%;
       min-height: 600px;
-      margin: 0 auto;
+      margin-top: 160px;
       // border: 1px solid red;
       ul{
         width: 100%;
         height: auto;
         li{
           width: 100%;
-          height: 120px;
-          border-bottom: 1px solid #f3f3f3;
-          padding-top: 10px;
+          height: 118px;
+          border-bottom: 1px solid #d7d7d7;
+          padding-top: 30px;
           input{
             width: 60%;
             height: 100px;
             line-height: 100px;
             float: left;
-            font-size: 26px;
+            font-size: 27px;
             border: none;
             outline: none;
-          }
-          input:-ms-input-placeholder{
-            color: #cbcbcb;
-            letter-spacing: 1px;
-          }
-          input::-moz-placeholder{
-            color: #cbcbcb;
-            letter-spacing: 1px;
-          }
-          input::-webkit-input-placeholder{
-            color: #cbcbcb;
-            letter-spacing: 1px;
           }
         }
         .passWord{
@@ -234,34 +192,35 @@ export default {
         }
         .hqyzm{
           .yzm{
-            width: 160px;
-            height: 48px;
-            border: 1px solid #fac31e;
-            color: #fac31e;
-            border-radius: 25px;
+            idth: 160px;
+            height: 60px;
+            border: 1px solid #c8c8c8;
+            color: #fff;
+            border-radius: 90px;
             text-align: center;
             float: right;
-            margin-top: 30px;
-            background: #fff;
-            font-size: 20px;
+            // margin-top: 20px;
+            background: #c8c8c8;
+            font-size: 22px;
             span{
-              line-height: 43px;
-              font-size: 20px;
+              line-height: 60px;
+              font-size: 22px;
             }
           }
         }
       }
       .resetBtn{
         width: 100%;
-        height: 80px;
+        height: 94px;
         background: #fac31e;
         color: #fff;
-        line-height: 80px;
+        line-height: 94px;
         text-align: center;
-        margin-top: 170px;
-        border-radius: 40px;
-        margin-bottom: 35px;
+        margin-top: 116px;
+        letter-spacing: 2px;
+        border-radius: 14px;
         padding-left: 15px;
+        font-size: 30px;
       }
     }
   }
@@ -272,9 +231,35 @@ export default {
   line-height: 100px;
   padding: 0;
   border: none;
-  font-size: 24px;
+  font-size: 32px;
+  background: #f2f2f2;
 }
 .forgetPassword .el-form-item__error {
-  top: 75%;
+  top: 35%;
+  right: 0;
+  left: auto;
+  font-size: 22px;
+  color: red;
+}
+.forgetPassword .el-icon-view{
+  font-size: 26px;
+  line-height: 105px;
+}
+.forgetPassword ul li input{
+  background: #f2f2f2;
+  height: 80px !important;
+  font-size: 32px;
+}
+.forgetPassword input:-ms-input-placeholder{
+  color: #909090;
+  font-size: 32px;
+}
+.forgetPassword input::-moz-placeholder{
+  color: #909090;
+  font-size: 32px;
+}
+.forgetPassword input::-webkit-input-placeholder{
+  color: #909090;
+  font-size: 32px;
 }
 </style>

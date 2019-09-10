@@ -30,17 +30,17 @@ export default {
       this.currtabIndex = index
       const groupId = window.sessionStorage.getItem('groupDetailId')
       if(index === 0) {
-        this.$router.push({
+        this.$router.replace({
           path: `/club/clubInfo/${groupId}`
         })
       }
       if(index === 1) {
-        this.$router.push({
+        this.$router.replace({
           path: '/club/clubActivities'
         })
       }
       if(index === 2) {
-        this.$router.push({
+        this.$router.replace({
           path: '/club/members'
         })
       }

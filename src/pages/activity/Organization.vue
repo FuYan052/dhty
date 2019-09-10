@@ -210,22 +210,22 @@ export default {
     })
 
     this.startDate = new Date()  //当天日期
-    this.typeValue = window.sessionStorage.getItem('typeValue')  //存sessionStorage是为了防止选择场地后返回页面被刷新，之前选择项被清空
-    this.activityTypeValue = window.sessionStorage.getItem('activityType')  
-    this.groupTypeValue = window.sessionStorage.getItem('groupTypeValue')
-    this.titleValue = window.sessionStorage.getItem('titleValue')
-    this.formatDateValue = window.sessionStorage.getItem('formatDateValue')
-    this.startTimeValue = window.sessionStorage.getItem('startTimeValue')
-    this.endTime = window.sessionStorage.getItem('endTime')
-    if(this.endTime !== null) {
-      this.endTimeValue = '~' + this.endTime
-    }
-    this.placeId = window.sessionStorage.getItem('placeId')
-    this.placeName = window.sessionStorage.getItem('placeName')
-    this.number = window.sessionStorage.getItem('number')
-    this.phone = window.sessionStorage.getItem('phone')
-    this.showLastTimeValue = window.sessionStorage.getItem('lastTimeValue')
-    this.cost = window.sessionStorage.getItem('cost')
+    // this.typeValue = window.sessionStorage.getItem('typeValue')  //存sessionStorage是为了防止选择场地后返回页面被刷新，之前选择项被清空
+    // this.activityTypeValue = window.sessionStorage.getItem('activityType')  
+    // this.groupTypeValue = window.sessionStorage.getItem('groupTypeValue')
+    // this.titleValue = window.sessionStorage.getItem('titleValue')
+    // this.formatDateValue = window.sessionStorage.getItem('formatDateValue')
+    // this.startTimeValue = window.sessionStorage.getItem('startTimeValue')
+    // this.endTime = window.sessionStorage.getItem('endTime')
+    // if(this.endTime !== null) {
+    //   this.endTimeValue = '~' + this.endTime
+    // }
+    // this.placeId = window.sessionStorage.getItem('placeId')
+    // this.placeName = window.sessionStorage.getItem('placeName')
+    // this.number = window.sessionStorage.getItem('number')
+    // this.phone = window.sessionStorage.getItem('phone')
+    // this.showLastTimeValue = window.sessionStorage.getItem('lastTimeValue')
+    // this.cost = window.sessionStorage.getItem('cost')
   },
   computed: {
     // 用户id

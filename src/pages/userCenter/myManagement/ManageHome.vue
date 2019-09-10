@@ -56,6 +56,17 @@ export default {
   },
   created() {
     // 获取信息
+    // this.$http.myManagementInfo(this.userId).then(resp => {
+    //   console.log(resp)
+    //   if(resp.status == 200) {
+    //     this.info = resp.data
+    //   }else{
+    //     this.$toast("获取信息失败！")
+    //   }
+    // })
+  },
+  mounted() {
+    // 获取信息
     this.$http.myManagementInfo(this.userId).then(resp => {
       console.log(resp)
       if(resp.status == 200) {

@@ -3,20 +3,24 @@ import { Message } from 'element-ui'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
-  // baseURL: 'http://192.168.0.114:9000/',
-  baseURL: 'http://laihu.baogongxia.com:9000/',
+  baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'https://laihu.baogongxia.com/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
 })
 
 const ajax2 = axios.create({
-  // baseURL: 'http://192.168.0.114:9000/',
-  baseURL: 'http://laihu.baogongxia.com:9000/',
+  baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'https://laihu.baogongxia.com/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
   },
+})
+
+const ajax3 = axios.create({
+
 })
 
 // request拦截器
@@ -254,4 +258,8 @@ export const getPopularize = (params) => {
   return ajax.get(`/v1/rest/file/qRCode?userId=${params}`)
 }
 
+// 微信
+export const getWXUserInfo = (params) => {
+  return ajax3.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=${params.grant_type}l&appid=${params.appid}&secret=${params.secret}`)
+}
 
