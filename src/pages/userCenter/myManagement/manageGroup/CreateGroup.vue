@@ -3,7 +3,7 @@
   <div class="createGroup" v-title data-title="创建社群">
     <!-- 社群名称 -->
     <div class="groupName">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
         <el-form-item label="社群名称" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
@@ -11,7 +11,7 @@
     </div>
     <!-- 社群简介 -->
     <div class="introduction">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
         <el-form-item label="社群简介" prop="introd">
           <!-- <el-input v-model="ruleForm.introd"></el-input> -->
           <el-input
@@ -24,7 +24,7 @@
     </div>
     <!-- 社群LOGO -->
     <div class="groupLogo">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
         <el-form-item label="社群LOGO" prop="introd">
           <el-upload
             class="avatar-uploader"

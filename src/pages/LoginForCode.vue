@@ -118,6 +118,7 @@ export default {
             this.$toast("登录成功！")
             // 登录成功后跳转回之前要去的页面
             const toPath = window.sessionStorage.getItem('routerPath')
+            const toPathName = window.sessionStorage.getItem('routerPathName')
             this.$router.replace({
               path: toPath
             })

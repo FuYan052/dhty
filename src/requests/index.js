@@ -3,16 +3,18 @@ import { Message } from 'element-ui'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
-  baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'http://192.168.0.114:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://8mr2q6.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
 })
 
 const ajax2 = axios.create({
-  baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'http://192.168.0.114:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://8mr2q6.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -46,7 +48,10 @@ ajax.interceptors.response.use(resp => {
       return resp.data
     }
     if (resp.data.status == 201) {
-      Toast(resp.data.message)
+      Toast({
+        message: resp.data.message,
+        duration: 2000
+      });
       window.localStorage.removeItem('ty-token')
     }
   },
@@ -77,7 +82,10 @@ ajax2.interceptors.response.use(resp => {
       return resp.data
     }
     if (resp.data.status == 201) {
-      Toast(resp.data.message)
+      Toast({
+        message: resp.data.message,
+        duration: 2000
+      });
       window.localStorage.removeItem('ty-token')
     }
   },
@@ -258,8 +266,13 @@ export const getPopularize = (params) => {
   return ajax.get(`/v1/rest/file/qRCode?userId=${params}`)
 }
 
-// 微信
-export const getWXUserInfo = (params) => {
-  return ajax3.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=${params.grant_type}l&appid=${params.appid}&secret=${params.secret}`)
+// 微信获取用户openId和session_key
+export const getWXLogin = (params) => {
+  return ajax.get(`/v1/rest/login/getSessionkey?code=${params}`)
 }
+
+// 微信
+// export const getWXUserInfo = (params) => {
+//   return ajax3.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=${params.grant_type}l&appid=${params.appid}&secret=${params.secret}`)
+// }
 

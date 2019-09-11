@@ -6,6 +6,7 @@ import RegisterUserInfo from '@/pages/RegisterUserInfo'
 import UserAgreement from '@/pages/UserAgreement'
 import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
+import BindPhone from '@/pages/BindPhone'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ChildrenActivities from '@/pages/activity/ChildrenActivities'
 import ActivityHome from '@/pages/activity/ActivityHome'
@@ -85,6 +86,11 @@ export default new Router({
       path: '/home/loginForCode',
       name: 'LoginForCode',
       component: LoginForCode,
+    },
+    {
+      path: '/home/bindPhone',
+      name: 'BindPhone',
+      component: BindPhone,
     },
     {
       path: '/home/forgetPassword',

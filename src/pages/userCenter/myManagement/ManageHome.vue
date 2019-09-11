@@ -47,7 +47,8 @@ export default {
         //   name: '地址管理',
         //   path: '/userCenter/addressManagement' 
         // },
-      ]
+      ],
+      _id: ''
     }
   },
   computed: {
@@ -67,7 +68,13 @@ export default {
   },
   mounted() {
     // 获取信息
-    this.$http.myManagementInfo(this.userId).then(resp => {
+    // console.log("id:" + this.userId)
+    // console.log("id2:" + this.$route.params._userId)
+    this._id = this.userId
+    if(this._id == null) {
+      this._id = this.$route.params._userId
+    }
+    this.$http.myManagementInfo(this._id).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
         this.info = resp.data

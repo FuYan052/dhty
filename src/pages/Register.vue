@@ -22,9 +22,9 @@
             <el-button class="yzm" :disabled='disabled' @click="getCode1">{{content}}</el-button>
           </li>
         </ul>
-        <div class="registerBtn" @click="doRegister">
+        <button class="registerBtn" @click="doRegister" :disabled="isDisabled">
           注册
-        </div>
+        </button>
         <img class="logoImg" src="../assets/logoImg.png" alt="">
     </div>
     <div class="agreement">
@@ -50,7 +50,7 @@ export default {
     let validPassword=(rule,value,callback)=>{
       let reg=/[0-9a-zA-Z]{6,16}/
       if(!reg.test(value)){callback(
-        new Error('请输入6-16位的密码'))
+        new Error('请输入6-16位的密码！'))
         this.rule2 = false
       }else{
         this.callback2()
@@ -77,6 +77,8 @@ export default {
       rule1: false,  //当输入不合法时无法注册
       rule2: false,  //当输入不合法时无法注册
       isChecked: false,  //是否同意用户协议
+      isDisabled: false,  //是否能点击注册，防止用户在短时间内多次提交注册
+      timer2: ''
     }
   },
   methods: {
@@ -127,15 +129,26 @@ export default {
     },
     // 提交注册信息
     doRegister() {
+      console.log("点击")
+      // this.isDisabled = true
       if(this.rule1 && this.rule2 && this.checkCode !== '' && this.isChecked){
         const params = {
           phone: this.ruleForm.phoneNum,
           authCode: this.checkCode,
           passWord: this.ruleForm.inputPassword,
         }
-        console.log(params)
+        // console.log(params)
         this.$http.postRegister(params).then(resp => {
-          console.log(params)
+          console.log(resp)
+          this.isDisabled = true
+          const _this = this
+          this.timer2 = setTimeout(() => {
+            _this.isDisabled = false
+            console.log(_this.timer2)
+            clearTimeout(_this.timer2)
+            this.timer2 = null
+            console.log(_this.timer2)
+          },5000)
           if(resp.status == 200) {
             this.$toast('注册成功！')
             this.$router.push({
@@ -144,6 +157,7 @@ export default {
           }
         })
       }else{
+        this.isDisabled = false
         if(!this.rule1 || this.code === '') {
           this.$toast('请输入正确的信息！')
         }
@@ -152,7 +166,7 @@ export default {
         }
       }
     }
-  }
+  },
 }
 </script>
 
@@ -216,6 +230,8 @@ export default {
         }
       }
       .registerBtn{
+        border: none;
+        outline: none;
         width: 100%;
         height: 94px;
         background: #fac31e;

@@ -39,6 +39,7 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {
       // console.log("缓存路径")
       window.sessionStorage.setItem('routerPath',to.fullPath)
+      window.sessionStorage.setItem('routerPathName',to.name)
       next('/home' )//这里是即将进入的页面是名单中的页面就直接进入
     } else { 
       next()

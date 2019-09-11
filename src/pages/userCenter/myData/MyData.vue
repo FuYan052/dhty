@@ -117,6 +117,7 @@ export default {
       currIndex: 0,
       dateList: [],
       myInfo: '',
+      _id: ''
     }
   },
   computed: {
@@ -140,7 +141,13 @@ export default {
   },
   mounted() {
     // 获取信息
-    this.$http.informationOthers(this.userId).then(resp => {
+    this._id = this.userId
+    // console.log(this._id)
+    if(this._id == null) {
+      this._id = this.$route.params._userId
+    }
+    // console.log(this._id)
+    this.$http.informationOthers(this._id).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
         this.myInfo = resp.data

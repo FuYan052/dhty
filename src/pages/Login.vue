@@ -34,7 +34,7 @@
           <p>手机登录</p>
           </div>
           <div class="changeType">
-            <img src="../assets/weinxinIcon.png" alt=""  @click="handleChangeType">
+            <img src="../assets/weinxinIcon.png" alt=""  @click="wexinLogin">
             <p>微信登录</p>
           </div>
         </div>
@@ -82,7 +82,8 @@ export default {
       totalTime: 0,
       timer: null,
       rule1: false,
-      rule2: false
+      rule2: false,
+      timer: '',
     }
   },
   computed: {
@@ -127,9 +128,14 @@ export default {
             this.$toast("登录成功！")
             // 登录成功后跳转回之前要去的页面
             const toPath = window.sessionStorage.getItem('routerPath')
+            const toPathName = window.sessionStorage.getItem('routerPathName')
             this.$router.replace({
-              path: toPath
-            })
+                path: toPath,
+                name: toPathName,
+                params: {
+                  _userId: resp.data.id
+                }
+              })
           }
         })
         console.log(params)
@@ -151,6 +157,18 @@ export default {
       this.$router.replace({
         path: '/home/forgetPassword'
       })
+    },
+    // 微信登录
+    wexinLogin() {
+      // this.$router.push({
+      //   path: '/home/bindPhone'
+      // })
+      const redirectUrl = encodeURIComponent('http://192.168.0.137:8082/#/home/bindPhone')
+      const appid = 'wxf1894ca38c849d17'
+      const state = window.sessionStorage.getItem('routerPath')
+      console.log(this.state)
+      console.log(window.location.href)
+      window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirectUrl}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`
     }
   }
 }

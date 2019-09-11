@@ -36,7 +36,8 @@ export default {
       downloadImg: '',
       groupList: '',
       groupIndex: '',
-      groupInfo: ''
+      groupInfo: '',
+      _id: ''
     }
   },
   computed: {
@@ -44,16 +45,24 @@ export default {
     ...mapState(['userId']),
   },
   created() {
-    this.$http.getPopularize(this.userId).then(resp => {
+    // this.$http.getPopularize(this.userId).then(resp => {
+    //   console.log(resp)
+    //   if(resp.status == 200) {
+    //     this.groupList = resp.data
+    //   }
+    // })
+  },
+  mounted () {
+    this._id = this.userId
+    if(this._id == null) {
+      this._id = this.$route.params._userId
+    }
+    this.$http.getPopularize(this._id).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
         this.groupList = resp.data
       }
     })
-  },
-  mounted () {
-    // console.log(this.$refs.codeImg)
-    // this.downloadImg = this.$refs.codeImg
   },
   methods: {
     changeGroup(v) {
