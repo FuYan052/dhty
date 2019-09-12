@@ -45,7 +45,10 @@ export default {
       if(resp.status == 200) {
         this.list = resp.data
         if(resp.data.length == 0) {
-          this.$toast("暂无活动！")
+          this.$toast({
+            message: '暂无活动！',
+            duration: 2000
+          });
         }
       }
     })

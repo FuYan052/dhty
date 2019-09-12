@@ -102,9 +102,15 @@ export default {
           this.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
           window.sessionStorage.setItem('imgUrl',this.imageUrl)
           this.$indicator.close();
-          this.$toast('头像上传成功');
+          this.$toast({
+            message: '头像上传成功！',
+            duration: 2000
+          });
         } else {
-          this.$toast('头像上传失败');
+          this.$toast({
+            message: '头像上传失败！',
+            duration: 2000
+          });
         }
       });
     },
@@ -124,7 +130,10 @@ export default {
       this.$http.createGroup(params).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
-          this.$toast('创建成功！')
+          this.$toast({
+            message: '创建成功！',
+            duration: 2000
+          });
           this.$router.push({
             path: '/userCenter/createdGroupList'
           })

@@ -85,7 +85,10 @@ export default {
       if(resp.status == 200) {
         this.activList = resp.data
       }else{
-        this.$toast("获取列表失败!")
+        this.$toast({
+          message: '获取列表失败！',
+          duration: 2000
+        });
         this.activList = []
       }
     })
@@ -113,7 +116,10 @@ export default {
         if(resp.status == 200) {
           this.activList = resp.data
         }else{
-          this.$toast("获取列表失败!")
+          this.$toast({
+            message: '获取列表失败！',
+            duration: 2000
+          });
           this.activList = []
         }
       })

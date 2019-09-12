@@ -125,7 +125,10 @@ export default {
             this.changeUserId(resp.data.id)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
-            this.$toast("登录成功！")
+            this.$toast({
+              message: '登录成功！',
+              duration: 2000
+            });
             // 登录成功后跳转回之前要去的页面
             const toPath = window.sessionStorage.getItem('routerPath')
             const toPathName = window.sessionStorage.getItem('routerPathName')
@@ -140,7 +143,10 @@ export default {
         })
         console.log(params)
       }else{
-        this.$toast('请输入正确的信息！')
+        this.$toast({
+          message: '请输入正确的信息！',
+          duration: 2000
+        });
       }
     },
     handleChangeType() {

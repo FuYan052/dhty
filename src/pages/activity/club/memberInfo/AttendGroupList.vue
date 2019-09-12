@@ -29,7 +29,10 @@ export default {
       if(resp.status == 200) {
         this.groupList = resp.data
         if(resp.data.length == 0) {
-          this.$toast("暂无社群！")
+          this.$toast({
+            message: '暂无社群！',
+            duration: 2000
+          });
         }
       }
     })

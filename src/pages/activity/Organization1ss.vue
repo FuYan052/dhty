@@ -1,6 +1,6 @@
 <template>
-  <!-- 修改活动信息 -->
-  <div class="editActiviesInfo" v-title data-title="修改活动">
+  <!-- 组织活动 -->
+  <div class="organization" v-title data-title="组织活动">
     <ul>
       <li @click="show1">
         选择运动种类<span class="el-icon-arrow-right"></span><span class="value">{{typeValue}}</span>
@@ -47,7 +47,7 @@
         v-model="textarea1">
       </el-input>
     </div>
-    <div class="submit" @click="submit">保存修改</div>
+    <div class="submit" @click="submit">确认发布</div>
     <div class="bottom">
       <span class="box" @click="isWeekActivie"><b class="el-icon-check" v-show="isCkecked"></b></span>
       <p class="bottomText">作为俱乐部每周活动安排发布</p>
@@ -145,7 +145,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: 'EditActiviesInfo',
+  name: 'Organization',
   data() {
     return {
       textarea1: '',  //参与须知
@@ -163,7 +163,6 @@ export default {
       activityTypeId: '',
       groupType: '大虎管理员', //默认所属群组
       groupTypeValue: '', //选择的所属群组
-      groupId: '',
       titleValue:'',  //标题内容
       dateValue: '',  //选择日期
       formatDateValue: '',  //格式化选择的日期并显示
@@ -191,46 +190,10 @@ export default {
         className: 'slot6',
         textAlign: 'center',
         // defaultIndex: -1
-      }],
-      editId: '',
-      id: ''  //活动id
+      }]
     }
   },
   created() {
-    this.editId = window.sessionStorage.getItem('editGroupId')
-    // 获取要修改的信息
-    this.$http.findOrganizingActivities(this.editId).then(resp => {
-      console.log(resp)
-      if(resp.status == 200) {
-        this.id = resp.data.id
-        this.type = resp.data.typeId
-        this.typeValue = resp.data.type
-        this.activityTypeId = resp.data.activityTypeId
-        this.activityTypeValue = resp.data.activityType
-        this.groupTypeValue = resp.data.groupName
-        this.groupId = resp.data.groupId
-        this.titleValue = resp.data.title
-        this.formatDateValue = resp.data.time
-        this.startTimeValue = resp.data.timeStart
-        this.endTime = resp.data.timeEnd
-        this.endTimeValue = '~' + this.endTime
-        this.number = resp.data.people
-        this.phone = resp.data.phone
-        this.lastTimeValue = resp.data.endTime
-        this.showLastTimeValue = resp.data.endTime
-        this.cost = resp.data.cost
-        this.textarea1 = resp.data.content
-        window.sessionStorage.setItem('typeId',resp.data.typeId)
-        if(window.sessionStorage.getItem('placeName')) {
-          this.placeName = window.sessionStorage.getItem('placeName')
-          this.placeId = window.sessionStorage.getItem('placeId')
-        }else{
-          this.placeName = resp.data.venueName
-          this.placeId = resp.data.venueId
-        }
-      }
-      console.log(this.lastTimeValue)
-    })
     // 获取运动类型
     this.$http.findDictList('sportsKinds').then(resp => {
       // console.log(resp)
@@ -239,8 +202,8 @@ export default {
       }
     })
     // 获取群组列表
-    this.$http.getGroupList('1').then(resp => {
-      // console.log(resp)
+    this.$http.getGroupList(this.userId).then(resp => {
+      console.log(resp)
       if(resp.status == 200) {
         this.slotsValues2 = resp.data
       }
@@ -263,9 +226,6 @@ export default {
     // this.phone = window.sessionStorage.getItem('phone')
     // this.showLastTimeValue = window.sessionStorage.getItem('lastTimeValue')
     // this.cost = window.sessionStorage.getItem('cost')
-  },
-  mounted() {
-
   },
   computed: {
     // 用户id
@@ -427,10 +387,8 @@ export default {
       if(this.groupType === undefined){
         this.groupType = this.dataList2[0].values[0]
         this.groupTypeValue = this.groupType.name
-        this.groupId = this.groupType.id
       }else{
         this.groupTypeValue = this.groupType.name
-        this.groupId = this.groupType.id
       }
       console.log(this.groupType)
       window.sessionStorage.setItem('groupTypeValue',this.groupTypeValue)
@@ -492,7 +450,6 @@ export default {
     },
     // 填写地点
     selectPlace() {
-      this.submit1()
       this.$router.push({
         path: '/mapSelection'
       })
@@ -524,11 +481,11 @@ export default {
       this.lastTimePicker = true
     },
     handleConfirmLastTime(v) {
-      // console.log(v)
+      console.log(v)
       this.showLastTimeValue = this.formatDate2(v)
       this.popupVisible = !this.popupVisible
       this.lastTimeValue = this.formatDate2(v)
-      // console.log(this.lastTimeValue)
+      console.log(this.lastTimeValue)
       const maxDateTime = new Date(this.formatDateValue + ' ' + this.endTime).getTime()
       const last = new Date(this.lastTimeValue).getTime()
       if(last > maxDateTime) {
@@ -538,53 +495,26 @@ export default {
         });
         this.showLastTimeValue = this.formatDateValue + ' ' + this.endTime
         this.lastTimeValue = this.formatDateValue + ' ' + this.endTime
+        // console.log(this.lastTimeValue)
       }
-      console.log(this.lastTimeValue)
-      // window.sessionStorage.setItem('lastTimeValue',this.lastTimeValue)
+      window.sessionStorage.setItem('lastTimeValue',this.lastTimeValue)
     },
     // 填写费用
     inputCost() {
       this.$messagebox.prompt('请填写费用').then(({ value, action }) => {
         // console.log(value)
         this.cost = value
-        // window.sessionStorage.setItem('cost',this.cost)
+        window.sessionStorage.setItem('cost',this.cost)
       })
     },
-    submit1() {
-      // console.log()
-      const params = {
-        id: this.id,
-        userId: this.userId,
-        type: this.type,
-        groupId: this.groupId,
-        activityType: this.activityTypeId,
-        title: this.titleValue,
-        time: this.formatDateValue,
-        timeStart: this.startTimeValue,
-        timeEnd: this.endTime,
-        venueId: this.placeId,
-        people: this.number,
-        phone: this.phone,
-        cost: this.cost,
-        content: this.textarea1,
-        // endTime: this.formatDate2(this.lastTimeValue),
-        endTime: this.lastTimeValue,
-        flag: this.isCkecked
-      }
-      console.log(params)
-      // 提交后台
-      this.$http.organizingActivities(params).then(resp => {
-        console.log(resp)
-      })
-    },
-    // 保存修改
+    // 确认发布按钮
     submit() {
       const params = {
-        id: this.id,
+        id: '',
         userId: this.userId,
-        type: this.type,
-        groupId: this.groupId,
-        activityType: this.activityTypeId,
+        type: window.sessionStorage.getItem('typeId'),
+        groupId: window.sessionStorage.getItem('groupTypeId'),
+        activityType: window.sessionStorage.getItem('activityTypeId'),
         title: this.titleValue,
         time: this.formatDateValue,
         timeStart: this.startTimeValue,
@@ -595,9 +525,7 @@ export default {
         cost: this.cost,
         content: this.textarea1,
         // endTime: this.lastTimeValue.getTime(),
-        // endTime: this.lastTimeValue,
-        // endTime: this.formatDate2(this.lastTimeValue),
-        endTime: this.lastTimeValue,
+        endTime: window.sessionStorage.getItem('lastTimeValue'),
         // endTime: this.lastTimeValue,
         flag: this.isCkecked
       }
@@ -640,8 +568,9 @@ export default {
   },
 }
 </script>
+
 <style lang="scss" scoped>
-  .editActiviesInfo{
+  .organization{
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
@@ -726,7 +655,6 @@ export default {
         line-height: 60px;
         color: #a9a9a9;
       }
-      
     }
     .submit{
       width: 710px;
@@ -773,7 +701,7 @@ export default {
   }
 </style>
 <style>
-.editActiviesInfo .notes .el-textarea__inner{
+.organization .notes .el-textarea__inner{
   min-height: 110px !important;
   outline: none !important;
   border: 2px solid #e1e1e1;

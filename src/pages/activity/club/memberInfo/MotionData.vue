@@ -110,11 +110,17 @@ export default {
             }
             console.log(this.dataInfo)
           }else{
-            this.$toast('获取数据失败！')
+            this.$toast({
+              message: '获取数据失败！',
+              duration: 2000
+            });
           }
         })
       }else{
-        this.$toast('获取分类失败！')
+        this.$toast({
+            message: '获取分类失败！',
+            duration: 2000
+          });
       }
     })
     this.currtitle = this.badmintonDataTitle
@@ -154,7 +160,10 @@ export default {
           }
           console.log(this.dataInfo)
         }else{
-          this.$toast('获取数据失败！')
+          this.$toast({
+            message: '获取数据失败！',
+            duration: 2000
+          });
         }
       })
     },

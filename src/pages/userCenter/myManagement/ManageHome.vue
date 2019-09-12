@@ -79,7 +79,10 @@ export default {
       if(resp.status == 200) {
         this.info = resp.data
       }else{
-        this.$toast("获取信息失败！")
+        this.$toast({
+          message: '获取信息失败！',
+          duration: 2000
+        });
       }
     })
   },

@@ -27,10 +27,10 @@ export default {
   //   // console.log(to)
   // },
   mounted() {
-    this.$toast({
-      message: '请先登录！',
-      duration: 1000
-    });
+    // this.$toast({
+    //   message: '请先登录！',
+    //   duration: 1000
+    // });
   },
   methods: {
     doLogin() {

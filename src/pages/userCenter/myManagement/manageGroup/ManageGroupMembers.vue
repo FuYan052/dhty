@@ -94,7 +94,10 @@ export default {
           this.getMemberList()
           this.selectedMemberIds = []
         }else{
-          this.$toast("操作失败！")
+          this.$toast({
+            message: '操作失败！',
+            duration: 2000
+          });
         }
       })
     },
@@ -112,7 +115,10 @@ export default {
             this.getMemberList()
             this.selectedMemberIds = []
           }else{
-            this.$toast("操作失败！")
+            this.$toast({
+              message: '操作失败！',
+              duration: 2000
+            });
           }
         })
       })

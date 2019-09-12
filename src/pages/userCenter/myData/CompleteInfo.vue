@@ -300,9 +300,15 @@ export default {
         if (resp.status == 200) {
           this.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
           this.$indicator.close();
-          this.$toast('头像上传成功');
+          this.$toast({
+            message: '头像上传成功！',
+            duration: 2000
+          });
         } else {
-          this.$toast('头像上传失败');
+          this.$toast({
+            message: '头像上传失败！',
+            duration: 2000
+          });
         }
       });
     },
@@ -472,7 +478,10 @@ export default {
       this.$http.completeInfo(params).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
-          this.$toast('保存成功！')
+          this.$toast({
+            message: '保存成功！',
+            duration: 2000
+          });
           this.getInfo()
           const _this = this
           setTimeout(function() {
@@ -561,8 +570,11 @@ export default {
       this.$http.createLabel(params).then(resp => {
         // console.log(resp)
         if(resp.status == 200) {
-        this.isShow = false
-        this.$toast("创建成功")
+          this.isShow = false
+          this.$toast({
+            message: '创建成功！',
+            duration: 2000
+          });
         }
         if(!this.isShow) {  //创建标签成功之后获取新的标签列表
           this.getAllList()

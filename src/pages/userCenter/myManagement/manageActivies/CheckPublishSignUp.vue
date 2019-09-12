@@ -21,7 +21,10 @@ export default {
   },
   created() {
     if(this.memberList.length == 0) {
-      this.$toast("暂无人员报名！")
+      this.$toast({
+        message: '暂无人员报名！',
+        duration: 2000
+      });
     }
     // this.memberList = [
     //   {

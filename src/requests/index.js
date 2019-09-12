@@ -4,8 +4,8 @@ import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://8mr2q6.natappfree.cc/',
+  baseURL: 'https://laihu.baogongxia.com/',
+  // baseURL: 'http://2kha7p.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -13,8 +13,8 @@ const ajax = axios.create({
 
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://8mr2q6.natappfree.cc/',
+  baseURL: 'https://laihu.baogongxia.com/',
+  // baseURL: 'http://2kha7p.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')

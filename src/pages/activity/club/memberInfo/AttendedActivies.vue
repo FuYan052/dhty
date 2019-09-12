@@ -57,11 +57,17 @@ export default {
           console.log(resp)
           this.actList = resp.data
           if(resp.data.length == 0) {
-            this.$toast('暂无活动!')
+              this.$toast({
+              message: '暂无活动!',
+              duration: 2000
+            });
           }
         })
       }else{
-        this.$toast('获取列表失败！')
+        this.$toast({
+          message: '获取列表失败！',
+          duration: 2000
+        });
       }
     })
   },
@@ -78,7 +84,10 @@ export default {
         if(resp.status == 200) {
           this.actList = resp.data
         }else{
-          this.$toast('获取列表失败！')
+          this.$toast({
+            message: '获取列表失败！',
+            duration: 2000
+          });
         }
       })
     },

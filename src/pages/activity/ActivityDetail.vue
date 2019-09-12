@@ -119,7 +119,10 @@ export default {
     submit() {
       console.log(this.isTosignUp)
       if(this.state == 2) {
-        this.$toast("抱歉，人员已满！")
+        this.$toast({
+          message: '抱歉，人员已满！',
+          duration: 2000
+        });
       }else{
         if(this.isTosignUp && this.state !== 2) {
           if(this.isChecked) {
@@ -127,10 +130,16 @@ export default {
               path: '/activitySignUp'
             })
           }else{
-            this.$toast("请阅读《免责条款》！")
+            this.$toast({
+              message: '请阅读《免责条款》！',
+              duration: 2000
+            });
           }
         }else{
-          this.$toast("报名已结束！")
+          this.$toast({
+            message: '报名已结束！',
+            duration: 2000
+          });
         }
       }
     },

@@ -73,7 +73,10 @@ export default {
         this.$http.applyJoinGroup(params).then(resp => {
           console.log(resp)
           if(resp.status == 200) {
-            this.$toast(resp.info)
+            this.$toast({
+            message: resp.info,
+            duration: 2000
+          });
           }
         })
       }else{

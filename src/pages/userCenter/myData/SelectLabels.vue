@@ -127,8 +127,11 @@ export default {
       this.$http.createLabel(params).then(resp => {
         // console.log(resp)
         if(resp.status == 200) {
-        this.isShow = false
-        this.$toast("创建成功")
+          this.isShow = false
+          this.$toast({
+            message: '创建成功！',
+            duration: 2000
+          });
         }
         if(!this.isShow) {  //创建标签成功之后获取新的标签列表
           this.getAllList()

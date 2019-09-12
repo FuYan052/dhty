@@ -121,7 +121,10 @@ export default {
           }
         },1000)
       }else{
-        this.$toast('手机号格式不正确！')
+        this.$toast({
+          message: '手机号格式不正确！',
+          duration: 2000
+        });
       }
     },
     resetPassword() {
@@ -134,7 +137,10 @@ export default {
         this.$http.postForgetPassword(params).then(resp => {
           // console.log(resp)
           if(resp.status == 200) {
-            this.$toast('密码修改成功！');
+            this.$toast({
+              message: '密码修改成功！',
+              duration: 2000
+            });
           }
         })
         console.log(params)

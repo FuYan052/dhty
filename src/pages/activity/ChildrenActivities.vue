@@ -115,10 +115,16 @@ export default {
       if(resp.status == 200) {
         this.activList = resp.data
         if(this.activList.length == 0) {
-          this.$toast('没有活动哦！')
+          this.$toast({
+            message: '没有活动哦！',
+            duration: 2000
+          });
         }
       }else{
-        this.$toast("获取列表失败!")
+        this.$toast({
+          message: '获取列表失败！',
+          duration: 2000
+        });
         this.activList = []
       }
       console.log(resp)
@@ -140,10 +146,16 @@ export default {
         if(resp.status == 200) {
           this.activList = resp.data
           if(this.activList.length == 0) {
-            this.$toast('没有活动哦！')
+            this.$toast({
+              message: '没有活动哦！',
+              duration: 2000
+            });
           }
         }else{
-          this.$toast("获取列表失败!")
+          this.$toast({
+            message: '获取列表失败！',
+            duration: 2000
+          });
           this.activList = []
         }
         console.log(resp)
@@ -173,10 +185,16 @@ export default {
         if(resp.status == 200) {
           this.activList = resp.data
           if(this.activList.length == 0) {
-            this.$toast('没有活动哦！')
+            this.$toast({
+              message: '没有活动哦！',
+              duration: 2000
+            });
           }
         }else{
-          this.$toast("获取列表失败!")
+          this.$toast({
+            message: '获取列表失败！',
+            duration: 2000
+          });
           this.activList = []
         }
       })
@@ -204,10 +222,16 @@ export default {
         if(resp.status == 200) {
           this.activList = resp.data
           if(this.activList.length == 0) {
-            this.$toast('没有活动哦！')
+            this.$toast({
+              message: '没有活动哦！',
+              duration: 2000
+            });
           }
         }else{
-          this.$toast("获取列表失败!")
+          this.$toast({
+            message: '获取列表失败！',
+            duration: 2000
+          });
           this.activList = []
         }
       })

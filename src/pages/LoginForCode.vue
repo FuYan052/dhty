@@ -96,7 +96,10 @@ export default {
           }
         },1000)
       }else{
-        this.$toast('手机号格式不正确！')
+        this.$toast({
+          message: '手机号格式不正确！',
+          duration: 2000
+        });
       }
     },
     loginForCodde() {
@@ -115,7 +118,10 @@ export default {
             this.changeUserId(resp.data.id)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
-            this.$toast("登录成功！")
+            this.$toast({
+              message: '登录成功！',
+              duration: 2000
+            });
             // 登录成功后跳转回之前要去的页面
             const toPath = window.sessionStorage.getItem('routerPath')
             const toPathName = window.sessionStorage.getItem('routerPathName')
@@ -126,10 +132,16 @@ export default {
         })
       }else{
         if(!this.rule1 || this.code === '') {
-          this.$toast('请输入正确的信息！')
+          this.$toast({
+            message: '请输入正确的信息！',
+            duration: 2000
+          });
         }
         else if(!this.isChecked) {
-          this.$toast('请阅读来虎用户协议！')
+          this.$toast({
+            message: '请阅读来虎用户协议！',
+            duration: 2000
+          });
         }
       }
     },

@@ -66,9 +66,15 @@ export default {
       this.$http.transferGroup(params).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
-          this.$toast("转让成功！")
+          this.$toast({
+            message: '转让成功！',
+            duration: 2000
+          });
         }else{
-          this.$toast("操作失败！")
+          this.$toast({
+            message: '操作失败！',
+            duration: 2000
+          });
         }
       })
     }

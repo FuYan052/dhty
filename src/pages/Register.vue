@@ -150,7 +150,10 @@ export default {
             console.log(_this.timer2)
           },5000)
           if(resp.status == 200) {
-            this.$toast('注册成功！')
+            this.$toast({
+              message: '注册成功！',
+              duration: 2000
+            });
             this.$router.push({
               path: '/home/login'
             })
@@ -159,10 +162,16 @@ export default {
       }else{
         this.isDisabled = false
         if(!this.rule1 || this.code === '') {
-          this.$toast('请输入正确的信息！')
+          this.$toast({
+            message: '请输入正确的信息！',
+            duration: 2000
+          });
         }
         else if(!this.isChecked) {
-          this.$toast('请阅读来虎用户协议！')
+          this.$toast({
+            message: '请阅读来虎用户协议！',
+            duration: 2000
+          });
         }
       }
     }
