@@ -126,7 +126,11 @@ export default {
             const toPath = window.sessionStorage.getItem('routerPath')
             const toPathName = window.sessionStorage.getItem('routerPathName')
             this.$router.replace({
-              path: toPath
+              path: toPath,
+              name: toPathName,
+              params: {
+                _userId: resp.data.id
+              }
             })
           }
         })

@@ -58,7 +58,7 @@ export default {
       this.resultList1 = []
       this.resultList2 = []
       // this.$http.findAllLabel(this.userId).then(resp => {
-      this.$http.findAllLabel('250').then(resp => {
+      this.$http.findAllLabel(this.userId).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
           this.labelList = resp.data

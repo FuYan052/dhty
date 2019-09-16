@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import LoginHome from '@/pages/LoginHome'
 import Register from '@/pages/Register'
 import RegisterUserInfo from '@/pages/RegisterUserInfo'
+import RegisterLabel from '@/pages/RegisterLabel'
 import UserAgreement from '@/pages/UserAgreement'
 import Login from '@/pages/Login'
 import LoginForCode from '@/pages/LoginForCode'
@@ -71,6 +72,11 @@ export default new Router({
       path: '/home/register/registerUserInfo',
       name: 'RegisterUserInfo',
       component: RegisterUserInfo,
+    },
+    {
+      path: '/home/register/registerLabel',
+      name: 'RegisterLabel',
+      component: RegisterLabel,
     },
     {
       path: '/home/register/userAgreement',  // 用户协议
@@ -234,7 +240,7 @@ export default new Router({
         requireAuth: true
       }
     },
-    // 我的管理
+    // 我的管理 
     {
       path: '/userCenter/manageHome',
       name: 'ManageHome',

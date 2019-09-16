@@ -15,10 +15,14 @@
           <el-button class="yzm" :disabled='disabled' @click="getCode2">{{content}}</el-button>
         </li>
       </ul>
-      <div class="loginBtn" @click="loginForCodde">
+      <div class="loginBtn" @click="BindPhone">
         绑定
       </div>
-      <!-- <img class="logoImg" src="../assets/logoImg.png" alt=""> -->
+      <img class="logoImg" src="../assets/logoImg.png" alt="">
+      <div class="agreement">
+        <span class="radiu" :class="{raiduChecked : isChecked}" @click="handleAgree"><i class="el-icon-check" v-show="isChecked"></i></span>
+          我同意并认可<span class="_mark" @click="toAgreement">《来虎用户协议》</span>
+      </div>
     </div>
   </div>
 </template>
@@ -47,12 +51,15 @@ export default {
       totalTime: 0,
       timer: null,
       code: '',
+      toPath: '',
       rules: {
         phoneNum: [
           { validator:validPhone,trigger:'blur'}
         ],
       },
       rule1: false, //当输入合法时才允许提交登录信息
+      isChecked: false,
+      wxUserInfo: ''
     }
   },
   computed: {
@@ -75,12 +82,27 @@ export default {
     }
     // console.log(requertUrl)
     this.code = requertUrl.code
+    const toPath = window.sessionStorage.getItem('routerPath')
     // console.log(decodeURIComponent(requertUrl.state))
+    this.$http.getWXLogin(this.code).then(resp => {
+      console.log(resp)
+      this.wxUserInfowxUserInfo = resp.data
+      if(resp.data.phone !== null) {
+        this.$router.replace({
+          path: this.toPath
+        })
+        window.localStorage.setItem('userId', resp.data.id)
+        window.localStorage.setItem('userPhone', resp.data.phone)
+        window.localStorage.setItem('ty-token', resp.data.token)
+        this.changeLoginStatus(true)
+        this.changeUserId(resp.data.id)
+        this.changeUserPhone(resp.data.phone)
+        this.changeToken(resp.data.token)
+      }
+    })
   },
   mounted() {
-    // this.$http.getWXLogin(this.code).then(resp => {
-    //   console.log(resp)
-    // })
+    
   },
   methods: {
     ...mapMutations(['changeLoginStatus','changeUserId','changeUserPhone','changeToken']),
@@ -111,20 +133,36 @@ export default {
         });
       }
     },
-    loginForCodde() {
+    handleAgree() {
+      this.isChecked = !this.isChecked
+    },
+    toAgreement() {
+      this.$router.push({
+        path: '/home/register/userAgreement'
+      })
+    },
+    BindPhone() {
       if(this.rule1 && this.ckeckCode !== '' && this.isChecked){
         const params = {
           phone: this.ruleForm.phoneNum,
-          code: this.ckeckCode
+          authCode: this.ckeckCode,
+          headPortrait: this.wxUserInfowxUserInfo.headPortrait,
+          nickName: this.wxUserInfowxUserInfo.nickName,
+          openId: this.wxUserInfowxUserInfo.openId,
+          region: this.wxUserInfowxUserInfo.region,
+          sex: this.wxUserInfowxUserInfo.sex,
+          token: '',
+          userId: '',
         }
-        this.$http.postLoginForCode(params).then(resp => {
+        console.log(params)
+        this.$http.postBindPhone(params).then(resp => {
           console.log(resp)
           if(resp.status == 200) {
-            window.localStorage.setItem('userId', resp.data.id)
+            window.localStorage.setItem('userId', resp.data.userId)
             window.localStorage.setItem('userPhone', resp.data.phone)
             window.localStorage.setItem('ty-token', resp.data.token)
             this.changeLoginStatus(true)
-            this.changeUserId(resp.data.id)
+            this.changeUserId(resp.data.userId)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
             this.$toast({
@@ -134,8 +172,18 @@ export default {
             // 登录成功后跳转回之前要去的页面
             const toPath = window.sessionStorage.getItem('routerPath')
             const toPathName = window.sessionStorage.getItem('routerPathName')
+            this.$messagebox({
+              title: '提示',
+              message: `为了方便您下次登录，我们为您设置的初始密码为手机号后六位:${resp.data.initPassword}！`,
+              showCancelButton: false,
+              confirmButtonText: '知道了'
+            });
             this.$router.replace({
-              path: toPath
+              path: toPath,
+              name: toPathName,
+              params: {
+                _userId: resp.data.userId
+              }
             })
           }
         })
@@ -244,6 +292,43 @@ export default {
         margin-bottom: 65px;
       }
     }
+    .logoImg{
+      width: 81px;
+      height: 113px;
+      margin: 0 auto;
+      margin-top: 400px;
+      margin-bottom: 65px;
+    }
+    .agreement{
+      width: 100%;
+      // height: 34px;
+      text-align: center;
+      font-size: 26px;
+      margin-top: 65px;
+      line-height: 32px; 
+      vertical-align: middle;
+      .radiu{
+        display: inline-block;
+        width: 30px;
+        height:30px;
+        border-radius: 50%;
+        border: 1px solid #fac31e;
+        vertical-align: top;
+        padding-top: 2px;
+        i{
+          font-size: 26px;
+          color: #fff;
+          vertical-align: top;
+          text-align: center;
+        }
+      }
+      .raiduChecked{
+        background: #fac31e;
+      }
+      ._mark{
+        color: #fac31e;
+      }
+    }
   }
 </style>
 <style>
@@ -282,5 +367,19 @@ export default {
 .bindPhone input::-webkit-input-placeholder{
   color: #909090;
   font-size: 32px;
+}
+.mint-msgbox{
+  width: 65% !important;
+}
+.mint-msgbox-content{
+  padding: 40px 0;
+}
+.mint-msgbox-message{
+  font-size: 26px;
+  line-height: 36px;
+  color: rgb(48, 47, 47);
+}
+.mint-msgbox-btns{
+  height: 70px;
 }
 </style>

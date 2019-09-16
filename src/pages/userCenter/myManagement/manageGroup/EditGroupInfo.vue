@@ -302,13 +302,17 @@ export default {
   .mint-msgbox {
     width: 60%;
   }
+  .mint-msgbox-title{
+    font-size: 22px;
+  }
   .mint-msgbox-message{
     color: rgb(22, 21, 21);
+    font-size: 26px;
   }
   .mint-msgbox-content{
-    padding: 30px 10px;
+    padding: 40px 10px;
   }
   .mint-msgbox-btns{
-    height: 60px;
+    height: 70px;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="registerUserInfo" v-title data-title="">
+  <div class="registerUserInfo" v-title data-title="注册">
     <div class="wrap">
       <!-- 性别 -->
       <div class="info info1">
@@ -59,7 +59,7 @@
       </div>
       </div>
       <!-- 确认 -->
-      <div class="sureButton">提交</div>
+      <div class="sureButton" @click="sureButton">提交</div>
   </div>
 </template>
 
@@ -69,29 +69,72 @@ export default {
   data() {
     return {
       list1: ['男', '女'],
-      list2: ['60前', '70后','80后','90后','00后'],
+      list2: ['69前', '70后','80后','90后','00后'],
       list3: ['初级', '中级','高级','专业'],
       list4: ['军人', '创业','学生','事业编','技术流','生产人',
               '运输人', '自由职业','商业服务人'],
       currSexIndex: '',
       currBirthdayIndex: '',
       currLevelIndex: '',
-      currWorkIndex: ''
+      currWorkIndex: '',
+      sexValue: '',
+      birthdayValue: '',
+      levelValue: '',
+      workValue: '',
     }
   },
   methods: {
     changeSex(item,index) {
       this.currSexIndex = index
+      this.sexValue = item
     },
     changeBirthday(item,index) {
       this.currBirthdayIndex = index
+      this.birthdayValue = item
     },
     changeLevel(item,index) {
       this.currLevelIndex = index
+      this.levelValue = item
     },
     changeWork(item,index) {
       this.currWorkIndex = index
+      this.workValue = item
     },
+    sureButton() {
+      if(this.sexValue == '') {
+        this.$toast({
+          message: '请选择性别！',
+          duration: 2000
+        });
+      }else if(this.birthdayValue == '') {
+        this.$toast({
+          message: '请选择年龄段！',
+          duration: 2000
+        });
+      }else if(this.levelValue == '') {
+        this.$toast({
+          message: '请选择水平！',
+          duration: 2000
+        });
+      }else if(this.workValue == '') {
+        this.$toast({
+          message: '请选择职业！',
+          duration: 2000
+        });
+      }else{
+        const params = {
+          sexValue: this.sexValue,
+          birthdayValue: this.birthdayValue,
+          levelValue: this.levelValue,
+          workValue: this.workValue
+        }
+        window.sessionStorage.setItem('registerInfo',JSON.stringify(params))
+        this.$router.replace({
+          path: '/home/register/registerLabel',
+          name: 'RegisterLabel',
+        })
+      }
+    }
   }
 }
 </script>

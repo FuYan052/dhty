@@ -154,9 +154,12 @@ export default {
               message: '注册成功！',
               duration: 2000
             });
-            this.$router.push({
-              path: '/home/login'
+            this.$router.replace(path)({
+              path: '/home/register/registerUserInfo'
             })
+            // this.$router.push({
+            //   path: '/home/login'
+            // })
           }
         })
       }else{

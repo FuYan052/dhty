@@ -1,19 +1,19 @@
 <template>
-  <div class="organization">
+  <div class="organization" v-title data-title="组织活动">
     <ul>
-      <li>
+      <li @click="showPicker1">
         <span class="title">运动种类</span>
-        <input type="text" class="inputValue" placeholder="填写种类" v-model="type.name" @click="showPicker1"/>
+        <input type="text" class="inputValue" placeholder="填写种类" v-model="type.name"/>
         <span class="el-icon-arrow-right"></span>
       </li>
-      <li>
+      <li @click="showPicker2">
         <span class="title">所属群组</span>
-        <input type="text" class="inputValue" placeholder="填写群组" />
+        <input type="text" class="inputValue" placeholder="填写群组" v-model="groupType.name">
         <span class="el-icon-arrow-right"></span>
       </li>
-      <li>
+      <li @click="showDate">
         <span class="title">日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期</span>
-        <input type="text" class="inputValue" placeholder="填写日期"/>
+        <input type="text" class="inputValue" v-model="dateValue" placeholder="填写日期"/>
         <span class="el-icon-arrow-right"></span>
       </li>
       <li class="timeLi">
@@ -27,9 +27,9 @@
       </li>
       <li>
         <span class="title">人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数</span>
-        <input type="text" class="inputValue" placeholder="填写人数"/>
+        <input type="text" class="inputValue" v-model="peopleNum" placeholder="填写人数"/>
         <div class="numberInputBox">
-          <span class="btn desc">-</span><input type="number" name="" id=""/><span class="btn add">+</span>
+          <span class="btn desc" @click="descBtn">-</span><input type="number" v-model="peopleNum" name="" id=""/><span class="btn add" @click="addBtn">+</span>
         </div>
       </li>
       <li>
@@ -76,9 +76,19 @@
         @change="currChange">
         <div class="picker-toolbar-title">
           <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
-          <div class="usi-btn-sure"  @click="sureType">确定</div>
+          <div class="usi-btn-sure"  @click="currSure">确定</div>
         </div>
       </mt-picker>
+      <mt-datetime-picker
+        ref="datePicker"
+        type="date"
+        :startDate="startDate"
+        year-format="{value} 年"
+        month-format="{value} 月"
+        date-format="{value} 日"
+        v-model="dateValue"
+        @confirm="handleConfirmDate">
+      </mt-datetime-picker>
     </mt-popup>
   </div>
 </template>
@@ -104,7 +114,13 @@ export default {
         id: '',
         name: ''
       },
-      currChange: function(){}
+      datePickerValue: '',  //日期选择
+      startDate: '',  //可选日期当天以后
+      dateValue: '',  //选择日期
+      currChange: function(){},
+      currSure: function() {},
+      peopleNum: '',  //人数
+
     }
   },
   computed: {
@@ -151,6 +167,8 @@ export default {
         this.groupSlots = resp.data
       }
     })
+    //当天日期
+    this.startDate = new Date()  
   },
   methods: {
     // 运动类型
@@ -159,6 +177,7 @@ export default {
       this.popupVisible = true
       this.currSlots = this.slotsType
       this.currChange = this.onChangeType
+      this.currSure = this.sureType
     },
     onChangeType(picker, values) {
       this.type.name = values[0].name
@@ -169,25 +188,76 @@ export default {
     },
     sureType() {
       this.popupVisible = !this.popupVisible
+      this.isShowPicker = false 
       if(this.type.name == '') {
         this.type.name = this.typeValues[0].name
         this.type.skey = this.typeValues[0].skey
       }
     },
     // // 所属群组
-    // showPicker2() {
-    //   this.isShowPicker = true
-    //   this.popupVisible = true
-    //   this.currSlots = this.slotsGroup
-    //   this.currChange = this.onChangeGroup
-    // },
-    // onChangeGroup(picker, values) {
-    //   this.groupType = values[0]
-    //   // console.log(this.groupType)
-    //   if (values[0] > values[1]) {
-    //     picker.setSlotValue(1, values[0]);
-    //   }
-    // }
+    showPicker2() {
+      this.isShowPicker = true
+      this.popupVisible = true
+      this.currSlots = this.slotsGroup
+      this.currChange = this.onChangeGroup
+      this.currSure = this.sureGroup
+    },
+    onChangeGroup(picker, values) {
+      console.log("改变")
+      this.groupType = values[0]
+      console.log(this.groupType)
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
+      }
+    },
+    sureGroup() {
+      this.popupVisible = !this.popupVisible
+      if(this.groupType.name == '') {
+        this.groupType.name = this.groupSlots[0].name
+        this.groupType.skey = this.groupSlots[0].skey
+      }
+    },
+    // 日期选择
+    showDate() {
+      this.popupVisible = true
+      this.$refs.datePicker.open();
+    },
+    handleConfirmDate(v) {
+      // console.log(v)
+      this.dateValue = this.formatDate(v)
+      // this.formatDateValue = this.dateValue
+      this.popupVisible = !this.popupVisible
+      console.log(this.dateValue)
+      // window.sessionStorage.setItem('formatDateValue',this.formatDateValue)
+    },
+    // 格式化选择的日期
+    formatDate(Time) {
+      var date = Time;
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h = h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      return y + '-' + m + '-' + d;
+      // return y + '年' + m + '月' + d+ '日';
+    },
+    // 人数减按钮
+    descBtn() {
+      if(this.peopleNum >= 0) {
+        this.peopleNum--
+      }else{
+        this.peopleNu = 0
+      }
+    },
+    // 人数加按钮
+    addBtn() {
+      this.peopleNum++
+    },
   },
 }
 </script>

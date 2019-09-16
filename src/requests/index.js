@@ -4,8 +4,8 @@ import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://2kha7p.natappfree.cc/',
+  // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://w8pmt9.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -13,16 +13,12 @@ const ajax = axios.create({
 
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://2kha7p.natappfree.cc/',
+  // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://w8pmt9.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
   },
-})
-
-const ajax3 = axios.create({
-
 })
 
 // request拦截器
@@ -117,6 +113,11 @@ export const postLoginForCode = (params) => {
 export const postForgetPassword = (params) => {
   return ajax.post(`/v1/rest/login/resetPassword?phone=${params.phone}&authCode=${params.code}&passWord=${params.passWord}`)
 }
+// 注册查询原始标签
+export const postInitLebal = (params) => {
+  return ajax.post(`/v1/rest/public/findSysLabel`)
+}
+
 
 // 场地
 // 场地详情  ok
@@ -270,7 +271,10 @@ export const getPopularize = (params) => {
 export const getWXLogin = (params) => {
   return ajax.get(`/v1/rest/login/getSessionkey?code=${params}`)
 }
-
+//绑定手机号
+export const postBindPhone = (params) => {
+  return ajax2.post('/v1/rest/login/wxRegist', params)
+}
 // 微信
 // export const getWXUserInfo = (params) => {
 //   return ajax3.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=${params.grant_type}l&appid=${params.appid}&secret=${params.secret}`)

@@ -1,28 +1,29 @@
 <template>
   <!-- 推广加群 -->
   <div class="popularize" v-title data-title="扫码进群">
-    <div class="imgBox">
-      <el-carousel 
-        trigger="click" 
-        height="150px"
-        :autoplay="false"
-        indicator-position="outside"
-        @change='changeGroup'
-        >
-        <el-carousel-item v-for="(item,index) in groupList" :key="index">
-          <h3 class="small">
-            <img ref="codeImg" id="img" :src="item.path" alt="">
-          </h3>
-        </el-carousel-item>
-    </el-carousel>
+    <div class="bgBox">
+      <div class="info">
+          <img :src="groupInfo.logo" alt="">
+          <span class="name">{{groupInfo.name}}</span>
+      </div>
+      <div class="imgBox">
+        <el-carousel 
+          trigger="click" 
+          height="150px"
+          :autoplay="false"
+          indicator-position="outside"
+          @change='changeGroup'
+          >
+          <el-carousel-item v-for="(item,index) in groupList" :key="index">
+            <h3 class="small">
+              <img ref="codeImg" id="img" :src="item.path" alt="">
+            </h3>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <p>长按二维码保存为图片</p>
     </div>
-    <div class="info">
-      <p>
-        <span class="img"><img :src="groupInfo.logo" alt=""></span>
-        <span class="name">{{groupInfo.name}}</span>
-      </p>
-    </div>
-    <div class="saveBtn"></div>
+    <!-- <div class="saveBtn"></div> -->
   </div>
 </template>
 
@@ -32,7 +33,6 @@ export default {
   name: 'Popularize',
   data() {
     return {
-      imgUrl: require("../../assets/code.png"),
       downloadImg: '',
       groupList: '',
       groupIndex: '',
@@ -78,52 +78,62 @@ export default {
   .popularize{
     width: 100%;
     min-height: 100vh;
-    background: url("../../assets/saomaBg.jpg") no-repeat center;
+    background: url("../../assets/tuiguang.jpg") no-repeat center;
     background-size: cover;
     overflow: hidden;
     position: relative;
-    .imgBox{
-      width: 420px;
-      height: 420px;
-      padding: 0 20px;
-      background: #fff;
+    .bgBox{
+      width: 561px;
+      height: 742px;
+      // border: 1px solid red;
       margin: 0 auto;
-      margin-top: 340px;
+      margin-top: 265px;
+      padding: 0 78px;
+      // border: 1px solid red;
+      background: rgba(0,0,0,0.6);
+      border-radius: 10px;
       overflow: hidden;
-      img{
-        width: 380px;
-        height: 380px;
-      }
-    }
-    .info{
-      width: 100%;
-      height: 80px;
-      margin: 0 auto;
-      margin-top: 130px;
-      padding-left: 7%;
-      p{
+      .info{
         width: 100%;
-        font-size: 0;
-        text-align: center;
-        padding-right: 10%;
-        color: #fff;
-        .img{
-          width: 80px;
-          height: 80px;
-          display: inline-block;
-          margin-right: 15px;
-          img{
-            width: 80px;
-            height: 80px;
-            float: left;
-            border-radius: 50%;
-          }
+        height: 100px;
+        margin-top: 47px;
+        img{
+          width: 98px;
+          height: 98px;
+          float: left;
+          border-radius: 50%;
         }
         .name{
+          display: inline-block;
+          width: 272px;
+          margin-left: 20px;
           font-size: 30px;
-          line-height: 80px;
-          vertical-align: top;
+          line-height: 100px;
+          color: #fff;
+          font-size: 33px;
         }
+      }
+      .imgBox{
+        width: 400px;
+        height: 400px;
+        // border: 1px solid red;
+        // padding: 0 20px;
+        background: #fff;
+        // margin: 0 auto;
+        margin-top: 60px;
+        overflow: hidden;
+        img{
+          width: 400px;
+          height: 400px;
+        }
+      }
+      p{
+        font-size: 32px;
+        line-height: 32px;
+        color: #fff;
+        padding-left: 13px;
+        text-align: center;
+        margin-top: 45px;
       }
     }
     .saveBtn{
@@ -147,8 +157,8 @@ export default {
     margin: 0;
   }
   .el-carousel__container{
-    margin-top: 20px;
-    height: 380px !important;
+    /* margin-top: 20px; */
+    height: 400px !important;
   }
   .el-carousel__item:nth-child(2n) {
     background-color: #99a9bf;
@@ -161,27 +171,31 @@ export default {
     display: none;
   }
   .el-carousel__button{
-    width: 25px;
-    height: 25px;
+    width: 23px;
+    height: 23px;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: rgba(0,0,0);
+    /* background-color: #000; */
   }
   .el-carousel__indicators{
     width: 100%;
     height: 60px;
     position: absolute; 
-    top: 800px;
+    top: 1060px;
     left: 0;
     bottom: 0;
   }
   .el-carousel__indicator{
     margin: 0 25px;
   }
+  .el-carousel__indicator.is-active button{
+    opacity: 0.6;
+  }
   .el-carousel__indicators--outside button{
-    background: #fff;
-    opacity: 0.3;
+    background: #000;
+    opacity: 0.4;
   }
   .el-carousel__indicators--outside .el-carousel__indicator:hover button{
-    opacity: 1;
+    opacity: 0.7;
   }
 </style>
