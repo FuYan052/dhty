@@ -34,7 +34,12 @@ export default {
   created() {
     // 上一页选择的信息
     this.lastSelect = JSON.parse(window.sessionStorage.getItem('registerInfo')) 
-    // console.log(this.lastSelect)
+    console.log(this.lastSelect)
+    if(this.lastSelect.sexValue == '男') {
+      this.isMale = true
+    }else{
+      this.isMale = false
+    }
     this.$http.postInitLebal().then(resp => {
       console.log(resp)
       this.labelList = resp.data
@@ -54,29 +59,63 @@ export default {
     // 跳过
     handleSkipBtn() {
       const params = {
-        userId: '',
+        userId: window.localStorage.getItem('userId'),
         sex: this.lastSelect.sexValue,
-        birthday: this.lastSelect.birthdayValue,
-        level1: this.lastSelect.levelValue,
-        work: this.lastSelect.work,
+        ageGroup: this.lastSelect.birthdayValue,
+        occupationLevel: this.lastSelect.levelValue,
+        occupation: this.lastSelect.workValue,
       }
-      // this.$http.handle().then(resp => {
-      //   console.log(resp)
-      // })
+      // console.log(params)
+      this.$http.postRegisterInfo(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          if(window.sessionStorage.getItem('isRegister')) {
+            this.$router.replace({
+              path: '/home/login'
+            })
+            window.sessionStorage.removeItem('isRegister')
+          }else{
+            this.$router.replace({
+              path: window.sessionStorage.getItem('routerPath'),
+              name: window.sessionStorage.getItem('routerPathName'),
+                params: {
+                  _userId: window.localStorage.getItem('userId')
+                }
+            })
+          }
+        }
+      })
     },
     // 选择标签后提交
     submit() {
       const params = {
-        userId: '',
+        userId: window.localStorage.getItem('userId'),
         sex: this.lastSelect.sexValue,
-        birthday: this.lastSelect.birthdayValue,
-        level1: this.lastSelect.levelValue,
-        work: this.lastSelect.work,
-        lebelIds: this.selectedListIds
+        ageGroup: this.lastSelect.birthdayValue,
+        occupationLevel: this.lastSelect.levelValue,
+        occupation: this.lastSelect.workValue,
+        labelId: this.selectedListIds.join(',')
       }
-      // this.$http.handle().then(resp => {
-      //   console.log(resp)
-      // })
+      // console.log(params)
+      this.$http.postRegisterInfo(params).then(resp => {
+        console.log(resp)
+        if(resp.status == 200) {
+          if(window.sessionStorage.getItem('isRegister')) {
+            this.$router.replace({
+              path: '/home/login'
+            })
+            window.sessionStorage.removeItem('isRegister')
+          }else{
+            this.$router.replace({
+              path: window.sessionStorage.getItem('routerPath'),
+              name: window.sessionStorage.getItem('routerPathName'),
+                params: {
+                  _userId: window.localStorage.getItem('userId')
+                }
+            })
+          }
+        }
+      })
     }
   }
 }
@@ -105,6 +144,7 @@ export default {
     }
     .topBgFemale{
       background: url("../assets/female.jpg") no-repeat center;
+      background-size: cover;
     }
     .title1{
       font-size: 43px;

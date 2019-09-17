@@ -4,8 +4,8 @@ import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://w8pmt9.natappfree.cc/',
+  baseURL: 'https://laihu.baogongxia.com/',
+  // baseURL: 'http://majhfz.natappfree.cc',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -13,8 +13,8 @@ const ajax = axios.create({
 
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://w8pmt9.natappfree.cc/',
+  baseURL: 'https://laihu.baogongxia.com/',
+  // baseURL: 'http://majhfz.natappfree.cc',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -116,6 +116,10 @@ export const postForgetPassword = (params) => {
 // 注册查询原始标签
 export const postInitLebal = (params) => {
   return ajax.post(`/v1/rest/public/findSysLabel`)
+}
+// 提交注册信息
+export const postRegisterInfo = (params) => {
+  return ajax2.post(`/v1/rest/login/registerLabelSave`,params)
 }
 
 

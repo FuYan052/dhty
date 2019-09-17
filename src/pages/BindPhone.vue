@@ -1,5 +1,5 @@
 <template>
-  <div class="bindPhone" v-title data-title="绑定手机号">
+  <div class="bindPhone" v-title data-title="微信登录" v-show="isShowPage">
     <div class="bindPhoneBox">
       <ul>
         <li>
@@ -42,6 +42,7 @@ export default {
       }
     };
     return {
+      isShowPage: false,
       ckeckCode: '',
       ruleForm: {
         phoneNum: '',
@@ -82,23 +83,50 @@ export default {
     }
     // console.log(requertUrl)
     this.code = requertUrl.code
-    const toPath = window.sessionStorage.getItem('routerPath')
+    const _toPath = window.sessionStorage.getItem('routerPath')
+    const _toPathName = window.sessionStorage.getItem('routerPathName')
     // console.log(decodeURIComponent(requertUrl.state))
     this.$http.getWXLogin(this.code).then(resp => {
       console.log(resp)
       this.wxUserInfowxUserInfo = resp.data
-      if(resp.data.phone !== null) {
-        this.$router.replace({
-          path: this.toPath
-        })
-        window.localStorage.setItem('userId', resp.data.id)
+      if(resp.data.phone === null) {
+        this.isShowPage = true
+      }else{
+        console.log("已注册")
+        window.localStorage.setItem('userId', resp.data.userId)
         window.localStorage.setItem('userPhone', resp.data.phone)
         window.localStorage.setItem('ty-token', resp.data.token)
         this.changeLoginStatus(true)
-        this.changeUserId(resp.data.id)
+        this.changeUserId(resp.data.userId)
         this.changeUserPhone(resp.data.phone)
         this.changeToken(resp.data.token)
+        this.$router.replace({
+          path: _toPath,
+          name: _toPathName,
+          params: {
+            _userId: resp.data.userId
+          }
+        })
       }
+      // if(resp.data.phone !== '') {
+      //   console.log("已注册")
+      //   window.localStorage.setItem('userId', resp.data.userId)
+      //   window.localStorage.setItem('userPhone', resp.data.phone)
+      //   window.localStorage.setItem('ty-token', resp.data.token)
+      //   this.changeLoginStatus(true)
+      //   this.changeUserId(resp.data.userId)
+      //   this.changeUserPhone(resp.data.phone)
+      //   this.changeToken(resp.data.token)
+      //   this.$router.replace({
+      //     path: _toPath,
+      //     name: _toPathName,
+      //     params: {
+      //       _userId: resp.data.userId
+      //     }
+      //   })
+      // }else{
+      //   this.isShowPage = true
+      // }
     })
   },
   mounted() {
@@ -165,13 +193,13 @@ export default {
             this.changeUserId(resp.data.userId)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
-            this.$toast({
-              message: '登录成功！',
-              duration: 2000
-            });
+            // this.$toast({
+            //   message: '登录成功！',
+            //   duration: 2000
+            // });
             // 登录成功后跳转回之前要去的页面
-            const toPath = window.sessionStorage.getItem('routerPath')
-            const toPathName = window.sessionStorage.getItem('routerPathName')
+            // const toPath = window.sessionStorage.getItem('routerPath')
+            // const toPathName = window.sessionStorage.getItem('routerPathName')
             this.$messagebox({
               title: '提示',
               message: `为了方便您下次登录，我们为您设置的初始密码为手机号后六位:${resp.data.initPassword}！`,
@@ -179,11 +207,7 @@ export default {
               confirmButtonText: '知道了'
             });
             this.$router.replace({
-              path: toPath,
-              name: toPathName,
-              params: {
-                _userId: resp.data.userId
-              }
+              path: '/home/register/registerUserInfo',
             })
           }
         })

@@ -144,18 +144,18 @@ export default {
           const _this = this
           this.timer2 = setTimeout(() => {
             _this.isDisabled = false
-            console.log(_this.timer2)
             clearTimeout(_this.timer2)
             this.timer2 = null
-            console.log(_this.timer2)
           },5000)
           if(resp.status == 200) {
             this.$toast({
               message: '注册成功！',
               duration: 2000
             });
-            this.$router.replace(path)({
-              path: '/home/register/registerUserInfo'
+            window.sessionStorage.setItem('isRegister',true)
+            window.localStorage.setItem('userId',resp.data.id)
+            this.$router.replace({
+              path: '/home/register/registerUserInfo',
             })
             // this.$router.push({
             //   path: '/home/login'

@@ -108,11 +108,17 @@ export default new Router({
       path: '/childrenActivities',  //儿童活动
       name: 'ChildrenActivities',
       component: ChildrenActivities,
+      meta: {
+        keepAlive: true 
+      }
     },
     {
       path: '/activityHome',
       name: 'ActivityHome',
       component: ActivityHome,
+      meta: {
+        keepAlive: true 
+      }
     },
     {
       path: '/playground',
@@ -229,7 +235,8 @@ export default new Router({
       name: 'CompleteInfo',
       component: CompleteInfo,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        keepAlive: true
       }
     },
     {
@@ -262,7 +269,8 @@ export default new Router({
       name: 'MyActivities',
       component: MyActivities,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        keepAlive: true 
       }
     },
     // 活动管理

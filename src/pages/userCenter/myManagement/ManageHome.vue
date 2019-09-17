@@ -90,10 +90,10 @@ export default {
     ...mapState(['userId']),
   },
   created() {
-    this._id = this.userId
-    if(this._id == null) {
-      this._id = this.$route.params._userId
-    }
+    this._id = window.localStorage.getItem('userId')
+    // if(this._id == null) {
+    //   this._id = this.$route.params._userId
+    // }
     this.$http.myManagementInfo(this._id).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
@@ -135,7 +135,16 @@ export default {
         })
       }
     }
-  }
+  },
+  // beforeRouteLeave(to, from, next)  {
+  //   if(to.path == '/userCenter/myData/completeInfo') {
+  //     to.meta.keepAlive = false
+  //     next()
+  //   }else{
+  //     to.meta.keepAlive = true
+  //     next()
+  //   }
+  // },
 }
 </script>
 

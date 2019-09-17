@@ -83,6 +83,9 @@ export default {
       workValue: '',
     }
   },
+  created() {
+    console.log(window.localStorage.getItem('userId'))
+  },
   methods: {
     changeSex(item,index) {
       this.currSexIndex = index

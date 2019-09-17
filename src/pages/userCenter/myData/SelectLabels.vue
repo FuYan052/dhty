@@ -48,9 +48,23 @@ export default {
       let currLab = _Ids[i]
       this.selectedListIds.push(currLab.id)
     }
-
     this.getAllList()
   },
+  // watch: {
+  //   selectedListIds() {
+  //     console.log(this.labelList)
+  //     for(let i=0; i<=this.labelList.length; i++) {
+  //       let _label = this.labelList[i]
+  //       console.log(_label)
+  //       for(let j=0; j<=this.selectedListIds.length; j++) {
+  //         if(JSON.stringify(JSON.parse(_label)).id == this.selectedListIds[j]) {
+  //           this.selectedList.push(i)
+  //         }
+  //       }
+  //     }
+  //     console.log(this.selectedList)
+  //   }
+  // },
   methods: {
     // 获取所有标签
     getAllList() {
@@ -66,7 +80,7 @@ export default {
           this.sliceArr2()
         }
       })
-    },
+    }, 
     sliceArr1() {
       let n = 7
       let len = this.labelList.length
@@ -96,13 +110,14 @@ export default {
     //选择标签
     selected(it,ind) {
       // 选中的标签集合
-      // let selectedIndex = this.selectedList.indexOf(it)
+      // let selectedIndex = this.selectedList.indexOf(it.id)
+      // console.log(selectedIndex)
       // if(selectedIndex >= 0) {
       //   this.selectedList.splice(selectedIndex, 1)
       // }else{
       //   this.selectedList.push(it)
       // }
-
+      // console.log(this.selectedList)
       // 选中的标签id集合
       let selectedIdIndex = this.selectedListIds.indexOf(it.id)
       if(selectedIdIndex >= 0) {
@@ -110,7 +125,20 @@ export default {
       }else{
         this.selectedListIds.push(it.id)
       }
-      // console.log(this.selectedListIds)
+
+      for(let i=0; i<=this.labelList.length; i++) {
+        let currLabel =JSON.parse(JSON.stringify(this.labelList[i])) 
+        // console.log(currLabel)
+        let currIndex = this.selectedListIds.indexOf(currLabel.id)
+        console.log(currIndex)
+        if(currIndex >= 0) {
+          this.selectedList.splice(currIndex, 1)
+        }else{
+          this.selectedList.push(currLabel)
+        }
+      }
+      console.log(this.selectedListIds)
+      console.log(this.selectedList)
     },
     //创建新标签
     showAddBox() {
@@ -121,8 +149,7 @@ export default {
       // 创建并提交后台
       const params = {
         labelName: this.addValue,
-        userId: '250'
-        // userId: this.userId
+        userId: window.localStorage.getItem('userId')
       }
       this.$http.createLabel(params).then(resp => {
         // console.log(resp)
@@ -137,11 +164,18 @@ export default {
           this.getAllList()
         }
       })
-      // this.selectedList = []
     },
     //保存
     saveSelectLabels() {
-      this.$router.push({
+
+      const labelIds = this.selectedListIds.join(',')  //用逗号隔开连成字符串传给后端
+      window.sessionStorage.setItem('labelIds',labelIds)
+      window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
+      const params = {
+        id: window.sessionStorage.getItem('infoId'),
+        labelId: labelIds
+      }
+      this.$router.replace({
         path: '/userCenter/myData/completeInfo',
       })
       // var _labelIds = []
@@ -149,28 +183,6 @@ export default {
       //   let currLab = JSON.parse(JSON.stringify(this.selectedList[i]))
       //   _labelIds.push(currLab.id)
       // }
-      const labelIds = this.selectedListIds.join(',')  //用逗号隔开连成字符串传给后端
-      window.sessionStorage.setItem('labelIds',labelIds)
-      // window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
-      const params = {
-        id: window.sessionStorage.getItem('infoId'),
-        labelId: labelIds
-      }
-      console.log(params)
-      this.$http.completeInfo(params).then(resp => {
-        // console.log(resp)
-        if(resp.status == 200) {
-          // window.sessionStorage.removeItem('address')
-          // window.sessionStorage.removeItem('birthday')
-          // window.sessionStorage.removeItem('height')
-          // window.sessionStorage.removeItem('imgUrl')
-          window.sessionStorage.removeItem('labelIds')
-          // window.sessionStorage.removeItem('labels')
-          // window.sessionStorage.removeItem('nickName')
-          // window.sessionStorage.removeItem('profession')
-          // window.sessionStorage.removeItem('sex')
-        }
-      })
     }
   }
 }

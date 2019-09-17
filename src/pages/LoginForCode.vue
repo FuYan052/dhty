@@ -118,20 +118,32 @@ export default {
             this.changeUserId(resp.data.id)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
-            this.$toast({
-              message: '登录成功！',
-              duration: 2000
-            });
+            // this.$toast({
+            //   message: '登录成功！',
+            //   duration: 2000
+            // });
             // 登录成功后跳转回之前要去的页面
-            const toPath = window.sessionStorage.getItem('routerPath')
-            const toPathName = window.sessionStorage.getItem('routerPathName')
-            this.$router.replace({
-              path: toPath,
-              name: toPathName,
-              params: {
-                _userId: resp.data.id
-              }
-            })
+            if(resp.data.initPassword !== null) {
+              this.$messagebox({
+                title: '提示',
+                message: `为了方便您下次登录，我们为您设置的初始密码为手机号后六位:${resp.data.initPassword}！`,
+                showCancelButton: false,
+                confirmButtonText: '知道了'
+              });
+              this.$router.replace({
+                path: '/home/register/registerUserInfo',
+              })
+            }else{
+              const toPath = window.sessionStorage.getItem('routerPath')
+              const toPathName = window.sessionStorage.getItem('routerPathName')
+              this.$router.replace({
+                path: toPath,
+                name: toPathName,
+                params: {
+                  _userId: resp.data.id
+                }
+              })
+            }
           }
         })
       }else{
@@ -348,5 +360,19 @@ export default {
 .loginForCode input::-webkit-input-placeholder{
   color: #909090;
   font-size: 32px;
+}
+.mint-msgbox{
+  width: 65% !important;
+}
+.mint-msgbox-content{
+  padding: 40px 0;
+}
+.mint-msgbox-message{
+  font-size: 26px;
+  line-height: 36px;
+  color: rgb(48, 47, 47);
+}
+.mint-msgbox-btns{
+  height: 70px;
 }
 </style>

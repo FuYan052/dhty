@@ -34,7 +34,8 @@
           <p>手机登录</p>
           </div>
           <div class="changeType">
-            <img src="../assets/weinxinIcon.png" alt=""  @click="wexinLogin">
+            <img src="../assets/weinxinIcon.png" alt="">
+            <!-- <img src="../assets/weinxinIcon.png" alt=""  @click="wexinLogin"> -->
             <p>微信登录</p>
           </div>
         </div>
@@ -125,10 +126,11 @@ export default {
             this.changeUserId(resp.data.id)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
-            this.$toast({
-              message: '登录成功！',
-              duration: 2000
-            });
+            // this.$toast({
+            //   message: '登录成功！',
+            //   duration: 2000
+            // });
+
             // 登录成功后跳转回之前要去的页面
             const toPath = window.sessionStorage.getItem('routerPath')
             const toPathName = window.sessionStorage.getItem('routerPathName')
@@ -314,11 +316,14 @@ export default {
 }
 .login input:-ms-input-placeholder{
   color: #909090;
+  font-size: 32px;
 }
 .login input::-moz-placeholder{
   color: #909090;
+  font-size: 32px;
 }
 .login input::-webkit-input-placeholder{
   color: #909090;
+  font-size: 32px;
 }
 </style>
