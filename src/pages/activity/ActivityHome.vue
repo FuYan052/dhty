@@ -280,11 +280,17 @@ export default {
       return _dateObj;
     },
     toClub(id) {
-      console.log(id)
-      window.sessionStorage.setItem('groupDetailId',id)
-      this.$router.push({
-        path: `/club/clubInfo/${id}`,
-      })
+      if(id == '1') {
+        this.$toast({
+          message: '这是临时组队哦！',
+          duration: 2000
+        });
+      }else{
+        window.sessionStorage.setItem('groupDetailId',id)
+        this.$router.push({
+          path: `/club/clubInfo/${id}`,
+        })
+      }
     },
     // 去报名
     toSignUp(id) {

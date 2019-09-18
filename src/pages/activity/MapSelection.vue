@@ -130,16 +130,14 @@ export default {
       },
       sure() {
         if(this.selectedPoint !== '') {
-          // console.log(this.selectedPoint)
-          window.sessionStorage.setItem('placeId',this.selectedPoint.id)
-          window.sessionStorage.setItem('placeName',this.selectedPoint.name)
-          
-          // this.$router.push({
-          //   path: '/organization',
-          //   // name: 'Organization',
-          //   // params: this.selectedPoint
-          // })
-          this.$router.go(-1)
+          this.$router.push({
+            path: '/organization',
+            name: 'Organization',
+            params: {
+              placeId: this.selectedPoint.id,
+              placeName : this.selectedPoint.name
+            }
+          })
           
         }else{
           this.$toast({

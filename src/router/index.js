@@ -212,6 +212,9 @@ export default new Router({
       path: '/mapSelection',
       name: 'MapSelection',
       component: MapSelection,
+      meta: {
+        needCacheLast: true  //是否需要缓存上一页
+      }
     },
     // 我的数据
     {
@@ -244,7 +247,8 @@ export default new Router({
       name: 'SelectLabels',
       component: SelectLabels,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        needCacheLast: true  //是否需要缓存上一页
       }
     },
     // 我的管理 
@@ -253,7 +257,8 @@ export default new Router({
       name: 'ManageHome',
       component: ManageHome,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        needCacheLast: false
       }
     },
     {

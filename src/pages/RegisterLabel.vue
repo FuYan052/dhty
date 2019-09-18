@@ -1,21 +1,25 @@
 <template>
   <div class="registerLabel" v-title data-title="注册">
     <div class="topBg topBgMale" v-show="isMale">
-      <div class="skipBtn" @click="handleSkipBtn">跳过 ></div>
+      <div class="skipBtn" @click="handleSkipBtn">跳过<span class="el-icon-arrow-right"></span></div>
     </div>
     <div class="topBg topBgFemale" v-show="!isMale">
-      <div class="skipBtn" @click="handleSkipBtn">跳过 ></div>
+      <div class="skipBtn" @click="handleSkipBtn">跳过 <span class="el-icon-arrow-right"></span></div>
     </div>
     <p class="title1">选择你的形象标签</p>
     <p class="title2">选择越多推荐的信息越精准</p>
-    <ul class="labelBox">
-      <li 
-        v-for="(item,index) in labelList" 
-        :key="index"
-        @click="selected(item,index)"
-        :class="{selected:selectedListIds.indexOf(item.id)>=0}"
-        >{{item.name}}</li>
-    </ul>
+    <div class="tabbox">
+      <table>
+        <tr>
+          <td 
+            v-for="(item,index) in labelList" 
+            :key="index" 
+            @click="selected(item,index)"
+            :class="{selected:selectedListIds.indexOf(item.id)>=0}"
+            >{{item.name}}</td>
+        </tr>
+      </table>
+    </div>
     <p class="saveBtn" @click="submit">我选好了</p>
   </div>
 </template>
@@ -140,6 +144,12 @@ export default {
         color: #9b999c;
         margin-top: 36px;
         margin-right: 30px;
+        overflow: hidden;
+        span{
+          display: inline-block;
+          font-size: 28px;
+          line-height: 45px;
+        }
       }
     }
     .topBgFemale{
@@ -160,36 +170,45 @@ export default {
       text-align: center;
       color: #4c4c4c;
     }
-    .labelBox{
+    .tabbox{
       width: 540px;
       height: 502px;
+      // border: 1px solid red;
       margin: 0 auto;
       margin-top: 65px;
       font-size: 0;
       overflow: auto;
-      li{
-        width: 218px;
-        height: 68px;
-        font-size: 32px;
-        display: inline-block;
-        line-height: 66px;
-        border-radius: 40px;
-        color: #585858;
-        text-align: center;
-        border: 1px solid #cacaca;
-        margin-bottom: 25px;
-        margin-left: 20px;
-        // vertical-align: top;
-      }
-      li:nth-of-type(even){
-        margin-left: 64px;
-      }
-      .selected{
-        background: #ffb400;
-        border: 1px solid #ffb400;
-        line-height: 66px;
-        border: none;
-        color: #fff;
+      table{
+        width: 100%;
+        font-size: 0;
+        tr{
+          width: 100%;
+          td{
+            width: 218px;
+            height: 66px;
+            font-size: 32px;
+            display: inline-block;
+            line-height: 60px;
+            border-radius: 40px;
+            color: #585858;
+            text-align: center;
+            border: 1px solid #cacaca;
+            margin-bottom: 25px;
+            margin-left: 20px;
+          }
+          td:nth-of-type(even){
+            margin-left: 64px;
+          }
+          .selected{
+            height: 66px;
+            background: #ffb400;
+            border: 1px solid #ffb400;
+            line-height: 64px;
+            border: none;
+            color: #fff;
+            margin-bottom: 25px;
+          }
+        }
       }
     }
     .saveBtn{

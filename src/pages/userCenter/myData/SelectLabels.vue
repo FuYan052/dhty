@@ -41,30 +41,10 @@ export default {
   },
   created() {
     // 从完善信息页传过来的标签集合
-    
-    var _Ids =JSON.parse(window.sessionStorage.getItem('labels'))
-    this.selectedList = _Ids
-    for(let i=0; i<_Ids.length; i++) {
-      let currLab = _Ids[i]
-      this.selectedListIds.push(currLab.id)
-    }
+    this.selectedListIds = new Array(window.sessionStorage.getItem('labelsIds')) 
+    console.log(this.selectedListIds)
     this.getAllList()
   },
-  // watch: {
-  //   selectedListIds() {
-  //     console.log(this.labelList)
-  //     for(let i=0; i<=this.labelList.length; i++) {
-  //       let _label = this.labelList[i]
-  //       console.log(_label)
-  //       for(let j=0; j<=this.selectedListIds.length; j++) {
-  //         if(JSON.stringify(JSON.parse(_label)).id == this.selectedListIds[j]) {
-  //           this.selectedList.push(i)
-  //         }
-  //       }
-  //     }
-  //     console.log(this.selectedList)
-  //   }
-  // },
   methods: {
     // 获取所有标签
     getAllList() {
@@ -109,15 +89,7 @@ export default {
     },
     //选择标签
     selected(it,ind) {
-      // 选中的标签集合
-      // let selectedIndex = this.selectedList.indexOf(it.id)
-      // console.log(selectedIndex)
-      // if(selectedIndex >= 0) {
-      //   this.selectedList.splice(selectedIndex, 1)
-      // }else{
-      //   this.selectedList.push(it)
-      // }
-      // console.log(this.selectedList)
+      console.log(this.selectedListIds)
       // 选中的标签id集合
       let selectedIdIndex = this.selectedListIds.indexOf(it.id)
       if(selectedIdIndex >= 0) {
@@ -126,19 +98,9 @@ export default {
         this.selectedListIds.push(it.id)
       }
 
-      for(let i=0; i<=this.labelList.length; i++) {
-        let currLabel =JSON.parse(JSON.stringify(this.labelList[i])) 
-        // console.log(currLabel)
-        let currIndex = this.selectedListIds.indexOf(currLabel.id)
-        console.log(currIndex)
-        if(currIndex >= 0) {
-          this.selectedList.splice(currIndex, 1)
-        }else{
-          this.selectedList.push(currLabel)
-        }
-      }
-      console.log(this.selectedListIds)
-      console.log(this.selectedList)
+      this.selectedList = this.labelList.filter(item => {
+        return this.selectedListIds.includes(item.id)
+      })  
     },
     //创建新标签
     showAddBox() {
@@ -155,10 +117,11 @@ export default {
         // console.log(resp)
         if(resp.status == 200) {
           this.isShow = false
-          this.$toast({
-            message: '创建成功！',
-            duration: 2000
-          });
+          // this.$toast({
+          //   message: '创建成功！',
+          //   duration: 2000
+          // });
+          this.addValue = ''
         }
         if(!this.isShow) {  //创建标签成功之后获取新的标签列表
           this.getAllList()
@@ -167,22 +130,20 @@ export default {
     },
     //保存
     saveSelectLabels() {
-
+      window.sessionStorage.removeItem('labelsIds')
+      // window.sessionStorage.setItem('labelIds',labelIds)
+      // window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
       const labelIds = this.selectedListIds.join(',')  //用逗号隔开连成字符串传给后端
-      window.sessionStorage.setItem('labelIds',labelIds)
-      window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
       const params = {
         id: window.sessionStorage.getItem('infoId'),
-        labelId: labelIds
+        labelId: labelIds,
+        selectedLabels: this.selectedList
       }
       this.$router.replace({
         path: '/userCenter/myData/completeInfo',
+        name: 'CompleteInfo',
+        params: params
       })
-      // var _labelIds = []
-      // for(let i=0; i<this.selectedList.length; i++) {
-      //   let currLab = JSON.parse(JSON.stringify(this.selectedList[i]))
-      //   _labelIds.push(currLab.id)
-      // }
     }
   }
 }

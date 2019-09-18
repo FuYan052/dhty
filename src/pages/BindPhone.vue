@@ -220,7 +220,7 @@ export default {
         }
         else if(!this.isChecked) {
           this.$toast({
-            message: '请阅读来虎用户协议！',
+            message: '未同意来虎用户协议！',
             duration: 2000
           });
         }
@@ -355,7 +355,7 @@ export default {
     }
   }
 </style>
-<style>
+<style scpoed>
 .bindPhone .el-input__inner{
   font-size: 32px;
   height: 80px;

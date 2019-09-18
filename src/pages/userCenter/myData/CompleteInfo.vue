@@ -3,7 +3,8 @@
     <!-- 完善个人信息 -->
     <div class="completeInfo" v-title data-title="基本信息">
       <div class="touxiang">
-        <span class="text">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像</span>
+        <!-- <span class="text">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像</span> -->
+        <span class="text">头像</span>
         <span class="el-icon-arrow-right"></span>
         <el-upload
           class="avatar-uploader"
@@ -19,33 +20,40 @@
       </div>
       <ul>
         <li @click="showInput">
-          <span class="titleText">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span>
+          <!-- <span class="titleText">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span> -->
+          <span class="titleText">昵称</span>
           <span class="right">{{inputNickNameValue}}<i class="el-icon-arrow-right"></i></span>
           <el-input v-model="inputNickName" @blur="blurInputName" v-show="isShowInputName"></el-input>
         </li>
         <li @click="showSexPicker">
-          性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别
+          性别
+          <!-- 性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别 -->
           <span class="right">{{sexValue}}<i class="el-icon-arrow-right"></i></span>
         </li>
         <li @click="showHeightPicker">
-          身&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高
+          身高
+          <!-- 身&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高 -->
           <span class="right">{{heightValue}}<i class="el-icon-arrow-right"></i></span>
         </li>
         <li @click="showBirthdayPicker">
-          生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日
+          生日
+          <!-- 生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日 -->
           <span class="right">{{birthdayValue}}<i class="el-icon-arrow-right"></i></span>
         </li>
         <li >
-          年&nbsp;龄&nbsp;段
+          年龄段
+          <!-- 年&nbsp;龄&nbsp;段 -->
           <span class="right">{{birthRangeValue}}<i class="el-icon-arrow-right"></i></span>
         </li>
         <li @click="showLevl">
-          级&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别
+          级别
+          <!-- 级&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别 -->
 
           <span class="right">{{levelValue}}<i class="el-icon-arrow-right"></i></span>
         </li>
         <li @click="showprofessionPicker">
-          职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业
+          职业
+          <!-- 职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业 -->
           <span class="right">{{professionValue}}<i class="el-icon-arrow-right"></i></span>
         </li>
         <li @click="showLocation">
@@ -54,10 +62,11 @@
         </li>
       </ul>
       <div class="label">
-        <p>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签</p>
+        <p>标签</p>
+        <!-- <p>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签</p> -->
         <div class="itemBox">
           <div class="addBtn" @click="selectLabel"><span class="el-icon-plus"></span></div>
-          <div class="itemLabel" v-for="(item,index) in showlabelList" :key="index">
+          <div class="itemLabel" v-for="(item,index) in selectedList" :key="index">
             {{item.name}}
           </div>
         </div>
@@ -95,7 +104,8 @@
           month-format="{value} 月"
           date-format="{value} 日"
           @confirm="handleConfirm"
-          v-model="birthday">
+          v-model="birthday"
+          >
         </mt-datetime-picker>
       </mt-popup>
     </div>
@@ -208,13 +218,9 @@ export default {
       ],
       showToolbar: true,
       popupVisible: false,
-      showlabelList: [],
-      labelsId: [],
+      selectedLabels: [],
+      labelsId: '',
       infoId: '',  //个人信息id,传给后端做标识
-
-      labelList: [],  //请求回来的一维数组
-      resultList1: [], 
-      resultList2: [], //变成二维数组渲染,用于渲染
       selectedList: [],
       selectedListIds: [],
       isShow: false,
@@ -240,24 +246,7 @@ export default {
       this.addressSlots[0].defaultIndex = 0
     })
   },
-  beforeRouteEnter(to, from, next){
-    if(from.path == '/userCenter/manageHome') {
-      to.meta.keepAlive = false
-      next()
-    }else{
-      to.meta.keepAlive = true
-      next()
-    }
-  },
-  beforeRouteLeave(to, from, next)  {
-    if(to.path == '/userCenter/manageHome') {
-      from.meta.keepAlive = false
-      next()
-    }else{
-      from.meta.keepAlive = true
-      next()
-    }
-  },
+
   watch: {
     myAddressPrivince(oldval,newval){  //省数据变化后，更新市的显示数据
       this.areapicker.setSlotValues(2,this.mycityList);
@@ -274,11 +263,19 @@ export default {
     },
     showlabelList() {
       return JSON.parse(window.sessionStorage.getItem('labels'))
-    } 
+    },
+
+    $route(to, from) {
+      if(from.name == 'SelectLabels') {
+        console.log(this.$route)
+        this.labelsId = this.$route.params.placeName || ''
+        this.selectedLabels = this.$route.params.selectedLabels || []
+      }
+    },
   },
   methods: {
     getInfo() {
-      this.showlabelList = []
+      this.selectedList = []
       this.selectedListIds = []
       // 获取信息
       this.$http.findPersonalInformation(this._id).then(resp => {
@@ -291,23 +288,48 @@ export default {
           if(resp.data.height !== null) {
             this.heightValue = resp.data.height + 'cm'
           }else{
-            this.heightValue = resp.data.height
+            this.heightValue = '-请选择-'
           }
           this.birthdayValue = resp.data.birthday
+          if(resp.data.birthday !== null) {
+            this.birthdayValue = resp.data.birthday
+          }else{
+            this.birthdayValue = '-请选择-'
+            console.log(this.birthdayValue)
+          }
           this.birthRangeValue = resp.data.ageGroup
           this.levelValue = resp.data.occupationLevel
           this.professionValue = resp.data.occupation
           this.addressValue = resp.data.region
-          this.showlabelList = resp.data.labelVoList
-
+          if(resp.data.region !== null) {
+            this.addressValue = resp.data.region
+          }else{
+            this.addressValue = '请选择'
+          }
           this.selectedList = resp.data.labelVoList
           var _Ids = resp.data.labelVoList
           for(let i=0; i<_Ids.length; i++) {
             let currLab = _Ids[i]
             this.selectedListIds.push(currLab.id)
           }
+          const ids = this.selectedListIds
+          window.sessionStorage.setItem('labelsIds',ids)
           // this.labelsId = this.selectedListIds
           this.labelsId = this.selectedListIds.join(',')
+          
+          // 计算年龄段
+          if(resp.data.ageGroup === null) {
+            const birthYear = new Date(resp.data.birthday).getFullYear().toString()
+            if(new Date(resp.data.birthday).getFullYear() < 1960) {
+              this.birthRangeValue = '60前'
+            }else if(new Date(resp.data.birthday).getFullYear() > 2000) {
+              this.birthRangeValue = '00后'
+            }else{
+              this.birthRangeValue = birthYear.substring(2,3) + '0后'
+            }
+          }else{
+            this.birthdayValue = resp.data.birthday
+          }
         }
       })
     },
@@ -368,7 +390,6 @@ export default {
     blurInputName() {
       this.isShowInputName = false
       this.inputNickNameValue = this.inputNickName
-      this.value1 = this.inputNickNameValue
     },
     // 性别选择
     showSexPicker() {
@@ -460,6 +481,9 @@ export default {
       }
     },
     sureLevle() {
+      if(this.level == '') {
+        this.level = this.levelSlots[0].values[0]
+      }
       this.popupVisible = !this.popupVisible
       this.levelValue = this.level
     },
@@ -539,26 +563,37 @@ export default {
     },
     // 提交信息
     submit() {
+      if(this.height == '请选择') {
+        this.height = ''
+      }
+      if(this.birthday == '请选择') {
+        this.birthday = ''
+      }
+      if(this.addressValue == '请选择') {
+        this.addressValue = ''
+      }
       const params = {
         id: this.infoId,
         userId: this.userId,
         image: this.imageUrl,
-        name: this.value1,
+        name: this.inputNickNameValue,
         sex: this.sexValue,
         height: this.height,
         birthday: this.birthdayValue,
         occupation: this.professionValue,
         region: this.addressValue,
-        labelId: window.sessionStorage.getItem('labelIds')
+        occupationLevel: this.levelValue,
+        ageGroup: this.birthRangeValue,
+        labelsId: this.labelId
       }
       console.log(params)
       this.$http.completeInfo(params).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
-          this.$toast({
-            message: '保存成功！',
-            duration: 2000
-          });
+          // this.$toast({
+          //   message: '保存成功！',
+          //   duration: 2000
+          // });
           this.getInfo()
           // const _this = this
           // setTimeout(function() {
@@ -586,7 +621,7 @@ export default {
       background: #fff;
       padding: 0 33px;
       line-height: 140px;
-      font-size: 24px;
+      font-size: 28px;
       color: #6d6d6d;
       border-bottom: 1px solid #dddddd;
       box-shadow: 0 2px 3px #dddddd;
@@ -619,12 +654,12 @@ export default {
         border-top: 2px solid #f2f2f2;
         box-shadow: 0 -1px 2px #f2f2f2;
         border-radius: 5px;
-        font-size: 24px;
+        font-size: 28px;
         color: #6d6d6d;
         line-height: 96px;
         .titleText{
           line-height: 96px;
-          font-size: 24px;
+          font-size: 28px;
           color: #6d6d6d;
           display: block;
           float: left;
@@ -659,7 +694,7 @@ export default {
         width: 100%;
         height: 94px;
         line-height: 94px;
-        color: #a9a9a9;
+        color: #6d6d6d;
         border-top: 2px solid #f6f6f6;
         padding-left: 30px;
       }
@@ -715,13 +750,13 @@ export default {
   }
 </style>
 <style>
-   .avatar-uploader .el-upload{
+   .completeInfo .avatar-uploader .el-upload{
     width: 94px;
     height: 94px;
     font-size: 0;
     border-radius: 50%;
   }
-  .avatar-uploader .el-upload .avatar-uploader-icon{
+  .completeInfo .avatar-uploader .el-upload .avatar-uploader-icon{
     width: 94px;
     height: 94px;
     font-size: 32px;
@@ -734,7 +769,7 @@ export default {
     display: block;
     border-radius: 50%;
   }
-  li .el-input{
+  .completeInfo li .el-input{
     width: 300px;
     float: left;
     font-size: 25px;
@@ -746,7 +781,7 @@ export default {
     outline: none;
     /* border: 1px solid red; */
   }
-  li .el-input .el-input__inner{
+  .completeInfo li .el-input .el-input__inner{
     width: 300px;
     float: left;
     font-size: 25px;
@@ -755,45 +790,45 @@ export default {
     border: none;
     outline: none;
   }
-  .mint-msgbox-btns{
+  .completeInfo .mint-msgbox-btns{
   height: 70px;
   line-height: 70px;
 }
-.mint-msgbox-input{
+.completeInfo .mint-msgbox-input{
   padding-top: 40px;
   padding-bottom: 10px;
 }
-.mint-msgbox-message{
+.completeInfo .mint-msgbox-message{
   font-size: 22px;
 }
 .mint-msgbox-confirm{
   color: #fac31e
 }
-.mint-msgbox-input input{
+.completeInfo .mint-msgbox-input input{
   height: 70px;
   width: 90%;
   margin-left: 5%;
   font-size: 26px;
 }
-.mint-msgbox-header{
+.completeInfo .mint-msgbox-header{
   padding: 20px 0;
 }
-.mint-msgbox-title{
+.completeInfo .mint-msgbox-title{
   font-size: 24px;
 }
-  .mint-popup{
+ .completeInfo .mint-popup{
   width: 100%;
   transition: .3s ease-out;
 }
-.picker{
+.completeInfo .picker{
   width: 100%;
   background: #fff;
 }
-.picker-toolbar{
+.completeInfo .picker-toolbar{
   height: 70px;
   padding: 0 100px;
 }
-.picker-toolbar-title{
+.completeInfo .picker-toolbar-title{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -801,7 +836,7 @@ export default {
   line-height: 70px;
   font-size: 24px;
 }
-.picker-slot{
+.completeInfo .picker-slot{
   font-size: 26px;
 }
 .usi-btn-cancel,

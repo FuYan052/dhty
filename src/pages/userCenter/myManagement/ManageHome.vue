@@ -127,7 +127,9 @@ export default {
           window.localStorage.removeItem('ty-token')
           window.localStorage.removeItem('userId')
           window.localStorage.removeItem('userPhone')
-          this.$router.go(0)
+          this.$router.replace({
+            path: '/home'
+          })
         });
       }else{
         this.$router.push({
@@ -167,6 +169,7 @@ export default {
       .headImg{
         width: 122px;
         height: 122px;
+        border: 1px solid #fff;
         border-radius: 50%;
         float: left;
         margin-top: 75px;

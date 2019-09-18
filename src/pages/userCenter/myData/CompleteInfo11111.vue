@@ -197,7 +197,7 @@ export default {
     display: block;
     border-radius: 50%;
   }
-  li .el-input{
+  .completeInfo li .el-input{
     width: 300px;
     float: left;
     font-size: 25px;
@@ -208,7 +208,7 @@ export default {
     border: none;
     outline: none;
   }
-  li .el-input .el-input__inner{
+  .completeInfo li .el-input .el-input__inner{
     width: 300px;
     float: left;
     font-size: 25px;

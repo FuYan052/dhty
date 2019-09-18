@@ -294,7 +294,7 @@ export default {
     }
   }
 </style>
-<style>
+<style scpoed>
 .login .el-input__inner{
   font-size: 32px;
   height: 80px;

@@ -1,11 +1,12 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import router from '../router'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://majhfz.natappfree.cc',
+  // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://fhad5v.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -13,8 +14,8 @@ const ajax = axios.create({
 
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://majhfz.natappfree.cc',
+  // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://fhad5v.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -48,7 +49,13 @@ ajax.interceptors.response.use(resp => {
         message: resp.data.message,
         duration: 2000
       });
+      router.replace({
+        path: '/home'
+      })
+      console.log(router)
       window.localStorage.removeItem('ty-token')
+      window.localStorage.removeItem('userId')
+      window.localStorage.removeItem('userPhone')
     }
   },
   error => {
@@ -82,7 +89,13 @@ ajax2.interceptors.response.use(resp => {
         message: resp.data.message,
         duration: 2000
       });
+      router.replace({
+        path: '/home'
+      })
+      console.log(router)
       window.localStorage.removeItem('ty-token')
+      window.localStorage.removeItem('userId')
+      window.localStorage.removeItem('userPhone')
     }
   },
   error => {
