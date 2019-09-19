@@ -29,7 +29,7 @@ export default {
       labelList: [],  //请求回来的一维数组
       resultList1: [], 
       resultList2: [], //变成二维数组渲染,用于渲染
-      selectedList: [],
+      selectedList: [],  
       selectedListIds: [],
       isShow: false,
       addValue: ''
@@ -41,8 +41,11 @@ export default {
   },
   created() {
     // 从完善信息页传过来的标签集合
-    this.selectedListIds = new Array(window.sessionStorage.getItem('labelsIds')) 
-    console.log(this.selectedListIds)
+    this.selectedList =JSON.parse(window.sessionStorage.getItem('labels')) 
+    for(let i in this.selectedList) {
+      this.selectedListIds.push(this.selectedList[i].id)
+    }
+    // 获取所有标签
     this.getAllList()
   },
   methods: {
@@ -89,7 +92,7 @@ export default {
     },
     //选择标签
     selected(it,ind) {
-      console.log(this.selectedListIds)
+      this.selectedList = []
       // 选中的标签id集合
       let selectedIdIndex = this.selectedListIds.indexOf(it.id)
       if(selectedIdIndex >= 0) {
@@ -101,6 +104,7 @@ export default {
       this.selectedList = this.labelList.filter(item => {
         return this.selectedListIds.includes(item.id)
       })  
+      // console.log(this.selectedList)
     },
     //创建新标签
     showAddBox() {
@@ -135,7 +139,6 @@ export default {
       // window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
       const labelIds = this.selectedListIds.join(',')  //用逗号隔开连成字符串传给后端
       const params = {
-        id: window.sessionStorage.getItem('infoId'),
         labelId: labelIds,
         selectedLabels: this.selectedList
       }

@@ -81,6 +81,10 @@ export default {
       timer2: ''
     }
   },
+  created() {
+    this.ruleForm.phoneNum = window.sessionStorage.getItem('registerInputPhone') || ''
+    this.ruleForm.inputPassword = window.sessionStorage.getItem('registerInputPassword') || ''
+  },
   methods: {
     // 用户协议
     toAgreement() {
@@ -123,6 +127,8 @@ export default {
       this.isChecked = !this.isChecked
     },
     toAgreement() {
+      window.sessionStorage.setItem('registerInputPhone', this.ruleForm.phoneNum) //存session防止看了用户协议回来后输入被清空
+      window.sessionStorage.setItem('registerInputPassword', this.ruleForm.inputPassword) //存session防止看了用户协议回来后输入被清空
       this.$router.push({
         path: '/home/register/userAgreement'
       })
@@ -177,6 +183,8 @@ export default {
           });
         }
       }
+      window.sessionStorage.removeItem('registerInputPhone')
+      window.sessionStorage.removeItem('registerInputPassword')
     }
   },
 }

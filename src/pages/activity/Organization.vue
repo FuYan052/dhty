@@ -101,6 +101,7 @@
       <!-- 选择日期 -->
       <mt-datetime-picker
         v-show="isShowDatePicker"
+        :visibleItemCount='5'
         type="date"
         :startDate="startDate"
         year-format="{value} 年"
@@ -110,6 +111,7 @@
       </mt-datetime-picker>
       <mt-datetime-picker
         v-show="startTimePicker"
+        :visibleItemCount='5'
         ref="picker"
         type="time"
         @confirm="handleConfirmStart">
@@ -117,6 +119,7 @@
       <!-- 选择结束时间 -->
       <mt-datetime-picker
         v-show="endTimePicker"
+        :visibleItemCount='5'
         ref="picker"
         type="time"
         @confirm="handleConfirmEnd">
@@ -125,6 +128,7 @@
       <mt-datetime-picker
         v-show="deadlinePicker"
         type="datetime"
+        :visibleItemCount='5'
         :startDate="startDate"
         year-format="{value} 年"
         month-format="{value} 月"
@@ -520,7 +524,8 @@ export default {
           width: 130px;
           line-height: 97px;
           font-size: 32px;
-          color: #676767;
+          // color: #676767;
+          color: #000;
           display: inline-block;
           vertical-align: top;
         }
@@ -653,7 +658,7 @@ export default {
       line-height: 65px;
       padding-left: 30px;
       font-size: 32px;
-      color: #676767;
+      color: #000;
     }
     .textAreaBox{
       width: 100%;
@@ -735,34 +740,34 @@ export default {
     padding: 0 30px;
     padding-top: 15px;
   }
-  textarea:-ms-input-placeholder{
+  .organization textarea:-ms-input-placeholder{
     font-size: 32px;
     line-height: 60px;
     color: #909090 !important;
   }
-  textarea::-moz-placeholder{
+  .organization textarea::-moz-placeholder{
     font-size: 32px;
     line-height: 60px;
     color: #909090 !important;
   }
-  textarea::-webkit-input-placeholder{
+  .organization textarea::-webkit-input-placeholder{
     font-size: 32px;
     line-height: 60px;
     color: #909090 !important;
   }
-  .mint-popup{
+  .organization .mint-popup{
     width: 100%;
     transition: .3s ease-out;
   }
-  .picker{
+  .organization .picker{
     width: 100%;
     background: #fff;
   }
-  .picker-toolbar{
+  .organization .picker-toolbar{
     height: 70px;
     padding: 0 100px;
   }
-  .picker-toolbar-title{
+  .organization .picker-toolbar-title{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -770,18 +775,24 @@ export default {
     line-height: 70px;
     font-size: 30px;
   }
-  .picker-slot{
+  .organization .picker-slot{
     font-size: 27px;
   }
-  .usi-btn-cancel,
-  .usi-btn-sure {
+  .organization .usi-btn-cancel,
+  .organization .usi-btn-sure {
     text-align: center;
     color: #fac31e
   }
-  .mint-datetime-action{
+  .organization .usi-btn-cancel{
+    color: rgb(139, 138, 138)
+  }
+  .organization .mint-datetime-action{
     width: 20%;
     line-height: 70px;
     color: #fac31e;
     font-size: 30px;
+  }
+  .organization .mint-datetime-cancel{
+    color: rgb(139, 138, 138)
   }
 </style>

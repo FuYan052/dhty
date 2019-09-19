@@ -24,7 +24,8 @@
         </ul>
         <p class="changeHandle">
           <!-- <span @click="doRegister">注册</span> -->
-          手机不可用？<span @click="changePhone">点此更换手机</span>
+          <!-- 手机不可用？<span @click="changePhone">点此更换手机</span> -->
+          &nbsp;<span>&nbsp;</span>
         </p>
         <div class="loginBtn" @click="loginForCodde">
           登录
@@ -72,6 +73,9 @@ export default {
   },
   computed: {
     ...mapState(['isLogin'])
+  },
+  created() {
+    this.ruleForm.phoneNum = window.sessionStorage.getItem('loginForCodeInputPhone') || ''
   },
   methods: {
     ...mapMutations(['changeLoginStatus','changeUserId','changeUserPhone','changeToken']),
@@ -160,6 +164,7 @@ export default {
           });
         }
       }
+      window.sessionStorage.removeItem('loginForCodeInputPhone')
     },
     changePhone() {
 
@@ -168,6 +173,7 @@ export default {
       this.isChecked = !this.isChecked
     },
     toAgreement() {
+      window.sessionStorage.setItem('loginForCodeInputPhone', this.ruleForm.phoneNum) //存session防止看了用户协议回来后输入被清空
       this.$router.push({
         path: '/home/register/userAgreement'
       })

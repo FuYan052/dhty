@@ -129,8 +129,8 @@ export default {
       // }
     })
   },
-  mounted() {
-    
+  created() {
+    this.ruleForm.phoneNum = window.sessionStorage.getItem('weixinInputPhone') || ''
   },
   methods: {
     ...mapMutations(['changeLoginStatus','changeUserId','changeUserPhone','changeToken']),
@@ -165,6 +165,7 @@ export default {
       this.isChecked = !this.isChecked
     },
     toAgreement() {
+      window.sessionStorage.setItem('weixinInputPhone', this.ruleForm.phoneNum) //存session防止看了用户协议回来后输入被清空
       this.$router.push({
         path: '/home/register/userAgreement'
       })
@@ -225,6 +226,7 @@ export default {
           });
         }
       }
+      window.sessionStorage.removeItem('weixinInputPhone')
     },
   }
 }
