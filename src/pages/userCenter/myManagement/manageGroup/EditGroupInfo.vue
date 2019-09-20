@@ -237,7 +237,7 @@ export default {
     }
   }
 </style>
-<style>
+<style scpoed>
   .editGroupInfo .el-form-item__error{
     left: 15px;
   }

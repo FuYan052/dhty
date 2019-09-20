@@ -82,8 +82,17 @@ export default {
         },
       ],
       info: '',
-      _id: ''
+      _id: '',
     }
+  },
+  mounted() {
+    console.log(window.localStorage.getItem('ty-token'))
+    this.$nextTick(() => {
+      if(!window.localStorage.getItem('ty-token')) {
+        console.log('过期')
+        this.$router.go(0)
+      }
+    })
   },
   computed: {
     // 用户id
@@ -130,6 +139,8 @@ export default {
           this.$router.replace({
             path: '/home'
           })
+          window.sessionStorage.setItem('routerPath','/userCenter/manageHome')
+          window.sessionStorage.setItem('routerPathName','ManageHome')
         });
       }else{
         this.$router.push({
@@ -343,19 +354,20 @@ export default {
 </style>
 <style>
   .mint-msgbox {
-    width: 60%;
+    width: 70%;
   }
   .mint-msgbox-title{
-    font-size: 22px;
+    font-size: 26px;
   }
   .mint-msgbox-message{
     color: rgb(22, 21, 21);
-    font-size: 26px;
+    font-size: 30px;
   }
   .mint-msgbox-content{
-    padding: 40px 10px;
+    padding: 60px 10px;
   }
   .mint-msgbox-btns{
-    height: 70px;
+    height: 80px;
+    font-size: 28px;
   }
 </style>

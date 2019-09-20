@@ -1,6 +1,6 @@
 <template>
   <!-- 创建新社群页面 -->
-  <div class="createGroup" v-title data-title="创建社群">
+  <div class="createGroup" id="createGroup" v-title data-title="创建社群">
     <!-- 社群名称 -->
     <div class="groupName">
       <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
@@ -187,56 +187,56 @@ export default {
     }
   }
 </style>
-<style>
-  .createGroup .el-form-item__error{
+<style scpoed>
+  #createGroup .el-form-item__error{
     left: 15px;
   }
-  .createGroup .groupName .el-form-item__label{
+  #createGroup .groupName .el-form-item__label{
     font-size: 26px;
     margin-top: 25px;
     color: #3b3b3b;
   }
-  .createGroup .groupName .el-input{
+  #createGroup .groupName .el-input{
     width: 74%;
   }
-  .createGroup .groupName .el-input__inner{
+  #createGroup .groupName .el-input__inner{
     height: 50px;
     margin-top: 18px;
     font-size: 26px;
     border: none;
   }
-  .createGroup .groupName .el-form-item__error{
+  #createGroup .groupName .el-form-item__error{
     top: 86%;
   }
-  .createGroup .introduction .el-form-item__label{
+  #createGroup .introduction .el-form-item__label{
     font-size: 26px;
     color: #3b3b3b;
     padding-bottom: 30px;
   }
-  .createGroup .introduction .el-textarea__inner{
+  #createGroup .introduction .el-textarea__inner{
     font-size: 26px;
     min-height: 140px !important;
     margin-left: 15px;
     border: 1px solid #f0f0f0;
   }
-  .createGroup .avatar-uploader{
+  #createGroup .avatar-uploader{
     display: block;
     width: 100px;
     height: 100px;
     margin-top: 60px;
     margin-left: 10px;
   }
-  .createGroup .avatar-uploader .el-upload {
+  #createGroup .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
   }
-  .createGroup .avatar-uploader .el-upload:hover {
+  #createGroup.avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
-  .createGroup .avatar-uploader-icon {
+  #createGroup .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
     width: 100px;
@@ -244,7 +244,7 @@ export default {
     line-height: 100px;
     text-align: center;
   }
-  .createGroup .avatar {
+  #createGroup .avatar {
     width: 100px;
     height: 100px;
     display: block;

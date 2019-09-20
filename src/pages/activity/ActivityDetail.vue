@@ -44,7 +44,7 @@
       <p class="p1">报名截止还有：<span>{{content}}</span></p>
       <div class="p2">
         <div class="checkbox" @click="checked"></div><span v-show="isChecked" class="span1 el-icon-check"></span>
-        <span class="span2">我已阅读并同意<span class="span3">《免责条款》</span></span>
+        <span class="span2">我已阅读并同意<span class="span3" @click="toEscapeClause">《免责条款》</span></span>
       </div>
       <el-button @click="submit">立即报名</el-button>
     </div>
@@ -61,7 +61,7 @@ export default {
       lon: '',
       groupId: '',
       peopleLength: '',  //已报名人数
-      isChecked: true,  //是否勾选免责条款
+      isChecked: false,  //是否勾选免责条款
       disabled: false,  //报名按钮是否能点击
       content: '',  //倒计时内容
       endTime: '',
@@ -84,10 +84,16 @@ export default {
         this.countdowm(this.endTime) //执行倒计时函数
       }
     })
-    console.log(this.content)
-    console.log(this.isTosignUp)
+    // console.log(this.content)
+    // console.log(this.isTosignUp)
   },
   methods: {
+    // 免责条款
+    toEscapeClause() {
+      this.$router.push({
+        path: '/escapeClause'
+      })
+    },
     toMap() {
       const location = {
         lat: this.lat,

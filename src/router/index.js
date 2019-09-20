@@ -12,6 +12,7 @@ import ForgetPassword from '@/pages/ForgetPassword'
 import ChildrenActivities from '@/pages/activity/ChildrenActivities'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import ActivityDetail from '@/pages/activity/ActivityDetail'
+import EscapeClause from '@/pages/activity/EscapeClause'
 import ClubHome from '@/pages/activity/club/ClubHome'
 import ClubInfo from '@/pages/activity/club/ClubInfo'
 import ClubActivities from '@/pages/activity/club/ClubActivities'
@@ -117,7 +118,8 @@ export default new Router({
       name: 'ActivityHome',
       component: ActivityHome,
       meta: {
-        keepAlive: true 
+        keepAlive: true ,
+        needCacheLast: false
       }
     },
     {
@@ -139,6 +141,14 @@ export default new Router({
       path: '/activityDetail',
       name: 'ActivityDetail',
       component: ActivityDetail,
+      meta: {
+        keepAlive: true 
+      }
+    },
+    {
+      path: '/escapeClause',  //免责条款
+      name: 'EscapeClause',
+      component: EscapeClause,
     },
     //俱乐部
     {

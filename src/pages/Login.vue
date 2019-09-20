@@ -34,8 +34,8 @@
           <p>手机登录</p>
           </div>
           <div class="changeType">
-            <img src="../assets/weinxinIcon.png" alt="">
-            <!-- <img src="../assets/weinxinIcon.png" alt=""  @click="wexinLogin"> -->
+            <!-- <img src="../assets/weinxinIcon.png" alt=""> -->
+            <img src="../assets/weinxinIcon.png" alt=""  @click="wexinLogin">
             <p>微信登录</p>
           </div>
         </div>
@@ -171,11 +171,12 @@ export default {
       // this.$router.push({
       //   path: '/home/bindPhone'
       // })
-      const redirectUrl = encodeURIComponent('http://192.168.0.137:8082/#/home/bindPhone')
-      const appid = 'wxf1894ca38c849d17'
       const state = window.sessionStorage.getItem('routerPath')
-      console.log(this.state)
-      console.log(window.location.href)
+      const redirectUrl = encodeURIComponent(`https://laihu.baogongxia.com/#/home/bindPhone`)
+      // const appid = 'wxf1894ca38c849d17'  测试号
+      const appid = 'wxd3d4d3045a1213a1'
+      // console.log(this.state)
+      // console.log(window.location.href)
       window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirectUrl}&response_type=code&scope=snsapi_userinfo&state=${state}#wechat_redirect`
     }
   }

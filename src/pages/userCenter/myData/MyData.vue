@@ -571,16 +571,19 @@ export default {
 </style>
 <style>
  .mint-msgbox{
-   width: 65% !important;
+   width: 70%;
  }
  .mint-msgbox-content{
    padding: 40px 0;
  }
+ .mint-msgbox-title{
+    font-size: 26px;
+  }
  .mint-msgbox-message{
-   font-size: 26px;
+   font-size: 30px;
    color: rgb(122, 120, 120);
  }
  .mint-msgbox-btns{
-   height: 70px;
+   height: 80px;
  }
 </style>

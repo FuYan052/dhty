@@ -14,7 +14,7 @@ export default {
   name: 'App',
   data() {
     return {
-      include: ['Organization','CompleteInfo','MyActivities','ActivityHome']
+      include: ['Organization','CompleteInfo','MyActivities','ActivityHome','ActivityDetail']
     }
   },
   watch: {
@@ -40,6 +40,9 @@ export default {
       //   index !== -1 && this.include.splice(index, 1);
       // }
     }
+  },
+  created() {
+    // window.location.href = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx1fcb375df1c9ccb2&secret=566f06e42bbdfc1442f3269355af1f0d`
   },
   methods: {
 

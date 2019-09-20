@@ -4,22 +4,28 @@ import router from '../router'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
-  baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'http://192.168.0.114:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://kgvnnn.natappfree.cc',
+  baseURL: 'http://kcc6ww.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
 })
 
 const ajax2 = axios.create({
-  baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'http://192.168.0.114:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://kgvnnn.natappfree.cc',
+  baseURL: 'http://kcc6ww.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
   },
+})
+
+const ajax3 = axios.create({
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
 })
 
 // request拦截器
@@ -49,10 +55,6 @@ ajax.interceptors.response.use(resp => {
         message: resp.data.message,
         duration: 2000
       });
-      router.replace({
-        path: '/home'
-      })
-      console.log(router)
       window.localStorage.removeItem('ty-token')
       window.localStorage.removeItem('userId')
       window.localStorage.removeItem('userPhone')
@@ -89,10 +91,8 @@ ajax2.interceptors.response.use(resp => {
         message: resp.data.message,
         duration: 2000
       });
-      router.replace({
-        path: '/home'
-      })
-      console.log(router)
+      // router.go(0)
+      // console.log(router)
       window.localStorage.removeItem('ty-token')
       window.localStorage.removeItem('userId')
       window.localStorage.removeItem('userPhone')
@@ -296,4 +296,7 @@ export const postBindPhone = (params) => {
 // export const getWXUserInfo = (params) => {
 //   return ajax3.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=${params.grant_type}l&appid=${params.appid}&secret=${params.secret}`)
 // }
+export const getSignature = (params) => {
+  return ajax.get(`/v1/rest/login/getSignature?url=${params}`)
+}
 

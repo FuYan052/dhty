@@ -1,5 +1,6 @@
 <template>
   <div class="bindPhone" v-title data-title="微信登录" v-show="isShowPage">
+  <!-- <div class="bindPhone" v-title data-title="微信登录"> -->
     <div class="bindPhoneBox">
       <ul>
         <li>
@@ -67,11 +68,12 @@ export default {
     ...mapState(['isLogin'])
   },
   created() {
-    // console.log(window.location.href)
+    // console.log()
+    console.log(window.location.href)
     // console.log(location.search)
     const url = location.search
     const requertUrl = new Object()
-    console.log(url.indexOf("?"))
+    // console.log(url.indexOf("?"))
     if(url.indexOf("?") != -1) {
       var str = url.substr(1);
       console.log(str)
@@ -88,26 +90,30 @@ export default {
     // console.log(decodeURIComponent(requertUrl.state))
     this.$http.getWXLogin(this.code).then(resp => {
       console.log(resp)
-      this.wxUserInfowxUserInfo = resp.data
-      if(resp.data.phone === null) {
-        this.isShowPage = true
+      if(resp.status == 200){
+        this.wxUserInfowxUserInfo = resp.data
+        if(resp.data.phone === null) {
+          this.isShowPage = true
+        }else{
+          console.log("已注册")
+          window.localStorage.setItem('userId', resp.data.userId)
+          window.localStorage.setItem('userPhone', resp.data.phone)
+          window.localStorage.setItem('ty-token', resp.data.token)
+          this.changeLoginStatus(true)
+          this.changeUserId(resp.data.userId)
+          this.changeUserPhone(resp.data.phone)
+          this.changeToken(resp.data.token)
+          this.$router.replace({
+            path: _toPath,
+            name: _toPathName,
+            params: {
+              _userId: resp.data.userId
+            }
+          })
+        }
       }else{
-        console.log("已注册")
-        window.localStorage.setItem('userId', resp.data.userId)
-        window.localStorage.setItem('userPhone', resp.data.phone)
-        window.localStorage.setItem('ty-token', resp.data.token)
-        this.changeLoginStatus(true)
-        this.changeUserId(resp.data.userId)
-        this.changeUserPhone(resp.data.phone)
-        this.changeToken(resp.data.token)
-        this.$router.replace({
-          path: _toPath,
-          name: _toPathName,
-          params: {
-            _userId: resp.data.userId
-          }
-        })
-      }
+        this.isShowPage = false
+    }
       // if(resp.data.phone !== '') {
       //   console.log("已注册")
       //   window.localStorage.setItem('userId', resp.data.userId)
@@ -127,9 +133,8 @@ export default {
       // }else{
       //   this.isShowPage = true
       // }
-    })
-  },
-  created() {
+     })
+
     this.ruleForm.phoneNum = window.sessionStorage.getItem('weixinInputPhone') || ''
   },
   methods: {
@@ -394,18 +399,21 @@ export default {
   color: #909090;
   font-size: 32px;
 }
-.mint-msgbox{
-  width: 65% !important;
-}
-.mint-msgbox-content{
-  padding: 40px 0;
+.mint-msgbox {
+    width: 70%;
+  }
+.mint-msgbox-title{
+  font-size: 26px;
 }
 .mint-msgbox-message{
-  font-size: 26px;
-  line-height: 36px;
-  color: rgb(48, 47, 47);
+  color: rgb(22, 21, 21);
+  font-size: 28px;
+}
+.mint-msgbox-content{
+  padding: 60px 10px;
 }
 .mint-msgbox-btns{
-  height: 70px;
+  height: 80px;
+  font-size: 28px;
 }
 </style>

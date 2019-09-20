@@ -198,7 +198,7 @@ export default {
         }
         .hqyzm{
           .yzm{
-            idth: 160px;
+            width: 160px;
             height: 60px;
             border: 1px solid #c8c8c8;
             color: #fff;
@@ -206,7 +206,7 @@ export default {
             text-align: center;
             float: right;
             // margin-top: 20px;
-            background: #c8c8c8;
+            // background: #c8c8c8;
             font-size: 22px;
             span{
               line-height: 60px;
@@ -231,7 +231,7 @@ export default {
     }
   }
 </style>
-<style>
+<style scpoed>
 .forgetPassword .el-input__inner{
   height: 100px;
   line-height: 100px;

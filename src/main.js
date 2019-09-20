@@ -23,6 +23,22 @@ Vue.directive('title', {
   }
 })
 
+// 判断ios还是android
+Vue.prototype.$isIosOrAndroid = function () {
+  let u = navigator.userAgent;
+  let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
+  let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+  let isStr = ''
+  if (isAndroid) {
+    isStr = 'android'
+  }
+  if (isiOS) {
+    isStr = 'ios'
+  }
+  return isStr
+}
+
+
 Vue.use(ElementUI);
 Vue.use(MintUI)
 // 图片放大查看
@@ -30,17 +46,15 @@ Vue.use(MintUI)
 
 // 全局导航守卫
 router.beforeEach((to, from, next) => {
-  // console.log(to)
   let hasToken = localStorage.getItem('ty-token');
-  // let hasToken = true
+  // console.log(hasToken)
   if (hasToken) {
     next()
   }else {
     if (to.meta.requireAuth) {
-      // console.log("缓存路径")
       window.sessionStorage.setItem('routerPath',to.fullPath)
       window.sessionStorage.setItem('routerPathName',to.name)
-      next('/home' )//这里是即将进入的页面是名单中的页面就直接进入
+      next('/home')
     } else { 
       next()
     } 

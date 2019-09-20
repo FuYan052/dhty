@@ -19,12 +19,12 @@
             <i v-else class="el-icon-camera-solid avatar-uploader-icon"></i>
           </el-upload>
         </div>
-        <ul>
+        <ul class="ul1">
           <li @click="showInput">
             <!-- <span class="titleText">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span> -->
             <span class="titleText">昵称</span>
             <span class="right">{{inputNickNameValue}}<i class="el-icon-arrow-right"></i></span>
-            <el-input v-model="inputNickName" @blur="blurInputName" v-show="isShowInputName"></el-input>
+            <!-- <el-input v-model="inputNickName" @blur="blurInputName" v-show="isShowInputName"></el-input> -->
           </li>
           <li @click="showSexPicker">
             性别
@@ -404,13 +404,14 @@ export default {
     },
     // 昵称输入
     showInput() {
-      // this.$messagebox.prompt('请填写昵称').then(({ value, action }) => {
-      //   // console.log(value)
-      //   this.value1 = value
-      // })
-      this.isShowInputName = true
-      this.inputNickName = this.inputNickNameValue
-      this.inputNickNameValue = ''
+      this.$messagebox.prompt('请填写昵称').then(({ value, action }) => {
+        // console.log(value)
+        this.inputNickNameValue = value
+      })
+
+      // this.isShowInputName = true
+      // this.inputNickName = this.inputNickNameValue
+      // this.inputNickNameValue = ''
     },
     blurInputName() {
       this.isShowInputName = false
@@ -618,17 +619,17 @@ export default {
       this.$http.completeInfo(params).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
-          // this.$toast({
-          //   message: '保存成功！',
-          //   duration: 2000
-          // });
+          this.$toast({
+            message: '保存成功！',
+            duration: 1000
+          });
           this.getInfo()
-          // const _this = this
-          // setTimeout(function() {
-          //   _this.$router.push({
-          //     path: '/userCenter/manageHome'
-          //   })
-          // },2000)
+          const _this = this
+          setTimeout(function() {
+            _this.$router.replace({
+              path: '/userCenter/manageHome'
+            })
+          },1000)
         }
       })
     },
@@ -685,7 +686,7 @@ export default {
         margin-right: 15px;
       }
     }
-    ul{
+    .ul1{
       width: 100%;
       height: auto;
       li{
@@ -835,33 +836,36 @@ export default {
     border: none;
     outline: none;
   }
-  .completeInfo .mint-msgbox-btns{
+  .mint-msgbox{
+    width: 75%;
+  }
+  .mint-msgbox-btns{
   height: 70px;
   line-height: 70px;
 }
-.completeInfo .mint-msgbox-input{
+.mint-msgbox-input{
   padding-top: 40px;
   padding-bottom: 10px;
 }
-.completeInfo .mint-msgbox-message{
+.mint-msgbox-message{
   font-size: 22px;
 }
 .mint-msgbox-confirm{
   color: #fac31e
 }
-.completeInfo .mint-msgbox-input input{
+.mint-msgbox-input input{
   height: 70px;
   width: 90%;
   margin-left: 5%;
   font-size: 26px;
 }
-.completeInfo .mint-msgbox-header{
+.mint-msgbox-header{
   padding: 20px 0;
 }
-.completeInfo .mint-msgbox-title{
+.mint-msgbox-title{
   font-size: 24px;
 }
- .completeInfo .mint-popup{
+.mint-popup{
   width: 100%;
   transition: .3s ease-out;
 }

@@ -71,6 +71,26 @@ export default {
       isChecked: false  //是否同意用户协议
     }
   },
+  // router.beforeEach((to, from, next) => {
+  // let hasToken = localStorage.getItem('ty-token');
+  // console.log(hasToken)
+  // if (hasToken) {
+  //   next()
+  // }else {
+  //   if (to.meta.requireAuth) {
+  //     console.log(to.fullPath)
+  //     next({
+  //       path: '/home'
+  //     })
+  //     window.sessionStorage.setItem('routerPath',from.fullPath)
+  //     window.sessionStorage.setItem('routerPathName',from.name)
+  //   } else { 
+  //     next()
+  //   } 
+  // }
+  // beforeRouteEnter(to, from, next){
+  //   console.log(from.path)
+  // },
   computed: {
     ...mapState(['isLogin'])
   },
@@ -367,18 +387,21 @@ export default {
   color: #909090;
   font-size: 32px;
 }
-.mint-msgbox{
-  width: 65% !important;
-}
-.mint-msgbox-content{
-  padding: 40px 0;
-}
-.mint-msgbox-message{
-  font-size: 26px;
-  line-height: 36px;
-  color: rgb(48, 47, 47);
-}
-.mint-msgbox-btns{
-  height: 70px;
-}
+.mint-msgbox {
+    width: 70%;
+  }
+  .mint-msgbox-title{
+    font-size: 26px;
+  }
+  .mint-msgbox-message{
+    color: rgb(22, 21, 21);
+    font-size: 28px;
+  }
+  .mint-msgbox-content{
+    padding: 60px 10px;
+  }
+  .mint-msgbox-btns{
+    height: 80px;
+    font-size: 28px;
+  }
 </style>
