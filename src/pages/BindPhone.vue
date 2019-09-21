@@ -19,7 +19,9 @@
       <div class="loginBtn" @click="BindPhone">
         绑定
       </div>
-      <img class="logoImg" src="../assets/logoImg.png" alt="">
+      <div class="logoImg">
+        <img src="../assets/logoImg.png" alt="">
+      </div>
       <div class="agreement">
         <span class="radiu" :class="{raiduChecked : isChecked}" @click="handleAgree"><i class="el-icon-check" v-show="isChecked"></i></span>
           我同意并认可<span class="_mark" @click="toAgreement">《来虎用户协议》</span>
@@ -321,6 +323,10 @@ export default {
         margin: 0 auto;
         margin-top: 400px;
         margin-bottom: 65px;
+        img{
+          width: 100%;
+          height: 100%;
+        }
       }
     }
     .logoImg{
@@ -329,6 +335,10 @@ export default {
       margin: 0 auto;
       margin-top: 400px;
       margin-bottom: 65px;
+      img{
+        width: 100%;
+        height: 100%;
+      }
     }
     .agreement{
       width: 100%;

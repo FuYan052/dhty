@@ -14,7 +14,7 @@ export default {
   name: 'App',
   data() {
     return {
-      include: ['Organization','CompleteInfo','MyActivities','ActivityHome','ActivityDetail']
+      include: ['Organization','Playground','CompleteInfo','MyActivities','ActivityHome','ActivityDetail']
     }
   },
   watch: {
@@ -57,7 +57,6 @@ export default {
     //   console.log(resp)
     // })
   },
-
 }
 </script>
 
@@ -121,7 +120,8 @@ table{
     border-collapse:collapse
 }
 .mint-toast-text {
-  font-size: 22px !important;
+  font-size: 29px !important;
+  line-height: 40px;
 }
 
 #app {

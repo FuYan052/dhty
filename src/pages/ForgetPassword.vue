@@ -137,6 +137,9 @@ export default {
         this.$http.postForgetPassword(params).then(resp => {
           // console.log(resp)
           if(resp.status == 200) {
+            this.$router.replace({
+              path: '/home/login'
+            })
             this.$toast({
               message: '密码修改成功！',
               duration: 2000
@@ -206,7 +209,7 @@ export default {
             text-align: center;
             float: right;
             // margin-top: 20px;
-            // background: #c8c8c8;
+            background: #c8c8c8;
             font-size: 22px;
             span{
               line-height: 60px;

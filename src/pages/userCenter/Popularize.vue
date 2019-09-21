@@ -3,7 +3,9 @@
   <div class="popularize" v-title data-title="扫码进群">
     <div class="bgBox">
       <div class="info">
+        <div class="infoImgLogo">
           <img :src="groupInfo.logo" alt="">
+        </div>
           <span class="name">{{groupInfo.name}}</span>
       </div>
       <div class="imgBox">
@@ -16,7 +18,9 @@
           >
           <el-carousel-item v-for="(item,index) in groupList" :key="index">
             <h3 class="small">
-              <img ref="codeImg" id="img" :src="item.path" alt="">
+              <div class="codeImg">
+                <img ref="codeImg" id="img" :src="item.path" alt="">
+              </div>
             </h3>
           </el-carousel-item>
         </el-carousel>
@@ -97,11 +101,16 @@ export default {
         width: 100%;
         height: 100px;
         margin-top: 47px;
-        img{
+        .infoImgLogo{
           width: 98px;
           height: 98px;
           float: left;
           border-radius: 50%;
+          img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
         }
         .name{
           display: inline-block;
@@ -122,9 +131,13 @@ export default {
         // margin: 0 auto;
         margin-top: 60px;
         overflow: hidden;
-        img{
+        .codeImg{
           width: 400px;
           height: 400px;
+          img{
+            width: 100%;
+            height: 100%;
+          }
         }
       }
       p{

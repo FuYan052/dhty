@@ -3,7 +3,9 @@
   <div class="joinCroupList" v-title data-title="我参加的群">
     <ul>
       <li v-for="(item,index) in groupList" :key="index" @click="handle(item.id)">
-        <img :src="item.logo" alt="">
+        <div class="image">
+          <img :src="item.logo" alt="">
+        </div>
         <div class="text">
           <p>{{item.name}}</p>
           <p>共参加过{{item.count}}次活动</p>
@@ -73,12 +75,17 @@ export default {
         height: 110px;
         border-bottom: 1px solid #eee8e8;
         padding: 0 20px;
-        img{
+        .image{
           width: 80px;
           height: 80px;
           border-radius: 10px;
           float: left;
           margin-top: 15px;
+          img{
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+          }
         }
         .text{
           width: 80%;

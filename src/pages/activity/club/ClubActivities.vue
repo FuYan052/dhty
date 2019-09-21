@@ -18,14 +18,18 @@
       <div class="activItem" v-for="(item,index) in activList" :key="index">
           <div class="top">
             <div class="title">
-              <img :src="item.image" alt="">
+              <div class="imgcluAct">
+                <img :src="item.image" alt="">
+              </div>
               <p class="text">{{item.nickName}}</p>
               <p class="role">{{item.type}}</p>
               <div class="rightBtn" @click="toSignUp(item.id)">{{item.osState}}</div>
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
-              <img :src="item.venueImage" alt="">
+              <div class="venuImg">
+                <img :src="item.venueImage" alt="">
+              </div>
               <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
               <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
               <div class="p1"><span><i class="el-icon-location-outline"></i></span>{{item.venueName}}</div>
@@ -219,13 +223,18 @@ export default {
             width: 100%;
             height: 128px;
             position: relative;
-            img{
+            .imgcluAct{
               width: 50px;
               height: 50px;
               float: left;
               margin-top: 23px;
               margin-left: 30px;
               border-radius: 50%;
+              img{
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+              }
             }
             .text{
               display: inline-block;
@@ -269,13 +278,19 @@ export default {
             margin: 0 auto;
             border-top: 1px solid #eeeeee;
             // border-bottom: 1px solid #eeeeee;
-            img{
+            .venuImg{
               width: 160px;
               height: 160px;
               margin-top: 35px;
               float: left;
-              border-radius: 10px;
+              img{
+                width: 100%;
+                height: 100%;
+                float: left;
+                border-radius: 10px;
+              }
             }
+            
             .p1{
               width: 460px;
               float: right;
@@ -300,6 +315,7 @@ export default {
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
+              margin-top: 30px;
             }
             .p1:nth-of-type(1){
               margin-top: 30px;

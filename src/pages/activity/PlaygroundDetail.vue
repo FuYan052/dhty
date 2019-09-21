@@ -7,7 +7,7 @@
     <div class="wrap1">
       <div class="title">
         {{playgroundInfo.name}}
-        <span>
+        <span class="crownImg">
           <img src="../../assets/crown.png" alt="">
         </span>
       </div>
@@ -31,7 +31,9 @@
     <div class="wrap3">
       <p class="title">活动</p>
       <div class="actItem" v-for="(item,index) in actiList" :key="index" @click="toActDetail">
-        <img :src="playgroundInfo.image" alt="">
+        <div class="theImg">
+          <img :src="playgroundInfo.image" alt="">
+        </div>
         <div class="right">
           <p class="p1">{{item.title}}</p>
           <p class="p2">{{item.groupName}}<span></span></p>
@@ -100,7 +102,7 @@ export default {
       height: 440px;
       img{
         width: 100%;
-        height: 440px;
+        height: 100%;
       }
     }
     .wrap1{
@@ -113,14 +115,14 @@ export default {
         line-height: 96px;
         padding-left: 30px;
         color: #161616;
-        span{
+        .crownImg{
           display: inline-block;
           width: 30px;
           height: 30px;
           padding-left: 15px;
           img{
-            width: 30px;
-            height: 30px;
+            width: 100%;
+            height: 100%;
             float: left;
           }
         }
@@ -194,11 +196,15 @@ export default {
         width: 100%;
         height: 200px;
         border-bottom: 1px solid #e7e7e7;
-        img{
+        .theImg{
           width: 180px;
           height: 112px;
           float: left;
           margin-top: 44px;
+          img{
+            width: 100%;
+            height: 100%;
+          }
         }
         .right{
           width: 490px;

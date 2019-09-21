@@ -27,9 +27,13 @@
            <p class="g_name" @click="toDetail(item.id)">
              {{item.name}}<span>{{item.distance}}km</span>
            </p>
-           <img @click="toDetail(item.id)" class="g_img" :src="item.image" alt="">
+           <div class="playGroundImg" @click="toDetail(item.id)" >
+             <img :src="item.image" alt="">
+           </div>
            <div class="g_bottom g_admin">
-             <img :src="item.userImage" alt="">
+             <div class="userImg">
+                <img :src="item.userImage" alt="">
+             </div>
              <p>{{item.userType}}<span>{{item.userName}}</span></p>
              <div class="icon"><a :href="'tel:' + item.userPhone"><span class="el-icon-phone"></span></a></div>
            </div>
@@ -53,29 +57,110 @@ export default {
       currIndex: 0,
       address: '',
       zoom: 3,
-      // currLon: '',
-      // currLat: '',
       currLon: '104.057150',
       currLat: '30.5702',
       type: 'sportsKinds_01',
       playGroungList: [],
-      geolocation: '',
-      latitude: "",
+      timestamp: '',
+      nonceStr: '',
+      signature: '',
+      latitude: '',
       longitude: '',
-      isGetLocation: ''
     }
   },
   created() {
     // 获取用户当前位置
-    // var myLatLng = new qq.maps.LatLng(myLatitude, myLongitude);
-    // console.log(myLatLng)
-    // this.geolocation = new qq.maps.Geolocation("ECMBZ-7HAK4-I3ZUO-D4BX7-WMD25-NSB6S", "公众号-体育"); 
-    // var positionNum = 0;
-    // var options = {timeout: 8000};
-    // geolocation.getLocation(this.showPosition, this.showErr, options);
-    // geolocation.getLocation(this.showPosition, this.showErr);
-    this.getMyLocation();
-    //   // 获取场馆列表
+    const url = location.href
+    this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
+      if(resp.status = 200) {
+        this.timestamp = resp.data.timestamp
+        this.nonceStr = resp.data.nonceStr
+        this.signature = resp.data.signature
+        const that = this
+        wx.config({
+          // debug: true,
+          appId: 'wxd3d4d3045a1213a1',
+          // appId: 'wxf1894ca38c849d17',  //测试号
+          // timestamp: '1568982632',
+          // nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
+          // signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',
+          timestamp: this.timestamp,
+          nonceStr: this.nonceStr,
+          signature: this.signature,
+          jsApiList: [
+            'getLocation',
+          ]
+        });
+        // 获取经纬度
+        wx.ready(function() {
+          wx.getLocation({
+            type: 'wgs84', 
+            success: function (res) {
+              // console.log(res)
+              that.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+              that.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+              const params = {
+                type: that.type,
+                name:'',
+                lon: that.longitude,
+                lat: that.latitude
+              }
+              that.$http.getPlaygroundList(params).then(resp => {
+                console.log(resp)
+                if(resp.status == 200) {
+                  that.playGroungList = resp.data
+                  // console.log(this.playGroungList)
+                }
+              })
+            },
+            cancel: function (res) {
+              const params = {
+                type: that.type,
+                name:'',
+                lon: that.currLon,
+                lat: that.currLat
+              }
+              that.$http.getPlaygroundList(params).then(resp => {
+                console.log(resp)
+                if(resp.status == 200) {
+                  that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+                  that.playGroungList = resp.data
+                  // console.log(this.playGroungList)
+                }
+              })
+            }
+          })
+        });
+        // 调取微信接口失败
+        wx.error(function(res){
+          const params = {
+            type: that.type,
+            name:'',
+            lon: that.currLon,
+            lat: that.currLat
+          }
+          that.$http.getPlaygroundList(params).then(resp => {
+            console.log(resp)
+            if(resp.status == 200) {
+              that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+              that.playGroungList = resp.data
+              // console.log(this.playGroungList)
+            }
+          })
+        })
+      }
+    })
+
+  },
+methods: {
+  changeCate(item,index) {
+    this.currIndex = index
+    if(index === 0) {
+      this.type = 'sportsKinds_01'
+    }
+    if(index === 1) {
+      this.type = 'sportsKinds_02'
+    }
     const params = {
       type: this.type,
       name:'',
@@ -90,134 +175,27 @@ export default {
       }
     })
   },
-  // beforeMount() {
-  //   // 获取场馆列表
-  //   const params = {
-  //     type: this.type,
-  //     name:'',
-  //     lon: this.currLon,
-  //     lat: this.currLat
-  //   }
-  //   this.$http.getPlaygroundList(params).then(resp => {
-  //     console.log(resp)
-  //     if(resp.status == 200) {
-  //       this.playGroungList = resp.data
-  //       // console.log(this.playGroungList)
-  //     }
-  //   })
-  // },
-  mounted() {
-    // this.geolocation.getLocation(this.showPosition, this.showErr);
-    // this.getMyLocation();
-
+  toDetail(id) {
+    window.sessionStorage.setItem('playGroundDetail',id)
+    this.$router.push({
+      path: '/playgroundDetail',
+    })
   },
-  methods: {
-//     showPosition(position) {
-//       console.log(position)
-//       console.log("ok")
-//       this.currLon = position.lng
-//       this.currLat = position.lat
-//      },
-//      showErr() { 
-//         //TODO 如果出错了调用此方法 
-//     // this.$toast('无法获取您的地理位置！')
-//     },
- 
-
-
-getMyLocation() {                
-  var geolocation = new qq.maps.Geolocation("ECMBZ-7HAK4-I3ZUO-D4BX7-WMD25-NSB6S", "公众号-体育");
-  geolocation.getIpLocation(this.showPosition, this.showErr);
-},
-
-showPosition(position) {                
-  console.log(position);  
-  console.log("已获取") 
-  this.isGetLocation = true             
-  this.latitude = position.lat;                
-  this.longitude = position.lng;                
-  // this.city = position.city;                
-  // this.setMap();
-},
-showErr() {                
-  console.log("定位失败"); 
-   this.isGetLocation = false
-  // this.$toast              
-  this.getMyLocation();//定位失败再请求定位，测试使用
-},//第二部分
-
-//位置信息在地图上展示
-  setMap() {                
-    //步骤：定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
-    //设置地图中心点
-    // var myLatlng = new qq.maps.LatLng(this.latitude,this.longitude); //定义工厂模式函数
-    // var myOptions = {                  
-    //   zoom: 13,     //设置地图缩放级别
-    //   // center: myLatlng,    //设置中心点样式
-    //   // mapTypeId: qq.maps.MapTypeId.ROADMAP  //设置地图样式详情参见MapType
-    // }                // //获取dom元素添加地图信息
-    // var map = new qq.maps.Map(document.getElementById("container"), myOptions);
-  //第三部分
-  //给定位的位置添加图片标注
-    // var marker = new qq.maps.Marker({                    
-    //   position: myLatlng,                    
-    //   map: map
-    // });                //给定位的位置添加文本标注
-    // var marker = new qq.maps.Label({                    
-    //   position: myLatlng,                    
-    //   map: map,                    
-    //   content:'这是我当前的位置，偏差有点大，哈哈'
-    // });
-  },
-
-
-
-    changeCate(item,index) {
-      this.currIndex = index
-      if(index === 0) {
-        this.type = 'sportsKinds_01'
-      }
-      if(index === 1) {
-        this.type = 'sportsKinds_02'
-      }
-      const params = {
-        type: this.type,
-        name:'',
-        lon: this.currLon,
-        lat: this.currLat
-      }
-      this.$http.getPlaygroundList(params).then(resp => {
-        console.log(resp)
-        if(resp.status == 200) {
-          this.playGroungList = resp.data
-          // console.log(this.playGroungList)
-        }
-      })
-    },
-    toDetail(id) {
-      window.sessionStorage.setItem('playGroundDetail',id)
-      this.$router.push({
-        path: '/playgroundDetail',
-      })
-    },
-    toMap(lat,lon) {
-      if(this.isGetLocation) {
-        console.log('去地图')
-        const location = {
-          lat: lat,
-          lng: lon
-        }
-        this.$router.push({
-          path: '/mapPage',
-          name: 'MapPage',
-          params: location
-        })
-        window.sessionStorage.setItem('location',JSON.stringify(location))
-      }else{
-        this.$toast('获取位置信息中...')
-      }
+  toMap(lat,lon) {
+    console.log('去地图')
+    const location = {
+      lat: lat,
+      lng: lon
     }
+    this.$router.push({
+      path: '/mapPage',
+      name: 'MapPage',
+      params: location
+    })
+    window.sessionStorage.setItem('location',JSON.stringify(location))
   }
+},
+    
 }
 </script>
 
@@ -311,20 +289,28 @@ showErr() {
               font-weight: normal;
             }
           }
-          .g_img{
+          .playGroundImg{
             width: 100%;
             height: 255px;
+            img{
+              width: 100%;
+              height: 100%;
+            }
           }
           .g_bottom{
             width: 100%;
             height: 73px;
             padding-left: 10px;
             padding-right: 3px;
-            img{
+            .userImg{
               width: 50px;
               height: 50px;
               float: left;
               margin-top: 12px;
+              img{
+                width: 100%;
+                height: 100%;
+              }
             }
             p{
               width: 80%;
@@ -350,8 +336,10 @@ showErr() {
           }
           .g_admin{
             border-bottom: 1px solid #f3f3f3;
-            img{
-              border-radius: 50%;
+            .userImg{
+              img{
+                border-radius: 50%;
+              }
             }
             .icon{
               a{

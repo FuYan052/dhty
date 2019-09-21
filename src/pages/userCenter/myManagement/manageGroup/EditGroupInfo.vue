@@ -34,7 +34,9 @@
             :before-upload="beforeAvatarUpload"
             ref="upload"
             :http-request="uploadSectionFile">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <div class="avatar" v-if="imageUrl">
+              <img :src="imageUrl">
+            </div>
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -298,6 +300,10 @@ export default {
     width: 100px;
     height: 100px;
     display: block;
+  }
+  .editGroupInfo .avatar img{
+    width: 100%;
+    height: 100%;
   }
   .mint-msgbox {
     width: 60%;

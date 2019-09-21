@@ -51,17 +51,23 @@
               <div class="rightBtn" :class="'rightColor' + item.osStateId">{{item.timeStart}}</div>
             </div>
             <div class="detailBox">
-              <img :src="item.venueImage" alt="">
+              <div class="homeImg1">
+                <img :src="item.venueImage" alt="">
+              </div>
               <div class="p1 venueName">{{item.venueName}}<span>{{item.distance}}km</span></div>
               <div class="p1 tit">{{item.title}}</div>
               <div class="p1">{{item.cost}}元/人</div>
             </div>
           </div>
           <div class="peopleList">
-            <img class="icon" src="../../assets/peoIcon.png" alt="">
+            <div class="iconImg">
+              <img src="../../assets/peoIcon.png" alt="">
+            </div>
             <!-- 报名头像列表 -->
             <div class="imgBox">
-              <img class="headImg"  v-for="(it,ind) in item.enrolledVoList" :key="ind"  :src="it.image" alt="">
+              <div class="headImg" v-for="(it,ind) in item.enrolledVoList" :key="ind">
+                <img :src="it.image" alt="">
+              </div>
             </div>
             <div class="detailText">
               <span class="num">{{item.enrolledVoList.length}}/{{item.people}}</span>
@@ -110,88 +116,146 @@ export default {
       timestamp: '',
       nonceStr: '',
       signature: '',
+      latitude: '30.5702',
+      longitude: '104.06476'
     }
   },
   created() {
     const url = location.href
-    // url = ' + encodeURIComponent(that.isIosOrAndroid() === 'android' ? location.href.split('#')[0] : window.initUrl)'
-    console.log(this.$isIosOrAndroid())
-
-    console.log(url.substr(0, url.indexOf(location.hash)))
+    // console.log(url.substr(0, url.indexOf(location.hash)))
     this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
-      console.log(resp)
+      // console.log(resp)
       if(resp.status = 200) {
+        this.$indicator.open()
         this.timestamp = resp.data.timestamp
         this.nonceStr = resp.data.nonceStr
         this.signature = resp.data.signature
         const that = this
         wx.config({
-          debug: true,
+          // debug: true,
           appId: 'wxd3d4d3045a1213a1',
-          timestamp: '1568982632',
-          nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
-          signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',
-          // timestamp: this.timestamp,
-          // nonceStr: this.nonceStr,
-          // signature: this.signature,
+          // appId: 'wxf1894ca38c849d17',  //测试号
+          // timestamp: '1568982632',
+          // nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
+          // signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',
+          timestamp: this.timestamp,
+          nonceStr: this.nonceStr,
+          signature: this.signature,
           jsApiList: [
             'getLocation',
           ]
         });
-        
-        wx.getLocation({
-          type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-          success: function (res) {
-            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-            var speed = res.speed; // 速度，以米/每秒计
-            var accuracy = res.accuracy; // 位置精度
+        // 获取经纬度
+        const _this = this
+        wx.ready(function(){
+          _this.$indicator.close()
+          wx.getLocation({
+            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function (res) {
+              // console.log(res)
+              _this.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+              _this.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+              const params = {
+                // activityType: this.activityType,
+                type: _this.type,
+                time: _this.time,
+                keyWord: '',
+                isTwoDaysLater: _this.isTwoDaysLater,
+                lat: _this.latitude,
+                lon: _this.longitude,
+              }
+              // console.log(params)
+              _this.$http.activitiesList(params).then(resp => {
+                if(resp.status == 200) {
+                  _this.activList = resp.data
+                  if(_this.activList.length == 0) {
+                    _this.$toast({
+                      message: '没有活动哦！',
+                      duration: 2000
+                    });
+                  }
+                }else{
+                  _this.$toast({
+                    message: '获取列表失败！',
+                    duration: 2000
+                  });
+                  _this.activList = []
+                }
+                console.log(resp)
+              })
+            },
+            // 当获取经纬度失败
+            cancel: function (res) {
+              const params = {
+                // activityType: this.activityType,
+                type: _this.type,
+                time: _this.time,
+                keyWord: '',
+                isTwoDaysLater: _this.isTwoDaysLater,
+                lat: '30.5702',
+                lon: '104.06476',
+              }
+              _this.$http.activitiesList(params).then(resp => {
+                if(resp.status == 200) {
+                  _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
+                  _this.activList = resp.data
+                  if(_this.activList.length == 0) {
+                    _this.$toast({
+                      message: '没有活动哦！',
+                      duration: 2000
+                    });
+                  }
+                }else{
+                  _this.$toast({
+                    message: '获取列表失败！',
+                    duration: 2000
+                  });
+                  _this.activList = []
+                }
+              })
+            }
+          });
+        });
+        // 当微信获取位置配置失败
+        wx.error(function(res){
+          const params = {
+          // activityType: this.activityType,
+          type: _this.type,
+          time: _this.time,
+          keyWord: '',
+          isTwoDaysLater: _this.isTwoDaysLater,
+          lat: '30.5702',
+          lon: '104.06476',
+        }
+        _this.$http.activitiesList(params).then(resp => {
+           _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
+          if(resp.status == 200) {
+            _this.activList = resp.data
+            if(_this.activList.length == 0) {
+              _this.$toast({
+                message: '没有活动哦！',
+                duration: 2000
+              });
+            }
+          }else{
+            _this.$toast({
+              message: '获取列表失败！',
+              duration: 2000
+            });
+            _this.activList = []
           }
+        })
         });
       }
     })
     
-
-    
-
-
-
-
     for(let i = 0; i< 4; i++){
       const result = this.findDate(i)
       this.dateList[i].date1 = result
     }
-    // console.log(this.dateList)
-    // 获取活动列表
+    // 计算日期
     this.time = this.dateList[0].date1.year + '-' + this.dateList[0].date1.month +'-'+ this.dateList[0].date1.day  //实际动态日期
-    const params = {
-      // activityType: this.activityType,
-      type: this.type,
-      time: this.time,
-      keyWord: '',
-      isTwoDaysLater: this.isTwoDaysLater,
-      lat: '30.67994285',
-      lon: '104.06792346'
-    }
-    console.log(params)
-    this.$http.activitiesList(params).then(resp => {
-      if(resp.status == 200) {
-        this.activList = resp.data
-        if(this.activList.length == 0) {
-          this.$toast({
-            message: '没有活动哦！',
-            duration: 2000
-          });
-        }
-      }else{
-        this.$toast({
-          message: '获取列表失败！',
-          duration: 2000
-        });
-        this.activList = []
-      }
-      console.log(resp)
-    })
+    
   },
   methods: {
     showSearch() {
@@ -244,8 +308,8 @@ export default {
         time: this.time,
         keyWord: '',
         isTwoDaysLater: this.isTwoDaysLater,
-        lat: '30.67994285',
-        lon: '104.06792346'
+        lat: this.latitude,
+        lon: this.longitude
       }
       console.log(params)
       // 活动列表
@@ -284,8 +348,8 @@ export default {
         time: this.time,
         keyWord: '',
         isTwoDaysLater: this.isTwoDaysLater,
-        lat: '30.67994285',
-        lon: '104.06792346'
+        lat: this.latitude,
+        lon: this.longitude
       }
       console.log(params)
       // 活动列表
@@ -539,13 +603,19 @@ export default {
               height: 194px;
               margin: 0 auto;
               border-top: 1px solid #eeeeee;
-              img{
+              .homeImg1{
                 width: 129px;
                 height: 129px;
                 margin-top: 32px;
                 float: left;
-                border-radius: 5px;
+                // border-radius: 5px;
                 margin-left: 23px;
+                img{
+                  width: 100%;
+                  height: 100%;
+                  float: left;
+                  border-radius: 5px;
+                }
               }
               .p1{
                 width: 500px;
@@ -561,9 +631,10 @@ export default {
                 line-height: 26px;
                 color: #444444;
                 margin-bottom: 30px;
+                margin-top: 33px;
                 span{
                   float: right;
-                  font-size: 18px;
+                  font-size: 26px;
                   color: #808080;
                   padding-right: 18px;
                 }
@@ -587,7 +658,7 @@ export default {
             padding-left: 42px;
             overflow-x: auto;
             border-top: 1px solid #eeeeee;
-            .icon{
+            .iconImg{
               width: 36px;
               height: 36px;
               display: block;
@@ -595,6 +666,10 @@ export default {
               line-height: 80px;
               margin-top: 22px;
               margin-right: 45px;
+              img{
+                width: 100%;
+                height: 100%;
+              }
             }
             .imgBox{
               height: 80px;
@@ -608,6 +683,11 @@ export default {
                 border-radius: 50%;
                 margin-top: 12px;
                 margin-right: 10px;
+                img{
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 50%;
+                }
               }
             }
             .detailText{

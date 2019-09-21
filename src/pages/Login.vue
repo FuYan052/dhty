@@ -30,12 +30,16 @@
         </div>
         <div class="btnWrap">
           <div class="changeType">
-          <img src="../assets/loginPhone.png" alt=""  @click="handleChangeType">
+            <div class="loginImg" @click="handleChangeType">
+              <img src="../assets/loginPhone.png" alt="">
+            </div>
           <p>手机登录</p>
           </div>
           <div class="changeType">
             <!-- <img src="../assets/weinxinIcon.png" alt=""> -->
-            <img src="../assets/weinxinIcon.png" alt=""  @click="wexinLogin">
+            <div class="loginImg" @click="wexinLogin">
+              <img src="../assets/weinxinIcon.png" alt="">
+            </div>
             <p>微信登录</p>
           </div>
         </div>
@@ -279,10 +283,14 @@ export default {
         .changeType{
           width: 49.2%;
           display: inline-block;
-          img{
+          .loginImg{
             width: 85px;
             height: 85px;
             margin: 0 auto;
+            img{
+              width: 100%;
+              height: 100%;
+            }
           }
           p{
             color: #909090;

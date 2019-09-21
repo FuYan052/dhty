@@ -23,10 +23,12 @@
       <li>
         <span class="span1">报名人数：</span>{{peopleLength}}/{{theDetail.people}}
       </li>
-      <li class="list">
+      <li class="list" @click="toList">
         <span class="span1">已&nbsp;&nbsp;报&nbsp;&nbsp;名：</span><span class="span2 el-icon-arrow-right"></span>
         <div class="imgBox">
-          <img v-for="(it,ind) in theDetail.enrolledVoList" :key="ind" :src="it.image" alt="">
+          <div class="imgitem" v-for="(it,ind) in theDetail.enrolledVoList" :key="ind" >
+            <img :src="it.image" alt="">
+          </div>
         </div>
       </li>
     </ul>
@@ -113,11 +115,11 @@ export default {
       })
     },
     // 报名列表
-    // toList() {
-    //   this.$router.push({
-    //     path: '/signUpList',
-    //   })
-    // },
+    toList() {
+      this.$router.push({
+        path: '/signUpList',
+      })
+    },
     checked() {
       this.isChecked = !this.isChecked
       // console.log(this.isChecked)
@@ -137,7 +139,7 @@ export default {
             })
           }else{
             this.$toast({
-              message: '请阅读《免责条款》！',
+              message: '未同意《免责条款》！',
               duration: 2000
             });
           }
@@ -267,19 +269,27 @@ export default {
       }
       .list{
         .imgBox{
-          width: 490px;
+          width: 66%;
           height: 100px;
           float: right;
+          // border: 1px solid red;
           overflow: hidden;
           padding-right: 15px;
-          img{
+          padding-left: 12px;
+          .imgitem{
             width: 62px;
             height: 62px;
-            border: 1px solid #dedede;
             border-radius: 50%;
             float: left;
-            // margin-left: -10px;
+            margin-left: -10px;
             margin-top: 22px;
+              img{
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+              border: 1px solid #dedede;
+              float: left;
+            }
           }
         }
         .span2{

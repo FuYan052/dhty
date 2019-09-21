@@ -27,12 +27,16 @@
       <div class="actList">
         <div class="actiItem" v-for="(item,index) in actList" :key="index">
           <div class="title">
-            <img :src="item.image" alt="">
+            <div class="Img1">
+              <img :src="item.image" alt="">
+            </div>
             <p class="role">{{item.type}}</p>
             <p class="text">{{item.nickName}}</p>
           </div>
           <div class="left">
-            <img :src="item.venueImage" alt="">
+            <div class="venueImage">
+              <img :src="item.venueImage" alt="">
+            </div>
           </div>
           <div class="right">
             <p class="p1">{{item.title}}</p>
@@ -73,7 +77,9 @@
       <div class="actList actList2">
         <div class="actiItem" v-for="(item,index) in actList" :key="index">
           <div class="left">
-            <img :src="item.venueImage" alt="">
+            <div class="imgwrap">
+              <img :src="item.venueImage" alt="">
+            </div>
           </div>
           <div class="right">
             <p class="p1">{{item.title}}</p>
@@ -311,12 +317,17 @@ export default {
           width: 100%;
           height: 90px;
           border-bottom: 1px solid #f0eded;
-          img{
+          .Img1{
             width: 60px;
             height: 60px;
             float: left;
             margin-top: 12px;
             border-radius: 50%;
+            img{
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+            }
           }
           .text{
             display: block;
@@ -347,12 +358,17 @@ export default {
           // float: left;
           display: inline-block;
           vertical-align: top;
-          img{
+          .venueImage{
             width: 142px;
             height: 142px;
             float: left;
             margin-top: 30px;
             border-radius: 10px;
+            img{
+              width: 100%;
+              height: 100%;
+              border-radius: 10px;
+            }
           }
         }
         .right{

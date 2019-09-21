@@ -3,7 +3,9 @@
   <div class="checkCompleteSignUp" v-title data-title="查看报名">
     <ul class="memberItem">
         <li v-for="(item,index) in memberList" :key="index">
-          <img :src="item.imgPath" alt="">
+          <div class="iteImg">
+            <img :src="item.imgPath" alt="">
+          </div>
           <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
           <div class="btn">确认收款</div>
           <div class="btn sure">退费</div>
@@ -77,12 +79,17 @@ export default {
         height: 130px;
         padding: 0 40px;
         border-top: 1px solid #f6f6f6;
-        img{
+        .iteImg{
           width: 75px;
           height: 75px;
           float: left;
           border-radius: 50%;
           margin-top: 20px;
+          img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
         }
         .name{
           float: left;

@@ -25,7 +25,9 @@
         <button class="registerBtn" @click="doRegister" :disabled="isDisabled">
           注册
         </button>
-        <img class="logoImg" src="../assets/logoImg.png" alt="">
+        <div class="logoImg">
+          <img src="../assets/logoImg.png" alt="">
+        </div>
     </div>
     <div class="agreement">
       <span class="radiu" :class="{raiduChecked : isChecked}" @click="handleAgree"><i class="el-icon-check" v-show="isChecked"></i></span>
@@ -270,6 +272,10 @@ export default {
         margin: 0 auto;
         margin-top: 282px;
         margin-bottom: 65px;
+        img{
+          width: 100%;
+          height: 100%;
+        }
       }
       .agreement{
         font-size: 20px;

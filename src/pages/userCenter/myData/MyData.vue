@@ -3,7 +3,9 @@
   <div class="myData" v-title data-title="我的数据">
     <div class="bgBox">
       <div class="userBox">
-        <img :src="myInfo.image" alt="">
+        <div class="infoImg">
+          <img :src="myInfo.image" alt="">
+        </div>
         <div class="name">{{myInfo.nickName}}</div>
         <div class="level">Lv.{{myInfo.level}}</div>
       </div>
@@ -355,12 +357,17 @@ export default {
       width: 100%;
       height: 70px;
       margin-top: 60px;
-      img{
+      .infoImg{
         width: 70px;
         height: 70px;
         border-radius: 50%;
         float: left;
         margin-left: 17px;
+        img{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
       }
       .name{
         font-size: 23px;
@@ -554,8 +561,8 @@ export default {
           margin: 0 auto;
           margin-top: 25px;
           img{
-            width: 74px;
-            height: 74px;
+            width: 100%;
+            height: 100%;
           }
         }
         p{

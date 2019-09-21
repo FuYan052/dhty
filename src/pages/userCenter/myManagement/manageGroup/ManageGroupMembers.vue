@@ -12,7 +12,9 @@
       <div class="title">管理员</div>
       <ul class="ul1">
         <li @click="memberInfo(item.id)" v-for="(item,index) in memberList1" :key="index">
-          <img :src="item.image" alt="">
+          <div class="image1">
+            <img :src="item.image" alt="">
+          </div>
           <div class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></div>
           <div class="role">{{item.state}}</div>
           <div class="dj">Lv.{{item.level}}</div>
@@ -25,7 +27,9 @@
       <ul class="memberItem">
         <li v-for="(item,index) in memberList2" :key="index" @click="selected(item,index)">
           <span class="checkWrap" :class="{selected:selectedMemberIds.indexOf(item.id)>=0}"><i class="el-icon-check"></i></span>
-          <img :src="item.image" alt="">
+          <div class="image2">
+            <img :src="item.image" alt="">
+          </div>
           <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
           <div class="grade">Lv.{{item.level}}</div>
         </li>
@@ -159,12 +163,17 @@ export default {
           height: 130px;
           padding: 0 20px;
           border-top: 1px solid #f6f6f6;
-          img{
+          .image1{
             width: 75px;
             height: 75px;
             float: left;
             border-radius: 50%;
             margin-top: 20px;
+            img{
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+            }
           }
           .name{
             float: left;
@@ -255,13 +264,18 @@ export default {
             background: #fac31e;
             border: 1px solid #fac31e;
           }
-          img{
+          .image2{
             width: 75px;
             height: 75px;
             border-radius: 50%;
             float: left;
             margin-top: 30px;
             margin-left: 35px;
+            img{
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+            }
           }
           .name{
             float: left;

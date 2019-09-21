@@ -15,7 +15,9 @@
             :before-upload="beforeAvatarUpload"
             ref="upload"
             :http-request="uploadSectionFile">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <div class="avatar" v-if="imageUrl">
+              <img :src="imageUrl" >
+            </div>
             <i v-else class="el-icon-camera-solid avatar-uploader-icon"></i>
           </el-upload>
         </div>
@@ -813,6 +815,11 @@ export default {
     width: 94px;
     height: 94px;
     display: block;
+    border-radius: 50%;
+  }
+  .completeInfo .avatar img{
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
   }
   .completeInfo li .el-input{

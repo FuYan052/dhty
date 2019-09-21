@@ -126,6 +126,9 @@ export default new Router({
       path: '/playground',
       name: 'Playground',
       component: Playground,
+      meta: {
+        keepAlive: true 
+      }
     },
     {
       path: '/playgroundDetail',

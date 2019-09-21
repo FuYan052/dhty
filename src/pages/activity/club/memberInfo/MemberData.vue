@@ -1,7 +1,9 @@
 <template>
   <div class="memberData" v-title data-title="Ta人资料">
     <div class="topBox">
-      <img :src="infoData.image" alt="">
+      <div class="topImg1">
+        <img :src="infoData.image" alt="">
+      </div>
       <div class="right">
         <p class="name">{{infoData.nickName}}<span>{{infoData.region}}&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;{{infoData.sex}}</span></p>
         <div class="dj">Lv.{{infoData.level}}</div>
@@ -23,11 +25,15 @@
       <p class="title">ta的装备<span class="el-icon-arrow-right"></span></p>
       <ul class="equListBox">
         <li v-for="(item,index) in 6" :key="index">
-          <img src="../../../../assets/LOGO1.png" alt="">
+          <div class="equImg">
+            <img src="../../../../assets/LOGO1.png" alt="">
+          </div>
         </li>
       </ul>
       <div class="buyUrl">
-        <img src="../../../../assets/LOGO1.png" alt="">
+        <div class="buyImg">
+          <img src="../../../../assets/LOGO1.png" alt="">
+        </div>
         <div class="_right">
           <p class="_title">实用的实用的实用的实用的用的实用的</p>
           <p class="price"><span class="span1">￥</span>5190<span class="span2">￥8190</span></p>
@@ -93,13 +99,18 @@ export default {
       width: 100%;
       height: 215px;
       background: #fff;
-      img{
+      .topImg1{
         width: 145px;
         height: 145px;
         border-radius: 50%;
         float: left;
         margin-top: 35px;
         margin-left: 25px;
+        img{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
       }
       .right{
         width: 550px;
@@ -230,10 +241,15 @@ export default {
           display: inline-block;
           margin-left: 5px;
           text-align: left;
-          img{
+          .equImg{
             width: 215px;
             height: 215px;
             border-radius: 15px;
+            img{
+              width: 100%;
+              height: 100%;
+              border-radius: 15px;
+            }
           }
         }
         li:nth-child(1){
@@ -248,12 +264,17 @@ export default {
         margin-top: 20px;
         border-radius: 10px;
         position: relative;
-        img{
+        .buyImg{
           width: 60px;
           height: 60px;
           float: left;
           margin-top: 12px;
           margin-left: 25px;
+          // border-radius: 5px;
+        }
+        img{
+          width: 100%;
+          height: 100%;
           border-radius: 5px;
         }
         ._right{

@@ -521,7 +521,7 @@ export default {
         font-size: 0;
         vertical-align: top;
         .title{
-          width: 130px;
+          width: 140px;
           line-height: 97px;
           font-size: 32px;
           // color: #676767;
@@ -539,7 +539,7 @@ export default {
           width: 280px;
           line-height: 97px;
           font-size: 32px;
-          margin-left: 84px;
+          margin-left: 74px;
           vertical-align: top;
           color: #000;
         }

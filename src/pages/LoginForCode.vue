@@ -19,7 +19,7 @@
           </li>
           <li class="hqyzm">
             <input type="text" v-model="code" placeholder="请输入手机验证码" placeholder-class="placeholderStyle">
-            <el-button class="yzm" :disabled='disabled' @click="getCode2">{{content}}</el-button>
+            <el-button id="yzm" :disabled='disabled' @click="getCode2">{{content}}</el-button>
           </li>
         </ul>
         <p class="changeHandle">
@@ -30,7 +30,9 @@
         <div class="loginBtn" @click="loginForCodde">
           登录
         </div>
-        <img class="logoImg" src="../assets/logoImg.png" alt="">
+        <div class="lodinForcodeImg">
+          <img src="../assets/logoImg.png" alt="">
+        </div>
     </div>
     <div class="agreement">
       <span class="radiu" :class="{raiduChecked : isChecked}" @click="handleAgree"><i class="el-icon-check" v-show="isChecked"></i></span>
@@ -202,7 +204,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .loginForCode{
     width: 100%;
     min-height: 100vh;
@@ -264,7 +266,7 @@ export default {
           }
         }
         .hqyzm{
-          .yzm{
+          #yzm{
             width: 160px;
             height: 60px;
             border: 1px solid #c8c8c8;
@@ -273,10 +275,10 @@ export default {
             text-align: center;
             float: right;
             // margin-top: 20px;
-            background: #c8c8c8;
+            background: #c8c8c8 !important;
             font-size: 22px;
             span{
-              line-height: 60px;
+              // line-height: 60px;
               font-size: 22px;
             }
           }
@@ -310,12 +312,16 @@ export default {
         padding-left: 15px;
         font-size: 30px;
       }
-      .logoImg{
+      .lodinForcodeImg{
         width: 81px;
         height: 113px;
         margin: 0 auto;
         margin-top: 400px;
         margin-bottom: 65px;
+        img{
+          width: 100%;
+          height: 100%;
+        }
       }
     }
     .agreement{
@@ -350,7 +356,7 @@ export default {
     }
   }
 </style>
-<style scpoed>
+<style>
 .loginForCode .el-input__inner{
   font-size: 32px;
   height: 80px;
@@ -404,4 +410,23 @@ export default {
     height: 80px;
     font-size: 28px;
   }
+  /* .el-button{
+    background: #c8c8c8 !important;
+  } */
+  /* #yzm{
+    width: 160px;
+    height: 60px;
+    border: 1px solid #c8c8c8;
+    color: #fff;
+    border-radius: 90px;
+    text-align: center;
+    float: right;
+    background: #c8c8c8 !important;
+    font-size: 22px;
+    
+  } */
+  /* #yzm span{
+    line-height: 60px;
+    font-size: 22px;
+  } */
 </style>

@@ -1,7 +1,9 @@
 <template>
   <div class="manageHome" v-title data-title="个人中心">
     <div class="topBox">
-      <img class="headImg" :src="info.image" alt="">
+      <div class="headImg">
+        <img :src="info.image" alt="">
+      </div>
       <div class="levelIcon">Lv{{info.level}}</div>
       <div class="nickName">
         <p>{{info.nickName}}</p>
@@ -129,7 +131,7 @@ export default {
       })
     },
     handleMenu(index,path) {
-      console.log(index,path)
+      // console.log(index,path)
       if(index === 6) {
         console.log(this)
         this.$messagebox.confirm('确定退出登录?').then(action => {
@@ -184,6 +186,11 @@ export default {
         border-radius: 50%;
         float: left;
         margin-top: 75px;
+        img{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
       }
       .levelIcon{
         width: 42px;
@@ -285,20 +292,20 @@ export default {
         padding-right: 15px;
         border-top: 2px solid #efefef;
         .icon{
-          width: 100px;
-          height: 102px;
+          width: 35px;
+          height: 35px;
           float: left;
+          margin-left: 5px;
+          margin-top: 35px;
           img{
-            display: inline-block;
-            width: 32px;
-            line-height: 100px;
-            margin-left: 5px;
-            margin-top: 32px;
+            width: 100%;
+            height: 100%;
           }
         }
         .title{
           width: 450px;
           height: 102px;
+          margin-left: 45px;
           line-height: 102px;
           font-size: 28px;
           color: #3d3d3d;
@@ -317,37 +324,37 @@ export default {
         }
       }
       li:nth-of-type(1) {
-        .icon{
-          img{
-            display: inline-block;
-            width: 35px;
-            line-height: 102px;
-            margin-left: 5px;
-            margin-top: 34px;
-          }
-        }
+        // .icon{
+        //   img{
+        //     display: inline-block;
+        //     width: 35px;
+        //     line-height: 102px;
+        //     margin-left: 5px;
+        //     margin-top: 34px;
+        //   }
+        // }
       }
       li:nth-of-type(4) {
-        .icon{
-          img{
-            display: inline-block;
-            width: 30px;
-            line-height: 102px;
-            margin-left: 5px;
-            margin-top: 35px;
-          }
-        }
+        // .icon{
+        //   img{
+        //     display: inline-block;
+        //     width: 30px;
+        //     line-height: 102px;
+        //     margin-left: 5px;
+        //     margin-top: 35px;
+        //   }
+        // }
       }
       li:nth-of-type(6) {
-        .icon{
-          img{
-            display: inline-block;
-            width: 32px;
-            line-height: 102px;
-            margin-left: 5px;
-            margin-top: 36px;
-          }
-        }
+        // .icon{
+        //   img{
+        //     display: inline-block;
+        //     width: 32px;
+        //     line-height: 102px;
+        //     margin-left: 5px;
+        //     margin-top: 36px;
+        //   }
+        // }
       }
     }
   }

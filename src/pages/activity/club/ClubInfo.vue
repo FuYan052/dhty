@@ -1,7 +1,9 @@
 <template>
   <div class="clubInfo">
     <div class="top">
-      <img :src="clubInfo.logo" alt="">
+      <div class="clubLogo">
+        <img :src="clubInfo.logo" alt="">
+      </div>
       <p>{{clubInfo.name}}</p>
     </div>
     <div class="join">
@@ -101,12 +103,17 @@ export default {
       background-size: contain;
       border-bottom: 3px solid #06a182;
       overflow: hidden;
-      img{
+      .clubLogo{
         width: 115px;
         height: 115px;
         border-radius: 50%;
         margin: 0 auto;
         margin-top: 32px;
+        img{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
       }
       p{
         color: #fff;
