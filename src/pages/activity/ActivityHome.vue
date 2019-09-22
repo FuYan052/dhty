@@ -52,7 +52,7 @@
             </div>
             <div class="detailBox">
               <div class="homeImg1">
-                <img :src="item.venueImage" alt="">
+                <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
               </div>
               <div class="p1 venueName">{{item.venueName}}<span>{{item.distance}}km</span></div>
               <div class="p1 tit">{{item.title}}</div>
@@ -61,12 +61,12 @@
           </div>
           <div class="peopleList">
             <div class="iconImg">
-              <img src="../../assets/peoIcon.png" alt="">
+              <img src="../../assets/peoIcon.png" style="width: 100%; height: 100%;" alt="">
             </div>
             <!-- 报名头像列表 -->
             <div class="imgBox">
               <div class="headImg" v-for="(it,ind) in item.enrolledVoList" :key="ind">
-                <img :src="it.image" alt="">
+                <img :src="it.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
               </div>
             </div>
             <div class="detailText">
@@ -610,12 +610,12 @@ export default {
                 float: left;
                 // border-radius: 5px;
                 margin-left: 23px;
-                img{
-                  width: 100%;
-                  height: 100%;
-                  float: left;
-                  border-radius: 5px;
-                }
+                // img{
+                //   width: 100%;
+                //   height: 100%;
+                //   float: left;
+                //   border-radius: 5px;
+                // }
               }
               .p1{
                 width: 500px;
@@ -663,13 +663,14 @@ export default {
               height: 36px;
               display: block;
               float: left;
-              line-height: 80px;
+              // line-height: 80px;
+              // border: 1px solid red;
               margin-top: 22px;
               margin-right: 45px;
-              img{
-                width: 100%;
-                height: 100%;
-              }
+              // img{
+              //   width: 100%;
+              //   height: 100%;
+              // }
             }
             .imgBox{
               height: 80px;
@@ -683,11 +684,11 @@ export default {
                 border-radius: 50%;
                 margin-top: 12px;
                 margin-right: 10px;
-                img{
-                  width: 100%;
-                  height: 100%;
-                  border-radius: 50%;
-                }
+                // img{
+                //   width: 100%;
+                //   height: 100%;
+                //   border-radius: 50%;
+                // }
               }
             }
             .detailText{

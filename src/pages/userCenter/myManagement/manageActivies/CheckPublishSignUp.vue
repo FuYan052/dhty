@@ -4,7 +4,7 @@
     <ul class="memberItem">
         <li v-for="(item,index) in memberList" :key="index">
           <div class="itImg1">
-            <img :src="item.imgPath" alt="">
+            <img :src="item.imgPath" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
           </div>
           <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
           <div class="cancel">取消活动</div>
@@ -90,11 +90,11 @@ export default {
           float: left;
           border-radius: 50%;
           margin-top: 20px;
-          img{
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          //   border-radius: 50%;
+          // }
         }
         .name{
           float: left;

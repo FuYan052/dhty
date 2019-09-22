@@ -5,7 +5,7 @@
       <li v-for="(item,index) in memberList" :key="index" @click="selected(item,index)">
         <span class="checkWrap" :class="{selected : clickIndex === index}"><i class="el-icon-check"></i></span>
         <div class="traImg">
-          <img :src="item.image" alt="">
+          <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
         </div>
         <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
         <div class="grade">Lv.{{item.level}}</div>
@@ -129,11 +129,11 @@ export default {
           float: left;
           margin-top: 30px;
           margin-left: 35px;
-          img{
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          //   border-radius: 50%;
+          // }
         }
         .name{
           float: left;

@@ -19,7 +19,7 @@
           <div class="top">
             <div class="title">
               <div class="imgcluAct">
-                <img :src="item.image" alt="">
+                <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
               </div>
               <p class="text">{{item.nickName}}</p>
               <p class="role">{{item.type}}</p>
@@ -28,7 +28,7 @@
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
               <div class="venuImg">
-                <img :src="item.venueImage" alt="">
+                <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 10px;" alt="">
               </div>
               <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
               <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
@@ -174,36 +174,49 @@ export default {
     // padding-bottom: 20px;
     .dateList{
       width: 100%;
-      height: 130px;
+      height: 120px;
       background: #fff;
       .dateItem{
         width: 25%;
-        height: 130px;
-        padding-top: 30px;
+        height: 120px;
+        padding-top: 22px;
         float: left;
         text-align: center;
         position: relative;
         .p{
-          color: #928d93;
+          color: #000000;
         }
         .p1{
-          font-size: 20px;
-          padding-bottom: 15px;
+          font-size: 24px;
+          line-height: 34px;
         }
         .p2{
-          font-size: 18px;
-          line-height: 26px;
+          font-size: 26px;
+          line-height: 45px;
         }
+      }
+      .dateItem::after{
+        display: block;
+        content: '';
+        width: 4px;
+        height: 50px;
+        border-right: 1px solid #e6e6e6;
+        position: absolute;
+        top: 40px;
+        right: 0;
+      }
+      .dateItem:nth-of-type(4)::after{
+        display: none;
       }
       .activeDate::before{
         display: block;
         content: '';
-        width: 37px;
+        width: 100%;
         height: 5px;
-        background: #23a0f2;
+        background: #ff9c00;
         position: absolute;
-        bottom: 1px;
-        left: 78px;
+        bottom: 0;
+        left: 0;
       }
     }
     .list{
@@ -230,11 +243,11 @@ export default {
               margin-top: 23px;
               margin-left: 30px;
               border-radius: 50%;
-              img{
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-              }
+              // img{
+              //   width: 100%;
+              //   height: 100%;
+              //   border-radius: 50%;
+              // }
             }
             .text{
               display: inline-block;
@@ -283,12 +296,12 @@ export default {
               height: 160px;
               margin-top: 35px;
               float: left;
-              img{
-                width: 100%;
-                height: 100%;
-                float: left;
-                border-radius: 10px;
-              }
+              // img{
+              //   width: 100%;
+              //   height: 100%;
+              //   float: left;
+              //   border-radius: 10px;
+              // }
             }
             
             .p1{

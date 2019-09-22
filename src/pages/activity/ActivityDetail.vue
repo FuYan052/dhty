@@ -27,7 +27,7 @@
         <span class="span1">已&nbsp;&nbsp;报&nbsp;&nbsp;名：</span><span class="span2 el-icon-arrow-right"></span>
         <div class="imgBox">
           <div class="imgitem" v-for="(it,ind) in theDetail.enrolledVoList" :key="ind" >
-            <img :src="it.image" alt="">
+            <img :src="it.image" style="width: 100%; height: 100%; float: left;" alt="">
           </div>
         </div>
       </li>
@@ -283,13 +283,14 @@ export default {
             float: left;
             margin-left: -10px;
             margin-top: 22px;
-              img{
-              width: 100%;
-              height: 100%;
-              border-radius: 50%;
-              border: 1px solid #dedede;
-              float: left;
-            }
+            // border: 1px solid #dedede;
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            //   border-radius: 50%;
+            //   border: 1px solid #dedede;
+            //   float: left;
+            // }
           }
         }
         .span2{

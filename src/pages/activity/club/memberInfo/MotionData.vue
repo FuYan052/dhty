@@ -92,7 +92,7 @@ export default {
   created() {
     // 获取活动类型
     this.$http.findDictList('sportsKinds').then(resp => {
-      // console.log(resp)
+      console.log(resp)
       if(resp.status == 200) {
         this.cateList = resp.data.slice(0,2)
 
@@ -102,7 +102,7 @@ export default {
         }
         // 运动参数
         this.$http.motionParameters(params).then(resp => {
-          // console.log(resp)
+          console.log(resp)
           if(resp.status == 200){
             this.dataInfo = resp.data[0]
             if(this.dataInfo === undefined) {

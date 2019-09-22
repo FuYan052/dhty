@@ -18,7 +18,7 @@
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
               <div class="venuImg1">
-                <img :src="item.venueImage" alt="">
+                <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 10px;" alt="">
               </div>
               <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
               <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
@@ -203,12 +203,12 @@ export default {
               height: 160px;
               margin-top: 35px;
               float: left;
-              img{
-                width: 100%;
-                height: 100%;
-                float: left;
-                border-radius: 10px;
-              }
+              // img{
+              //   width: 100%;
+              //   height: 100%;
+              //   float: left;
+              //   border-radius: 10px;
+              // }
             }
             .p1{
               width: 460px;

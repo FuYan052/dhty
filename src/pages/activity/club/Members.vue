@@ -14,7 +14,7 @@
       <ul class="ul1">
         <li @click="memberInfo(item.id)" v-for="(item,index) in memberList1" :key="index">
           <div class="adminImg">
-            <img :src="item.image" alt="">
+            <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
           </div>
           <div class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></div>
           <div class="role">{{item.state}}</div>
@@ -31,7 +31,7 @@
             :key="index" 
             @click="memberInfo(item.id)">
             <div class="memImg">
-              <img :src="item.image" alt="">
+              <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
             </div>
             <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
             <div class="grade">Lv.{{item.level}}</div>
@@ -114,11 +114,11 @@ export default {
             float: left;
             // border-radius: 50%;
             margin-top: 20px;
-            img{
-              width: 100%;
-              height: 100%;
-              border-radius: 50%;
-            }
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            //   border-radius: 50%;
+            // }
           }
           .name{
             float: left;
@@ -190,11 +190,11 @@ export default {
             float: left;
             // border-radius: 50%;
             margin-top: 20px;
-            img{
-              width: 100%;
-              height: 100%;
-              border-radius: 50%;
-            }
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            //   border-radius: 50%;
+            // }
           }
           .name{
             float: left;

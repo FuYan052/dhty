@@ -16,7 +16,7 @@
             ref="upload"
             :http-request="uploadSectionFile">
             <div class="avatar" v-if="imageUrl">
-              <img :src="imageUrl" >
+              <img :src="imageUrl" style="width: 100%; height: 100%; border-radius: 50%;">
             </div>
             <i v-else class="el-icon-camera-solid avatar-uploader-icon"></i>
           </el-upload>
@@ -817,11 +817,11 @@ export default {
     display: block;
     border-radius: 50%;
   }
-  .completeInfo .avatar img{
+  /* .completeInfo .avatar img{
     width: 100%;
     height: 100%;
     border-radius: 50%;
-  }
+  } */
   .completeInfo li .el-input{
     width: 300px;
     float: left;
@@ -855,7 +855,8 @@ export default {
   padding-bottom: 10px;
 }
 .mint-msgbox-message{
-  font-size: 22px;
+  color: rgb(37, 37, 37);
+  font-size: 29px;
 }
 .mint-msgbox-confirm{
   color: #fac31e

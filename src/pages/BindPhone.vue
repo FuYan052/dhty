@@ -20,7 +20,7 @@
         绑定
       </div>
       <div class="logoImg">
-        <img src="../assets/logoImg.png" alt="">
+        <img src="../assets/logoImg.png" style="width: 100%; height: 100%;" alt="">
       </div>
       <div class="agreement">
         <span class="radiu" :class="{raiduChecked : isChecked}" @click="handleAgree"><i class="el-icon-check" v-show="isChecked"></i></span>
@@ -335,10 +335,10 @@ export default {
       margin: 0 auto;
       margin-top: 400px;
       margin-bottom: 65px;
-      img{
-        width: 100%;
-        height: 100%;
-      }
+      // img{
+      //   width: 100%;
+      //   height: 100%;
+      // }
     }
     .agreement{
       width: 100%;

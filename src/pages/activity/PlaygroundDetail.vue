@@ -2,13 +2,13 @@
   <!-- 场馆详情 -->
   <div class="playgroundDetail" v-title data-title="场馆详情">
     <div class="topImg">
-      <img :src="playgroundInfo.image" alt="">
+      <img :src="playgroundInfo.image" style="width: 100%; height: 100%;" alt="">
     </div>
     <div class="wrap1">
       <div class="title">
         {{playgroundInfo.name}}
         <span class="crownImg">
-          <img src="../../assets/crown.png" alt="">
+          <img src="../../assets/crown.png" style="width: 100%; height: 100%; float: left;" alt="">
         </span>
       </div>
       <!-- 地址 -->
@@ -32,7 +32,7 @@
       <p class="title">活动</p>
       <div class="actItem" v-for="(item,index) in actiList" :key="index" @click="toActDetail">
         <div class="theImg">
-          <img :src="playgroundInfo.image" alt="">
+          <img :src="playgroundInfo.image" style="width: 100%; height: 100%;" alt="">
         </div>
         <div class="right">
           <p class="p1">{{item.title}}</p>
@@ -100,10 +100,10 @@ export default {
     .topImg{
       width: 100%;
       height: 440px;
-      img{
-        width: 100%;
-        height: 100%;
-      }
+      // img{
+      //   width: 100%;
+      //   height: 100%;
+      // }
     }
     .wrap1{
       width: 100%;
@@ -115,16 +115,18 @@ export default {
         line-height: 96px;
         padding-left: 30px;
         color: #161616;
+        // border: 1px solid red;
         .crownImg{
           display: inline-block;
           width: 30px;
           height: 30px;
-          padding-left: 15px;
-          img{
-            width: 100%;
-            height: 100%;
-            float: left;
-          }
+          vertical-align: middle;
+          // border: 1px solid red;
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          //   float: left;
+          // }
         }
       }
       .address{
@@ -201,10 +203,10 @@ export default {
           height: 112px;
           float: left;
           margin-top: 44px;
-          img{
-            width: 100%;
-            height: 100%;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          // }
         }
         .right{
           width: 490px;

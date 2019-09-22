@@ -1,10 +1,13 @@
 <template>
   <!-- 我创建的群列表 -->
   <div class="createdGroupList" v-title data-title="我创建的群">
-    <ul>
+    <!-- 当列表为空 -->
+    <div class="noGroup" v-show="noGroup"></div>
+    <!-- 当列表不为空 -->
+    <ul v-show="!noGroup">
       <li v-for="(item,index) in createdGroupList" :key="index" @click="handle(item,index)">
         <div class="imgLogo">
-          <img :src="item.logo" alt="">
+          <img :src="item.logo" style="width: 100%; height: 100%; border-radius: 5px" alt="">
         </div>
         <div class="text">
           <p>{{item.name}}</p>
@@ -22,7 +25,8 @@ export default {
   name: 'CreatedGroupList',
   data() {
     return {
-      createdGroupList: []
+      createdGroupList: [],
+      noGroup: false
     }
   },
   computed: {
@@ -35,11 +39,10 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.createdGroupList = resp.data
-        if(resp.data.length == 0) {
-          this.$toast({
-            message: '暂无社群！',
-            duration: 2000
-          });
+        if(this.createdGroupList.length == 0) {
+          this.noGroup = true
+        }else{
+          this.noGroup = false
         }
       }
     })
@@ -61,6 +64,12 @@ export default {
     min-height: 100vh;
     background: #f2f2f2;
     overflow: hidden;
+    .noGroup{
+      width: 100%;
+      height: 100vh;
+      background: url("../../../../assets/noListPage.jpg") no-repeat center;
+      background-size: cover;
+    }
     ul{
       width: 100%;
       height: auto;
@@ -77,11 +86,11 @@ export default {
           border-radius: 10px;
           float: left;
           margin-top: 15px;
-          img{
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          //   border-radius: 10px;
+          // }
         }
         .text{
           width: 80%;

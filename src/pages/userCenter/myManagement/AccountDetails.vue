@@ -10,8 +10,11 @@
         @click="changeCate(item,index)"
         >{{item}}</div>
     </div>
-    <ul class="detailList">
-      <li v-for="(item,index) in 3" :key="index">
+    <!-- 当记录为空 -->
+    <div class="accountNull" v-show="listLength"></div>
+    <!-- 当记录不为空 -->
+    <ul class="detailList" v-show="!listLength">
+      <li v-for="(item,index) in accountList" :key="index">
         <div class="left"></div>
         <div class="text">
           <p class="p1">{{number}}虎币</p>
@@ -33,7 +36,16 @@ export default {
       cateList: ['购物明细','账户明细','提现明细'],
       currIndex: 0,
       number: '+465',
-      content: '订单' + 89895642562226554652
+      content: '订单' + 89895642562226554652,
+      listLength: false,  //缺省页
+      accountList: []
+    }
+  },
+  created() {
+    if(this.accountList.length == 0) {
+      this.listLength = true
+    }else{
+      this.listLength = false
     }
   },
   methods: {
@@ -66,6 +78,7 @@ export default {
       height: 80px;
       line-height: 78px;
       border: 1px solid #f8d2a7;
+      background: #fff;
       // border-bottom: 1px solid #f8d2a7;
       .cateItem{
         width: 33.3%;
@@ -81,6 +94,12 @@ export default {
         height: 76px;
         background: #fdeab0;
       }
+    }
+    .accountNull{
+      width: 100%;
+      height: 97vh;
+      background: url("../../../assets/noListPage.jpg") no-repeat center;
+      background-size: cover;
     }
     .detailList{
       width: 100%;

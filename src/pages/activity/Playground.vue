@@ -28,13 +28,13 @@
              {{item.name}}<span>{{item.distance}}km</span>
            </p>
            <div class="playGroundImg" @click="toDetail(item.id)" >
-             <img :src="item.image" alt="">
+             <img :src="item.image" style="width: 100%; height: 100%;" alt="">
            </div>
            <div class="g_bottom g_admin">
              <div class="userImg">
-                <img :src="item.userImage" alt="">
+                <img :src="item.userImage" style="width: 100%; height: 100%;" alt="">
              </div>
-             <p>{{item.userType}}<span>{{item.userName}}</span></p>
+             <p>{{item.userType}}<span>&nbsp;&nbsp;&nbsp;{{item.userName}}</span></p>
              <div class="icon"><a :href="'tel:' + item.userPhone"><span class="el-icon-phone"></span></a></div>
            </div>
            <div class="g_bottom g_address">
@@ -251,7 +251,7 @@ methods: {
             float: left;
             line-height: 78px;
             padding-left: 25px;
-            font-size: 22px;
+            font-size: 27px;
           }
           .g_top_left{
             color: #6989a6;
@@ -261,11 +261,11 @@ methods: {
             display: inline-block;
             content: '';
             width: 4px;
-            height: 34px;
+            height: 40px;
             border-right: 1px solid #cfcfcf;
             position: absolute;
             right: 0;
-            top: 25px;
+            top: 20px;
           }
           .g_top_right{
             color: #5d5d5d;
@@ -280,7 +280,7 @@ methods: {
           width: 100%;
           padding: 0 20px;
           .g_name{
-            font-size: 30px;
+            font-size: 31px;
             color: #161616;
             margin: 25px 0;
             span{
@@ -292,10 +292,10 @@ methods: {
           .playGroundImg{
             width: 100%;
             height: 255px;
-            img{
-              width: 100%;
-              height: 100%;
-            }
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            // }
           }
           .g_bottom{
             width: 100%;
@@ -307,14 +307,14 @@ methods: {
               height: 50px;
               float: left;
               margin-top: 12px;
-              img{
-                width: 100%;
-                height: 100%;
-              }
+              // img{
+              //   width: 100%;
+              //   height: 100%;
+              // }
             }
             p{
               width: 80%;
-              font-size: 23px;
+              font-size: 27px;
               line-height: 73px;
               float: left;
               margin-left: 25px;
@@ -328,19 +328,19 @@ methods: {
               width: 25px;
               height: 30px;
               float: right;
-              font-size: 30px;
+              font-size: 34px;
               color: #fac51d;
-              margin-top: 13px;
+              margin-top: 4px;
               margin-right: 10px;
             }
           }
           .g_admin{
             border-bottom: 1px solid #f3f3f3;
-            .userImg{
-              img{
-                border-radius: 50%;
-              }
-            }
+            // .userImg{
+            //   // img{
+            //   //   border-radius: 50%;
+            //   // }
+            // }
             .icon{
               a{
                 color: #fac51d;

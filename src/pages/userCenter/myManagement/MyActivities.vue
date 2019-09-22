@@ -24,18 +24,19 @@
         >{{item}}</div>
       </div>
       <!-- 活动列表 -->
-      <div class="actList">
+      <div class="noActList" v-show="noActList"></div>
+      <div class="actList" v-show="!noActList">
         <div class="actiItem" v-for="(item,index) in actList" :key="index">
           <div class="title">
             <div class="Img1">
-              <img :src="item.image" alt="">
+              <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
             </div>
             <p class="role">{{item.type}}</p>
             <p class="text">{{item.nickName}}</p>
           </div>
           <div class="left">
             <div class="venueImage">
-              <img :src="item.venueImage" alt="">
+              <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
             </div>
           </div>
           <div class="right">
@@ -74,11 +75,12 @@
           >{{item}}</div>
       </div>
       <!-- 活动列表 -->
-      <div class="actList actList2">
+      <div class="noActList" v-show="noActList2"></div>
+      <div class="actList actList2" v-shoe="!noActList2">
         <div class="actiItem" v-for="(item,index) in actList" :key="index">
           <div class="left">
             <div class="imgwrap">
-              <img :src="item.venueImage" alt="">
+              <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
             </div>
           </div>
           <div class="right">
@@ -129,6 +131,8 @@ export default {
       cateList3: ['已发布','已完成'],
       currIndex2: 0,
       currIndex3: 0,
+      noActList: false,  //缺省页
+      noActList2: false,  //缺省页
       state: '0', //我参加的活动传给后端的状态标识
       state2: '1', //我组织的活动传给后端的状态标识
       actList: []
@@ -152,6 +156,11 @@ export default {
         // console.log(resp)
         if(resp.status == 200) {
           this.actList = resp.data
+          if(this.actList.length == 0) {
+            this.noActList = true
+          }else{
+            this.noActList = false
+          }
         }
         console.log(this.actList)
       })
@@ -166,6 +175,11 @@ export default {
         // console.log(resp)
         if(resp.status == 200) {
           this.actList = resp.data
+          if(this.actList.length == 0) {
+            this.noActList2 = true
+          }else{
+            this.noActList2 = false
+          }
         }
         console.log(this.actList)
       })
@@ -301,6 +315,12 @@ export default {
         background: #fdeab0;
       }
     }
+    .noActList{
+      width: 100%;
+      height: 90vh;
+      background: url('../../../assets/noListPage.jpg') no-repeat center;
+      background-size: cover;
+    }
     .actList{
       width: 100%;
       height: auto;
@@ -322,12 +342,13 @@ export default {
             height: 60px;
             float: left;
             margin-top: 12px;
-            border-radius: 50%;
-            img{
-              width: 100%;
-              height: 100%;
-              border-radius: 50%;
-            }
+            // border-radius: 50%;
+            border: 1px solid red;
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            //   border-radius: 50%;
+            // }
           }
           .text{
             display: block;
@@ -363,29 +384,31 @@ export default {
             height: 142px;
             float: left;
             margin-top: 30px;
-            border-radius: 10px;
-            img{
-              width: 100%;
-              height: 100%;
-              border-radius: 10px;
-            }
+            // border-radius: 10px;
+            border: 1px solid red;
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            //   border-radius: 10px;
+            // }
           }
         }
         .right{
           width: 514px;
           height: 230px;
           // float: left;
+          padding-left: 30px;
           display: inline-block;
           vertical-align: top;
           .p1{
-            width: 514px;
+            width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             font-size: 26px;
             color: #323232;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 15px;
           }
           .text{
             height: 40px;
@@ -445,6 +468,16 @@ export default {
       .actiItem{
         margin-bottom: 10px;
         border: none;
+      }
+      .left{
+        width: 165px;
+        height: 230px;
+        display: inline-block;
+        .imgwrap{
+          width: 165px;
+          height: 165px;
+          margin-top: 20px;
+        }
       }
       .btnWrap{
         width: 100%;

@@ -1,10 +1,13 @@
 <template>
   <!-- 参加的群列表 -->
   <div class="joinCroupList" v-title data-title="我参加的群">
-    <ul>
+    <!-- 当列表为空 -->
+    <div class="noJionGroup" v-show="noJionGroup"></div>
+    <!-- 当列表不为空 -->
+    <ul v-show="!noJionGroup">
       <li v-for="(item,index) in groupList" :key="index" @click="handle(item.id)">
         <div class="image">
-          <img :src="item.logo" alt="">
+          <img :src="item.logo" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
         </div>
         <div class="text">
           <p>{{item.name}}</p>
@@ -21,7 +24,8 @@ export default {
   name: 'JoinCroupList',
   data() {
     return{
-      groupList: []
+      groupList: [],
+      noJionGroup: false
     }
   },
   computed: {
@@ -34,11 +38,10 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.groupList = resp.data
-        if(resp.data.length == 0) {
-          this.$toast({
-            message: '暂无社群！',
-            duration: 2000
-          });
+        if(this.groupList.length == 0) {
+          this.noJionGroup = true
+        }else{
+          this.noJionGroup = false
         }
       }else{
         this.$toast({
@@ -65,6 +68,12 @@ export default {
     min-height: 100vh;
     background: #f2f2f2;
     overflow: hidden;
+    .noJionGroup{
+      width: 100%;
+      height: 100vh;
+      background: url("../../../../assets/noListPage.jpg") no-repeat center;
+      background-size: cover;
+    }
     ul{
       width: 100%;
       height: auto;
@@ -78,14 +87,14 @@ export default {
         .image{
           width: 80px;
           height: 80px;
-          border-radius: 10px;
+          // border-radius: 10px;
           float: left;
           margin-top: 15px;
-          img{
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          //   border-radius: 10px;
+          // }
         }
         .text{
           width: 80%;

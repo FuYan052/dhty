@@ -35,7 +35,7 @@
             ref="upload"
             :http-request="uploadSectionFile">
             <div class="avatar" v-if="imageUrl">
-              <img :src="imageUrl">
+              <img :src="imageUrl" style="width: 100%; height: 100%;">
             </div>
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -244,7 +244,7 @@ export default {
     left: 15px;
   }
   .editGroupInfo .groupName .el-form-item__label{
-    font-size: 26px;
+    font-size: 28px;
     margin-top: 28px;
     color: #3b3b3b;
   }
@@ -254,22 +254,32 @@ export default {
   .editGroupInfo .groupName .el-input__inner{
     height: 50px;
     margin-top: 25px;
-    font-size: 26px;
+    font-size: 28px;
     border: none;
   }
   .editGroupInfo .groupName .el-form-item__error{
     top: 86%;
   }
   .editGroupInfo .introduction .el-form-item__label{
-    font-size: 26px;
+    font-size: 28px;
     color: #3b3b3b;
     padding-bottom: 30px;
   }
   .editGroupInfo .introduction .el-textarea__inner{
-    font-size: 26px;
+    font-size: 28px;
     min-height: 140px !important;
     margin-left: 15px;
     border: 1px solid #f0f0f0;
+  }
+  .editGroupInfo .groupLogo .el-form-item__label{
+    font-size: 28px;
+    color: #3b3b3b;
+    padding-bottom: 30px;
+  }
+  .editGroupInfo .groupLogo .el-textarea__inner{
+    font-size: 28px;
+    margin-left: 15px;
+    /* border: 1px solid #f0f0f0; */
   }
   .editGroupInfo .avatar-uploader{
     display: block;
@@ -301,10 +311,10 @@ export default {
     height: 100px;
     display: block;
   }
-  .editGroupInfo .avatar img{
+  /* .editGroupInfo .avatar img{
     width: 100%;
     height: 100%;
-  }
+  } */
   .mint-msgbox {
     width: 60%;
   }

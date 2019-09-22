@@ -2,7 +2,7 @@
   <div class="memberData" v-title data-title="Ta人资料">
     <div class="topBox">
       <div class="topImg1">
-        <img :src="infoData.image" alt="">
+        <img :src="infoData.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
       </div>
       <div class="right">
         <p class="name">{{infoData.nickName}}<span>{{infoData.region}}&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;{{infoData.sex}}</span></p>
@@ -26,13 +26,13 @@
       <ul class="equListBox">
         <li v-for="(item,index) in 6" :key="index">
           <div class="equImg">
-            <img src="../../../../assets/LOGO1.png" alt="">
+            <img src="../../../../assets/LOGO1.png" style="width: 100%; height: 100%; border-radius: 15px;" alt="">
           </div>
         </li>
       </ul>
       <div class="buyUrl">
         <div class="buyImg">
-          <img src="../../../../assets/LOGO1.png" alt="">
+          <img src="../../../../assets/LOGO1.png" style="width: 100%; height: 100%; border-radius: 5px;"  alt="">
         </div>
         <div class="_right">
           <p class="_title">实用的实用的实用的实用的用的实用的</p>
@@ -106,11 +106,11 @@ export default {
         float: left;
         margin-top: 35px;
         margin-left: 25px;
-        img{
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
+        // img{
+        //   width: 100%;
+        //   height: 100%;
+        //   border-radius: 50%;
+        // }
       }
       .right{
         width: 550px;
@@ -245,11 +245,11 @@ export default {
             width: 215px;
             height: 215px;
             border-radius: 15px;
-            img{
-              width: 100%;
-              height: 100%;
-              border-radius: 15px;
-            }
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            //   border-radius: 15px;
+            // }
           }
         }
         li:nth-child(1){
@@ -272,11 +272,11 @@ export default {
           margin-left: 25px;
           // border-radius: 5px;
         }
-        img{
-          width: 100%;
-          height: 100%;
-          border-radius: 5px;
-        }
+        // img{
+        //   width: 100%;
+        //   height: 100%;
+        //   border-radius: 5px;
+        // }
         ._right{
           width: 380px;
           height: 86px;

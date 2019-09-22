@@ -2,7 +2,7 @@
   <div class="manageHome" v-title data-title="个人中心">
     <div class="topBox">
       <div class="headImg">
-        <img :src="info.image" alt="">
+        <img :src="info.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
       </div>
       <div class="levelIcon">Lv{{info.level}}</div>
       <div class="nickName">
@@ -30,7 +30,7 @@
     </ul>
     <ul class="menu2">
       <li v-for="(item,index) in menu2List" :key="index" @click="handleMenu(index,item.routerPath)">
-        <div class="icon"><img :src="item.icon" alt=""></div>
+        <div class="icon"><img :src="item.icon" style="width: 100%; height: 100%;" alt=""></div>
         <div class="title">{{item.title}}</div>
         <div class="right">
           <span class="el-icon-arrow-right"></span>
@@ -186,11 +186,11 @@ export default {
         border-radius: 50%;
         float: left;
         margin-top: 75px;
-        img{
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
+        // img{
+        //   width: 100%;
+        //   height: 100%;
+        //   border-radius: 50%;
+        // }
       }
       .levelIcon{
         width: 42px;
@@ -225,10 +225,11 @@ export default {
         }
       }
       .right1{
-        width: 80px;
+        width: 100px;
         height: 122px;
         float: right;
         margin-top: 75px;
+        margin-right: -20px;
         .menu_icon{
           display: inline-block;
           width: 33px;
@@ -297,10 +298,10 @@ export default {
           float: left;
           margin-left: 5px;
           margin-top: 35px;
-          img{
-            width: 100%;
-            height: 100%;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          // }
         }
         .title{
           width: 450px;
@@ -360,7 +361,7 @@ export default {
   }
 </style>
 <style>
-  .mint-msgbox {
+  /* .mint-msgbox {
     width: 70%;
   }
   .mint-msgbox-title{
@@ -376,5 +377,5 @@ export default {
   .mint-msgbox-btns{
     height: 80px;
     font-size: 28px;
-  }
+  } */
 </style>

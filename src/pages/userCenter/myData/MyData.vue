@@ -4,7 +4,7 @@
     <div class="bgBox">
       <div class="userBox">
         <div class="infoImg">
-          <img :src="myInfo.image" alt="">
+          <img :src="myInfo.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
         </div>
         <div class="name">{{myInfo.nickName}}</div>
         <div class="level">Lv.{{myInfo.level}}</div>
@@ -58,43 +58,43 @@
     <ul class="healthData">
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/shuimian.png" alt="">
+          <img src="../../../assets/shuimian.png" style="width: 100%; height: 100%;" alt="">
         </div>
         <p>睡眠</p>
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/tizhong.png" alt="">
+          <img src="../../../assets/tizhong.png" style="width: 100%; height: 100%;" alt="">
         </div>
         <p>体重</p>
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/xueya.png" alt="">
+          <img src="../../../assets/xueya.png" style="width: 100%; height: 100%;" alt="">
         </div>
         <p>压力</p>
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/xinlv.png" alt="">
+          <img src="../../../assets/xinlv.png" style="width: 100%; height: 100%;" alt="">
         </div>
         <p>心率</p>
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/xybhd.png" alt="">
+          <img src="../../../assets/xybhd.png" style="width: 100%; height: 100%;" alt="">
         </div>
         <p>血氧饱和度</p>
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/xy.png" alt="">
+          <img src="../../../assets/xy.png" style="width: 100%; height: 100%;" alt="">
         </div>
         <p>血压</p>
       </li>
       <li>
         <div class="iconBox" @click="toDetail">
-          <img src="../../../assets/xt.png" alt="">
+          <img src="../../../assets/xt.png" style="width: 100%; height: 100%;" alt="">
         </div>
         <p>血糖</p>
       </li>
@@ -142,6 +142,14 @@ export default {
     // console.log(this.dateList)
   },
   mounted() {
+    this.$messagebox({
+      title: '提示',
+      message: '抱歉，当前页暂时是Demo数据！',
+      showCancelButton: false,
+      confirmButtonText: '知道了'
+    });
+
+
     // 获取信息
     this._id = this.userId
     // console.log(this._id)
@@ -363,11 +371,11 @@ export default {
         border-radius: 50%;
         float: left;
         margin-left: 17px;
-        img{
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
+        // img{
+        //   width: 100%;
+        //   height: 100%;
+        //   border-radius: 50%;
+        // }
       }
       .name{
         font-size: 23px;
@@ -560,10 +568,10 @@ export default {
           height: 74px;
           margin: 0 auto;
           margin-top: 25px;
-          img{
-            width: 100%;
-            height: 100%;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          // }
         }
         p{
           font-size: 26px;

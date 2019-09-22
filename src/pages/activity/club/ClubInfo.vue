@@ -2,7 +2,7 @@
   <div class="clubInfo">
     <div class="top">
       <div class="clubLogo">
-        <img :src="clubInfo.logo" alt="">
+        <img :src="clubInfo.logo" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
       </div>
       <p>{{clubInfo.name}}</p>
     </div>
@@ -109,16 +109,16 @@ export default {
         border-radius: 50%;
         margin: 0 auto;
         margin-top: 32px;
-        img{
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
+        // img{
+        //   width: 100%;
+        //   height: 100%;
+        //   border-radius: 50%;
+        // }
       }
       p{
         color: #fff;
-        font-size: 32px;
-        margin-top: 32px;
+        font-size: 34px;
+        margin-top: 28px;
         text-align: center;
       }
     }
@@ -173,6 +173,7 @@ export default {
         line-height: 75px;
         text-align: center;
         border-radius: 10px;
+        font-size: 30px;
       }
     }
     .activList{
@@ -186,23 +187,25 @@ export default {
         width: 100%;
         height: 85px;
         line-height: 110px;
-        font-size: 28px;
+        font-size: 30px;
         color: #767676;
         padding-left: 15px;
       }
       .title2{
         width: 100%;
-        height: 50px;
+        height: 60px;
+        // border: 1px solid red;
         background: #f8f8f8;
         color: #272727;
         margin-top: 10px;
-        padding-top: 5px;
+        // padding-top: 5px;
         span{
           display: inline-block;
+          // border: 1px solid red;
           text-align: center;
-          height: 40px;
-          line-height: 40px;
-          font-size: 22px;
+          height: 60px;
+          line-height: 60px;
+          font-size: 26px;
         }
         span:nth-child(1){
           width: 135px;
@@ -229,7 +232,7 @@ export default {
             height: 40px;
             line-height: 36px;
             text-align: center;
-            font-size: 21px;
+            font-size: 25px;
             color: #54a596;
             border: 1px solid #a3c7bd;
             border-radius: 10px;
@@ -243,7 +246,7 @@ export default {
             line-height: 96px;
             margin-left: 130px;
             border-top: 1px dashed #e7e7e7;
-            font-size: 22px;
+            font-size: 25px;
             padding-left: 40px;
             span{
               display: block;
@@ -284,7 +287,7 @@ export default {
         width: 100%;
         height: 60px;
         line-height: 110px;
-        font-size: 28px;
+        font-size: 30px;
         color: #767676;
         padding-left: 15px;
       }

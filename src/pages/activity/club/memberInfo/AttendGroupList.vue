@@ -4,7 +4,7 @@
     <ul>
       <li v-for="(item,index) in groupList" :key="index" @click="toGroupDetail(item)">
         <div class="logoImg">
-          <img :src="item.logo" alt="">
+          <img :src="item.logo" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
         </div>
         <div class="text">
           <p>{{item.name}}</p>
@@ -73,11 +73,11 @@ export default {
           // border-radius: 10px;
           float: left;
           margin-top: 15px;
-          img{
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          //   border-radius: 10px;
+          // }
         }
         .text{
           width: 80%;

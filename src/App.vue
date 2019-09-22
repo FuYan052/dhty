@@ -80,9 +80,9 @@ html,body,ul,li,ol,dl,dd,dt,p,h1,h2,h3,h4,h5,h6,form,fieldset,legend,img {
 fieldset,img {
     border:0
 }
-img {
+/* img {
     display:block
-}
+} */
 address,caption,cite,code,dfn,th,var {
     font-style:normal;
     font-weight:normal

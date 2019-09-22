@@ -34,7 +34,9 @@
             :before-upload="beforeAvatarUpload"
             ref="upload"
             :http-request="uploadSectionFile">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <div class="avatar" v-if="imageUrl">
+              <img :src="imageUrl" style="width: 100%; height: 100%;">
+            </div>
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -192,7 +194,7 @@ export default {
     left: 15px;
   }
   #createGroup .groupName .el-form-item__label{
-    font-size: 26px;
+    font-size: 28px;
     margin-top: 25px;
     color: #3b3b3b;
   }
@@ -202,22 +204,32 @@ export default {
   #createGroup .groupName .el-input__inner{
     height: 50px;
     margin-top: 18px;
-    font-size: 26px;
+    font-size: 28px;
     border: none;
   }
   #createGroup .groupName .el-form-item__error{
     top: 86%;
   }
   #createGroup .introduction .el-form-item__label{
-    font-size: 26px;
+    font-size: 28px;
     color: #3b3b3b;
     padding-bottom: 30px;
   }
   #createGroup .introduction .el-textarea__inner{
-    font-size: 26px;
+    font-size: 28px;
     min-height: 140px !important;
     margin-left: 15px;
     border: 1px solid #f0f0f0;
+  }
+  #createGroup .groupLogo .el-form-item__label{
+    font-size: 28px;
+    color: #3b3b3b;
+    padding-bottom: 30px;
+  }
+  #createGroup .groupLogo .el-textarea__inner{
+    font-size: 28px;
+    margin-left: 15px;
+    /* border: 1px solid #f0f0f0; */
   }
   #createGroup .avatar-uploader{
     display: block;

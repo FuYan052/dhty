@@ -5,7 +5,7 @@
         <ul class="memberItem">
           <li v-for="(item,index) in memberList" :key="index" @click="memberInfo">
             <div class="listItemImg">
-              <img :src="item.imgPath" alt="">
+              <img :src="item.imgPath" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
             </div>
             <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
             <div class="grade">{{item.grade}}</div>
@@ -97,15 +97,14 @@ export default {
             width: 75px;
             height: 75px;
             float: left;
-            // border-radius: 50%;
             margin-top: 20px;
-            img{
-              width: 100%;
-              height: 100%;
-              // float: left;
-              border-radius: 50%;
-              // margin-top: 20px;
-            }
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            //   // float: left;
+            //   border-radius: 50%;
+            //   // margin-top: 20px;
+            // }
           }
           .name{
             float: left;

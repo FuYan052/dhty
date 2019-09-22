@@ -14,7 +14,7 @@
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
               <div class="orgImg">
-                <img src="../../../../assets/g-img.png" alt="">
+                <img src="../../../../assets/g-img.png" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
               </div>
               <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
               <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
@@ -91,14 +91,14 @@ export default {
           line-height: 80px;
           padding-left: 20px;
           position: relative;
-          img{
-            width: 50px;
-            height: 50px;
-            float: left;
-            margin-top: 23px;
-            margin-left: 30px;
-            border-radius: 50%;
-          }
+          // img{
+          //   width: 50px;
+          //   height: 50px;
+          //   float: left;
+          //   margin-top: 23px;
+          //   margin-left: 30px;
+          //   border-radius: 50%;
+          // }
           .text{
             display: inline-block;
             font-size: 26px;
@@ -140,18 +140,18 @@ export default {
           height: 220px;
           margin: 0 auto;
           border-top: 1px solid #eeeeee;
-          // border-bottom: 1px solid #eeeeee;
+          border-bottom: 1px solid #eeeeee;
           .orgImg{
             width: 160px;
             height: 160px;
-            margin-top: 35px;
+            margin-top: 25px;
             float: left;
             // border-radius: 10px;
-            img{
-              width: 100%;
-              height: 100%;
-              border-radius: 10px;
-            }
+            // img{
+            //   width: 100%;
+            //   height: 100%;
+            //   border-radius: 10px;
+            // }
           }
           .p1{
             width: 460px;
@@ -173,14 +173,15 @@ export default {
             }
           }
           .p1_title{
+            margin-top: 20px;
             overflow: hidden;
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
           }
-          .p1:nth-of-type(1){
-            margin-top: 30px;
-          }
+          // .p1:nth-of-type(1){
+          //   margin-top: 30px;
+          // }
         }
       }
       .address{

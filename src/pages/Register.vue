@@ -26,7 +26,7 @@
           注册
         </button>
         <div class="logoImg">
-          <img src="../assets/logoImg.png" alt="">
+          <img src="../assets/logoImg.png" width="100%; height: 100%;" alt="">
         </div>
     </div>
     <div class="agreement">
@@ -272,10 +272,10 @@ export default {
         margin: 0 auto;
         margin-top: 282px;
         margin-bottom: 65px;
-        img{
-          width: 100%;
-          height: 100%;
-        }
+        // img{
+        //   width: 100%;
+        //   height: 100%;
+        // }
       }
       .agreement{
         font-size: 20px;

@@ -1,15 +1,16 @@
 <template>
   <!-- 推广加群 -->
   <div class="popularize" v-title data-title="扫码进群">
-    <div class="bgBox">
+    <div class="noList" v-if="isNoList"></div>
+    <div class="bgBox" v-else>
       <div class="info">
         <div class="infoImgLogo">
-          <img :src="groupInfo.logo" alt="">
+          <img :src="groupInfo.logo" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
         </div>
           <span class="name">{{groupInfo.name}}</span>
       </div>
       <div class="imgBox">
-        <el-carousel 
+        <el-carousel  
           trigger="click" 
           height="150px"
           :autoplay="false"
@@ -19,7 +20,7 @@
           <el-carousel-item v-for="(item,index) in groupList" :key="index">
             <h3 class="small">
               <div class="codeImg">
-                <img ref="codeImg" id="img" :src="item.path" alt="">
+                <img ref="codeImg" id="img" style="width: 100%; height: 100%;" :src="item.path" alt="">
               </div>
             </h3>
           </el-carousel-item>
@@ -37,6 +38,7 @@ export default {
   name: 'Popularize',
   data() {
     return {
+      isNoList: false,
       downloadImg: '',
       groupList: '',
       groupIndex: '',
@@ -55,8 +57,6 @@ export default {
     //     this.groupList = resp.data
     //   }
     // })
-  },
-  mounted () {
     this._id = this.userId
     if(this._id == null) {
       this._id = this.$route.params._userId
@@ -65,8 +65,17 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.groupList = resp.data
+        this.groupList = []
+        if(this.groupList.length == 0) {
+          this.isNoList = true
+        }else{
+          this.isNoList = false
+        }
       }
     })
+  },
+  mounted () {
+    
   },
   methods: {
     changeGroup(v) {
@@ -86,13 +95,20 @@ export default {
     background-size: cover;
     overflow: hidden;
     position: relative;
+    .noList{
+      width: 100%;
+      min-height: 100vh;
+      background: url("../../assets/noListPage.jpg") no-repeat center;
+      background-size: cover;
+    }
     .bgBox{
       width: 561px;
       height: 742px;
       // border: 1px solid red;
       margin: 0 auto;
       margin-top: 265px;
-      padding: 0 78px;
+      // padding: 0 78px;
+      padding-left: 78px;
       // border: 1px solid red;
       background: rgba(0,0,0,0.6);
       border-radius: 10px;
@@ -106,38 +122,42 @@ export default {
           height: 98px;
           float: left;
           border-radius: 50%;
-          img{
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          //   border-radius: 50%;
+          // }
         }
         .name{
           display: inline-block;
-          width: 272px;
+          width: 76%;
+          height: 100px;
           margin-left: 20px;
           font-size: 30px;
           line-height: 100px;
           color: #fff;
           font-size: 33px;
+          padding-left: 10px;
+          // border: 1px solid red;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
         }
       }
       .imgBox{
         width: 400px;
         height: 400px;
-        // border: 1px solid red;
-        // padding: 0 20px;
         background: #fff;
-        // margin: 0 auto;
         margin-top: 60px;
         overflow: hidden;
         .codeImg{
           width: 400px;
           height: 400px;
-          img{
-            width: 100%;
-            height: 100%;
-          }
+          // img{
+          //   width: 100%;
+          //   height: 100%;
+          // }
         }
       }
       p{
@@ -147,6 +167,7 @@ export default {
         padding-left: 13px;
         text-align: center;
         margin-top: 45px;
+        padding-right: 78px;
       }
     }
     .saveBtn{
