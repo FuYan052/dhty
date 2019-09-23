@@ -76,7 +76,7 @@
       </div>
       <!-- 活动列表 -->
       <div class="noActList" v-show="noActList2"></div>
-      <div class="actList actList2" v-shoe="!noActList2">
+      <div class="actList actList2" v-show="!noActList2">
         <div class="actiItem" v-for="(item,index) in actList" :key="index">
           <div class="left">
             <div class="imgwrap">
@@ -343,7 +343,7 @@ export default {
             float: left;
             margin-top: 12px;
             // border-radius: 50%;
-            border: 1px solid red;
+            // border: 1px solid red;
             // img{
             //   width: 100%;
             //   height: 100%;
@@ -385,7 +385,7 @@ export default {
             float: left;
             margin-top: 30px;
             // border-radius: 10px;
-            border: 1px solid red;
+            // border: 1px solid red;
             // img{
             //   width: 100%;
             //   height: 100%;

@@ -5,10 +5,10 @@
         <ul class="memberItem">
           <li v-for="(item,index) in memberList" :key="index" @click="memberInfo">
             <div class="listItemImg">
-              <img :src="item.imgPath" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
+              <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
             </div>
-            <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
-            <div class="grade">{{item.grade}}</div>
+            <p class="name">{{item.nickName}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
+            <div class="grade">Lv.{{item.level}}</div>
           </li>
       </ul>
     </div>
@@ -25,44 +25,16 @@ export default {
     }
   },
   created() {
-    this.memberList = [
-      {
-        imgPath: require('../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-    ]
+    const _id = window.sessionStorage.getItem('activityDetailId')
+    // 获取报名列表
+    this.$http.getSignUpList(_id).then(resp => {
+      console.log(resp)
+      if(resp.status = 200) {
+        this.memberList = resp.data
+      }else{
+
+      }
+    })
   },
   methods: {
     memberInfo() {
@@ -125,7 +97,7 @@ export default {
           .grade{
             width: 65px;
             height: 28px;
-            line-height: 28px;
+            line-height: 30px;
             text-align: center;
             font-size: 15px;
             color: #fff;

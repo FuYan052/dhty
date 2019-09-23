@@ -14,21 +14,26 @@ export default {
   name: 'App',
   data() {
     return {
-      include: ['Organization','Playground','CompleteInfo','MyActivities','ActivityHome','ActivityDetail']
+      include: ['Organization','Playground','CompleteInfo','MyActivities']
     }
   },
   watch: {
     $route(to, from) {
       //如果 要 to(进入) 的页面是需要 keepAlive 缓存的，把 name push 进 include数组
+      // console.log(to.meta.keepAlive)
       if (to.meta.keepAlive) {
         !this.include.includes(to.name) && this.include.push(to.name);
+      }
+      console.log(from.name)
+      if(from.name == 'ActivityHome') {
+        console.log("ok")
+        !this.include.includes(from.name) && this.include.push(from.name);
       }
       // if (from.meta.keepAlive) {
       //   !this.include.includes(to.name) && this.include.push(from.name);
       // }
       // console.log(this.include)
       //如果 要 form(离开) 的页面是 keepAlive缓存的，
-      //再根据 deepth 来判断是前进还是后退
       //如果是后退
       if (from.meta.keepAlive && !to.meta.needCacheLast) {
         var index = this.include.indexOf(from.name);

@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import preview from 'vue-photo-preview'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
+// import './assets/js/mobileFonts.js'
 // import 'vue-photo-preview/dist/skin.css'
 import App from './App'
 import router from './router'

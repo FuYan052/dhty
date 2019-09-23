@@ -40,7 +40,11 @@
     </div>
     <!-- 活动详情 -->
     <div class="contentBg">
-      <div class="content">
+      <div class="content" 
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="isMoreLoading"
+        :infinite-scroll-immediate-check="true"
+        infinite-scroll-distance="10">
         <div class="activItem" v-for="(item,index) in activList" :key="index">
           <div class="address" @click="toClub(item.groupId)">
             {{item.groupName}}<span class="span2 el-icon-arrow-right"></span>
@@ -56,10 +60,10 @@
               </div>
               <div class="p1 venueName">{{item.venueName}}<span>{{item.distance}}km</span></div>
               <div class="p1 tit">{{item.title}}</div>
-              <div class="p1">{{item.cost}}元/人</div>
+              <div class="p1 cost">{{item.cost}}元/人</div>
             </div>
           </div>
-          <div class="peopleList">
+          <div class="peopleList" @click="toSignUp(item.id)">
             <div class="iconImg">
               <img src="../../assets/peoIcon.png" style="width: 100%; height: 100%;" alt="">
             </div>
@@ -76,6 +80,14 @@
           </div>
         </div>
       </div>
+      <!--显示加载中转菊花-->
+      <div class="loading-box tc" v-if="isLoading">
+          <mt-spinner type="snake" class="loading-more"></mt-spinner>
+          <span class="loading-more-txt">加载中...</span>
+      </div>
+
+      <div class="no-more" v-if="noMore">没有更多了~</div>
+
     </div>
   </div>
 </template>
@@ -117,7 +129,17 @@ export default {
       nonceStr: '',
       signature: '',
       latitude: '30.5702',
-      longitude: '104.06476'
+      longitude: '104.06476',
+      isLoading: false, // 加载中转菊花
+      isMoreLoading: true, // 加载更多中
+      noMore: false, // 是否还有更多
+      pageInfo: { // 分页信息
+        page: 1,
+        page_size: 15,
+        total: 0, // 总条数
+        totalPage: 1 // 总分页数
+      }
+
     }
   },
   created() {
@@ -133,8 +155,8 @@ export default {
         const that = this
         wx.config({
           // debug: true,
-          appId: 'wxd3d4d3045a1213a1',
-          // appId: 'wxf1894ca38c849d17',  //测试号
+          // appId: 'wxd3d4d3045a1213a1',
+          appId: 'wxf1894ca38c849d17',  //测试号
           // timestamp: '1568982632',
           // nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
           // signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',
@@ -163,11 +185,12 @@ export default {
                 isTwoDaysLater: _this.isTwoDaysLater,
                 lat: _this.latitude,
                 lon: _this.longitude,
+                page: 1
               }
               // console.log(params)
               _this.$http.activitiesList(params).then(resp => {
                 if(resp.status == 200) {
-                  _this.activList = resp.data
+                  _this.activList = resp.data.rows
                   if(_this.activList.length == 0) {
                     _this.$toast({
                       message: '没有活动哦！',
@@ -194,11 +217,12 @@ export default {
                 isTwoDaysLater: _this.isTwoDaysLater,
                 lat: '30.5702',
                 lon: '104.06476',
+                page: 1
               }
               _this.$http.activitiesList(params).then(resp => {
                 if(resp.status == 200) {
                   _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
-                  _this.activList = resp.data
+                  _this.activList = resp.data.rows
                   if(_this.activList.length == 0) {
                     _this.$toast({
                       message: '没有活动哦！',
@@ -226,11 +250,12 @@ export default {
           isTwoDaysLater: _this.isTwoDaysLater,
           lat: '30.5702',
           lon: '104.06476',
+          page: 1
         }
         _this.$http.activitiesList(params).then(resp => {
            _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
           if(resp.status == 200) {
-            _this.activList = resp.data
+            _this.activList = resp.data.rows
             if(_this.activList.length == 0) {
               _this.$toast({
                 message: '没有活动哦！',
@@ -267,15 +292,18 @@ export default {
       console.log(this.inputText)
         const params = {
         type: this.type,
-        activityType: this.activityType,
+        // activityType: this.activityType,
         time: this.time,
         keyWord: this.inputText,
-        isTwoDaysLater: this.isTwoDaysLater
+        isTwoDaysLater: this.isTwoDaysLater,
+        lat: this.latitude,
+        lon: this.longitude,
+        page: 1
       }
       console.log(params)
       this.$http.activitiesList(params).then(resp => {
         if(resp.status == 200) {
-          this.activList = resp.data
+          this.activList = resp.data.rows
           if(this.activList.length == 0) {
             this.$toast({
               message: '没有活动哦！',
@@ -309,14 +337,15 @@ export default {
         keyWord: '',
         isTwoDaysLater: this.isTwoDaysLater,
         lat: this.latitude,
-        lon: this.longitude
+        lon: this.longitude,
+        page: 1
       }
       console.log(params)
       // 活动列表
       this.$http.activitiesList(params).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
-          this.activList = resp.data
+          this.activList = resp.data.rows
           if(this.activList.length == 0) {
             this.$toast({
               message: '没有活动哦！',
@@ -349,14 +378,15 @@ export default {
         keyWord: '',
         isTwoDaysLater: this.isTwoDaysLater,
         lat: this.latitude,
-        lon: this.longitude
+        lon: this.longitude,
+        page: 1
       }
       console.log(params)
       // 活动列表
       this.$http.activitiesList(params).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
-          this.activList = resp.data
+          this.activList = resp.data.rows
           if(this.activList.length == 0) {
             this.$toast({
               message: '没有活动哦！',
@@ -418,7 +448,24 @@ export default {
       this.$router.push({
         path: '/activityDetail',
       })
+    },
+    // 加载更多
+    loadMore () { // 加载更多
+      this.pageInfo.page += 1 // 增加分页
+      this.isMoreLoading = true // 设置加载更多中
+      this.isLoading = true // 加载中
+      console.log(this.pageInfo.page, this.pageInfo.totalPage)
+      if (this.pageInfo.page > this.pageInfo.totalPage) { // 超过了分页
+          this.noMore = true // 显示没有更多了
+          this.isLoading = false // 关闭加载中
+          return false
+      }
+      // 做个缓冲
+      setTimeout(() => {
+          this.getProjectInfo('loadMore')
+      }, 100)
     }
+
   }
 }
 </script>
@@ -429,6 +476,7 @@ export default {
     min-height: 100vh;
     background: #f2f2f2;
     padding-bottom: 40px;
+    padding-top: 214px;
     .fixedBox{
       width: 100%;
       height: 214px;
@@ -541,7 +589,7 @@ export default {
     .contentBg{
       width: 100%;
       // padding: 0 25px;
-      margin-top: 234px;
+      // margin-top: 234px;
       position: relative;
       .content{
         width: 100%;
@@ -633,7 +681,7 @@ export default {
                 font-size: 24px;
                 line-height: 26px;
                 color: #444444;
-                margin-bottom: 30px;
+                margin-bottom: 24px;
                 margin-top: 33px;
                 // border: 1px solid red;
                 span{
@@ -644,14 +692,18 @@ export default {
                 }
               }
               .tit{
-                height: 37px;
+                height: 27px;
+                line-height: 30px;
                 overflow: hidden;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
               }
+              .cost{
+                margin-top: 15px;
+              }
               .p1:nth-of-type(1){
-                margin-top: 30px;
+                margin-top: 35px;
               }
             }
           }
@@ -678,7 +730,8 @@ export default {
             }
             .imgBox{
               height: 80px;
-              width: 285px;
+              width: 340px;
+              // border: 1px solid red;
               float: left;
               overflow: hidden;
               .headImg{

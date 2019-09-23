@@ -5,8 +5,8 @@ import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://nthm3d.natappfree.cc/',
+  // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://872hcj.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -14,8 +14,8 @@ const ajax = axios.create({
 
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://nthm3d.natappfree.cc/',
+  // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://872hcj.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -219,6 +219,10 @@ export const activitiesDetail = (params) => {
 export const activitiesList = (params) => {
   return ajax2.post(`/v1/rest/login/activitiesList`,params)
 }
+// 报名列表
+export const getSignUpList = (params) => {
+  return ajax.get(`/v1/rest/login/activitiesEnrolled?id=${params}`)
+}
 // 申请加入社群  ok
 export const applyJoinGroup = (params) => {
   return ajax.get(`/v1/rest/login/applyJoinGroup?groupId=${params.groupId}&userId=${params.userId}`)
@@ -229,7 +233,7 @@ export const attendedActivities = (params) => {
 }
 // 获取场地信息  ok
 export const getVenueInfo = (params) => {
-  return ajax.get(`/v1/rest/login/getVenueInfo?type=${params}`)
+  return ajax.get(`/v1/rest/login/getVenueInfo?type=${params.type}&name=${params.name}`)
 }
 // 群活动  ok
 export const groupActivity = (params) => {

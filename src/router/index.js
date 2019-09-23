@@ -144,9 +144,6 @@ export default new Router({
       path: '/activityDetail',
       name: 'ActivityDetail',
       component: ActivityDetail,
-      meta: {
-        keepAlive: true 
-      }
     },
     {
       path: '/escapeClause',  //免责条款
@@ -206,6 +203,9 @@ export default new Router({
       path: '/activitySignUp',
       name: 'ActivitySignUp',
       component: ActivitySignUp,
+      meta: {
+        requireAuth: true,
+      }
     },
     {
       path: '/signUpList',

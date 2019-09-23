@@ -27,7 +27,7 @@
         <span class="span1">已&nbsp;&nbsp;报&nbsp;&nbsp;名：</span><span class="span2 el-icon-arrow-right"></span>
         <div class="imgBox">
           <div class="imgitem" v-for="(it,ind) in theDetail.enrolledVoList" :key="ind" >
-            <img :src="it.image" style="width: 100%; height: 100%; float: left;" alt="">
+            <img :src="it.image" style="width: 100%; height: 100%; float: left; border-radius: 50%;" alt="">
           </div>
         </div>
       </li>

@@ -1,9 +1,11 @@
 <template>
   <div class="registerLabel" v-title data-title="注册">
     <div class="topBg topBgMale" v-show="isMale">
+      <div class="goBack" @click="goBackBtn"><span class="el-icon-arrow-left"></span>上一页</div>
       <div class="skipBtn" @click="handleSkipBtn">跳过<span class="el-icon-arrow-right"></span></div>
     </div>
     <div class="topBg topBgFemale" v-show="!isMale">
+      <div class="goBack" @click="goBackBtn"><span class="el-icon-arrow-left"></span>上一页</div>
       <div class="skipBtn" @click="handleSkipBtn">跳过 <span class="el-icon-arrow-right"></span></div>
     </div>
     <p class="title1">选择你的形象标签</p>
@@ -59,6 +61,12 @@ export default {
       }else{
         this.selectedListIds.push(it.id)
       }
+    },
+    // 上一页
+    goBackBtn() {
+      this.$router.replace({
+        path: '/home/register/registerUserInfo'
+      })
     },
     // 跳过
     handleSkipBtn() {
@@ -135,9 +143,27 @@ export default {
       height: 438px;
       background: url("../assets/male.jpg") no-repeat center;
       background-size: cover;
+      .goBack{
+        width: 130px;
+        height: 45px;
+        // border: 1px solid red;
+        line-height: 45px;
+        float: left;
+        font-size: 26px;
+        color: #9b999c;
+        margin-top: 36px;
+        margin-left: 30px;
+        overflow: hidden;
+        span{
+          display: inline-block;
+          font-size: 28px;
+          line-height: 45px;
+        }
+      }
       .skipBtn{
         width: 94px;
         height: 45px;
+        // border: 1px solid red;
         line-height: 45px;
         float: right;
         font-size: 26px;

@@ -32,7 +32,7 @@
            </div>
            <div class="g_bottom g_admin">
              <div class="userImg">
-                <img :src="item.userImage" style="width: 100%; height: 100%;" alt="">
+                <img :src="item.userImage" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
              </div>
              <p>{{item.userType}}<span>&nbsp;&nbsp;&nbsp;{{item.userName}}</span></p>
              <div class="icon"><a :href="'tel:' + item.userPhone"><span class="el-icon-phone"></span></a></div>
@@ -79,8 +79,8 @@ export default {
         const that = this
         wx.config({
           // debug: true,
-          appId: 'wxd3d4d3045a1213a1',
-          // appId: 'wxf1894ca38c849d17',  //测试号
+          // appId: 'wxd3d4d3045a1213a1',
+          appId: 'wxf1894ca38c849d17',  //测试号
           // timestamp: '1568982632',
           // nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
           // signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',

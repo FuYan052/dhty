@@ -55,7 +55,7 @@
       <textarea
         class="textareaTitle"
         v-model="title"
-        placeholder="时间+地点+活动类型"
+        placeholder="时间+地点"
         />
     </div>
     <div class="inputTitleBox noteTitle">参与须知</div>
@@ -222,6 +222,7 @@ export default {
         console.log(this.$route)
         this.placeName = this.$route.params.placeName || ''
         this.placeId = this.$route.params.placeId || ''
+        this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       }
     },
   },
@@ -312,6 +313,7 @@ export default {
       this.sureDateValue = this.formatDate(v)
       this.popupVisible = !this.popupVisible
       this.isShowDatePicker = false
+      this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
     },
     // 格式化选择的日期
     formatDate(Time) {
@@ -346,6 +348,7 @@ export default {
       this.startTimePicker = false
       this.deadlinePicker = false
       this.startTime = v
+      this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
     },
     // 结束时间
     showEndTime() {
