@@ -2,18 +2,18 @@
   <!-- 组织活动-地图选择地点 -->
   <div class="mapSelection" id="mapSelection" v-title data-title="选择地点">
     <div class="serchBox">
-      <!-- <mt-search
+      <mt-search
         :value.sync="value"
         cancel-text="取消"
         placeholder="搜索场地">
-      </mt-search> -->
+      </mt-search>
     </div>
     <div class="mapBox">
         <div id="mapBox">
             <p id="mapInfo"></p>
         </div>
     </div>
-    <div class="sureBtn" @click="sure">确&nbsp;&nbsp;&nbsp;定</div>
+    <div class="sureBtn" v-show="isOriginHei" @click="sure">确&nbsp;&nbsp;&nbsp;定</div>
   </div>
 </template>
 
@@ -27,7 +27,20 @@ export default {
       long: '',
       lat: '',
       list: [],
-      selectedPoint: ''
+      selectedPoint: '',
+      value: '',
+      isOriginHei: true,
+      screenHeight: document.documentElement.clientHeight, 
+      originHeight: document.documentElement.clientHeight,
+    }
+  },
+  watch: {
+    screenHeight (val) {
+      if(this.originHeight > val + 100) {        //加100为了兼容华为的返回键
+          this.isOriginHei = false;
+      }else{
+          this.isOriginHei = true;
+      }
     }
   },
   created() {
@@ -37,7 +50,14 @@ export default {
   // },
   mounted() {
     this.showMap(30.657420,104.065840);
-    // this.showMap('','');
+    
+    // 检测浏览器变化
+    let self = this;
+    window.onresize = function() {
+      return (function(){
+          self.screenHeight = document.documentElement.clientHeight;
+      })()
+    }
   },
   methods:{
 
@@ -120,10 +140,11 @@ export default {
   .mapSelection{
     width: 100%;
     height: 100vh;
-    // .serchBox{
-    //   width: 100%;
-    //   height: 6vh;
-    // }
+    position: relative;
+    .serchBox{
+      width: 100%;
+      height: 110px;
+    }
     .map{
       width: 100%;
       height: 80%;
@@ -148,6 +169,8 @@ export default {
       color: #fff;
       font-size: 30px;
       background: #44c294;
+      position: fixed;
+      bottom: 0;
     }
   }
 </style>
@@ -161,12 +184,21 @@ export default {
     color: #595959;
   }
   .mint-searchbar{
-    height: 6vh;
+    height: 110px;
     padding: 10px 30px;
     background-color: #e8e9e8;
   }
   .mint-searchbar-inner {
-    height: 50px;
+    height: 70px;
+    font-size: 28px;
+  }
+  .mint-searchbar-inner .mintui-search {
+    font-size: 30px;
+    padding-left: 10px;
+    padding-right: 15px;
+  }
+  .mint-searchbar-core{
+    font-size: 27px;
   }
   /* .mapInfo span{
     display: block; 

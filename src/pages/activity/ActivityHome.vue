@@ -52,7 +52,7 @@
             </div>
             <div class="detailBox">
               <div class="homeImg1">
-                <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
+                <img :src="item.venueImage" style="width: 100%; height: 100%; float:left; border-radius: 5px;" alt="">
               </div>
               <div class="p1 venueName">{{item.venueName}}<span>{{item.distance}}km</span></div>
               <div class="p1 tit">{{item.title}}</div>
@@ -603,6 +603,7 @@ export default {
               height: 194px;
               margin: 0 auto;
               border-top: 1px solid #eeeeee;
+              // border: 1px solid red;
               .homeImg1{
                 width: 129px;
                 height: 129px;
@@ -610,6 +611,7 @@ export default {
                 float: left;
                 // border-radius: 5px;
                 margin-left: 23px;
+                // border: 1px solid red;
                 // img{
                 //   width: 100%;
                 //   height: 100%;
@@ -625,6 +627,7 @@ export default {
                 font-size: 24px;
                 line-height: 26px;
                 margin-bottom: 10px;
+                // border: 1px solid red;
               }
               .venueName{
                 font-size: 24px;
@@ -632,6 +635,7 @@ export default {
                 color: #444444;
                 margin-bottom: 30px;
                 margin-top: 33px;
+                // border: 1px solid red;
                 span{
                   float: right;
                   font-size: 26px;

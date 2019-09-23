@@ -184,6 +184,7 @@ export default {
       title: '',  //标题
       notes: '',   //参与须知
       isCkecked: false,   //是否为周活动
+      
     }
   },
   computed: {
