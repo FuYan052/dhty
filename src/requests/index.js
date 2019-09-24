@@ -6,7 +6,7 @@ import { Indicator, Toast } from 'mint-ui'
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://872hcj.natappfree.cc/',
+  baseURL: 'http://aubqui.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -15,7 +15,16 @@ const ajax = axios.create({
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://872hcj.natappfree.cc/',
+  baseURL: 'http://aubqui.natappfree.cc/',
+  headers: {
+    'Content-Type': "application/json;charset=UTF-8",
+    // 'token': window.localStorage.getItem('ty-token')
+  },
+})
+const ajax4 = axios.create({
+  // baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://aubqui.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -101,8 +110,45 @@ ajax2.interceptors.response.use(resp => {
   error => {
     return Promise.reject(error)
   })
+// request拦截器
+ajax4.interceptors.request.use(config => {
+  // Indicator.open();
+  // console.log(config)
+  // Do something before request is sent
+  if (localStorage.getItem('ty-token')) {
+    config.headers.common['token'] =window.localStorage.getItem('ty-token'); //让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+  }
+  // config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+  return config
+}, error => {
+  // Do something with request error
+  console.log(error) // for debug
+  return Promise.reject(error)
+})
 
-// 获取验证码  ok
+// respone拦截器
+ajax4.interceptors.response.use(resp => {
+  // Indicator.close();
+    if (resp.data.status === 200) {
+      return resp.data
+    }
+    if (resp.data.status == 201) {
+      Toast({
+        message: resp.data.message,
+        duration: 2000
+      });
+      // router.go(0)
+      // console.log(router)
+      window.localStorage.removeItem('ty-token')
+      window.localStorage.removeItem('userId')
+      window.localStorage.removeItem('userPhone')
+    }
+  },
+  error => {
+    return Promise.reject(error)
+  })
+
+// 获取验证码 
 export const postCode = (params) => {
   return ajax.post(`/v1/rest/public/bgxsendcode?phone=${params}`)
 }  
@@ -110,19 +156,19 @@ export const postCode = (params) => {
 // export const checkCode = (params) => {
 //   return ajax.post(`/public_controller/bgxisphonecode?phone=${params.phoneNum}&verifyCode=${params.verifyCode}`)
 // }
-// 注册  ok
+// 注册 
 export const postRegister = (params) => {
   return ajax.post(`/v1/rest/login/register?phone=${params.phone}&authCode=${params.authCode}&passWord=${params.passWord}`)
 }
-// 手机密码登录  ok
+// 手机密码登录 
 export const postLoginForPassword = (params) => {
   return ajax.post(`/v1/rest/login/login?phone=${params.phone}&passWord=${params.passWord}`)
 }
-// 验证码登录  ok
+// 验证码登录 
 export const postLoginForCode = (params) => {
   return ajax.post(`/v1/rest/login/authCodeLogin?phone=${params.phone}&authCode=${params.code}`)
 }
-// 忘记密码  ok
+// 忘记密码 
 export const postForgetPassword = (params) => {
   return ajax.post(`/v1/rest/login/resetPassword?phone=${params.phone}&authCode=${params.code}&passWord=${params.passWord}`)
 }
@@ -137,13 +183,17 @@ export const postRegisterInfo = (params) => {
 
 
 // 场地
-// 场地详情  ok
+// 场地详情 
 export const getPlaygroundDetail = (params) => {
   return ajax.get(`/v1/rest/venue/venueDetails?id=${params}`)
 }
-// 场地列表  ok
+// 场地列表
 export const getPlaygroundList = (params) => {
-  return ajax.get(`/v1/rest/venue/venueList?type=${params.type}&name=${params.name}&lon=${params.lon}&lat=${params.lat}`)
+  return ajax2.post(`/v1/rest/venue/venueList`,params)
+}
+// 场地列表2  不带请求缓冲
+export const getPlaygroundList2 = (params) => {
+  return ajax4.post(`/v1/rest/venue/venueList`,params)
 }
 
 // 我的管理
@@ -151,39 +201,39 @@ export const getPlaygroundList = (params) => {
 export const myManagementInfo = (params) => {
   return ajax.get(`/v1/rest/management/myManagement?userId=${params}`)
 }
-// 我参加的社群  ok
+// 我参加的社群 
 export const getJoinedGroup = (params) => {
   return ajax.get(`/v1/rest/management/JoinedGroup?userId=${params}`)
 }
-// 创建社群  ok
+// 创建社群 
 export const createGroup = (params) => {
   return ajax2.post(`/v1/rest/management/createGroup`,params)
 }
-// 解散群  ok
+// 解散群 
 export const disbandmentGroup = (params) => {
   return ajax.get(`/v1/rest/management/disbandmentGroup?groupId=${params}`)
 }
-// 我创建的群  ok
+// 我创建的群
 export const createGroupList = (params) => {
   return ajax.get(`/v1/rest/management/groupList?id=${params}`)
 }
-// 我参加的活动  ok
+// 我参加的活动 
 export const participatedActivity = (params) => {
   return ajax.get(`/v1/rest/management/participatedActivity?state=${params.state}&userId=${params.userId}`)
 }
-// 我组织的活动  ok
+// 我组织的活动 
 export const myOrganization = (params) => {
   return ajax.get(`/v1/rest/management/myOrganization?state=${params.state}&userId=${params.userId}`)
 }
-// 设为管理员、移除管理员、移除群成员  ok
+// 设为管理员、移除管理员、移除群成员 
 export const setInfo = (params) => {
   return ajax.get(`/v1/rest/management/setInfo?type=${params.type}&groupId=${params.groupId}&userId=${params.userId}`)
 }
-// 转让群  ok
+// 转让群
 export const transferGroup = (params) => {
   return ajax.get(`/v1/rest/management/transferGroup?groupId=${params.groupId}&qId=${params.qId}&cId=${params.cId}`)
 }
-// 查询要修改的群信息  ok
+// 查询要修改的群信息 
 export const updateGroupInfo = (params) => {
   return ajax.get(`/v1/rest/management/findGroup?id=${params}`)
 }
@@ -193,25 +243,25 @@ export const updateGroupInfo = (params) => {
 // }
 
 // 我的数据
-// 查询现有待完善信息  ok
+// 查询现有待完善信息 
 export const findPersonalInformation = (params) => {
   return ajax.get(`/v1/rest/mydata/findPersonalInformation?userId=${params}`)
 }
-// 查询所有标签  ok
+// 查询所有标签 
 export const findAllLabel = (params) => {
   return ajax.get(`/v1/rest/mydata/findAllLabel?userId=${params}`)
 }
-// 创建新标签  ok
+// 创建新标签
 export const createLabel = (params) => {
   return ajax.get(`/v1/rest/mydata/createLabel?labelName=${params.labelName}&userId=${params.userId}`)
 }
-// 完善信息  ok
+// 完善信息
 export const completeInfo = (params) => {
   return ajax2.post(`/v1/rest/mydata/savePersonalInformation`,params)
 }
 
 // 我要参与
-// 活动详情  ok
+// 活动详情
 export const activitiesDetail = (params) => {
   return ajax.get(`/v1/rest/login/activitiesDetailInfo?id=${params}`)
 }
@@ -219,55 +269,58 @@ export const activitiesDetail = (params) => {
 export const activitiesList = (params) => {
   return ajax2.post(`/v1/rest/login/activitiesList`,params)
 }
+export const activitiesList2 = (params) => {  //无加载缓冲显示
+  return ajax4.post(`/v1/rest/login/activitiesList`,params)
+}
 // 报名列表
 export const getSignUpList = (params) => {
   return ajax.get(`/v1/rest/login/activitiesEnrolled?id=${params}`)
 }
-// 申请加入社群  ok
+// 申请加入社群
 export const applyJoinGroup = (params) => {
   return ajax.get(`/v1/rest/login/applyJoinGroup?groupId=${params.groupId}&userId=${params.userId}`)
 }
-// Ta参加过的活动  ok
+// Ta参加过的活动 
 export const attendedActivities = (params) => {
   return ajax.get(`/v1/rest/login/attendedActivities?id=${params.id}&type=${params.type}`)
 }
-// 获取场地信息  ok
+// 获取场地信息 
 export const getVenueInfo = (params) => {
   return ajax.get(`/v1/rest/login/getVenueInfo?type=${params.type}&name=${params.name}`)
 }
-// 群活动  ok
+// 群活动
 export const groupActivity = (params) => {
   return ajax.get(`/v1/rest/login/groupActivity?id=${params.id}&time=${params.time}&isTwoDaysLater=${params.isTwoDaysLater}`)
 }
-// 群详情 ok
+// 群详情
 export const groupDetailInfo = (params) => {
   return ajax.get(`/v1/rest/login/groupDetailInfo?id=${params}`)
 }
-// ta所属社群列表  ok
+// ta所属社群列表
 export const groupList = (params) => {
   return ajax.get(`/v1/rest/login/groupList?id=${params}`)
 }
-// 群成员  ok
+// 群成员
 export const groupMembers = (params) => {
   return ajax.get(`/v1/rest/login/groupMembers?groupId=${params.groupId}&keyWord=${params.keyWord}`)
 }
-// Ta人资料  ok
+// Ta人资料 
 export const informationOthers = (params) => {
   return ajax.get(`/v1/rest/login/informationOthers?id=${params}`)
 }
-// Ta的活动参数  ok
+// Ta的活动参数
 export const motionParameters = (params) => {
   return ajax.get(`/v1/rest/login/motionParameters?id=${params.id}&type=${params.type}`)
 }
-// ta组织的活动  ok
+// ta组织的活动 
 export const organizedActivities = (params) => {
   return ajax.get(`/v1/rest/login/organizedActivities?id=${params}`)
 }
-// 创建活动获取社群列表  ok
+// 创建活动获取社群列表
 export const getGroupList = (params) => {
   return ajax.get(`/v1/rest/login/getGroupList?id=${params}`)
 }
-// 创建组织活动  ok
+// 创建组织活动 
 export const organizingActivities = (params) => {
   return ajax2.post(`/v1/rest/login/organizingActivities`,params)
 }
@@ -275,11 +328,11 @@ export const organizingActivities = (params) => {
 export const findOrganizingActivities = (params) => {
   return ajax.post(`/v1/rest/login/findOrganizingActivities?id=${params}`)
 }
-// 根据父集查询子集数据字典  ok
+// 根据父集查询子集数据字典
 export const findDictList = (params) => {
   return ajax.get(`/v1/rest/public/findDictList?skey=${params}`)
 }
-// 上传图片  ok
+// 上传图片
 export const postUpolad = (params) => {
   return ajax.post(`/v1/rest/file/uploadOSS`,params)
 }
@@ -297,10 +350,11 @@ export const postBindPhone = (params) => {
   return ajax2.post('/v1/rest/login/wxRegist', params)
 }
 // 微信
-// export const getWXUserInfo = (params) => {
-//   return ajax3.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=${params.grant_type}l&appid=${params.appid}&secret=${params.secret}`)
-// }
 export const getSignature = (params) => {
   return ajax.get(`/v1/rest/login/getSignature?url=${params}`)
+}
+// 微信支付
+export const postPay = (params) => {
+  return ajax2.post(`/v1/rest/pay/pay`,params)
 }
 

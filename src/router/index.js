@@ -48,6 +48,7 @@ import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/Mana
 import CreatedGroupList from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupList'
 import JoinCroupList from '@/pages/userCenter/myManagement/manageGroup/JoinCroupList'
 import CommonProblem from '@/pages/userCenter/myManagement/CommonProblem'
+// import MyOrder from '@/pages/userCenter/MyOrder'
 import Cash from '@/pages/userCenter/myManagement/Cash'
 import AccountDetails from '@/pages/userCenter/myManagement/AccountDetails'
 
@@ -61,53 +62,53 @@ export default new Router({
     },
     {
       path: '/home',
-      name: 'LoginHome',
+      name: 'LoginHome',  //选择登录注册页
       component: LoginHome,
     },
     {
       path: '/home/register',
-      name: 'Register',
+      name: 'Register',  //注册页
       component: Register,
     },
     {
       path: '/home/register/registerUserInfo',
-      name: 'RegisterUserInfo',
+      name: 'RegisterUserInfo',   //提交注册后选择个人信息
       component: RegisterUserInfo,
     },
     {
       path: '/home/register/registerLabel',
-      name: 'RegisterLabel',
+      name: 'RegisterLabel',  //提交注册后选择标签
       component: RegisterLabel,
     },
     {
-      path: '/home/register/userAgreement',  // 用户协议
-      name: 'UserAgreement',
+      path: '/home/register/userAgreement',  
+      name: 'UserAgreement',  // 用户协议
       component: UserAgreement,
     },
     {
       path: '/home/login',
-      name: 'Login',
+      name: 'Login',  //密码登录页
       component: Login,
     },
     {
       path: '/home/loginForCode',
-      name: 'LoginForCode',
+      name: 'LoginForCode',  //手机验证码登录页
       component: LoginForCode,
     },
     {
       path: '/home/bindPhone',
-      name: 'BindPhone',
+      name: 'BindPhone',  //首次微信登录绑定手机号
       component: BindPhone,
     },
     {
       path: '/home/forgetPassword',
-      name: 'ForgetPassword',
+      name: 'ForgetPassword',  //找回密码页
       component: ForgetPassword,
     },
     // 活动
     {
-      path: '/childrenActivities',  //儿童活动
-      name: 'ChildrenActivities',
+      path: '/childrenActivities',  
+      name: 'ChildrenActivities',  //儿童活动
       component: ChildrenActivities,
       meta: {
         keepAlive: true 
@@ -116,7 +117,7 @@ export default new Router({
     {
       path: '/activityHome',
       name: 'ActivityHome',
-      component: ActivityHome,
+      component: ActivityHome,  //我要参与活动页
       meta: {
         keepAlive: true ,
         needCacheLast: false
@@ -124,7 +125,7 @@ export default new Router({
     },
     {
       path: '/playground',
-      name: 'Playground',
+      name: 'Playground',  //场馆列表页
       component: Playground,
       meta: {
         keepAlive: true 
@@ -132,76 +133,76 @@ export default new Router({
     },
     {
       path: '/playgroundDetail',
-      name: 'PlaygroundDetail',
+      name: 'PlaygroundDetail',  //场馆详情
       component: PlaygroundDetail,
     },
     {
       path: '/mapPage',
-      name: 'MapPage',
+      name: 'MapPage',  //地图导航页
       component: MapPage,
     },
     {
       path: '/activityDetail',
-      name: 'ActivityDetail',
+      name: 'ActivityDetail',  //活动详情页
       component: ActivityDetail,
     },
     {
-      path: '/escapeClause',  //免责条款
-      name: 'EscapeClause',
+      path: '/escapeClause',  
+      name: 'EscapeClause',  //免责条款
       component: EscapeClause,
     },
     //俱乐部
     {
       path: '/clubHome',
       name: 'ClubHome',
-      component: ClubHome,
+      component: ClubHome,  //社群页
       redirect: '/club/clubInfo/:id',
       children: [
         {
           path: '/club/clubInfo/:id',
-          name: 'ClubInfo',
+          name: 'ClubInfo',  //社群信息
           component: ClubInfo
         },
         {
           path: '/club/clubActivities',
-          name: 'ClubActivities',
+          name: 'ClubActivities',  //社群活动
           component: ClubActivities
         },
         {
           path: '/club/members',
-          name: 'Members',
+          name: 'Members',  //社群成员
           component: Members,
         },
       ]
     },
     {
       path: '/club/member/memberData',
-      name: 'MemberData',
+      name: 'MemberData',  //社群成员资料
       component: MemberData,
     },
     {
       path: '/club/member/attendGroupList',
-      name: 'AttendGroupList',
+      name: 'AttendGroupList',  //社群成员所加入的群
       component: AttendGroupList,
     },
     {
       path: '/club/member/organActivies',
-      name: 'OrganActivies',
+      name: 'OrganActivies',  //社群成员组织过的活动
       component: OrganActivies,
     },
     {
       path: '/club/member/attendedActivies',
-      name: 'AttendedActivies',
+      name: 'AttendedActivies',  //社群成员参加过的活动
       component: AttendedActivies,
     },
     {
       path: '/club/member/motionData',
-      name: 'MotionData',
+      name: 'MotionData',  //社群成员运动参数
       component: MotionData,
     },
     {
       path: '/activitySignUp',
-      name: 'ActivitySignUp',
+      name: 'ActivitySignUp',  //活动报名页
       component: ActivitySignUp,
       meta: {
         requireAuth: true,
@@ -209,12 +210,12 @@ export default new Router({
     },
     {
       path: '/signUpList',
-      name: 'SignUpList',
+      name: 'SignUpList',  //活动报名列表页
       component: SignUpList,
     },
     {
-      path: '/organization',  //组织活动
-      name: 'Organization',
+      path: '/organization',  
+      name: 'Organization',  //组织活动页
       component: Organization,
       meta: {
         requireAuth: true,
@@ -223,7 +224,7 @@ export default new Router({
     },
     {
       path: '/mapSelection',
-      name: 'MapSelection',
+      name: 'MapSelection',  //组织活动地图选点页
       component: MapSelection,
       meta: {
         needCacheLast: true  //是否需要缓存上一页
@@ -233,22 +234,22 @@ export default new Router({
     {
       path: '/userCenter/myData',
       name: 'MyData',
-      component: MyData,
+      component: MyData,  //个人数据
       meta: {
         requireAuth: true
       }
     },
     {
       path: '/userCenter/myData/more',
-      name: 'MyDataDetail',
-      component: MyDataDetail,
+      name: 'MyDataDetail',  //个人数据-更多数据
+      component: MyDataDetail, 
       meta: {
         requireAuth: true
       }
     },
     {
       path: '/userCenter/myData/completeInfo',
-      name: 'CompleteInfo',
+      name: 'CompleteInfo',  //个人中心完善信息页
       component: CompleteInfo,
       meta: {
         requireAuth: true,
@@ -257,7 +258,7 @@ export default new Router({
     },
     {
       path: '/userCenter/selectLabels',
-      name: 'SelectLabels',
+      name: 'SelectLabels',  //完善信息选择标签
       component: SelectLabels,
       meta: {
         requireAuth: true,
@@ -267,16 +268,16 @@ export default new Router({
     // 我的管理 
     {
       path: '/userCenter/manageHome',
-      name: 'ManageHome',
-      component: ManageHome,
+      name: 'ManageHome',  //我的管理页
+      component: ManageHome,  
       meta: {
         requireAuth: true,
         needCacheLast: false
       }
     },
     {
-      path: '/userCenter/popularize',  //马上推广
-      name: 'Popularize',
+      path: '/userCenter/popularize',  
+      name: 'Popularize',  //马上推广
       component: Popularize,
       meta: {
         requireAuth: true
@@ -284,7 +285,7 @@ export default new Router({
     },
     {
       path: '/userCenter/myActivities',
-      name: 'MyActivities',
+      name: 'MyActivities',  //我的活动页
       component: MyActivities,
       meta: {
         requireAuth: true,
@@ -294,7 +295,7 @@ export default new Router({
     // 活动管理
     {
       path: '/userCenter/editActiviesInfo',
-      name: 'EditActiviesInfo',
+      name: 'EditActiviesInfo',  //修改活动信息
       component: EditActiviesInfo,
       meta: {
         requireAuth: true
@@ -302,7 +303,7 @@ export default new Router({
     },
     {
       path: '/userCenter/checkPublishSignUp',
-      name: 'CheckPublishSignUp',
+      name: 'CheckPublishSignUp',  //个人中心查看报名列表
       component: CheckPublishSignUp,
       meta: {
         requireAuth: true
@@ -310,7 +311,7 @@ export default new Router({
     },
     {
       path: '/userCenter/checkCompleteSignUp',
-      name: 'CheckCompleteSignUp',
+      name: 'CheckCompleteSignUp',  //查看已报名
       component: CheckCompleteSignUp,
       meta: {
         requireAuth: true
@@ -319,7 +320,7 @@ export default new Router({
     // 群组管理
     {
       path: '/userCenter/groupManagement',
-      name: 'GroupManagement',
+      name: 'GroupManagement',  //管理社群
       component: GroupManagement,
       meta: {
         requireAuth: true
@@ -327,7 +328,7 @@ export default new Router({
     },
     {
       path: '/userCenter/groupManagement/createGroup',
-      name: 'CreateGroup',
+      name: 'CreateGroup',  //创建社群
       component: CreateGroup,
       meta: {
         requireAuth: true
@@ -335,7 +336,7 @@ export default new Router({
     },
     {
       path: '/userCenter/groupManagement/createdGroupManage',
-      name: 'CreatedGroupManage',
+      name: 'CreatedGroupManage',  //管理创建的群
       component: CreatedGroupManage,
       meta: {
         requireAuth: true
@@ -343,7 +344,7 @@ export default new Router({
     },
     {
       path: '/userCenter/groupManagement/manageGroupMembers',
-      name: 'ManageGroupMembers',
+      name: 'ManageGroupMembers',  //管理社群成员
       component: ManageGroupMembers,
       meta: {
         requireAuth: true
@@ -351,7 +352,7 @@ export default new Router({
     },
     {
       path: '/userCenter/groupManagement/editGroupInfo',
-      name: 'EditGroupInfo',
+      name: 'EditGroupInfo',  //修改社群信息
       component: EditGroupInfo,
       meta: {
         requireAuth: true
@@ -359,7 +360,7 @@ export default new Router({
     },
     {
       path: '/userCenter/groupManagement/transferGroup',
-      name: 'TransferGroup',
+      name: 'TransferGroup',  //转让群
       component: TransferGroup,
       meta: {
         requireAuth: true
@@ -367,7 +368,7 @@ export default new Router({
     },
     {
       path: '/userCenter/createdGroupList',
-      name: 'CreatedGroupList',
+      name: 'CreatedGroupList',  //所创建的群列表
       component: CreatedGroupList,
       meta: {
         requireAuth: true
@@ -375,7 +376,7 @@ export default new Router({
     },
     {
       path: '/userCenter/joinCroupList',
-      name: 'JoinCroupList',
+      name: 'JoinCroupList',  //加入的群列表
       component: JoinCroupList,
       meta: {
         requireAuth: true
@@ -388,7 +389,7 @@ export default new Router({
     // },
     {
       path: '/userCenter/commonProblem',
-      name: 'CommonProblem',
+      name: 'CommonProblem',  //常见问题
       component: CommonProblem,
       meta: {
         requireAuth: true
@@ -396,7 +397,7 @@ export default new Router({
     },
     {
       path: '/userCenter/cash',
-      name: 'Cash',
+      name: 'Cash',  //提现
       component: Cash,
       meta: {
         requireAuth: true
@@ -404,7 +405,7 @@ export default new Router({
     },
     {
       path: '/userCenter/cash/accountDetails',
-      name: 'AccountDetails',
+      name: 'AccountDetails',  //提现账户明细
       component: AccountDetails,
       meta: {
         requireAuth: true

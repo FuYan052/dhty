@@ -81,13 +81,16 @@
         </div>
       </div>
       <!--显示加载中转菊花-->
-      <div class="loading-box tc" v-if="isLoading">
+      <div class="showLoading" v-show="showLoading">
+        <div class="loading-box tc" v-if="isLoading">
           <mt-spinner type="snake" class="loading-more"></mt-spinner>
           <span class="loading-more-txt">加载中...</span>
+        </div>
+
+        <div class="no-more" v-if="noMore">没有更多了~</div>
+
       </div>
-
-      <div class="no-more" v-if="noMore">没有更多了~</div>
-
+      
     </div>
   </div>
 </template>
@@ -130,8 +133,9 @@ export default {
       signature: '',
       latitude: '30.5702',
       longitude: '104.06476',
+      showLoading: false,  //是否显示底部加载信息
       isLoading: false, // 加载中转菊花
-      isMoreLoading: true, // 加载更多中
+      isMoreLoading: false, // 加载更多中
       noMore: false, // 是否还有更多
       pageInfo: { // 分页信息
         page: 1,
@@ -139,16 +143,30 @@ export default {
         total: 0, // 总条数
         totalPage: 1 // 总分页数
       }
-
     }
   },
+  // watch: {
+  //   pageInfo(val) {
+  //     if(val.totalPage > 1) {
+  //       console.log("显示")
+  //       this.showLoading = true
+  //     }else{
+  //       console.log("不显示")
+  //       this.showLoading = false
+  //     }
+  //   }
+  // },
   created() {
     const url = location.href
     // console.log(url.substr(0, url.indexOf(location.hash)))
     this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
       // console.log(resp)
       if(resp.status = 200) {
-        this.$indicator.open()
+        // this.$indicator.open()
+        this.$indicator.open({
+          text: '获取位置信息中...',
+          spinnerType: 'fading-circle'
+        });
         this.timestamp = resp.data.timestamp
         this.nonceStr = resp.data.nonceStr
         this.signature = resp.data.signature
@@ -191,6 +209,9 @@ export default {
               _this.$http.activitiesList(params).then(resp => {
                 if(resp.status == 200) {
                   _this.activList = resp.data.rows
+                  // 分页信息
+                  _this.pageInfo.totalPage = resp.data.pageNum
+                  _this.pageInfo.page = resp.data.prePage
                   if(_this.activList.length == 0) {
                     _this.$toast({
                       message: '没有活动哦！',
@@ -223,6 +244,9 @@ export default {
                 if(resp.status == 200) {
                   _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
                   _this.activList = resp.data.rows
+                  // 分页信息
+                  _this.pageInfo.totalPage = resp.data.pageNum
+                  _this.pageInfo.page = resp.data.prePage
                   if(_this.activList.length == 0) {
                     _this.$toast({
                       message: '没有活动哦！',
@@ -243,19 +267,22 @@ export default {
         // 当微信获取位置配置失败
         wx.error(function(res){
           const params = {
-          // activityType: this.activityType,
-          type: _this.type,
-          time: _this.time,
-          keyWord: '',
-          isTwoDaysLater: _this.isTwoDaysLater,
-          lat: '30.5702',
-          lon: '104.06476',
-          page: 1
-        }
+            // activityType: this.activityType,
+            type: _this.type,
+            time: _this.time,
+            keyWord: '',
+            isTwoDaysLater: _this.isTwoDaysLater,
+            lat: '30.5702',
+            lon: '104.06476',
+            page: 1
+          }
         _this.$http.activitiesList(params).then(resp => {
            _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
           if(resp.status == 200) {
             _this.activList = resp.data.rows
+            // 分页信息
+            _this.pageInfo.totalPage = resp.data.pageNum
+            _this.pageInfo.page = resp.data.prePage
             if(_this.activList.length == 0) {
               _this.$toast({
                 message: '没有活动哦！',
@@ -283,11 +310,58 @@ export default {
     
   },
   methods: {
-    showSearch() {
-      this.isShowSearch = !this.isShowSearch
-      this.inputText = ''
+    // 加载等多
+    loadMore() {
+      if(this.pageInfo.totalPage > 1) {
+        this.showLoading = true
+      }else{
+        // console.log("只有1页")
+        this.showLoading = false
+      }
+      this.pageInfo.page += 1 // 增加分页
+      // console.log(this.pageInfo.page, this.pageInfo.totalPage)
+      if (this.pageInfo.page > this.pageInfo.totalPage) { // 超过了分页
+          this.noMore = true // 显示没有更多了
+          this.isLoading = false // 关闭加载中
+          return false
+      }else{
+        // console.log("还有更多")
+        this.isMoreLoading = true // 设置加载更多中
+        this.isLoading = true // 加载中
+        const params = {
+          // activityType: this.activityType,
+          type: this.type,
+          time: this.time,
+          keyWord: '',
+          isTwoDaysLater: this.isTwoDaysLater,
+          lat: '30.5702',
+          lon: '104.06476',
+          page: this.pageInfo.page
+        }
+        // console.log(params)
+        setTimeout(() => {
+          this.$http.activitiesList2(params).then(resp => {
+            console.log(resp)
+            if(resp.status == 200) {
+              this.isLoading = false
+              this.isMoreLoading = false
+              this.activList = this.activList.concat(resp.data.rows)
+              // console.log(this.playGroungList)
+              this.pageInfo.totalPage = resp.data.pageNum
+              this.pageInfo.page = resp.data.prePage
+            }
+          })
+        },1000)
+      }
     },
     // 搜索
+    showSearch() {
+      this.showLoading = false
+      this.isLoading = false // 加载中转菊花
+      this.isMoreLoading = false // 加载更多中
+      this.noMore = false// 是否还有更多
+      this.inputText = ''
+    },
     search1() {
       console.log(this.inputText)
         const params = {
@@ -304,6 +378,9 @@ export default {
       this.$http.activitiesList(params).then(resp => {
         if(resp.status == 200) {
           this.activList = resp.data.rows
+          // 分页信息
+          this.pageInfo.totalPage = resp.data.pageNum
+          this.pageInfo.page = resp.data.prePage
           if(this.activList.length == 0) {
             this.$toast({
               message: '没有活动哦！',
@@ -322,6 +399,10 @@ export default {
     },
     // 切换分类
     changeCate(index) {
+      this.showLoading = false
+      this.isLoading = false // 加载中转菊花
+      this.isMoreLoading = false // 加载更多中
+      this.noMore = false// 是否还有更多
       this.currIndex = index
       this.isShowSearch = false
       if(index === 0) {
@@ -346,6 +427,9 @@ export default {
         console.log(resp)
         if(resp.status == 200) {
           this.activList = resp.data.rows
+          // 分页信息
+          this.pageInfo.totalPage = resp.data.pageNum
+          this.pageInfo.page = resp.data.prePage
           if(this.activList.length == 0) {
             this.$toast({
               message: '没有活动哦！',
@@ -363,6 +447,10 @@ export default {
     },
     // 切换日期
     changeDate(index,clickDate) {
+      this.showLoading = false
+      this.isLoading = false // 加载中转菊花
+      this.isMoreLoading = false // 加载更多中
+      this.noMore = false// 是否还有更多
       this.isShowSearch = false
       if(index === 3){
         this.isTwoDaysLater = true
@@ -384,9 +472,13 @@ export default {
       console.log(params)
       // 活动列表
       this.$http.activitiesList(params).then(resp => {
+        this.showLoading = false
         console.log(resp)
         if(resp.status == 200) {
           this.activList = resp.data.rows
+          // 分页信息
+          this.pageInfo.totalPage = resp.data.pageNum
+          this.pageInfo.page = resp.data.prePage
           if(this.activList.length == 0) {
             this.$toast({
               message: '没有活动哦！',
@@ -449,23 +541,6 @@ export default {
         path: '/activityDetail',
       })
     },
-    // 加载更多
-    loadMore () { // 加载更多
-      this.pageInfo.page += 1 // 增加分页
-      this.isMoreLoading = true // 设置加载更多中
-      this.isLoading = true // 加载中
-      console.log(this.pageInfo.page, this.pageInfo.totalPage)
-      if (this.pageInfo.page > this.pageInfo.totalPage) { // 超过了分页
-          this.noMore = true // 显示没有更多了
-          this.isLoading = false // 关闭加载中
-          return false
-      }
-      // 做个缓冲
-      setTimeout(() => {
-          this.getProjectInfo('loadMore')
-      }, 100)
-    }
-
   }
 }
 </script>
@@ -590,10 +665,13 @@ export default {
       width: 100%;
       // padding: 0 25px;
       // margin-top: 234px;
+      margin-top:2px;
       position: relative;
       .content{
         width: 100%;
-        height: auto;
+        max-height: 96vh;
+        overflow: auto;
+        // border: 1px solid red;
         .activItem{
           width: 100%;
           height: 441px;
@@ -826,4 +904,20 @@ export default {
     /* font-weight: bold; */
     color: #767676;
   }
+  .activityHome .loading-box{
+    margin-top: 20px;
+    text-align: center;
+  }
+  .loading-more div{
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .no-more{
+    margin-top: 20px;
+    text-align: center;
+  }
+  /* .showLoading{
+    margin-top: 20px;
+  } */
 </style>

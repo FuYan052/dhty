@@ -13,7 +13,11 @@
           >{{item}}</div>
       </div>
     </div>
-    <div class="contentWrap">
+    <div class="contentWrap" 
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="isMoreLoading"
+        :infinite-scroll-immediate-check="true"
+        infinite-scroll-distance="10">
       <div class="groundItem" v-for="(item,index) in playGroungList" :key="index">
          <div class="g_top" @click="toDetail(item.id)">
            <div class="g_top_left">
@@ -45,6 +49,15 @@
          </div>
       </div>
     </div>
+    <!--显示加载中转菊花-->
+    <!-- 当只有一页数据时不显示  由showLoading控制-->
+    <div class="showLoading" v-show="showLoading">  
+      <div class="loading-box tc" v-if="isLoading">
+        <mt-spinner type="snake" class="loading-more"></mt-spinner>
+        <span class="loading-more-txt">加载中...</span>
+      </div>
+      <div class="no-more" v-if="noMore">没有更多了~</div>
+    </div>
   </div>
 </template>
 
@@ -66,6 +79,17 @@ export default {
       signature: '',
       latitude: '',
       longitude: '',
+      showLoading: false,  //是否显示底部加载信息
+      isLoading: false, // 加载中转菊花
+      isMoreLoading: false, // 加载更多中
+      noMore: false, // 是否还有更多
+      pageInfo: { // 分页信息
+          page: 1,
+          page_size: 15,
+          total: 0, // 总条数
+          totalPage: 1 // 总分页数
+      }
+
     }
   },
   created() {
@@ -73,6 +97,10 @@ export default {
     const url = location.href
     this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
       if(resp.status = 200) {
+        this.$indicator.open({
+          text: '获取位置信息中...',
+          spinnerType: 'fading-circle'
+        });
         this.timestamp = resp.data.timestamp
         this.nonceStr = resp.data.nonceStr
         this.signature = resp.data.signature
@@ -93,6 +121,7 @@ export default {
         });
         // 获取经纬度
         wx.ready(function() {
+          that.$indicator.close()
           wx.getLocation({
             type: 'wgs84', 
             success: function (res) {
@@ -103,12 +132,17 @@ export default {
                 type: that.type,
                 name:'',
                 lon: that.longitude,
-                lat: that.latitude
+                lat: that.latitude,
+                page: 1
               }
               that.$http.getPlaygroundList(params).then(resp => {
                 console.log(resp)
                 if(resp.status == 200) {
-                  that.playGroungList = resp.data
+                  that.playGroungList = resp.data.rows
+                  // 分页信息
+                  that.pageInfo.totalPage = resp.data.pageNum
+                  that.pageInfo.page = resp.data.prePage
+
                   // console.log(this.playGroungList)
                 }
               })
@@ -118,14 +152,17 @@ export default {
                 type: that.type,
                 name:'',
                 lon: that.currLon,
-                lat: that.currLat
+                lat: that.currLat,
+                page: 1
               }
               that.$http.getPlaygroundList(params).then(resp => {
                 console.log(resp)
                 if(resp.status == 200) {
                   that.$toast('获取地理位置失败，当前距离为平台默认距离！')
-                  that.playGroungList = resp.data
+                  that.playGroungList = resp.data.rows
                   // console.log(this.playGroungList)
+                  that.pageInfo.totalPage = resp.data.pageNum
+                  that.pageInfo.page = resp.data.prePage
                 }
               })
             }
@@ -137,14 +174,17 @@ export default {
             type: that.type,
             name:'',
             lon: that.currLon,
-            lat: that.currLat
+            lat: that.currLat,
+            page: 1
           }
           that.$http.getPlaygroundList(params).then(resp => {
             console.log(resp)
             if(resp.status == 200) {
               that.$toast('获取地理位置失败，当前距离为平台默认距离！')
-              that.playGroungList = resp.data
+              that.playGroungList = resp.data.rows
               // console.log(this.playGroungList)
+              that.pageInfo.totalPage = resp.data.pageNum
+              that.pageInfo.page = resp.data.prePage
             }
           })
         })
@@ -153,6 +193,47 @@ export default {
 
   },
 methods: {
+  loadMore () { // 加载更多
+    if(this.pageInfo.totalPage > 1) {
+      this.showLoading = true
+    }else{
+      // console.log("只有1页")
+      this.showLoading = false
+    }
+    this.pageInfo.page += 1 // 增加分页
+    // console.log(this.pageInfo.page, this.pageInfo.totalPage)
+    if (this.pageInfo.page > this.pageInfo.totalPage) { // 超过了分页
+        this.noMore = true // 显示没有更多了
+        this.isLoading = false // 关闭加载中
+        return false
+    }else{
+      // console.log("还有更多")
+      this.isMoreLoading = true // 设置加载更多中
+      this.isLoading = true // 加载中
+      const params = {
+        type: this.type,
+        name:'',
+        lon: this.currLon,
+        lat: this.currLat,
+        page: this.pageInfo.page
+      }
+      // console.log(params)
+      setTimeout(() => {
+        this.$http.getPlaygroundList2(params).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.isLoading = false
+            this.isMoreLoading = false
+            this.playGroungList = this.playGroungList.concat(resp.data.rows)
+            // console.log(this.playGroungList)
+            this.pageInfo.totalPage = resp.data.pageNum
+            this.pageInfo.page = resp.data.prePage
+          }
+        })
+      },1000)
+    }
+  },
+  // 切换分类
   changeCate(item,index) {
     this.currIndex = index
     if(index === 0) {
@@ -165,13 +246,16 @@ methods: {
       type: this.type,
       name:'',
       lon: this.currLon,
-      lat: this.currLat
+      lat: this.currLat,
+      page: 1
     }
     this.$http.getPlaygroundList(params).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
-        this.playGroungList = resp.data
+        this.playGroungList = resp.data.rows
         // console.log(this.playGroungList)
+        this.pageInfo.totalPage = resp.data.pageNum
+        this.pageInfo.page = resp.data.prePage
       }
     })
   },
@@ -204,10 +288,16 @@ methods: {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
+    padding-bottom: 20px;
+    position: relative;
+    padding-top: 114px;
     .cateNav{
       width: 100%;
       height: 94px;
       background: #fac31e;
+      position: fixed;
+      top: 0;
+      // z-index: 3;
       .content{
         width: 246px;
         height: 94px;
@@ -236,11 +326,14 @@ methods: {
     .contentWrap{
       width: 100%;
       padding: 0 20px;
+      max-height: 98vh;
+      overflow-y: auto;
+      // border: 1px solid red;
       .groundItem{
         width: 100%;
         min-height: 572px;
         background: #fff;
-        margin-top: 30px;
+        margin-bottom: 30px;
         .g_top{
           width: 100%;
           height: 80px;
@@ -365,7 +458,7 @@ methods: {
           .mapBox{
             width: 100%;
             height: 500px;
-            border: 1px solid red;
+            // border: 1px solid red;
             margin: 10px 0;
             .bm-view{
               width: 100%;
@@ -376,5 +469,18 @@ methods: {
       }
     }
     
+  }
+</style>
+<style>
+  .loading-box{
+    text-align: center;
+  }
+  .loading-more div{
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .no-more{
+    text-align: center;
   }
 </style>

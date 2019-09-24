@@ -134,9 +134,12 @@ export default {
       }else{
         if(this.isTosignUp && this.state !== 2) {
           if(this.isChecked) {
-            this.$router.push({
-              path: '/activitySignUp'
-            })
+            // this.$router.push({
+            //   path: '/activitySignUp'
+            // })
+            const redirectUrl = encodeURIComponent(`http://192.168.0.137:8082//#/activitySignUp`)
+            const appid = 'wxf1894ca38c849d17'  //测试号
+            window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirectUrl}&response_type=code&scope=snsapi_base&state='1'#wechat_redirect`
           }else{
             this.$toast({
               message: '未同意《免责条款》！',
