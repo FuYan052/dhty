@@ -12,7 +12,18 @@
           :class="{activeCate : currIndex === index}"
           >{{item}}</div>
       </div>
+      <div class="secrachBtn" @click="showSearch"><span class="el-icon-search"></span></div>
     </div>
+    <!-- 搜索框 -->
+    <div class="serchBox" v-show="ishowSearch">
+      <el-input
+        placeholder="搜索场地"
+        prefix-icon="el-icon-search"
+        v-model="searchInput">
+      </el-input>
+      <div class="serchText" @click="handleSearchBtn">搜索</div>
+    </div>
+    <!-- 场地列表 -->
     <div class="contentWrap" 
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="isMoreLoading"
@@ -88,8 +99,11 @@ export default {
           page_size: 15,
           total: 0, // 总条数
           totalPage: 1 // 总分页数
-      }
-
+      },
+      searchInput: '',  //搜索输入
+      ishowSearch: false,  //默认不显示搜索
+      timer1: null,  //计时器
+      timer2: null,  //计时器
     }
   },
   created() {
@@ -107,8 +121,8 @@ export default {
         const that = this
         wx.config({
           // debug: true,
-          // appId: 'wxd3d4d3045a1213a1',
-          appId: 'wxf1894ca38c849d17',  //测试号
+          appId: 'wxd3d4d3045a1213a1',
+          // appId: 'wxf1894ca38c849d17',  //测试号
           // timestamp: '1568982632',
           // nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
           // signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',
@@ -193,6 +207,35 @@ export default {
 
   },
 methods: {
+  // 搜索
+  showSearch() {
+    this.ishowSearch = !this.ishowSearch
+  },
+  handleSearchBtn() {
+    const params = {
+      type: this.type,
+      name: this.searchInput,
+      lon: this.currLon,
+      lat: this.currLat,
+      page: this.pageInfo.page
+    }
+    console.log(params)
+    this.playGroungList = []
+    this.timer1 = setTimeout(() =>{
+      this.ishowSearch = false
+    },200)
+    this.$http.getPlaygroundList2(params).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.isLoading = false
+        this.isMoreLoading = false
+        this.playGroungList = this.playGroungList.concat(resp.data.rows)
+        // console.log(this.playGroungList)
+        this.pageInfo.totalPage = resp.data.pageNum
+        this.pageInfo.page = resp.data.prePage
+      }
+    })
+  },
   loadMore () { // 加载更多
     if(this.pageInfo.totalPage > 1) {
       this.showLoading = true
@@ -212,13 +255,13 @@ methods: {
       this.isLoading = true // 加载中
       const params = {
         type: this.type,
-        name:'',
+        name:this.searchInput,
         lon: this.currLon,
         lat: this.currLat,
         page: this.pageInfo.page
       }
       // console.log(params)
-      setTimeout(() => {
+      this.timer2 = setTimeout(() => {
         this.$http.getPlaygroundList2(params).then(resp => {
           console.log(resp)
           if(resp.status == 200) {
@@ -244,7 +287,7 @@ methods: {
     }
     const params = {
       type: this.type,
-      name:'',
+      name: this.searchInput,
       lon: this.currLon,
       lat: this.currLat,
       page: 1
@@ -279,7 +322,14 @@ methods: {
     window.sessionStorage.setItem('location',JSON.stringify(location))
   }
 },
-    
+  beforeDestroy() {
+    clearTimeout(this.timer1)
+    this.timer1 = null
+    clearTimeout(this.timer2)
+    this.timer2 = null
+    console.log(this.timer1)
+    console.log(this.timer2)
+  }  
 }
 </script>
 
@@ -290,14 +340,14 @@ methods: {
     background: #f2f2f2;
     padding-bottom: 20px;
     position: relative;
-    padding-top: 114px;
+    padding-top: 124px;
     .cateNav{
       width: 100%;
       height: 94px;
       background: #fac31e;
       position: fixed;
       top: 0;
-      // z-index: 3;
+      z-index: 3;
       .content{
         width: 246px;
         height: 94px;
@@ -321,6 +371,37 @@ methods: {
           color: #000;
           border-bottom: 3px solid #000;
         }
+      }
+      .secrachBtn{
+        width: 60px;
+        height: 94px;
+        // border: 1px solid red;
+        position: absolute;
+        top: 0;
+        right: 0;
+        span{
+          font-size: 34px;
+          // color: #fff;
+          line-height: 100px;
+        }
+      }
+    }
+    .serchBox{
+      width: 100%;
+      height: 90px;
+      // background-color: #e4e9e1;
+      padding: 10px;
+      padding-left: 20px;
+      margin-top: -20px;
+      .serchText{
+        width: 11%;
+        height: 70px;
+        // border: 1px solid red;
+        line-height: 70px;
+        text-align: right;
+        float: right;
+        font-size: 30px;
+        color: #000;
       }
     }
     .contentWrap{
@@ -482,5 +563,25 @@ methods: {
   }
   .no-more{
     text-align: center;
+  }
+  .playground .serchBox .el-input {
+    width: 88%;
+    height: 70px;
+    margin-top: 5px;
+  }
+  .playground .el-input--prefix .el-input__inner{
+    height: 60px;
+    line-height: 60px;
+    border: none;
+    outline: none;
+    font-size: 28px;
+    padding-left: 60px;
+  }
+  .playground .el-input__prefix{
+    padding: 0 7px;
+    font-size: 30px;
+  }
+  .playground .el-input__icon{
+    line-height: 60px;
   }
 </style>

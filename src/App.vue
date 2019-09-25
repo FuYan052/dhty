@@ -24,9 +24,8 @@ export default {
       if (to.meta.keepAlive) {
         !this.include.includes(to.name) && this.include.push(to.name);
       }
-      console.log(from.name)
+      // console.log(from.name)
       if(from.name == 'ActivityHome') {
-        console.log("ok")
         !this.include.includes(from.name) && this.include.push(from.name);
       }
       // if (from.meta.keepAlive) {

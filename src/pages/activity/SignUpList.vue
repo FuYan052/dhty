@@ -31,6 +31,12 @@ export default {
       console.log(resp)
       if(resp.status = 200) {
         this.memberList = resp.data
+        if(this.memberList == 0) {
+          this.$toast({
+            message: '暂无人员报名哦！',
+            duration: 2000
+          });
+        }
       }else{
 
       }

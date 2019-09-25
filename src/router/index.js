@@ -132,19 +132,25 @@ export default new Router({
       }
     },
     {
+      path: '/activityDetail',
+      name: 'ActivityDetail',  //活动详情页
+      component: ActivityDetail,
+      meta: {
+        needCacheLast: true
+      }
+    },
+    {
       path: '/playgroundDetail',
       name: 'PlaygroundDetail',  //场馆详情
       component: PlaygroundDetail,
+      meta: {
+        needCacheLast: true
+      }
     },
     {
       path: '/mapPage',
       name: 'MapPage',  //地图导航页
       component: MapPage,
-    },
-    {
-      path: '/activityDetail',
-      name: 'ActivityDetail',  //活动详情页
-      component: ActivityDetail,
     },
     {
       path: '/escapeClause',  

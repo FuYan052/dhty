@@ -88,7 +88,7 @@ export default {
     }
   },
   mounted() {
-    console.log(window.localStorage.getItem('ty-token'))
+    // console.log(window.localStorage.getItem('ty-token')) 
     this.$nextTick(() => {
       if(!window.localStorage.getItem('ty-token')) {
         console.log('过期')

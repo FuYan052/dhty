@@ -173,8 +173,8 @@ export default {
         const that = this
         wx.config({
           // debug: true,
-          // appId: 'wxd3d4d3045a1213a1',
-          appId: 'wxf1894ca38c849d17',  //测试号
+          appId: 'wxd3d4d3045a1213a1',
+          // appId: 'wxf1894ca38c849d17',  //测试号
           // timestamp: '1568982632',
           // nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
           // signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',

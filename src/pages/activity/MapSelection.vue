@@ -247,20 +247,20 @@ export default {
   }
 </style>
 <style>
-  .mapInfo .center{
+  .mapSelection .mapInfo .center{
     color: #0e0e0e;
     font-weight: bold;
   }
-  .mapBox p{
+  .mapSelection .mapBox p{
     line-height: 36px;
     color: #595959;
   }
-  .serchBox .el-input {
+  .mapSelection .serchBox .el-input {
     width: 88%;
     height: 70px;
     margin-top: 5px;
   }
-  .el-input--prefix .el-input__inner{
+  .mapSelection .el-input--prefix .el-input__inner{
     height: 60px;
     line-height: 60px;
     border: none;
@@ -268,11 +268,11 @@ export default {
     font-size: 28px;
     padding-left: 60px;
   }
-  .el-input__prefix{
+  .mapSelection .el-input__prefix{
     padding: 0 7px;
     font-size: 30px;
   }
-  .el-input__icon{
+  .mapSelection .el-input__icon{
     line-height: 60px;
   }
   /* .mint-searchbar{
