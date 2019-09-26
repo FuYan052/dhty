@@ -2,16 +2,21 @@
   <!-- 修改群资料 -->
   <div class="editGroupInfo" v-title data-title="修改群资料">
     <!-- 社群名称 -->
-    <div class="groupName">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <el-form-item label="社群名称" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+    <div class="groupname" id="groupname">
+      <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
+        <el-form-item label="社群名称" prop="introd">
+          <!-- <el-input v-model="ruleForm.name"></el-input> -->
+          <el-input
+            type="textarea"
+            autosize
+            v-model="ruleForm.name">
+          </el-input>
         </el-form-item>
       </el-form>
     </div>
     <!-- 社群简介 -->
     <div class="introduction">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
         <el-form-item label="社群简介" prop="introd">
           <!-- <el-input v-model="ruleForm.introd"></el-input> -->
           <el-input
@@ -24,7 +29,7 @@
     </div>
     <!-- 社群LOGO -->
     <div class="groupLogo">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
         <el-form-item label="社群LOGO" prop="introd">
           <el-upload
             class="avatar-uploader"
@@ -133,22 +138,39 @@ export default {
     },
     // 保存
     save() {
-      const params = {
-        userId: this.userId,
-        id: this.groupId,
-        name: this.ruleForm.name,
-        content: this.ruleForm.introd,
-        logo: this.imageUrl
-      }
-      this.$http.createGroup(params).then(resp => {
-        console.log(resp)
-        if(resp.status == 200) {
-          this.$toast({
-            message: '修改成功！',
-            duration: 2000
-          });
+       if(this.ruleForm.name == '') {
+        this.$toast({
+          message: '请填写社群名称！',
+          duration: 2000
+        })
+      }else if(this.ruleForm.introd == '') {
+        this.$toast({
+          message: '请填写社群简介！',
+          duration: 2000
+        })
+      }else if(this.imageUrl == '') {
+        this.$toast({
+          message: '请上传社群头像！',
+          duration: 2000
+        })
+      }else{
+        const params = {
+          userId: this.userId,
+          id: this.groupId,
+          name: this.ruleForm.name,
+          content: this.ruleForm.introd,
+          logo: this.imageUrl
         }
-      })
+        this.$http.createGroup(params).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast({
+              message: '修改成功！',
+              duration: 2000
+            });
+          }
+        })
+      }
     },
     // 解散群
     disbandment() {
@@ -188,18 +210,21 @@ export default {
     min-height: 100vh;
     background: #f1f1f1;
     overflow: hidden;
-    .groupName{
-      width: 100%;
-      height: 98px;
-      background: #fff;
-      // margin-top: 20px;
-      padding-left: 30px;
-    }
     .introduction{
       width: 100%;
       min-height: 240px;
       background: #fff;
-      margin-top: 40px;
+      margin-bottom: 25px;
+      padding-left: 30px;
+      padding-top: 35px;
+      padding-bottom: 35px;
+      padding-right: 50px;
+    }
+    .groupname{
+      min-height: 80px;
+      width: 100%;
+      background: #fff;
+      margin-bottom: 25px;
       padding-left: 30px;
       padding-top: 35px;
       padding-bottom: 35px;
@@ -209,7 +234,7 @@ export default {
       width: 100%;
       height: 238px;
       background: #fff;
-      margin-top: 40px;
+      // margin-top: 25px;
       padding-top: 35px;
       padding-left: 30px;
     }
@@ -243,23 +268,6 @@ export default {
   .editGroupInfo .el-form-item__error{
     left: 15px;
   }
-  .editGroupInfo .groupName .el-form-item__label{
-    font-size: 28px;
-    margin-top: 28px;
-    color: #3b3b3b;
-  }
-  .editGroupInfo .groupName .el-input{
-    width: 74%;
-  }
-  .editGroupInfo .groupName .el-input__inner{
-    height: 50px;
-    margin-top: 25px;
-    font-size: 28px;
-    border: none;
-  }
-  .editGroupInfo .groupName .el-form-item__error{
-    top: 86%;
-  }
   .editGroupInfo .introduction .el-form-item__label{
     font-size: 28px;
     color: #3b3b3b;
@@ -275,6 +283,17 @@ export default {
     font-size: 28px;
     color: #3b3b3b;
     padding-bottom: 30px;
+  }
+  #groupname .el-form-item__label{
+    font-size: 28px;
+    color: #3b3b3b;
+    padding-bottom: 30px;
+  }
+  #groupname .el-textarea__inner{
+    font-size: 28px;
+    min-height: 80px !important;
+    margin-left: 15px;
+    border: 1px solid #f0f0f0;
   }
   .editGroupInfo .groupLogo .el-textarea__inner{
     font-size: 28px;
@@ -319,11 +338,11 @@ export default {
     width: 60%;
   }
   .mint-msgbox-title{
-    font-size: 22px;
+    font-size: 24px;
   }
   .mint-msgbox-message{
     color: rgb(22, 21, 21);
-    font-size: 26px;
+    font-size: 30px;
   }
   .mint-msgbox-content{
     padding: 40px 10px;

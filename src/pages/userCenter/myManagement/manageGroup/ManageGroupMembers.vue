@@ -87,29 +87,11 @@ export default {
     },
     // 设为管理员
     handle1() {
-      const params = {
-        type: '1',  //根据后端约定的类型为1
-        groupId: this.groupId,
-        userId: this.selectedMemberIds
-      }
-      this.$http.setInfo(params).then(resp => {
-        console.log(resp)
-        if(resp.status == 200) {
-          this.getMemberList()
-          this.selectedMemberIds = []
-        }else{
-          this.$toast({
-            message: '操作失败！',
-            duration: 2000
-          });
-        }
-      })
-    },
-    // 移除
-    handle2() {
-      this.$messagebox.confirm('确定删除?').then(action => {
+      if(this.selectedMemberIds.length === 0) {
+        this.$toast("未选择群员！")
+      }else{
         const params = {
-          type: '3',  //根据后端约定的类型为1
+          type: '1',  //根据后端约定的类型为1
           groupId: this.groupId,
           userId: this.selectedMemberIds
         }
@@ -125,7 +107,33 @@ export default {
             });
           }
         })
-      })
+      }
+    },
+    // 移除
+    handle2() {
+      if(this.selectedMemberIds.length === 0) {
+        this.$toast("未选择群员！")
+      }else{
+        this.$messagebox.confirm('确定删除?').then(action => {
+          const params = {
+            type: '3',  //根据后端约定的类型为1
+            groupId: this.groupId,
+            userId: this.selectedMemberIds
+          }
+          this.$http.setInfo(params).then(resp => {
+            console.log(resp)
+            if(resp.status == 200) {
+              this.getMemberList()
+              this.selectedMemberIds = []
+            }else{
+              this.$toast({
+                message: '操作失败！',
+                duration: 2000
+              });
+            }
+          })
+        })
+      }
     }
   }
 }
@@ -145,14 +153,14 @@ export default {
       width: 100%;
       height: auto;
       background: #fff;
-      border-bottom: 1px solid #e0dfe4;
+      // border-bottom: 1px solid #e0dfe4;
       .title{
         width: 100%;
         height: 74px;
         line-height: 74px;
         font-size: 30px;
         padding-left: 40px;
-        border-top: 1px solid #dadada;
+        // border-top: 1px solid #dadada;
         border-bottom: 1px solid #dadada;
       }
       .ul1{
@@ -161,14 +169,14 @@ export default {
         li{
           width: 100%;
           height: 130px;
-          padding: 0 20px;
+          padding: 0 40px;
           border-top: 1px solid #f6f6f6;
           .image1{
             width: 75px;
             height: 75px;
             float: left;
             border-radius: 50%;
-            margin-top: 20px;
+            margin-top: 23px;
             // img{
             //   width: 100%;
             //   height: 100%;
@@ -177,7 +185,7 @@ export default {
           }
           .name{
             float: left;
-            font-size: 25px;
+            font-size: 28px;
             line-height: 130px;
             margin-left: 28px;
             span{
@@ -193,8 +201,8 @@ export default {
           }
           .role{
             float: left;
-            font-size: 24px;
-            line-height: 130px;
+            font-size: 25px;
+            line-height: 133px;
             color: #a4a4a4;
             margin-left: 40px;
           }
@@ -220,7 +228,7 @@ export default {
       width: 100%;
       height: auto;
       background: #fff;
-      border-bottom: 1px solid #e0dfe4;
+      // border-bottom: 1px solid #e0dfe4;
       margin-top: 20px;
       .title{
         width: 100%;
@@ -228,8 +236,8 @@ export default {
         line-height: 74px;
         font-size: 30px;
         padding-left: 40px;
-        border-top: 1px solid #dadada;
-        border-bottom: 1px solid #dadada;
+        // border-top: 1px solid #eeecec;
+        border-bottom: 1px solid #ecebeb;
       }
       .memberItem{
         width: 100%;
@@ -243,17 +251,18 @@ export default {
           padding: 0 40px;
           .checkWrap{
             display: block;
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             border: 1px solid #a9a9a9;
             float: left;
-            margin-top: 55px;
+            margin-top: 50px;
             i{
               display: block;
               width: 23px;
               height: 23px;
-              margin-top: 2px;
-              margin-left: -1px;
+              margin-top: 4px;
+              margin-left: 0px;
               float: left;
               font-size: 23px;
               font-weight: bolder;
@@ -269,7 +278,7 @@ export default {
             height: 75px;
             border-radius: 50%;
             float: left;
-            margin-top: 30px;
+            margin-top: 25px;
             margin-left: 35px;
             // img{
             //   width: 100%;
@@ -279,8 +288,11 @@ export default {
           }
           .name{
             float: left;
-            margin-left: 50px;
-            margin-top: 45px;
+            margin-left: 30px;
+            height: 128px;
+            line-height: 128px;
+            // margin-top: 43px;
+            // border: 1px solid red;
             .el-icon-male{
               color: #0683ff;
               padding-left: 10px;
@@ -310,10 +322,10 @@ export default {
     .btnBox{
       width: 100%;
       height: 130px;
-      padding: 0 50px;
+      padding: 0 40px;
       margin-top: 80px;
       div{
-        width: 222px;
+        width: 320px;
         height: 75px;
         line-height: 75px;
         text-align: center;

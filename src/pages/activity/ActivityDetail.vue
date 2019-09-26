@@ -4,6 +4,16 @@
       <p class="p1">活动主题：</p>
       <p class="p2">{{theDetail.title}}</p>
     </div>
+    <!-- 俱乐部 -->
+    <div class="clubBox" @click="toClub">
+      <div class="imgWrap">
+        <img :src="imgurl" style="width: 100%; hight: 100% border-radius: 5px;" alt="">
+      </div>
+      <div class="text">
+        {{theDetail.groupName}}
+      </div>
+      <div class="spanBox"><span class="span2 el-icon-arrow-right"></span></div>
+    </div>
     <ul>
       <li>
         <span class="span1">活动时间：</span>{{theDetail.time}}&nbsp;&nbsp;{{theDetail.timeStart}}-{{theDetail.timeEnd}}
@@ -12,14 +22,14 @@
         <span class="span1">报名费用：</span>￥{{theDetail.cost}}
       </li>
       <li>
-        <span class="span1">活动地点：</span>{{theDetail.venueName}}<span class="span2 el-icon-location-information" @click="toMap"><b>导航</b></span>
+        <span class="span1">活动地点：</span>{{theDetail.venueName}}<span class="span2 spanLocat el-icon-location-information" @click="toMap"></span>
       </li>
       <li>
-        <span class="span1">组&nbsp;&nbsp;织&nbsp;&nbsp;者：</span>{{theDetail.phone}}({{theDetail.nickName}})<a :href="'tel:' + theDetail.phone"><span class="span2 el-icon-phone-outline"><b>拨打</b></span></a>
+        <span class="span1">组&nbsp;&nbsp;织&nbsp;&nbsp;者：</span>{{theDetail.phone}}({{theDetail.nickName}})<a :href="'tel:' + theDetail.phone"><span class="span2 el-icon-phone-outline"></span></a>
       </li>
-      <li>
-        <span class="span1">俱&nbsp;&nbsp;乐&nbsp;&nbsp;部：</span>{{theDetail.groupName}}<span class="span2 el-icon-house" @click="toClub"><b>查看</b></span>
-      </li>
+      <!-- <li>
+        <span class="span1">俱&nbsp;&nbsp;乐&nbsp;&nbsp;部：</span>{{theDetail.groupName}}<span class="span2 el-icon-house" @click="toClub"></span>
+      </li> -->
       <li>
         <span class="span1">报名人数：</span>{{peopleLength}}/{{theDetail.people}}
       </li>
@@ -45,8 +55,8 @@
     <div class="time">
       <p class="p1">报名截止还有：<span>{{content}}</span></p>
       <div class="p2">
-        <div class="checkbox" @click="checked"></div><span v-show="isChecked" class="span1 el-icon-check"></span>
-        <span class="span2">我已阅读并同意<span class="span3" @click="toEscapeClause">《免责条款》</span></span>
+        <div class="checkbox" @click="checked" :class="{checked:isChecked}"><span v-show="isChecked" class="span1 el-icon-check"></span></div>
+        <div class="span2">我已阅读并同意<span class="span3" @click="toEscapeClause">《免责条款》</span></div>
       </div>
       <el-button @click="submit">立即报名</el-button>
     </div>
@@ -59,6 +69,7 @@ export default {
   data() {
     return {
       theDetail: '',
+      imgurl: '',
       lat: '',
       lon: '',
       groupId: '',
@@ -82,7 +93,8 @@ export default {
         this.state = resp.data.state
         this.peopleLength = resp.data.enrolledVoList.length
         this.groupId = resp.data.groupId
-        this.endTime = (new Date(resp.data.endTime).getTime()) / 1000
+        this.imgurl = resp.data.image
+        this.endTime = (new Date(resp.data.endTime.replace(/-/g,'/')).getTime()) / 1000
         this.countdowm(this.endTime) //执行倒计时函数
       }
     })
@@ -137,8 +149,9 @@ export default {
             // this.$router.push({
             //   path: '/activitySignUp'
             // })
-            const redirectUrl = encodeURIComponent(`http://192.168.0.137:8082//#/activitySignUp`)
-            const appid = 'wxf1894ca38c849d17'  //测试号
+            const redirectUrl = encodeURIComponent(`https://laihu.baogongxia.com/#/activitySignUp`)
+            // const appid = 'wxf1894ca38c849d17'  //测试号
+            const appid = 'wxd3d4d3045a1213a1'  
             window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirectUrl}&response_type=code&scope=snsapi_base&state='1'#wechat_redirect`
           }else{
             this.$toast({
@@ -156,11 +169,14 @@ export default {
     },
     // 倒计时
     countdowm(timestamp) {
+      console.log(timestamp)
       let self = this
       let timer = setInterval(function() {
         let nowTime = new Date();
-        let endTime = new Date(timestamp * 1000);
-        let t = endTime.getTime() - nowTime.getTime();
+        // let endTime = new Date(timestamp * 1000);
+        let endTime = timestamp * 1000;
+        // console.log(endTime)
+        let t = endTime - nowTime.getTime();
         if(t > 0) {
           let day = Math.floor(t / 86400000)
           let hour = Math.floor((t / 3600000) % 24)
@@ -206,57 +222,88 @@ export default {
   .activityDetail{
     width: 100%;
     min-height: 100vh;
-    background: #f7f8fa;
+    background: #f2f2f2;
     padding-bottom: 210px;
     .topTitle{
       width: 100%;
-      min-height: 200px;
+      min-height: 180px;
       background: #fff;
-      border-bottom: 1px solid #dfdfdf;
+      // border-bottom: 1px solid #dfdfdf;
       overflow: hidden;
       padding: 0 35px;
       .p1{
         width: 100%;
-        color: #50505a;
-        font-size: 24px;
+        color: #000;
+        font-size: 28px;
         line-height: 60px ;
-        font-weight: bold;
+        // font-weight: bold;
       }
       .p2{
-        font-size: 24px;
-        color: #636363;
+        font-size: 32px;
+        color: #ffa302;
         // float: right;
         line-height: 42px;
         padding-left: 115px;
       }
     }
+    .clubBox{
+      width: 100%;
+      height: 120px;
+      background: #fff;
+      border-top: 1px solid #f5f2f2;
+      .imgWrap{
+        width: 80px;
+        height: 80px;
+        // border: 1px solid red;
+        float: left;
+        margin-top: 20px;
+        margin-left: 40px;
+      }
+      .text{
+        height: 120px;
+        line-height: 120px;
+        float: left;
+        margin-left: 70px;
+        font-size: 30px;
+      }
+      .spanBox{
+        width: 50px;
+        height: 120px;
+        float: right;
+        margin-right: 15px;
+        line-height: 120px;
+        color: #b1b1b1;
+        font-size: 36px;
+      }
+    }
     ul{
       width: 100%;
       height: auto;
-      margin-top: 20px;
+      margin-top: 30px;
       background: #fff;
-      border-bottom: 1px solid #e2e2e2;
+      // border-bottom: 1px solid #e2e2e2;
       padding-left: 35px;
       li{
         width: 100%;
         height: 112px;
         line-height: 112px;
-        color: #717171;
-        border-top: 1px solid #dfdfdf;
+        font-size: 30px;
+        color: #000;
+        border-top: 1px solid #f5f2f2;
         .span1{
           padding-right: 20px;
-          color: #141414;
-          font-weight: bold;
-          font-size: 24px;
+          color: #000;
+          // font-weight: bold;
+          font-size: 28px;
         }
         .span2{
           width: 100px;
           height: 52px;
-          font-size: 32px;
+          font-size: 38px;
+          line-height: 112px;
           float: right;
-          font-weight: bold;
+          // font-weight: bold;
           display: block;
-          margin-top: 20px;
           color: #2ebda1;
           text-align: center;
           b{
@@ -266,9 +313,15 @@ export default {
             margin-top: 10px;
           }
         }
+        .spanLocat{
+          color: #02aee6;
+        }
       }
       li:nth-of-type(1) {
         border-top: none;
+      }
+      li:nth-of-type(2) {
+        color: #ffa302;
       }
       .list{
         .imgBox{
@@ -286,19 +339,12 @@ export default {
             float: left;
             margin-left: -10px;
             margin-top: 22px;
-            // border: 1px solid #dedede;
-            // img{
-            //   width: 100%;
-            //   height: 100%;
-            //   border-radius: 50%;
-            //   border: 1px solid #dedede;
-            //   float: left;
-            // }
           }
         }
         .span2{
           width: 70px;
-          margin-top: 40px;
+          // margin-top: 40px;
+          margin-right: 10px;
           color: #b1b1b1;
         }
       }
@@ -306,84 +352,87 @@ export default {
     .descr{
       width: 100%;
       min-height: 292px;
-      border-bottom: 1px solid #e2e2e2;
+      // border-bottom: 1px solid #e2e2e2;
       padding-left: 38px;
       background: #fff;
-      margin-top: 40px;
+      margin-top: 30px;
       .tiltle{
         width: 100%;
         height: 90px;
         line-height: 90px;
-        color: #141414;
-        font-weight: bold;
-        font-size: 24px;
+        color: #000;
+        font-size: 28px;
       }
       .text{
         width: 100%;
         height: auto;
         padding-right: 40px;
-        font-size: 24px;
+        font-size: 30px;
+        font-weight: bold;
         line-height: 40px;
-        color: #53575a;
+        color: #000;
         padding-bottom: 35px;
       }
     }
     .time{
       width: 100%;
-      height: 162px;
+      height: 146px;
       background: #fff;
       margin-top: 45px;
-      border-top: 1px solid #dfdfdf;
-      border-bottom: 1px solid #dfdfdf;
+      border-top: 1px solid #f5f2f2;
+      border-bottom: 1px solid #f5f2f2;
       position: fixed;
       bottom: 0;
       // position: relative;
       .p1{
-        font-size: 22px;
+        font-size: 25px;
         padding-left: 20px;
         color: #636468;
-        margin-top: 20px;
+        margin-top: 25px;
         span{
           font-size: 25px;
-          color: #ba5251;
+          color: #ee5e39;
         }
       }
       .p2{
         width: 490px;
-        height: 80px;
+        height: 60px;
         position: relative;
-        padding-top: 20px;
-        padding-left: 85px;
+        // padding-top: 20px;
+        line-height: 60px;
+        padding-left: 20px;
         position: relative;
         .checkbox{
-          display: inline-block;
-          width: 50px;
-          height: 50px;
+          width: 35px;
+          height: 35px;
+          margin-top: 12px;
+          float: left;
+          line-height: 32px;
+          text-align: center;
           border: 2px solid #c8c8ca;
           border-radius: 50%;
-          position: absolute;
-          left: 20px;
-          top: 10px;
-          z-index: 29;
+          .span1{
+            font-size: 25px;
+            text-align: center;
+            color: #fff;
+          }
         }
-        .span1{
-          display: block;
-          font-size: 36px;
-          font-weight: bold;
-          position: absolute;
-          left: 26px;
-          top: 17px;
-          color: #53575a;
+        .checked{
+          border: 2px solid #ffd200;
+          background: #ffd200;
         }
         .span2{
+          height: 60px;
+          line-height: 60px;
+          float: left;
+          padding-left: 10px;
           font-size: 22px;
           color: #4a5157;
-          display: inline-block;
-          position: absolute;
-          top: 13px;
-          .span3{
-            color: #6a9cbf;
-          }
+          // position: absolute;
+          // top: 13px;
+          // .span3{
+          //   color: #6a9cbf;
+          // }
         }
       }
     }
@@ -394,7 +443,7 @@ export default {
     width: 160px;
     height: 80px;
     color: #fff;
-    background: #e94e52;
+    background: #ee5e39;
     float: right;
     border-radius: 10px;
     position: absolute;

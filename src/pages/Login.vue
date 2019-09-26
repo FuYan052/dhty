@@ -279,7 +279,7 @@ export default {
       .btnWrap{
         width: 100%;
         height: 180px;
-        margin-top: 400px;
+        margin-top: 300px;
         // border: 1px solid red;
         .changeType{
           width: 49.2%;

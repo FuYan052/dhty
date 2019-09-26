@@ -316,7 +316,7 @@ export default {
         width: 81px;
         height: 113px;
         margin: 0 auto;
-        margin-top: 400px;
+        margin-top: 250px;
         margin-bottom: 65px;
         img{
           width: 100%;

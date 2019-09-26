@@ -243,6 +243,7 @@ export default {
             float: right;
             // margin-top: 20px;
             background: #c8c8c8;
+            // background: #f2f2f2;
             font-size: 22px;
             span{
               line-height: 60px;
@@ -270,7 +271,7 @@ export default {
         width: 81px;
         height: 113px;
         margin: 0 auto;
-        margin-top: 282px;
+        margin-top: 140px;
         margin-bottom: 65px;
         // img{
         //   width: 100%;

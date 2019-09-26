@@ -11,7 +11,7 @@
         <div class="grade">Lv.{{item.level}}</div>
       </li>
     </ul>
-    <div class="sureBtn" @click="sure">确定</div>
+    <div class="sureBtn" v-show="isHaveMember" @click="sure">确定</div>
   </div>
 </template>
 
@@ -25,7 +25,8 @@ export default {
       memberList2: [],
       memberList: [],
       clickIndex: -1,
-      toUserId: ''  //被转让者id
+      toUserId: '',  //被转让者id
+      isHaveMember: false
     }
   },
   computed: {
@@ -49,6 +50,12 @@ export default {
         this.memberList = this.memberList.filter(item => {
           return item.id != this.userId
         })
+        if(this.memberList.length === 0) {
+          this.$toast('此社群还没有群成员哦！')
+          this.isHaveMember = false
+        }else{
+          this.isHaveMember = true
+        }
       }
     })
   },
@@ -60,25 +67,30 @@ export default {
     },
     // 确定
     sure() {
-      const params = {
-        groupId: this.groupId,
-        qId: this.userId,
-        cId: this.toUserId
-      }
-      this.$http.transferGroup(params).then(resp => {
-        console.log(resp)
-        if(resp.status == 200) {
-          this.$toast({
-            message: '转让成功！',
-            duration: 2000
-          });
-        }else{
-          this.$toast({
-            message: '操作失败！',
-            duration: 2000
-          });
+      if(this.toUserId == '') {
+        this.$toast('转让失败！')
+      }else{
+        const params = {
+          groupId: this.groupId,
+          qId: this.userId,
+          cId: this.toUserId
         }
-      })
+        this.$http.transferGroup(params).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast({
+              message: '转让成功！',
+              duration: 2000
+            });
+          }else{
+            this.$toast({
+              message: '操作失败！',
+              duration: 2000
+            });
+          }
+        })
+      }
+      
     }
   }
 }

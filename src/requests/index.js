@@ -5,8 +5,8 @@ import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://y8xdrx.natappfree.cc/',
+  baseURL: 'https://laihu.baogongxia.com/',
+  // baseURL: 'http://idvjss.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -14,8 +14,8 @@ const ajax = axios.create({
 
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://y8xdrx.natappfree.cc/',
+  baseURL: 'https://laihu.baogongxia.com/',
+  // baseURL: 'http://idvjss.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -23,19 +23,19 @@ const ajax2 = axios.create({
 })
 const ajax4 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
-  // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://y8xdrx.natappfree.cc/',
+  baseURL: 'https://laihu.baogongxia.com/',
+  // baseURL: 'http://idvjss.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
   },
 })
 
-const ajax3 = axios.create({
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
-})
+// const ajax3 = axios.create({
+//   headers: {
+//     'Content-Type': 'application/x-www-form-urlencoded'
+//   }
+// })
 
 // request拦截器
 ajax.interceptors.request.use(config => {
@@ -45,7 +45,6 @@ ajax.interceptors.request.use(config => {
   if (localStorage.getItem('ty-token')) {
     config.headers.common['token'] =window.localStorage.getItem('ty-token'); //让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
   }
-  // config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
   return config
 }, error => {
   // Do something with request error
@@ -81,7 +80,6 @@ ajax2.interceptors.request.use(config => {
   if (localStorage.getItem('ty-token')) {
     config.headers.common['token'] =window.localStorage.getItem('ty-token'); //让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
   }
-  // config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
   return config
 }, error => {
   // Do something with request error
@@ -118,7 +116,6 @@ ajax4.interceptors.request.use(config => {
   if (localStorage.getItem('ty-token')) {
     config.headers.common['token'] =window.localStorage.getItem('ty-token'); //让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
   }
-  // config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
   return config
 }, error => {
   // Do something with request error

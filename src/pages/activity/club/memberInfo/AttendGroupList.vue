@@ -60,19 +60,19 @@ export default {
     ul{
       width: 100%;
       height: auto;
-      background: #fff;
-      padding: 0 20px;
       li{
         width: 100%;
-        height: 110px;
-        border-bottom: 1px solid #eee8e8;
-        padding: 0 20px;
+        height: 150px;
+        // border-bottom: 1px solid #eee8e8;
+        background: #fff;
+        padding: 0 40px;
+        margin-bottom: 20px;
         .logoImg{
-          width: 80px;
-          height: 80px;
-          // border-radius: 10px;
+          width: 100px;
+          height: 100px;
+          border-radius: 10px;
           float: left;
-          margin-top: 15px;
+          margin-top: 23px;
           // img{
           //   width: 100%;
           //   height: 100%;
@@ -80,26 +80,28 @@ export default {
           // }
         }
         .text{
-          width: 80%;
-          height: 110px;
+          width: 76%;
+          height: 150px;
           float: left;
+          padding-top: 18px;
           p{
-            font-size: 27px;
+            font-size: 31px;
             padding-left: 20px;
             line-height: 70px;
           }
           p:nth-child(2){
-            font-size: 20px;
+            font-size: 26px;
             color: #9f9f9f;
             line-height: 20px;
-            padding-left: 30px;
+            padding-left: 20px;
           }
         }
         span{
           float: right;
-          line-height: 110px;
-          font-weight: bold;
-          color: #ddd9d9;
+          line-height: 150px;
+          font-size: 38px;
+          // font-weight: bold;
+          color: #504f4f;
         }
       }
     }

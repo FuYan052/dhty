@@ -460,40 +460,53 @@ export default {
     },
     // 确认发布按钮
     submit() {
-      const params = {
-        id: '',
-        userId: window.localStorage.getItem('userId'),
-        type: this.type.skey,
-        groupId: this.groupType.id,
-        title: this.title,
-        time: this.sureDateValue,
-        timeStart: this.startTime,
-        timeEnd: this.endTime,
-        venueId: this.placeId,
-        people: this.peopleNum,
-        phone: this.phone,
-        cost: this.cost,
-        content: this.notes,
-        endTime: this.deadlineValue,
-        flag: this.isCkecked
-      }
-      console.log(params)
-      // 提交后台
-      this.$http.organizingActivities(params).then(resp => {
-        console.log(resp)
-        if(resp.status == 200) {
-          this.$toast({
-            message: '提交成功！',
-            duration: 2000
-          });
-          this.$router.replace({
-            path: '/userCenter/myActivities'
-          })
-          // 清除sessionStorage里的字段
-          window.sessionStorage.removeItem("typeId")
-          window.sessionStorage.removeItem("typeValue")
+      // 判断金额是否是整形
+      if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
+        this.$toast({
+          message: '费用请填写整数！',
+          duration: 2000
+        });
+      }else{
+        const params = {
+          id: '',
+          userId: window.localStorage.getItem('userId'),
+          type: this.type.skey,
+          groupId: this.groupType.id,
+          title: this.title,
+          time: this.sureDateValue,
+          timeStart: this.startTime,
+          timeEnd: this.endTime,
+          venueId: this.placeId,
+          people: this.peopleNum,
+          phone: this.phone,
+          cost: this.cost,
+          content: this.notes,
+          endTime: this.deadlineValue,
+          flag: this.isCkecked
         }
-      })
+        console.log(params)
+        // 提交后台
+        this.$http.organizingActivities(params).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast({
+              message: '发布成功！',
+              duration: 2000
+            });
+            this.$router.replace({
+              path: '/userCenter/myActivities'
+            })
+            // 清除sessionStorage里的字段
+            window.sessionStorage.removeItem("typeId")
+            window.sessionStorage.removeItem("typeValue")
+          }else{
+            this.$toast({
+              message: '发布失败！',
+              duration: 2000
+            });
+          }
+        })
+      }
     },
   },
 }

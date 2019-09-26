@@ -118,7 +118,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 export default {
   name: 'MyActivities',
   data() {
@@ -135,14 +135,16 @@ export default {
       noActList2: false,  //缺省页
       state: '0', //我参加的活动传给后端的状态标识
       state2: '1', //我组织的活动传给后端的状态标识
-      actList: []
+      actList: [],
+      userId: ''
     }
   },
   computed: {
     // 用户id
-    ...mapState(['userId']),
+    // ...mapState(['userId']),
   },
   created() {
+    this.userId = window.localStorage.getItem('userId')
     this.getList1()
   },
   methods:{
@@ -289,30 +291,31 @@ export default {
         top: 19px;
       }
       .currStyle{
-        color: #f8c633;
-        border-bottom: 4px solid #f8c633;
+        color: #ffbc00;
+        border-bottom: 4px solid #ffbc00;
       }
     }
     .cate2{
       width: 100%;
-      height: 70px;
-      line-height: 70px;
+      height: 72px;
+      line-height: 73px;
       // background: #f7f8fa;
       .cateItem{
-        height: 70px;
-        line-height: 70px;
+        height: 72px;
+        line-height: 73px;
         text-align: center;
         padding: 0 39px;
         float: left;
         color: #9fa0a2;
-        font-size: 24px;
+        font-size: 26px;
       }
       .cateItem2{
         width: 50%;
       }
       .currStyle2{
         color: #1f1b10;
-        background: #fdeab0;
+        // background: #ffbc00;
+        background: rgba(250,195,30,0.5);
       }
     }
     .noActList{

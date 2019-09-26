@@ -72,7 +72,8 @@ export default {
       num2: 0,
       radio: '1',
       activityDetailId: '',
-      code: ''
+      code: '',
+      timer1: null,
     }
   },
   computed: {
@@ -108,6 +109,7 @@ export default {
     },
     // 支付
     surePay() {
+      const that = this
       const params = {
         userId: window.localStorage.getItem('userId'),
         oaMoneyId: this.activityDetailId,
@@ -130,7 +132,7 @@ export default {
 
           wx.ready(function () {
             wx.chooseWXPay({
-                timestamp: configData.time$tamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写 。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                timestamp: configData.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写 。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                 nonceStr: configData.nonceStr, // 支付签名随机串，不长于 32 位
                 package: configData.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
                 signType: configData.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
@@ -138,16 +140,28 @@ export default {
                 success: function (res) {
                   // 支付成功后的回调函数
                   console.log(res);
+                  that.$toast('支付成功！')
+                  that.timer1 = setTimeout(() => {
+                    that.$router.replace({
+                      path: '/userCenter/myActivities'
+                    })
+                  },500)
                 },
                 fail: function (res) {
                   //失败回调函数
                   console.log(res);
+                  that.$toast('支付失败！')
                 }
             });
           }); 
         }
       })
     }
+  },
+  beforeDestroy() {
+    // 清除定时器
+    clearTimeout(this.timer1)
+    this.timer1 = null
   }
 }
 </script>
@@ -163,7 +177,7 @@ export default {
       background: #fff;
       overflow: hidden;
       .left{
-        width: 170px;
+        width: 190px;
         height: 120px;
         border-right: 1px solid #e8e8e8;
         float: left;
@@ -171,23 +185,23 @@ export default {
         padding-right: 20px;
         overflow: hidden;
         .time{
-          font-size: 26px;
+          font-size: 34px;
           color: #f9c41e;
           font-weight: bold;
           text-align: center;
           line-height: 65px;
         }
         .date{
-          font-size: 22px;
+          font-size: 25px;
           color: #a5a5a5;
           text-align: center;
         }
       }
       .right{
-        width: 540px;
+        width: 520px;
         height: 100%;
         float: right;
-        padding-top: 42px;
+        // padding-top: 42px;
         white-space: nowrap;
         padding-right: 20px;
         .title{
@@ -195,14 +209,22 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           color: #7f7f7f;
+          margin-top: 40px;
+          font-size: 32px;
+          line-height: 34px;
+
         }
         .p{
-          font-size: 20px;
+          font-size: 24px;
           color: #797979;
           line-height: 37px;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .name{
           margin-top: 5px;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
     }
@@ -211,6 +233,7 @@ export default {
       height: 100px;
       padding-left: 20px;
       line-height: 120px;
+      font-size: 30px;
     }
     .numberWrap{
       width: 100%;
@@ -231,7 +254,7 @@ export default {
             height: 96px;
             line-height: 96px;
             float: left;
-            font-size: 20px;
+            font-size: 24px;
             span{
               font-size: 32px;
               color: #12abe7;
@@ -259,6 +282,7 @@ export default {
       height: 100px;
       padding-left: 20px;
       line-height: 120px;
+      font-size: 30px;
     }
     .pay{
       width: 100%;
@@ -316,6 +340,7 @@ export default {
     .bottom{
       width: 100%;
       height: 128px;
+      padding-left: 20px;
       border-top: 1px solid #e6eaeb;
       background: #fff;
       position: fixed;
@@ -326,13 +351,13 @@ export default {
         float: left;
         padding-left: 20px;
         .p1{
-          font-size: 22px;
+          font-size: 24px;
           color: #717171;
           line-height: 22px;
           margin-top: 24px;
         }
         .p2{
-          font-size: 24px;
+          font-size: 28px;
           color: #ec532a;
           line-height: 24px;
           margin-top: 20px;

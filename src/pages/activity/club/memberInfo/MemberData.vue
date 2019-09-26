@@ -22,8 +22,10 @@
     </ul>
     <!-- ta的装备 -->
     <div class="equipment">
-      <p class="title">ta的装备<span class="el-icon-arrow-right"></span></p>
-      <ul class="equListBox">
+      <p class="title">ta的装备<span>暂未开启</span></p>
+      <!-- 此版本还未开启装备 -->
+      <!-- <p class="title">ta的装备<span class="el-icon-arrow-right"></span></p> -->
+      <!-- <ul class="equListBox">
         <li v-for="(item,index) in 6" :key="index">
           <div class="equImg">
             <img src="../../../../assets/LOGO1.png" style="width: 100%; height: 100%; border-radius: 15px;" alt="">
@@ -39,7 +41,7 @@
           <p class="price"><span class="span1">￥</span>5190<span class="span2">￥8190</span></p>
         </div>
         <div class="moreBtn"><span class="el-icon-arrow-right"></span></div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -209,7 +211,8 @@ export default {
     }
     .equipment{
       width: 100%;
-      height: 500px;
+      min-height: 80px;
+      // height: 500px;
       background: #fff;
       .title{
         width: 100%;

@@ -2,10 +2,15 @@
   <!-- 创建新社群页面 -->
   <div class="createGroup" id="createGroup" v-title data-title="创建社群">
     <!-- 社群名称 -->
-    <div class="groupName">
+    <div class="groupName1 introduction">
       <el-form :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
-        <el-form-item label="社群名称" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+        <el-form-item label="社群名称" prop="introd">
+          <!-- <el-input v-model="ruleForm.name"></el-input> -->
+          <el-input
+            type="textarea"
+            autosize
+            v-model="ruleForm.name">
+          </el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -122,25 +127,43 @@ export default {
     },
     // 创建
     create() {
-      const params = {
-        id: '',
-        userId: this.userId,
-        name: this.ruleForm.name,
-        content: this.ruleForm.introd,
-        logo: this.imageUrl
-      }
-      this.$http.createGroup(params).then(resp => {
-        console.log(resp)
-        if(resp.status == 200) {
-          this.$toast({
-            message: '创建成功！',
-            duration: 2000
-          });
-          this.$router.push({
-            path: '/userCenter/createdGroupList'
-          })
+      if(this.ruleForm.name == '') {
+        this.$toast({
+          message: '请填写社群名称！',
+          duration: 2000
+        })
+      }else if(this.ruleForm.introd == '') {
+        this.$toast({
+          message: '请填写社群简介！',
+          duration: 2000
+        })
+      }else if(this.imageUrl == '') {
+        this.$toast({
+          message: '请上传社群头像！',
+          duration: 2000
+        })
+      }else{
+        const params = {
+          id: '',
+          userId: this.userId,
+          name: this.ruleForm.name,
+          content: this.ruleForm.introd,
+          logo: this.imageUrl
         }
-      })
+        // console.log(params)
+        this.$http.createGroup(params).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast({
+              message: '创建成功！',
+              duration: 2000
+            });
+            this.$router.push({
+              path: '/userCenter/createdGroupList'
+            })
+          }
+        })
+      }
     }
   }
 }
@@ -151,18 +174,12 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f1f1f1;
-    .groupName{
-      width: 100%;
-      height: 98px;
-      background: #fff;
-      margin-top: 20px;
-      padding-left: 30px;
-    }
+    overflow: hidden;
     .introduction{
       width: 100%;
       min-height: 240px;
       background: #fff;
-      margin-top: 40px;
+      margin-bottom: 25px;
       padding-left: 30px;
       padding-top: 35px;
       padding-bottom: 35px;
@@ -172,43 +189,30 @@ export default {
       width: 100%;
       height: 238px;
       background: #fff;
-      margin-top: 40px;
+      margin-bottom: 25px;
       padding-top: 35px;
       padding-left: 30px;
     }
     .submitBtn{
       width: 94.66%;
-      height: 76px;
-      line-height: 76px;
-      margin: 55px auto;
-      background: #ff8d30;
+      // width: 100%;
+      margin: 0 auto;
+      height: 94px;
+      background: #fac31e;
+      color: #fff;
+      line-height: 94px;
       text-align: center;
-      border-radius: 10px;
-      color: #fff8f5;
-      letter-spacing: 1px;
+      margin-top: 38px;
+      letter-spacing: 2px;
+      border-radius: 14px;
+      padding-left: 15px;
+      font-size: 32px;
     }
   }
 </style>
 <style scpoed>
   #createGroup .el-form-item__error{
     left: 15px;
-  }
-  #createGroup .groupName .el-form-item__label{
-    font-size: 28px;
-    margin-top: 25px;
-    color: #3b3b3b;
-  }
-  #createGroup .groupName .el-input{
-    width: 74%;
-  }
-  #createGroup .groupName .el-input__inner{
-    height: 50px;
-    margin-top: 18px;
-    font-size: 28px;
-    border: none;
-  }
-  #createGroup .groupName .el-form-item__error{
-    top: 86%;
   }
   #createGroup .introduction .el-form-item__label{
     font-size: 28px;
@@ -218,6 +222,12 @@ export default {
   #createGroup .introduction .el-textarea__inner{
     font-size: 28px;
     min-height: 140px !important;
+    margin-left: 15px;
+    border: 1px solid #f0f0f0;
+  }
+  #createGroup .groupName1 .el-textarea__inner{
+    font-size: 28px;
+    min-height: 80px !important;
     margin-left: 15px;
     border: 1px solid #f0f0f0;
   }

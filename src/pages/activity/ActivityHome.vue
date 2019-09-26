@@ -175,9 +175,6 @@ export default {
           // debug: true,
           appId: 'wxd3d4d3045a1213a1',
           // appId: 'wxf1894ca38c849d17',  //测试号
-          // timestamp: '1568982632',
-          // nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
-          // signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',
           timestamp: this.timestamp,
           nonceStr: this.nonceStr,
           signature: this.signature,
@@ -665,18 +662,19 @@ export default {
       width: 100%;
       // padding: 0 25px;
       // margin-top: 234px;
-      margin-top:2px;
+      margin-top:5px;
       position: relative;
       .content{
         width: 100%;
         max-height: 96vh;
+        padding-bottom: 3px;
         overflow: auto;
         // border: 1px solid red;
         .activItem{
           width: 100%;
           height: 441px;
           background: #fff;
-          box-shadow: 0 -1px 5px rgb(216, 215, 215);
+          box-shadow: 0 -1px 5px rgb(226, 225, 225);
           margin-top: 20px;
           .top{
             width: 100%;
@@ -687,29 +685,30 @@ export default {
               width: 100%;
               height: 84px;
               padding-left: 10px;
-              border-top: 1px solid #efefef;
+              border-top: 1px solid #f7f7f7;
               position: relative;
               .text{
                 height: 84;
                 font-size: 27px;
                 line-height: 84px;
-                color: #757575;
+                color: #646464;
                 float: left;
                 span{
                   padding-left: 30px;
                 }
               }
               .rightBtn{
-                width: 130px;
-                height: 50px;
-                line-height: 50px;
-                font-size: 48px;
+                width: 132px;
+                height: 54px;
+                line-height: 57px;
+                letter-spacing: 1px;
+                font-size: 50px;
                 color: #fff;
                 text-align: center;
                 background: #ff9c00;
                 float: right;
                 margin-top: 14px;
-                margin-right: -15px;
+                margin-right: -20px;
               }
               .rightColor1{  //正在报名
                 background: #ff9c00;
@@ -728,15 +727,15 @@ export default {
               width: 100%;
               height: 194px;
               margin: 0 auto;
-              border-top: 1px solid #eeeeee;
+              border-top: 1px solid #f7f7f7;
               // border: 1px solid red;
               .homeImg1{
-                width: 129px;
-                height: 129px;
-                margin-top: 32px;
+                width: 131px;
+                height: 131px;
+                margin-top: 30px;
                 float: left;
                 // border-radius: 5px;
-                margin-left: 23px;
+                margin-left: 17px;
                 // border: 1px solid red;
                 // img{
                 //   width: 100%;
@@ -746,7 +745,7 @@ export default {
                 // }
               }
               .p1{
-                width: 500px;
+                width: 540px;
                 float: right;
                 line-height: 22px;
                 color: #838383;
@@ -756,15 +755,15 @@ export default {
                 // border: 1px solid red;
               }
               .venueName{
-                font-size: 24px;
+                font-size: 28px;
                 line-height: 26px;
-                color: #444444;
+                color: #000;
                 margin-bottom: 24px;
                 margin-top: 33px;
                 // border: 1px solid red;
                 span{
                   float: right;
-                  font-size: 26px;
+                  font-size: 24px;
                   color: #808080;
                   padding-right: 18px;
                 }
@@ -791,7 +790,8 @@ export default {
             background: #fafafa;
             padding-left: 42px;
             overflow-x: auto;
-            border-top: 1px solid #eeeeee;
+            border-top: 1px solid #eeecec;
+            box-shadow: 0 1px 5px rgb(226, 225, 225);
             .iconImg{
               width: 36px;
               height: 36px;
@@ -832,14 +832,14 @@ export default {
               float: right;
               line-height: 80px;
               .num{
-                font-size: 22px;
+                font-size: 25px;
                 color: #707070;
                 display: block;
                 line-height: 80px;
                 float: left;
               }
               .status{
-                font-size: 23px;
+                font-size: 25px;
                 display: block;
                 color: #ffb200;
                 float: left;
@@ -863,7 +863,8 @@ export default {
           .address{
             width: 100%;
             height: 84px;
-            font-size: 30px;
+            font-size: 31px;
+            letter-spacing: 1px;
             padding-left: 30px;
             padding-right: 20px;
             line-height: 84px;
