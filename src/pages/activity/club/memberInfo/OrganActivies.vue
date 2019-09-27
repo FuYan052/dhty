@@ -1,8 +1,10 @@
 <template>
   <!-- ta组织过的活动 -->
   <div class="organActivies">
+    <!-- 没有活动时显示缺省页 -->
+    <div class="noList" v-show="noData"></div>
     <!-- 活动列表 -->
-    <div class="list">
+    <div class="list" v-show="!noData">
       <div class="activItem" v-for="(item,index) in list" :key="index">
           <div class="top">
             <div class="title">
@@ -14,7 +16,7 @@
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
               <div class="orgImg">
-                <img src="../../../../assets/g-img.png" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
+                <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
               </div>
               <div class="p1 p1_title"><span><i class="el-icon-house"></i></span>{{item.title}}</div>
               <div class="p1"><span><i class="el-icon-time"></i></span>{{item.time}}&nbsp;&nbsp;{{item.timeStart}}-{{item.timeEnd}}</div>
@@ -36,7 +38,8 @@ export default {
   name: 'OrganActivies',
   data() {
     return {
-      list: []
+      list: [],
+      noData: false
     }
   },
   created() {
@@ -46,11 +49,10 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.list = resp.data
-        if(resp.data.length == 0) {
-          this.$toast({
-            message: '暂无活动！',
-            duration: 2000
-          });
+        if(this.list == 0) {
+          this.noData = true
+        }else{
+          this.noData = false
         }
       }
     })
@@ -74,6 +76,12 @@ export default {
     background: #f2f2f2;
     padding-bottom: 20px;
     overflow: hidden;
+    .noList{
+      width: 100%;
+      height: 100vh;
+      background: url('../../../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     .activItem{
       width: 100%;
       height: 400px;

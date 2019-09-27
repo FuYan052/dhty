@@ -1,13 +1,7 @@
 <template>
   <!-- 群组成员 -->
   <div class="members" v-title data-title="群组成员">
-    <!-- <div class="searchBox">
-      <el-input
-        prefix-icon="el-icon-search"
-        @change="search"
-        v-model="input3">
-      </el-input>
-    </div> -->
+    
     <!-- 管理员 -->
     <div class="admin">
       <div class="title">管理员</div>

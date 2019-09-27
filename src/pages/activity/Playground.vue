@@ -23,8 +23,11 @@
       </el-input>
       <div class="serchText" @click="handleSearchBtn">搜索</div>
     </div>
+    <!-- 没有场地时显示缺省页 -->
+    <div class="noList" v-show="noData"></div>
     <!-- 场地列表 -->
     <div class="contentWrap" 
+        v-show="!noData"
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="isMoreLoading"
         :infinite-scroll-immediate-check="true"
@@ -77,6 +80,7 @@ export default {
   name: 'Playground',
   data() {
     return {
+      noData: false,  //缺省页控制
       cateList: ['羽毛球', '跑步'],
       currIndex: 0,
       address: '',
@@ -144,7 +148,7 @@ export default {
               that.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
               const params = {
                 type: that.type,
-                name:'',
+                keyWord:'',
                 lon: that.longitude,
                 lat: that.latitude,
                 page: 1
@@ -153,6 +157,11 @@ export default {
                 console.log(resp)
                 if(resp.status == 200) {
                   that.playGroungList = resp.data.rows
+                  if(that.playGroungList.length == 0) {
+                    that.noData = true
+                  }else{
+                    that.noData = false
+                  }
                   // 分页信息
                   that.pageInfo.totalPage = resp.data.pageNum
                   that.pageInfo.page = resp.data.prePage
@@ -164,7 +173,7 @@ export default {
             cancel: function (res) {
               const params = {
                 type: that.type,
-                name:'',
+                keyWord:'',
                 lon: that.currLon,
                 lat: that.currLat,
                 page: 1
@@ -174,6 +183,11 @@ export default {
                 if(resp.status == 200) {
                   that.$toast('获取地理位置失败，当前距离为平台默认距离！')
                   that.playGroungList = resp.data.rows
+                  if(that.playGroungList.length == 0) {
+                    that.noData = true
+                  }else{
+                    that.noData = false
+                  }
                   // console.log(this.playGroungList)
                   that.pageInfo.totalPage = resp.data.pageNum
                   that.pageInfo.page = resp.data.prePage
@@ -186,7 +200,7 @@ export default {
         wx.error(function(res){
           const params = {
             type: that.type,
-            name:'',
+            keyWord:'',
             lon: that.currLon,
             lat: that.currLat,
             page: 1
@@ -214,7 +228,7 @@ methods: {
   handleSearchBtn() {
     const params = {
       type: this.type,
-      name: this.searchInput,
+      keyWord: this.searchInput,
       lon: this.currLon,
       lat: this.currLat,
       page: this.pageInfo.page
@@ -230,6 +244,11 @@ methods: {
         this.isLoading = false
         this.isMoreLoading = false
         this.playGroungList = this.playGroungList.concat(resp.data.rows)
+        if(this.playGroungList.length == 0) {
+          this.noData = true
+        }else{
+          this.noData = false
+        }
         // console.log(this.playGroungList)
         this.pageInfo.totalPage = resp.data.pageNum
         this.pageInfo.page = resp.data.prePage
@@ -255,7 +274,7 @@ methods: {
       this.isLoading = true // 加载中
       const params = {
         type: this.type,
-        name:this.searchInput,
+        keyWord:this.searchInput,
         lon: this.currLon,
         lat: this.currLat,
         page: this.pageInfo.page
@@ -268,6 +287,11 @@ methods: {
             this.isLoading = false
             this.isMoreLoading = false
             this.playGroungList = this.playGroungList.concat(resp.data.rows)
+            if(this.playGroungList.length == 0) {
+              this.noData = true
+            }else{
+              this.noData = false
+            }
             // console.log(this.playGroungList)
             this.pageInfo.totalPage = resp.data.pageNum
             this.pageInfo.page = resp.data.prePage
@@ -287,7 +311,7 @@ methods: {
     }
     const params = {
       type: this.type,
-      name: this.searchInput,
+      keyWord: this.searchInput,
       lon: this.currLon,
       lat: this.currLat,
       page: 1
@@ -296,6 +320,11 @@ methods: {
       console.log(resp)
       if(resp.status == 200) {
         this.playGroungList = resp.data.rows
+        if(this.playGroungList.length == 0) {
+          this.noData = true
+        }else{
+          this.noData = false
+        }
         // console.log(this.playGroungList)
         this.pageInfo.totalPage = resp.data.pageNum
         this.pageInfo.page = resp.data.prePage
@@ -341,6 +370,12 @@ methods: {
     padding-bottom: 20px;
     position: relative;
     padding-top: 124px;
+    .noList{
+      width: 100%;
+      height: 100vh;
+      background: url('../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     .cateNav{
       width: 100%;
       height: 94px;

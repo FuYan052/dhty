@@ -67,7 +67,7 @@
         />
     </div>
     </div>
-    <div class="bottomWrap">
+    <div class="bottomWrap" v-show="!isInput">
       <div class="sureBtn" @click="submit">
         提交
       </div>
@@ -153,6 +153,7 @@ export default {
       startTimePicker: false,
       endTimePicker: false,
       deadlinePicker: false,
+      isInput: false,  //当手机输入键盘弹起时不显示提交按钮
       textarea_1: '',
       textarea_2: '',
       currSlots: [], //渲染
@@ -244,6 +245,20 @@ export default {
     })
     //当天日期
     this.startDate = new Date()  
+    // 键盘弹起事件
+    const that = this
+    var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+    window.onresize = function() {
+      var nowClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      if (clientHeight - nowClientHeight > 60 ) {//因为ios有自带的底部高度
+        //键盘弹出的事件处理
+        that.isInput = true
+      }
+      else {
+        //键盘收起的事件处理
+        that.isInput = false
+      } 
+    };
   },
   methods: {
     // 运动类型
@@ -517,13 +532,8 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
-    .maxHeightBox{
-      width: 100%;
-      height: 82vh;
-      overflow: auto;
-      padding: 20px 14px;
-      padding-bottom: 40px;
-    }
+    position: relative;
+    padding-bottom: 20vh;
     ul{
       width: 100%;
       height: auto;
@@ -690,6 +700,9 @@ export default {
       // padding-bottom: 30px;
       height: 18vh;
       background: #fff;
+      position: fixed;
+      top: 82vh;
+      left: 0;
     }
     .sureBtn{
       width: 100%;
@@ -745,6 +758,9 @@ export default {
   }
 </style>
 <style>
+  .focusState {
+    position: absolute;
+  }
   .organization .textAreaBox textarea{
     width: 100%;
     border: none;

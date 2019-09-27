@@ -1,7 +1,8 @@
 <template>
   <!-- 已发布活动查看报名 -->
   <div class="checkPublishSignUp" v-title data-title="查看报名">
-    <ul class="memberItem">
+    <div class="noData" v-show="noList"></div>
+    <ul class="memberItem" v-show="!noList">
         <li v-for="(item,index) in memberList" :key="index">
           <div class="itImg1">
             <img :src="item.imgPath" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
@@ -19,15 +20,10 @@ export default {
   data() {
     return {
       memberList: [],
+      noList: false
     }
   },
   created() {
-    if(this.memberList.length == 0) {
-      this.$toast({
-        message: '暂无人员报名！',
-        duration: 2000
-      });
-    }
     // this.memberList = [
     //   {
     //     imgPath: require('../../../../assets/touxiang.jpg'),
@@ -66,6 +62,11 @@ export default {
     //     grade: 'Lv.11'
     //   },
     // ]
+    if(this.memberList.length == 0) {
+      this.noList = true
+    }else{
+      this.noList = false
+    }
   },
 }
 </script>
@@ -75,6 +76,12 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
+    .noData{
+      width: 100%;
+      height: 100vh;
+      background: url('../../../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     ul{
       width: 100%;
       height: auto;

@@ -1,7 +1,9 @@
 <template>
   <!-- ta的所属社群列表 -->
   <div class="attendGroupList" v-title data-title="所属社群">
-    <ul>
+    <!-- 当没有社群显示缺省页 -->
+    <div class="noList" v-show="noData"></div>
+    <ul v-show="!noData">
       <li v-for="(item,index) in groupList" :key="index" @click="toGroupDetail(item)">
         <div class="logoImg">
           <img :src="item.logo" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
@@ -21,7 +23,8 @@ export default {
   name: 'AttendGroupList',
   data() {
     return {
-      groupList: ''
+      groupList: '',
+      noData: false
     }
   },
   created() {
@@ -30,11 +33,10 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.groupList = resp.data
-        if(resp.data.length == 0) {
-          this.$toast({
-            message: '暂无社群！',
-            duration: 2000
-          });
+        if(this.groupList == 0) {
+          this.noData = true
+        }else{
+          this.noData = false
         }
       }
     })
@@ -57,6 +59,12 @@ export default {
     min-height: 100vh;
     background: #f2f2f2;
     overflow: hidden;
+    .noList{
+      width: 100%;
+      height: 100vh;
+      background: url('../../../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     ul{
       width: 100%;
       height: auto;

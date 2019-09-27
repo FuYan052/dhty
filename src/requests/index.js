@@ -6,7 +6,7 @@ import { Indicator, Toast } from 'mint-ui'
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://idvjss.natappfree.cc/',
+  // baseURL: 'http://mejixt.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -15,7 +15,7 @@ const ajax = axios.create({
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://idvjss.natappfree.cc/',
+  // baseURL: 'http://mejixt.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -24,7 +24,7 @@ const ajax2 = axios.create({
 const ajax4 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://idvjss.natappfree.cc/',
+  // baseURL: 'http://mejixt.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -63,9 +63,9 @@ ajax.interceptors.response.use(resp => {
         message: resp.data.message,
         duration: 2000
       });
-      window.localStorage.removeItem('ty-token')
-      window.localStorage.removeItem('userId')
-      window.localStorage.removeItem('userPhone')
+      // window.localStorage.removeItem('ty-token')
+      // window.localStorage.removeItem('userId')
+      // window.localStorage.removeItem('userPhone')
     }
   },
   error => {
@@ -100,9 +100,9 @@ ajax2.interceptors.response.use(resp => {
       });
       // router.go(0)
       // console.log(router)
-      window.localStorage.removeItem('ty-token')
-      window.localStorage.removeItem('userId')
-      window.localStorage.removeItem('userPhone')
+      // window.localStorage.removeItem('ty-token')
+      // window.localStorage.removeItem('userId')
+      // window.localStorage.removeItem('userPhone')
     }
   },
   error => {
@@ -136,9 +136,9 @@ ajax4.interceptors.response.use(resp => {
       });
       // router.go(0)
       // console.log(router)
-      window.localStorage.removeItem('ty-token')
-      window.localStorage.removeItem('userId')
-      window.localStorage.removeItem('userPhone')
+      // window.localStorage.removeItem('ty-token')
+      // window.localStorage.removeItem('userId')
+      // window.localStorage.removeItem('userPhone')
     }
   },
   error => {
@@ -353,5 +353,9 @@ export const getSignature = (params) => {
 // 微信支付
 export const postPay = (params) => {
   return ajax2.post(`/v1/rest/pay/pay`,params)
+}
+// 支付成功
+export const payOk = (params) => {
+  return ajax.get(`/v1/rest/pay/ok?orderNo=${params}`)
 }
 

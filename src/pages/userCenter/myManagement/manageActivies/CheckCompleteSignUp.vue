@@ -1,7 +1,8 @@
 <template>
   <!-- 已完成活动查看报名 -->
-  <div class="checkCompleteSignUp" v-title data-title="查看报名">
-    <ul class="memberItem">
+  <div class="checkCompleteSignUp" :class="{noData : isnoData}" v-title data-title="查看报名">
+    <div class="noData" v-show="isnoData"></div>
+    <ul class="memberItem" v-show="!isnoData">
         <li v-for="(item,index) in memberList" :key="index">
           <div class="iteImg">
             <img :src="item.imgPath" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
@@ -20,6 +21,7 @@ export default {
   data() {
     return {
       memberList: [],
+      isnoData: false
     }
   },
   created() {
@@ -61,6 +63,11 @@ export default {
         grade: 'Lv.11'
       },
     ]
+    if(this.memberList.length == 0) {
+      this.isnoData = true
+    }else{
+      this.isnoData = false
+    }
   },
 }
 </script>
@@ -70,6 +77,12 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
+    .noData{
+      width: 100%;
+      height: 100vh;
+      background: url('../../../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     ul{
       width: 100%;
       height: auto;

@@ -1,142 +1,141 @@
 <template>
-  <!-- 修改活动信息 -->
   <div class="editActiviesInfo" v-title data-title="修改活动">
+    <div class="maxHeightBox">
     <ul>
-      <li @click="show1">
-        选择运动种类<span class="el-icon-arrow-right"></span><span class="value">{{typeValue}}</span>
-      </li>
-      <li @click="showActivityType">
-        选择活动类型<span class="el-icon-arrow-right"></span><span class="value">{{activityTypeValue}}</span>
-      </li>
-      <li @click="show2">
-        选择所属群组<span class="el-icon-arrow-right"></span><span class="value">{{groupTypeValue}}</span>
-      </li>
-      <li class="title" @click="show3">
-        填写标题<span class="el-icon-arrow-right"></span><span class="value">{{titleValue}}</span>
-      </li>
-      <li class="title" @click="showDate">
-        填写日期<span class="el-icon-arrow-right"></span><span class="value">{{formatDateValue}}</span>
-      </li>
-      <li class="selectTime">
-        <div @click="showStartTime">开始时间<span class="el-icon-date"></span></div>
-        <div @click="showEndTime">结束时间<span class="el-icon-date"></span></div>
+      <li @click="showPicker1">
+        <span class="title">运动种类</span>
+        <input type="text" readonly class="inputValue" placeholder="填写种类" v-model="type.name"/>
         <span class="el-icon-arrow-right"></span>
-        <span class="value">{{startTimeValue}}{{endTimeValue}}</span>
       </li>
-      <li @click="selectPlace">
-        填写地点<span class="el-icon-arrow-right"></span><span class="value">{{placeName}}</span>
+      <li @click="showPicker2">
+        <span class="title">所属群组</span>
+        <input type="text" readonly class="inputValue" placeholder="填写群组" v-model="groupType.name">
+        <span class="el-icon-arrow-right"></span>
       </li>
-      <li @click="inputNumber">
-        填写人数<span class="el-icon-arrow-right"></span><span class="value">{{number}}</span>
+      <li @click="showDate">
+        <span class="title">日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期</span>
+        <input type="text" readonly class="inputValue" v-model="sureDateValue" placeholder="填写日期"/>
+        <span class="el-icon-arrow-right"></span>
       </li>
-      <li @click="inputPhone">
-        填写联系方式<span class="el-icon-arrow-right"></span><span class="value">{{phone}}</span>
+      <li class="timeLi">
+        <span class="title">时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;间</span>
+        <input type="text" readonly class="timeInput time1" @click="showStartTime" v-model="startTime" placeholder="几点">
+        <span class="range">至</span>
+        <input readonly type="text" class="timeInput time2" @click="showEndTime" v-model="endTime" placeholder="几点">
       </li>
-      <li @click="lastTime">
-        报名截止时间<span class="el-icon-arrow-right"></span><span class="value">{{showLastTimeValue}}</span>
+      <li @click="showDeadline ">
+        <span class="title">报名截止</span>
+        <input type="text" readonly class="inputValue" v-model="deadlineValue" placeholder="填写时间"/>
+        <span class="el-icon-arrow-right"></span>
+      </li>
+      <li @click="showMap">
+        <span class="title">活动地点</span>
+        <input type="text" class="inputValue inputPlaceValue" readonly v-model="placeName" placeholder="填写位置"/>
+        <span class="el-icon-location-outline"></span>
+      </li>
+      <li>
+        <span class="title">人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数</span>
+        <input type="text" class="inputValue inputNumber" v-model="peopleNum" placeholder="填写人数"/>
+        <div class="numberInputBox">
+          <span class="btn desc" @click="descBtn"><i class="el-icon-minus"></i></span><input type="number" v-model="peopleNum" name="" id=""/><span class="btn add" @click="addBtn"><i class="el-icon-plus"></i></span>
+        </div>
+      </li>
+      <li>
+        <!-- <span class="title">费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用</span> -->
+        <span class="title">费用&nbsp;/&nbsp;人</span>
+        <input type="text" class="inputValue" v-model="cost" placeholder="填写费用，如:60"/>
+      </li>
+      <li>
+        <span class="title">联系方式</span>
+        <input type="text" class="inputValue" v-model="phone" placeholder="填写电话"/>
       </li>
     </ul>
-    <div class="cost" @click="inputCost">填写参加费用 <span class="el-icon-arrow-right"></span><span class="value">{{cost}}</span></div>
-    <div class="notes">
-      <span>参与须知</span>
-      <el-input
-        class="textarea1"
-        type="textarea"
-        autosize
-        placeholder="请输入内容"
-        v-model="textarea1">
-      </el-input>
+    <div class="inputTitleBox">标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题</div>
+    <div class="textAreaBox">
+      <textarea
+        class="textareaTitle"
+        v-model="title"
+        placeholder="时间+地点"
+        />
     </div>
-    <div class="submit" @click="submit">保存修改</div>
-    <div class="bottom">
-      <span class="box" @click="isWeekActivie"><b class="el-icon-check" v-show="isCkecked"></b></span>
-      <p class="bottomText">作为俱乐部每周活动安排发布</p>
+    <div class="inputTitleBox noteTitle">参与须知</div>
+    <div class="textAreaBox">
+      <textarea
+        class="textareaTitle"
+        v-model="notes"
+        placeholder="请填写活动须知"
+        />
+    </div>
+    </div>
+    <div class="bottomWrap" v-show="!isInput">
+      <div class="sureBtn" @click="submit">
+        保存修改
+      </div>
+      <div class="bottom">
+        <span class="box" :class="{activeBox:isCkecked}" @click="isWeekActivie"><b class="el-icon-check" v-show="isCkecked"></b></span>
+        <p class="bottomText">作为群组内周循环活动发布</p>
+      </div>
     </div>
     
-    <!-- 弹框 -->
+    <!-- 选择弹框 -->
     <mt-popup
       v-model="popupVisible"
       popup-transition="popup-fade"
       closeOnClickModal="true" 
       position="bottom"
       >
-      <!-- 选择运动种类 -->
+      <!-- 选择 -->
       <mt-picker 
-        v-show="picker1"
+        v-show="isShowPicker"
         :slots="currSlots" 
         value-key="name"
-        :visibleItemCount='5'
+        :visibleItemCount='3'
         :itemHeight='50'
         showToolbar
-        @change="onValuesChange1">
+        @change="currChange">
         <div class="picker-toolbar-title">
           <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
-          <div class="usi-btn-sure"  @click="sure1">确定</div>
-        </div>
-      </mt-picker>
-      <!-- 选择活动类型 -->
-      <mt-picker 
-        v-show="activityTypePicker"
-        :slots="activityTypeSlots" 
-        :visibleItemCount='5'
-        :itemHeight='50'
-        showToolbar
-        @change="ChangeactivityType">
-        <div class="picker-toolbar-title">
-          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
-          <div class="usi-btn-sure"  @click="sureActivityType">确定</div>
-        </div>
-      </mt-picker>
-      <!-- 选择所属群组 -->
-      <mt-picker 
-        v-show="picker2"
-        :slots="currSlots" 
-        value-key="name"
-        :visibleItemCount='5'
-        :itemHeight='50'
-        showToolbar
-        @change="onValuesChange2">
-        <div class="picker-toolbar-title">
-          <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
-          <div class="usi-btn-sure"  @click="sure2">确定</div>
+          <div class="usi-btn-sure"  @click="currSure">确定</div>
         </div>
       </mt-picker>
       <!-- 选择日期 -->
       <mt-datetime-picker
-        v-show="datePicker"
-        ref="picker"
+        v-show="isShowDatePicker"
+        :visibleItemCount='5'
         type="date"
         :startDate="startDate"
         year-format="{value} 年"
         month-format="{value} 月"
         date-format="{value} 日"
-        v-model="dateValue"
         @confirm="handleConfirmDate">
       </mt-datetime-picker>
-      <!-- 选择开始时间 -->
       <mt-datetime-picker
         v-show="startTimePicker"
+        :visibleItemCount='5'
         ref="picker"
         type="time"
-        v-model="startTime"
         @confirm="handleConfirmStart">
       </mt-datetime-picker>
       <!-- 选择结束时间 -->
       <mt-datetime-picker
         v-show="endTimePicker"
+        :visibleItemCount='5'
         ref="picker"
         type="time"
-        v-model="endTime"
         @confirm="handleConfirmEnd">
       </mt-datetime-picker>
-      <!-- 报名截止时间 -->
+      <!-- 报名截止 -->
       <mt-datetime-picker
-        v-show="lastTimePicker"
-        ref="picker"
+        v-show="deadlinePicker"
         type="datetime"
+        :visibleItemCount='5'
         :startDate="startDate"
-        v-model="lastTimeValue"
-        @confirm="handleConfirmLastTime">
+        year-format="{value} 年"
+        month-format="{value} 月"
+        date-format="{value} 日"
+        hour-format="{value} 时"
+        minute-format="{value} 分"
+        @confirm="handleConfirmDeadline">
       </mt-datetime-picker>
     </mt-popup>
   </div>
@@ -145,56 +144,88 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: 'EditActiviesInfo',
+  name: 'Organization',
   data() {
     return {
-      textarea1: '',  //参与须知
-      picker1: false,
-      activityTypePicker: false,
-      picker2: false,
-      datePicker: false,
+      id: '',  //活动id
+      isShowPicker: false,
+      popupVisible: false,
+      isShowDatePicker: false,
       startTimePicker: false,
       endTimePicker: false,
-      lastTimePicker: false,
-      type: '羽毛球', //默认运动类型
-      typeValue: '', //选择的运动类型
-      activityType: '', //默认活动类型
-      activityTypeValue: '', //选择的活动类型
-      activityTypeId: '',
-      groupType: '大虎管理员', //默认所属群组
-      groupTypeValue: '', //选择的所属群组
-      groupId: '',
-      titleValue:'',  //标题内容
-      dateValue: '',  //选择日期
-      formatDateValue: '',  //格式化选择的日期并显示
-      startTime: '',  //选择的开始时间
-      startTimeValue: '',  //显示的格式化的开始时间
-      endTime: '',  //选择的结束时间
-      endTimeValue: '',  //显示的格式化的结束时间
+      deadlinePicker: false,
+      isInput: false,  //当手机输入键盘弹起时不显示提交按钮
+      textarea_1: '',
+      textarea_2: '',
+      currSlots: [], //渲染
+      typeValues: [],  //运动类型slots
+      type: {
+        name: '',
+        skey: ''
+      },  //运动类型选择的值
+      groupSlots: [],  //所属群组slots
+      groupType: {
+        id: '',
+        name: ''
+      },
+      datePickerValue: '',  //日期选择
       startDate: '',  //可选日期当天以后
-      placeId: '',  //选择的地点id
-      placeName: '',  //选择的地点名字
-      number: '',  //人数
+      // dateValue: '',  //选择日期
+      sureDateValue: '',  //渲染日期
+      startTime: '',  //活动开始时间
+      endTime: '',  //活动结束时间
+      startHour: null,  //控制结束时间大于开始时间
+      currChange: function(){},
+      currSure: function() {},
+      peopleNum: '',  //人数
+      deadlineValue: '',  //报名截止时间
+      placeName: '',   //活动地点名称
+      placeId: '',  //活动地点id
+      cost: null,  //费用
       phone: '',  //联系方式
-      lastTimeValue: '',  //报名截止时间  //此格式传给后端
-      showLastTimeValue: '',  //报名截止时间  //此格式用于前端显示
-      cost: '',  //费用
-      currSlots: this.slots1,
-      slotsValues1: [],
-      slotsValues2: [],
-      showToolbar: true,
-      popupVisible: false,
+      title: '',  //标题
+      notes: '',   //参与须知
       isCkecked: false,   //是否为周活动
-      activityTypeSlots: [{
-        flex: 1,
-        values: ['成人活动', '儿童活动','亲子活动'],
-        className: 'slot6',
-        textAlign: 'center',
-        // defaultIndex: -1
-      }],
-      editId: '',
-      id: ''  //活动id
     }
+  },
+  computed: {
+    // 用户id
+    // ...mapState(['userId']),
+
+    slotsType() {
+      let slots1 = [
+        {
+          flex: 1,
+          values: this.typeValues,
+          className: 'slot1',
+          textAlign: 'center',
+          defaultIndex: 0,
+        }
+      ]
+      return slots1
+    },
+    slotsGroup() {
+      let slots2 = [
+        {
+          flex: 1,
+          values: this.groupSlots,
+          className: 'slot1',
+          textAlign: 'center',
+          defaultIndex: 0
+        }
+      ]
+      return slots2
+    },
+  },
+  watch: {
+    $route(to, from) {
+      if(from.path == '/mapSelection') {
+        console.log(this.$route)
+        this.placeName = this.$route.params.placeName || ''
+        this.placeId = this.$route.params.placeId || ''
+        this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+      }
+    },
   },
   created() {
     this.editId = window.sessionStorage.getItem('editGroupId')
@@ -203,238 +234,127 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.id = resp.data.id
-        this.type = resp.data.typeId
-        this.typeValue = resp.data.type
-        this.activityTypeId = resp.data.activityTypeId
-        this.activityTypeValue = resp.data.activityType
-        this.groupTypeValue = resp.data.groupName
-        this.groupId = resp.data.groupId
-        this.titleValue = resp.data.title
-        this.formatDateValue = resp.data.time
-        this.startTimeValue = resp.data.timeStart
+        this.type.skey = resp.data.typeId
+        this.type.name = resp.data.type
+        this.groupType.name = resp.data.groupName
+        this.groupType.id = resp.data.groupId
+        this.title = resp.data.title
+        this.sureDateValue = resp.data.time
+        this.startTime = resp.data.timeStart
         this.endTime = resp.data.timeEnd
-        this.endTimeValue = '~' + this.endTime
-        this.number = resp.data.people
+        this.peopleNum = resp.data.people
         this.phone = resp.data.phone
-        this.lastTimeValue = resp.data.endTime
-        this.showLastTimeValue = resp.data.endTime
+        this.deadlineValue = resp.data.endTime
         this.cost = resp.data.cost
-        this.textarea1 = resp.data.content
+        this.notes = resp.data.content
+        this.placeName = resp.data.venueName
+        this.placeId = resp.data.venueId
+        this.isCkecked = resp.data.flag === 'true'  //字符串转Boolean
         window.sessionStorage.setItem('typeId',resp.data.typeId)
-        if(window.sessionStorage.getItem('placeName')) {
-          this.placeName = window.sessionStorage.getItem('placeName')
-          this.placeId = window.sessionStorage.getItem('placeId')
-        }else{
-          this.placeName = resp.data.venueName
-          this.placeId = resp.data.venueId
-        }
       }
       console.log(this.lastTimeValue)
     })
+    this.userId = window.localStorage.getItem('userId')
     // 获取运动类型
     this.$http.findDictList('sportsKinds').then(resp => {
-      // console.log(resp)
+      console.log(resp)
       if(resp.status == 200) {
-        this.slotsValues1 = resp.data
+        this.typeValues = resp.data
       }
     })
-    // 获取群组列表
-    this.$http.getGroupList('1').then(resp => {
-      // console.log(resp)
+    // 获取所属群组
+    this.$http.getGroupList(this.userId).then(resp => {
+      console.log(resp)
       if(resp.status == 200) {
-        this.slotsValues2 = resp.data
+        this.groupSlots = resp.data
       }
     })
-
-    this.startDate = new Date()  //当天日期
-    // this.typeValue = window.sessionStorage.getItem('typeValue')  //存sessionStorage是为了防止选择场地后返回页面被刷新，之前选择项被清空
-    // this.activityTypeValue = window.sessionStorage.getItem('activityType')  
-    // this.groupTypeValue = window.sessionStorage.getItem('groupTypeValue')
-    // this.titleValue = window.sessionStorage.getItem('titleValue')
-    // this.formatDateValue = window.sessionStorage.getItem('formatDateValue')
-    // this.startTimeValue = window.sessionStorage.getItem('startTimeValue')
-    // this.endTime = window.sessionStorage.getItem('endTime')
-    // if(this.endTime !== null) {
-    //   this.endTimeValue = '~' + this.endTime
-    // }
-    // this.placeId = window.sessionStorage.getItem('placeId')
-    // this.placeName = window.sessionStorage.getItem('placeName')
-    // this.number = window.sessionStorage.getItem('number')
-    // this.phone = window.sessionStorage.getItem('phone')
-    // this.showLastTimeValue = window.sessionStorage.getItem('lastTimeValue')
-    // this.cost = window.sessionStorage.getItem('cost')
-  },
-  mounted() {
-
-  },
-  computed: {
-    // 用户id
-    ...mapState(['userId']),
-
-    dataList1() {
-      let slots1 = [
-        {
-          flex: 1,
-          // values: ['羽毛球', '跑步','儿童活动'],
-          values: this.slotsValues1,
-          className: 'slot1',
-          textAlign: 'center',
-          // defaultIndex: -1
-        }
-      ]
-      return slots1
-    },
-    dataList2() {
-      let slots2 = [
-        {
-          flex: 1,
-          values: this.slotsValues2,
-          className: 'slot1',
-          textAlign: 'center',
-          // defaultIndex: -1
-        }
-      ]
-      return slots2
-    },
-
+    //当天日期
+    this.startDate = new Date()  
+    // 键盘弹起事件
+    const that = this
+    var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+    window.onresize = function() {
+      var nowClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      if (clientHeight - nowClientHeight > 60 ) {//因为ios有自带的底部高度
+        //键盘弹出的事件处理
+        that.isInput = true
+      }
+      else {
+        //键盘收起的事件处理
+        that.isInput = false
+      } 
+    };
   },
   methods: {
-    onValuesChange1(picker, values) {
-      this.type = values[0]
-      // console.log(this.type)
+    // 运动类型
+    showPicker1() {
+      this.isShowPicker = true
+      this.isShowDatePicker = false
+      this.popupVisible = true
+      this.currSlots = this.slotsType
+      this.currChange = this.onChangeType
+      this.currSure = this.sureType
+    },
+    onChangeType(picker, values) {
+      this.type.name = values[0].name
+      this.type.skey = values[0].skey
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0]);
       }
     },
-    ChangeactivityType(picker, values) {
-      this.activityType = values[0]
-      // console.log(this.activityType)
-      if (values[0] > values[1]) {
-        picker.setSlotValue(1, values[0]);
-      }
-    },
-    onValuesChange2(picker, values) {
-      this.groupType = values[0]
-      // console.log(this.groupType)
-      if (values[0] > values[1]) {
-        picker.setSlotValue(1, values[0]);
-      }
-    },
-    //显示运动类型选择项
-    show1() {
-      this.popupVisible = true
-      this.picker1 = true
-      this.activityTypePicker = false
-      this.picker2 = false
-      this.picker3 = false
-      this.datePicker = false
-      this.startTimePicker = false
-      this.endTimePicker = false
-      this.currSlots = this.dataList1
-    },
-    //显示活动类型选择项
-    showActivityType() {
-      this.popupVisible = true
-      this.activityTypePicker = true
-      this.picker1 = false
-      this.picker2 = false
-      this.picker3 = false
-      this.datePicker = false
-      this.startTimePicker = false
-      this.endTimePicker = false
-    },
-    //显示所属群组选择项
-    show2() {
-      this.popupVisible = true
-      this.picker1 = false
-      this.activityTypePicker = false
-      this.picker2 = true
-      this.picker3 = false
-      this.datePicker = false
-      this.startTimePicker = false
-      this.endTimePicker = false
-      this.currSlots = this.dataList2
-    },
-    //显示标题填写框
-    show3() {
-      this.$messagebox.prompt('请填写标题').then(({ value, action }) => {
-        // console.log(value)
-        this.titleValue = value
-        window.sessionStorage.setItem('titleValue',this.titleValue)
-      })
-    },
-    showDate() {
-      this.popupVisible = true
-      this.picker1 = false
-      this.activityTypePicker = false
-      this.picker2 = false
-      this.datePicker = true
-      this.endTimePicker = false
-      this.startTimePicker = false
-    },
-    // 显示开始时间选择项
-    showStartTime() {
-      this.popupVisible = true
-      this.picker1 = false
-      this.activityTypePicker = false
-      this.picker2 = false
-      this.datePicker = false
-      this.endTimePicker = false
-      this.startTimePicker = true
-    },
-    // 显示结束时间选择项
-    showEndTime() {
-      this.popupVisible = true
-      this.picker1 = false
-      this.activityTypePicker = false
-      this.picker2 = false
-      this.datePicker = false
-      this.startTimePicker = false
-      this.endTimePicker = true
-    },
-    sure1() {
+    sureType() {
       this.popupVisible = !this.popupVisible
-      if(this.type === undefined){
-        this.type = this.dataList1[0].values[0]
-        this.typeValue = this.type.name
-      }else{
-        this.typeValue = this.type.name
+      this.isShowPicker = false
+      this.isShowPicker = false 
+      if(this.type.name == '') {
+        this.type.name = this.typeValues[0].name
+        this.type.skey = this.typeValues[0].skey
       }
-      console.log(this.type)
-      window.sessionStorage.setItem('typeValue',this.typeValue)
+      window.sessionStorage.setItem('typeValue',this.type.name)
       window.sessionStorage.setItem('typeId',this.type.skey)
     },
-    sureActivityType() {
-      this.popupVisible = !this.popupVisible
-      this.activityTypeValue = this.activityType
-      // console.log(this.activityType)
-      
-      // console.log(this.type)
-      if(this.activityTypeValue === '成人活动'){
-        this.activityTypeId = '1'
-      }
-      if(this.activityTypeValue === '儿童活动'){
-        this.activityTypeId = '2'
-      }
-      if(this.activityTypeValue === '亲子活动'){
-        this.activityTypeId = '3'
-      }
-      window.sessionStorage.setItem('activityType',this.activityType)
-      window.sessionStorage.setItem('activityTypeId',this.activityTypeId)
+    // // 所属群组
+    showPicker2() {
+      this.isShowPicker = true
+      this.isShowDatePicker = false
+      this.popupVisible = true
+      this.currSlots = this.slotsGroup
+      this.currChange = this.onChangeGroup
+      this.currSure = this.sureGroup
     },
-    sure2() {
-      this.popupVisible = !this.popupVisible
-      if(this.groupType === undefined){
-        this.groupType = this.dataList2[0].values[0]
-        this.groupTypeValue = this.groupType.name
-        this.groupId = this.groupType.id
-      }else{
-        this.groupTypeValue = this.groupType.name
-        this.groupId = this.groupType.id
-      }
+    onChangeGroup(picker, values) {
+      this.groupType = values[0]
       console.log(this.groupType)
-      window.sessionStorage.setItem('groupTypeValue',this.groupTypeValue)
-      window.sessionStorage.setItem('groupTypeId',this.groupType.id)
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
+      }
+    },
+    sureGroup() {
+      this.popupVisible = !this.popupVisible
+      this.isShowPicker = false
+      if(this.groupType.name == '') {
+        this.groupType.name = this.groupSlots[0].name
+        this.groupType.id = this.groupSlots[0].id
+      }
+      if(this.groupType.id == '1') {  //临时组队
+        this.isCkecked = false
+      }
+    },
+    // 日期选择
+    showDate() {
+      this.popupVisible = true
+      this.isShowPicker = false
+      this.isShowDatePicker = true
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.deadlinePicker = false
+    },
+    handleConfirmDate(v) {
+      this.sureDateValue = this.formatDate(v)
+      this.popupVisible = !this.popupVisible
+      this.isShowDatePicker = false
+      this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
     },
     // 格式化选择的日期
     formatDate(Time) {
@@ -452,7 +372,53 @@ export default {
       return y + '-' + m + '-' + d;
       // return y + '年' + m + '月' + d+ '日';
     },
-    // 转化日期时间
+    // 开始时间
+    showStartTime() {
+      this.popupVisible = true
+      this.isShowPicker = false
+      this.isShowDatePicker = false
+      this.endTimePicker = false
+      this.startTimePicker = true
+    },
+    handleConfirmStart(v) {
+      this.popupVisible = !this.popupVisible
+      this.startTimePicker = false
+      this.isShowPicker = false
+      this.isShowDatePicker = false
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.deadlinePicker = false
+      this.startTime = v
+      this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+    },
+    // 结束时间
+    showEndTime() {
+      this.popupVisible = true
+      this.isShowPicker = false
+      this.isShowDatePicker = false
+      this.endTimePicker = true
+      this.startTimePicker = false
+    },
+    handleConfirmEnd(v) {
+      this.popupVisible = !this.popupVisible
+      this.isShowPicker = false
+      this.isShowDatePicker = false
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.endTime = v
+      const tStart = Number(this.startTime.substring(0,2)) * 60 + Number(this.startTime.substring(4,6))
+      const tEnd = Number(this.endTime.substring(0,2)) * 60 + Number(this.endTime.substring(4,6))
+      if(tStart > tEnd) {
+        this.endTime = ''
+        this.$toast({
+          message: '不能小于开始时间！',
+          duration: 3000
+        });
+      }else{
+        this.endTime = v
+      }
+    },
+    // 报名截止
     formatDate2(Time) {
       var date = Time;
       var y = date.getFullYear();
@@ -467,378 +433,422 @@ export default {
       var second = date.getSeconds();
       second = second < 10 ? ('0' + second) : second;
       return y + '-' + m + '-' + d + " " +  h + ":" + minute;
-      // return y + '-' + m + '-' + d + " " +  h + ":" + minute + ":" + second;
     },
-    handleConfirmDate(v) {
-      this.dateValue = this.formatDate(v)
-      this.formatDateValue = this.dateValue
+    showDeadline() {
+      this.popupVisible = true
+      this.isShowPicker = false
+      this.isShowDatePicker = false
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.deadlinePicker = true
+    },
+    handleConfirmDeadline(v) {
       this.popupVisible = !this.popupVisible
-      // console.log(this.dateValue)
-      window.sessionStorage.setItem('formatDateValue',this.formatDateValue)
+      this.isShowPicker = false
+      this.isShowDatePicker = false
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.deadlinePicker = false
+      console.log(v)
+      this.deadlineValue = this.formatDate2(v)
+      // 判断选的时间是否大于活动结束时间
+      const maxDateTime = new Date(this.sureDateValue + ' ' + this.endTime).getTime()
+      const last = new Date(this.deadlineValue).getTime()
+      if(last > maxDateTime) {
+        this.$toast({
+          message: '报名截止时间不得大于活动结束时间！',
+          duration: 3000
+        });
+        console.log(this.endTime)
+        this.deadlineValue = this.sureDateValue + ' ' + this.endTime
+        
+      }
+      console.log(this.deadlineValue)
+
     },
-    handleConfirmStart(v) {
-      this.popupVisible = !this.popupVisible
-      this.startTime = v
-      this.startTimeValue = this.startTime
-      // console.log(this.startTimeValue)
-      window.sessionStorage.setItem('startTimeValue',this.startTime)
-    },
-    handleConfirmEnd(v) {
-      this.popupVisible = !this.popupVisible
-      this.endTime = v
-      this.endTimeValue = '~' + this.endTime
-      // console.log(v)
-      window.sessionStorage.setItem('endTime',this.endTime)
-    },
-    // 填写地点
-    selectPlace() {
-      this.submit1()
+    // 活动地点
+    showMap() {
       this.$router.push({
         path: '/mapSelection'
       })
     },
-    // 填写人数
-    inputNumber() {
-      this.$messagebox.prompt('请填写人数').then(({ value, action }) => {
-        // console.log(value)
-        this.number = value
-        window.sessionStorage.setItem('number',this.number)
-      })
-    },
-    // 填写联系方式
-    inputPhone() {
-      this.$messagebox.prompt('请填写联系方式').then(({ value, action }) => {
-        // console.log(value)
-        this.phone = value
-        window.sessionStorage.setItem('phone',this.phone)
-      })
-    },
-    // 报名截止时间
-    lastTime() {
-      this.popupVisible = true
-      this.picker1 = false
-      this.picker2 = false
-      this.datePicker = false
-      this.endTimePicker = false
-      this.startTimePicker = false
-      this.lastTimePicker = true
-    },
-    handleConfirmLastTime(v) {
-      // console.log(v)
-      this.showLastTimeValue = this.formatDate2(v)
-      this.popupVisible = !this.popupVisible
-      this.lastTimeValue = this.formatDate2(v)
-      // console.log(this.lastTimeValue)
-      const maxDateTime = new Date(this.formatDateValue + ' ' + this.endTime).getTime()
-      const last = new Date(this.lastTimeValue).getTime()
-      if(last > maxDateTime) {
-        this.$toast({
-          message: '报名截止时间不得大于活动结束时间！',
-          duration: 2000
-        });
-        this.showLastTimeValue = this.formatDateValue + ' ' + this.endTime
-        this.lastTimeValue = this.formatDateValue + ' ' + this.endTime
-      }
-      console.log(this.lastTimeValue)
-      // window.sessionStorage.setItem('lastTimeValue',this.lastTimeValue)
-    },
-    // 填写费用
-    inputCost() {
-      this.$messagebox.prompt('请填写费用').then(({ value, action }) => {
-        // console.log(value)
-        this.cost = value
-        // window.sessionStorage.setItem('cost',this.cost)
-      })
-    },
-    submit1() {
-      // console.log()
-      const params = {
-        id: this.id,
-        userId: this.userId,
-        type: this.type,
-        groupId: this.groupId,
-        activityType: this.activityTypeId,
-        title: this.titleValue,
-        time: this.formatDateValue,
-        timeStart: this.startTimeValue,
-        timeEnd: this.endTime,
-        venueId: this.placeId,
-        people: this.number,
-        phone: this.phone,
-        cost: this.cost,
-        content: this.textarea1,
-        // endTime: this.formatDate2(this.lastTimeValue),
-        endTime: this.lastTimeValue,
-        flag: this.isCkecked
-      }
-      console.log(params)
-      // 提交后台
-      this.$http.organizingActivities(params).then(resp => {
-        console.log(resp)
-      })
-    },
-    // 保存修改
-    submit() {
-      const params = {
-        id: this.id,
-        userId: this.userId,
-        type: this.type,
-        groupId: this.groupId,
-        activityType: this.activityTypeId,
-        title: this.titleValue,
-        time: this.formatDateValue,
-        timeStart: this.startTimeValue,
-        timeEnd: this.endTime,
-        venueId: this.placeId,
-        people: this.number,
-        phone: this.phone,
-        cost: this.cost,
-        content: this.textarea1,
-        // endTime: this.lastTimeValue.getTime(),
-        // endTime: this.lastTimeValue,
-        // endTime: this.formatDate2(this.lastTimeValue),
-        endTime: this.lastTimeValue,
-        // endTime: this.lastTimeValue,
-        flag: this.isCkecked
-      }
-      console.log(params)
-      // 提交后台
-      this.$http.organizingActivities(params).then(resp => {
-        console.log(resp)
-        if(resp.status == 200) {
-          this.$toast({
-            message: '提交成功！',
-            duration: 2000
-          });
-          this.$router.push({
-            path: '/userCenter/myActivities'
-          })
-          // 清除sessionStorage里的字段
-          window.sessionStorage.removeItem("cost")
-          window.sessionStorage.removeItem("endTime")
-          window.sessionStorage.removeItem("formatDateValue")
-          window.sessionStorage.removeItem("groupTypeValue")
-          window.sessionStorage.removeItem("typeId")
-          window.sessionStorage.removeItem("groupTypeId")
-          window.sessionStorage.removeItem("number")
-          window.sessionStorage.removeItem("phone")
-          window.sessionStorage.removeItem("placeId")
-          window.sessionStorage.removeItem("placeName")
-          window.sessionStorage.removeItem("startTimeValue")
-          window.sessionStorage.removeItem("lastTimeValue")
-          window.sessionStorage.removeItem("titleValue")
-          window.sessionStorage.removeItem("typeValue")
-          window.sessionStorage.removeItem("activityType")
-          window.sessionStorage.removeItem("activityTypeId")
+    // 人数减按钮
+    descBtn() {
+      if(this.peopleNum >= 0) {
+        this.peopleNum--
+        if(this.peopleNum <= 0) {
+          this.peopleNum = 0
         }
-      })
+      }else{
+        this.peopleNu = 0
+      }
+    },
+    // 人数加按钮
+    addBtn() {
+      this.peopleNum++
     },
     // 是否为周活动
     isWeekActivie() {
-      this.isCkecked = !this.isCkecked
-    }
+      if(this.groupType.id == '1') {  //临时组队
+        this.isCkecked = false
+        this.$toast({
+          message: '临时组队不可作为周活动发布！',
+          duration: 3000
+        });
+      } else{
+        this.isCkecked = !this.isCkecked
+      }
+    },
+    // 确认发布按钮
+    submit() {
+      // 判断金额是否是整形
+      if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
+        this.$toast({
+          message: '费用请填写整数！',
+          duration: 2000
+        });
+      }else{
+        const params = {
+          id: this.id,
+          userId: window.localStorage.getItem('userId'),
+          type: this.type.skey,
+          groupId: this.groupType.id,
+          title: this.title,
+          time: this.sureDateValue,
+          timeStart: this.startTime,
+          timeEnd: this.endTime,
+          venueId: this.placeId,
+          people: this.peopleNum,
+          phone: this.phone,
+          cost: this.cost,
+          content: this.notes,
+          endTime: this.deadlineValue,
+          flag: this.isCkecked
+        }
+        console.log(params)
+        // 提交后台
+        this.$http.organizingActivities(params).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast({
+              message: '提交成功！',
+              duration: 2000
+            });
+            this.$router.replace({
+              path: '/userCenter/myActivities'
+            })
+            // 清除sessionStorage里的字段
+            window.sessionStorage.removeItem("typeId")
+            window.sessionStorage.removeItem("typeValue")
+          }else{
+            this.$toast({
+              message: '发布失败！',
+              duration: 2000
+            });
+          }
+        })
+      }
+    },
   },
 }
 </script>
+
 <style lang="scss" scoped>
   .editActiviesInfo{
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
-    padding-bottom: 40px;
+    position: relative;
+    padding-bottom: 20vh;
     ul{
       width: 100%;
       height: auto;
-      background: #fff;
       li{
         width: 100%;
-        height: 94px;
-        line-height: 94px;
-        color: #a9a9a9;
-        padding: 0 20px;
-        border-top: 2px solid #f6f6f6;
-        span{
-          float: right;
-          font-weight: bold;
-          line-height: 94px;
-          color: #cdcdcd;
+        height: 97px;
+        background: #fff;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        padding-left: 30px;
+        padding-right: 30px;
+        font-size: 0;
+        vertical-align: top;
+        .title{
+          width: 140px;
+          line-height: 97px;
+          font-size: 32px;
+          // color: #676767;
+          color: #000;
+          display: inline-block;
+          vertical-align: top;
         }
-        .value{
-          font-weight: normal;
-          padding-right: 15px;
-          color: #868686;
-        }
-      }
-      .title{
-        input{
-          width: 70%;
-          height: 60px;
-          padding-left: 10px;
-          font-size: 24px;
+        .inputValue{
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
           border: none;
-          color: #868686;
+          outline: none;
+          // height: 97px;
+          width: 280px;
+          line-height: 97px;
+          font-size: 32px;
+          margin-left: 74px;
+          vertical-align: top;
+          color: #000;
         }
-      }
-      .selectTime{
-        div{
-          width: 25%;
-          height: 94px;
-          line-height: 94px;
-          float: left;
-          span{
-            float: left;
-            padding-right: 10px;
-            color: #f8c31b;
-            font-weight: normal;
+        .inputNumber{
+          width: 230px;
+        }
+        .inputPlaceValue{
+          width: 390px;
+        }
+        input:-ms-input-placeholder{
+          font-size: 32px;
+          color: #909090;
+        }
+        input::-moz-placeholder{
+          font-size: 32px;
+          color: #909090;
+        }
+        input::-webkit-input-placeholder{
+          font-size:32px;
+          color: #909090;
+        }
+        .timeInput{
+          width: 150px;
+          height: 97px;
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          border: none;
+          outline: none;
+          line-height: 97px;
+          font-size: 32px;
+          vertical-align: top;
+        }
+        .time1{
+          margin-left: 84px;
+          vertical-align: top;
+        }
+        .range{
+          width: 80px;
+          height: 97px;
+          display: inline-block;
+          vertical-align: top;
+          font-size: 32px;
+          line-height: 99px;
+          text-align: center;
+        }
+        .time2{
+          float: right;
+          vertical-align: top;
+        }
+        .numberInputBox{
+          width: 190px;
+          height: 97px;
+          line-height: 97px;
+          float: right;
+          // border: 1px solid red;
+          .btn{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            
+            line-height: 50px;
+            text-align: center;
+            background: #ffb401;
+            
+            vertical-align: middle;
+            i{
+              color: #fff;
+              font-size: 26px;
+              font-weight: bold;
+              line-height: 50px;
+            }
+          }
+          .desc{
+            background: #ebeaec;
+          }
+          input{
+            width: 70px;
+            height: 40px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            border: none;
+            outline: none;
+            line-height: 35px;
+            font-size: 20px;
+            border: 1px solid #aeaeae;
+            border-radius: 3px;
+            vertical-align: middle;
+            margin: 0 10px;
+            text-align: center;
           }
         }
+        .el-icon-arrow-right{
+          display: block;
+          float: right;
+          line-height: 97px;
+          font-size: 34px;
+          color: #333333;
+          font-weight: bold;
+        }
+        .el-icon-location-outline{
+          display: block;
+          float: right;
+          line-height: 97px;
+          font-size: 36px;
+          color: #000;
+          // font-weight: bold;
+        }
       }
     }
-    .cost{
+    .inputTitleBox{
+      width: 100%;
+      height: 87px;
+      line-height: 65px;
+      padding-left: 30px;
+      font-size: 32px;
+      color: #000;
+    }
+    .textAreaBox{
+      width: 100%;
+      min-height: 184px;
+    }
+    .noteTitle{
+      margin-top: 20px;
+    }
+    .bottomWrap{
+      width: 100%;
+      padding: 10px 0;
+      // padding-bottom: 30px;
+      height: 18vh;
+      background: #fff;
+      position: fixed;
+      top: 82vh;
+      left: 0;
+    }
+    .sureBtn{
       width: 100%;
       height: 94px;
-      line-height: 94px;
-      padding: 0 20px;
-      margin: 30px 0;
-      background: #fff;
-      color: #a9a9a9;
-      span{
-        float: right;
-        font-weight: bold;
-        line-height: 94px;
-        color: #cdcdcd;
-      }
-      .value{
-        font-weight: normal;
-        padding-right: 15px;
-        color: #868686;
-      }
-    }
-    .notes{
-      width: 100%;
-      min-height: 200px;
-      background: #fff;
-      padding: 0 20px;
-      span{
-        display: block;
-        width: 100%;
-        height: 60px;
-        line-height: 60px;
-        color: #a9a9a9;
-      }
-      
-    }
-    .submit{
-      width: 710px;
-      height: 80px;
-      line-height: 80px;
-      color: #fff;
-      text-align: center;
       background: #fac31e;
-      margin: 0 auto;
-      margin-top: 87px;
-      border-radius: 10px;
-      letter-spacing: 1px;
+      color: #fff;
+      line-height: 94px;
+      text-align: center;
+      margin-top: 38px;
+      letter-spacing: 2px;
+      border-radius: 14px;
+      padding-left: 15px;
+      font-size: 32px;
     }
     .bottom{
       width: 100%;
       height: 60px;
+      margin-top: 10px;
       position: relative;
       .box{
-        display: block;
-        width: 28px;
-        height: 28px;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
         border: 1px solid #f9c732;
         border-radius: 50%;
         position: absolute;
-        left: 180px;
-        top: 15px;
+        left: 210px;
+        top: 16px;
         b{
           font-size: 22px;
-          line-height: 26px;
+          line-height: 30px;
           color: #f9c732;
           position: absolute;
           top: 0px;
-          left: 2px;
+          left: 1px;
+        }
+      }
+      .activeBox{
+        background: #f9c732;
+        b{
+          color: #fff;
         }
       }
       .bottomText{
-        font-size: 26px;
-        color: #c3c2c2;
+        font-size: 24px;
+        color: #000;
         text-align: center;
+        letter-spacing: 1px;
         line-height: 60px;
-        padding-left: 30px;
+        padding-left: 50px;
       }
     }
   }
 </style>
 <style>
-.editActiviesInfo .notes .el-textarea__inner{
-  min-height: 110px !important;
-  outline: none !important;
-  border: 2px solid #e1e1e1;
-  border-radius: 10px;
-}
-.mint-popup{
-  width: 100%;
-  transition: .3s ease-out;
-}
-.picker{
-  width: 100%;
-  background: #fff;
-}
-.picker-toolbar{
-  height: 70px;
-  padding: 0 60px;
-}
-.picker-toolbar-title{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  height: 70px;
-  line-height: 70px;
-  font-size: 30px;
-}
-.picker-slot{
-  font-size: 27px;
-}
-.usi-btn-cancel,
-.usi-btn-sure {
-  text-align: center;
-  color: #fac31e
-}
-.mint-msgbox-btns{
-  height: 70px;
-  line-height: 70px;
-}
-.mint-msgbox-input{
-  padding-top: 40px;
-  padding-bottom: 10px;
-}
-.mint-msgbox-message{
-  font-size: 22px;
-}
-.mint-msgbox-confirm{
-  color: #fac31e
-}
-.mint-msgbox-input input{
-  height: 70px;
-  width: 90%;
-  margin-left: 5%;
-  font-size: 26px;
-}
-.mint-msgbox-header{
-  padding: 20px 0;
-}
-.mint-msgbox-title{
-  font-size: 24px;
-}
-.mint-datetime-action{
-  line-height: 70px;
-  color: #fac31e;
-  font-size: 24px;
-}
-.textarea1{
-  font-size: 23px;
-}
+  .editActiviesInfo .textAreaBox textarea{
+    width: 100%;
+    border: none;
+    font-size: 32px;
+    line-height: 60px;
+    outline: none !important;
+    border-radius: 10px;
+    min-height: 184px !important;
+    color: #000;
+    padding: 0 30px;
+    padding-top: 15px;
+  }
+  .editActiviesInfo textarea:-ms-input-placeholder{
+    font-size: 32px;
+    line-height: 60px;
+    color: #909090 !important;
+  }
+  .editActiviesInfo textarea::-moz-placeholder{
+    font-size: 32px;
+    line-height: 60px;
+    color: #909090 !important;
+  }
+  .editActiviesInfo textarea::-webkit-input-placeholder{
+    font-size: 32px;
+    line-height: 60px;
+    color: #909090 !important;
+  }
+  .editActiviesInfo .mint-popup{
+    width: 100%;
+    transition: .3s ease-out;
+  }
+  .editActiviesInfo .picker{
+    width: 100%;
+    background: #fff;
+  }
+  .editActiviesInfo .picker-toolbar{
+    height: 70px;
+    padding: 0 100px;
+  }
+  .editActiviesInfo .picker-toolbar-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 70px;
+    line-height: 70px;
+    font-size: 30px;
+  }
+  .editActiviesInfo .picker-slot{
+    font-size: 27px;
+  }
+  .editActiviesInfo .usi-btn-cancel,
+  .editActiviesInfo .usi-btn-sure {
+    text-align: center;
+    color: #fac31e
+  }
+  .editActiviesInfo .usi-btn-cancel{
+    color: rgb(139, 138, 138)
+  }
+  .editActiviesInfo .mint-datetime-action{
+    width: 20%;
+    line-height: 70px;
+    color: #fac31e;
+    font-size: 30px;
+  }
+  .editActiviesInfo .mint-datetime-cancel{
+    color: rgb(139, 138, 138)
+  }
 </style>

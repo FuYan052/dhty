@@ -19,7 +19,7 @@
           </li>
           <li class="hqyzm">
             <input type="text" v-model="checkCode" placeholder="请输入验证码" placeholder-class="placeholderStyle">
-            <el-button class="yzm" :disabled='disabled' @click="getCode1">{{content}}</el-button>
+            <el-button class="yzm" :class="{actClick : disabled}" :disabled='disabled' @click="getCode1">{{content}}</el-button>
           </li>
         </ul>
         <button class="registerBtn" @click="doRegister" :disabled="isDisabled">
@@ -236,19 +236,23 @@ export default {
           .yzm{
             width: 160px;
             height: 60px;
-            border: 1px solid #c8c8c8;
-            color: #fff;
+            border: 1px solid #fac31e;
+            color: #fac31e;
             border-radius: 90px;
             text-align: center;
             float: right;
             // margin-top: 20px;
-            background: #c8c8c8;
-            // background: #f2f2f2;
+            // background: #c8c8c8;
+            background: #f2f2f2;
             font-size: 22px;
             span{
               line-height: 60px;
               font-size: 22px;
             }
+          }
+          .actClick{
+            background: #fac31e;
+            color: #fff;
           }
         }
       }

@@ -33,6 +33,8 @@ export default {
       isOriginHei: true,
       screenHeight: document.documentElement.clientHeight, 
       originHeight: document.documentElement.clientHeight,
+      toPath: '',
+      toPathName: ''
     }
   },
   watch: {
@@ -43,6 +45,11 @@ export default {
           this.isOriginHei = true;
       }
     }
+  },
+  beforeRouteEnter(to, from, next)  {
+    window.sessionStorage.setItem('mapToPath',from.fullPath)
+    window.sessionStorage.setItem('mapToPathName',from.name)
+    next()
   },
   created() {
   },
@@ -177,14 +184,13 @@ export default {
       sure() {
         if(this.selectedPoint !== '') {
           this.$router.push({
-            path: '/organization',
-            name: 'Organization',
+            path: window.sessionStorage.getItem('mapToPath'),
+            name: window.sessionStorage.getItem('mapToPathName'),
             params: {
               placeId: this.selectedPoint.id,
               placeName : this.selectedPoint.name
             }
           })
-          
         }else{
           this.$toast({
             message: '请选择地点',
@@ -192,6 +198,10 @@ export default {
           });
         }
       }
+  },
+  beforeDestroy() {
+    window.sessionStorage.removeItem('mapToPath')
+    window.sessionStorage.removeItem('mapToPathName')
   }
 }
 </script>

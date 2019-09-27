@@ -1,9 +1,12 @@
 <template>
   <!-- 报名列表 -->
   <div class="signUpList" v-title data-title="报名列表">
-    <div class="memberList">
+    <!-- 没有活动时显示缺省页 -->
+    <div class="noList" v-show="noData"></div>
+    <!-- 有活动 -->
+    <div class="memberList" v-show="!noData">
         <ul class="memberItem">
-          <li v-for="(item,index) in memberList" :key="index" @click="memberInfo">
+          <li v-for="(item,index) in memberList" :key="index" @click="memberInfo(item.id)">
             <div class="listItemImg">
               <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
             </div>
@@ -22,6 +25,7 @@ export default {
     return {
       input3: '',
       memberList: [],
+      noData: false
     }
   },
   created() {
@@ -32,18 +36,18 @@ export default {
       if(resp.status = 200) {
         this.memberList = resp.data
         if(this.memberList == 0) {
-          this.$toast({
-            message: '暂无人员报名哦！',
-            duration: 2000
-          });
+          this.noData = true
+        }else{
+          this.noData = false
         }
       }else{
-
+        this.$toast('获取数据失败！')
       }
     })
   },
   methods: {
-    memberInfo() {
+    memberInfo(id) {
+      window.sessionStorage.setItem('userInfoId' , id)
       this.$router.push({
         path: '/club/member/memberData'
       })
@@ -57,6 +61,12 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
+    .noList{
+      width: 100%;
+      height: 100vh;
+      background: url('../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     .memberList{
       width: 100%;
       height: auto;

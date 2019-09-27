@@ -25,6 +25,7 @@ import Playground from '@/pages/activity/Playground'
 import PlaygroundDetail from '@/pages/activity/PlaygroundDetail'
 import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
+import PaySuccess from '@/pages/activity/PaySuccess'
 import SignUpList from '@/pages/activity/SignUpList'
 import Organization from '@/pages/activity/Organization'
 import MapSelection from '@/pages/activity/MapSelection'
@@ -215,6 +216,11 @@ export default new Router({
       }
     },
     {
+      path: '/activitySignUp/paySuccess',
+      name: 'PaySuccess',  //活动报名支付成功
+      component: PaySuccess,
+    },
+    {
       path: '/signUpList',
       name: 'SignUpList',  //活动报名列表页
       component: SignUpList,
@@ -304,7 +310,8 @@ export default new Router({
       name: 'EditActiviesInfo',  //修改活动信息
       component: EditActiviesInfo,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        keepAlive: true 
       }
     },
     {

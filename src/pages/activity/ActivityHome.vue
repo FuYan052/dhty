@@ -17,7 +17,7 @@
           <!-- 搜索框 -->
           <div class="searchBox" v-show="isShowSearch">
             <el-input
-              @change="search1"
+              @change="search1" 
               v-model="inputText">
             </el-input>
           </div>
@@ -38,8 +38,10 @@
       </div>
       <div class="huise"></div>
     </div>
+    <!-- 当没有活动时显示缺省页 -->
+    <div class="nolist" v-show="isNoData"></div>
     <!-- 活动详情 -->
-    <div class="contentBg">
+    <div class="contentBg" v-show="!isNoData">
       <div class="content" 
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="isMoreLoading"
@@ -90,7 +92,6 @@
         <div class="no-more" v-if="noMore">没有更多了~</div>
 
       </div>
-      
     </div>
   </div>
 </template>
@@ -142,7 +143,7 @@ export default {
         page_size: 15,
         total: 0, // 总条数
         totalPage: 1 // 总分页数
-      }
+      },
     }
   },
   // watch: {
@@ -156,6 +157,15 @@ export default {
   //     }
   //   }
   // },
+  computed: {
+    isNoData() {
+      if(this.activList.length === 0) {
+        return true
+      }else{
+        return false
+      }
+    }
+  },
   created() {
     const url = location.href
     // console.log(url.substr(0, url.indexOf(location.hash)))
@@ -209,12 +219,6 @@ export default {
                   // 分页信息
                   _this.pageInfo.totalPage = resp.data.pageNum
                   _this.pageInfo.page = resp.data.prePage
-                  if(_this.activList.length == 0) {
-                    _this.$toast({
-                      message: '没有活动哦！',
-                      duration: 2000
-                    });
-                  }
                 }else{
                   _this.$toast({
                     message: '获取列表失败！',
@@ -244,12 +248,6 @@ export default {
                   // 分页信息
                   _this.pageInfo.totalPage = resp.data.pageNum
                   _this.pageInfo.page = resp.data.prePage
-                  if(_this.activList.length == 0) {
-                    _this.$toast({
-                      message: '没有活动哦！',
-                      duration: 2000
-                    });
-                  }
                 }else{
                   _this.$toast({
                     message: '获取列表失败！',
@@ -280,12 +278,6 @@ export default {
             // 分页信息
             _this.pageInfo.totalPage = resp.data.pageNum
             _this.pageInfo.page = resp.data.prePage
-            if(_this.activList.length == 0) {
-              _this.$toast({
-                message: '没有活动哦！',
-                duration: 2000
-              });
-            }
           }else{
             _this.$toast({
               message: '获取列表失败！',
@@ -378,12 +370,6 @@ export default {
           // 分页信息
           this.pageInfo.totalPage = resp.data.pageNum
           this.pageInfo.page = resp.data.prePage
-          if(this.activList.length == 0) {
-            this.$toast({
-              message: '没有活动哦！',
-              duration: 2000
-            });
-          }
         }else{
           this.$toast({
             message: '获取列表失败！',
@@ -427,12 +413,6 @@ export default {
           // 分页信息
           this.pageInfo.totalPage = resp.data.pageNum
           this.pageInfo.page = resp.data.prePage
-          if(this.activList.length == 0) {
-            this.$toast({
-              message: '没有活动哦！',
-              duration: 2000
-            });
-          }
         }else{
           this.$toast({
             message: '获取列表失败！',
@@ -476,12 +456,6 @@ export default {
           // 分页信息
           this.pageInfo.totalPage = resp.data.pageNum
           this.pageInfo.page = resp.data.prePage
-          if(this.activList.length == 0) {
-            this.$toast({
-              message: '没有活动哦！',
-              duration: 2000
-            });
-          }
         }else{
           this.$toast({
             message: '获取列表失败！',
@@ -549,6 +523,13 @@ export default {
     background: #f2f2f2;
     padding-bottom: 40px;
     padding-top: 214px;
+    .nolist{
+      width: 100%;
+      height: 83vh;
+      background: url('../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+      background-position: 0 10%;
+    }
     .fixedBox{
       width: 100%;
       height: 214px;

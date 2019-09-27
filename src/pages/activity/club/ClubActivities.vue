@@ -13,9 +13,11 @@
         <p class="p p2">{{item.date1.month}}月{{item.date1.day}}日<span v-show="index === 3">~</span></p>
       </div>
     </div>
+    <!-- 当没有活动时显示缺省页 -->
+    <div class="nolist" v-show="nolist"></div>
     <!-- 活动详情 -->
-    <div class="list">
-      <div class="activItem" v-for="(item,index) in activList" :key="index">
+    <div class="list" v-show="!nolist">
+      <div class="activItem" v-for="(item,index) in activList" :key="index" @click="toSignUp(item.id)">
           <div class="top">
             <div class="title">
               <div class="imgcluAct">
@@ -23,7 +25,7 @@
               </div>
               <p class="text">{{item.nickName}}</p>
               <p class="role">{{item.type}}</p>
-              <div class="rightBtn" @click="toSignUp(item.id)">{{item.osState}}</div>
+              <div class="rightBtn">{{item.osState}}</div>
             </div>
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
             <div class="detailBox">
@@ -47,6 +49,7 @@ export default {
   name: 'ClubActivities',
   data() {
     return {
+      nolist: false,
       currDateIndex: 0,
       dateList: [
         {
@@ -88,6 +91,11 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.activList = resp.data
+        if(this.activList.length == 0) {
+          this.nolist = true
+        }else{
+          this.nolist = false
+        }
       }else{
         this.$toast({
           message: '获取列表失败！',
@@ -119,6 +127,11 @@ export default {
         console.log(resp)
         if(resp.status == 200) {
           this.activList = resp.data
+          if(this.activList.length == 0) {
+            this.nolist = true
+          }else{
+            this.nolist = false
+          }
         }else{
           this.$toast({
             message: '获取列表失败！',
@@ -171,11 +184,16 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
+    overflow: hidden;
+    padding-top: 120px;
     // padding-bottom: 20px;
     .dateList{
       width: 100%;
       height: 120px;
       background: #fff;
+      position: fixed;
+      top: 0;
+      z-index: 9;
       .dateItem{
         width: 25%;
         height: 120px;
@@ -218,6 +236,12 @@ export default {
         bottom: 0;
         left: 0;
       }
+    }
+    .nolist{
+      width: 100%;
+      min-height: 90vh;
+      background: url('../../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
     }
     .list{
       width: 100%;

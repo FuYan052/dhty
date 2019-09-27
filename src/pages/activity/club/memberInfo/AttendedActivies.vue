@@ -11,8 +11,10 @@
         {{item.name}}
       </div>
     </div>
+    <!-- 没有活动时显示缺省页 -->
+    <div class="noList" v-show="noData"></div>
     <!-- 活动列表 -->
-    <div class="list">
+    <div class="list" v-show="!noData">
       <div class="activItem" v-for="(item,index) in actList" :key="index">
           <div class="top">
             <!-- <p class="address">金地羽毛球馆1<span>16km</span></p> -->
@@ -42,7 +44,8 @@ export default {
     return {
       cateList: [],
       currIndex: 0,
-      actList: []
+      actList: [],
+      noData: false
     }
   },
   created() {
@@ -58,11 +61,10 @@ export default {
         this.$http.attendedActivities(params).then(resp => {
           console.log(resp)
           this.actList = resp.data
-          if(resp.data.length == 0) {
-              this.$toast({
-              message: '暂无活动!',
-              duration: 2000
-            });
+          if(this.actList == 0) {
+            this.noData = true
+          }else{
+            this.noData = false
           }
         })
       }else{
@@ -85,6 +87,11 @@ export default {
         // console.log(resp)
         if(resp.status == 200) {
           this.actList = resp.data
+          if(this.actList == 0) {
+            this.noData = true
+          }else{
+            this.noData = false
+          }
         }else{
           this.$toast({
             message: '获取列表失败！',
@@ -123,13 +130,19 @@ export default {
       .activeCate::before{
         display: block;
         content: '';
-        width: 48px;
+        width: 100%;
         height: 3px;
-        background: #22a1f2;
+        background: #ff9c00;
         position: absolute;
-        bottom: 1px;
-        left: 42.5%;
+        bottom: 0;
+        left: 0;
       }
+    }
+    .noList{
+      width: 100%;
+      height: 100vh;
+      background: url('../../../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
     }
     .list{
       width: 100%;
@@ -198,7 +211,7 @@ export default {
             margin: 0 auto;
             border-top: 1px solid #eeeeee;
             // border-bottom: 1px solid #eeeeee;
-            .venuImg{
+            .venuImg1{
               width: 160px;
               height: 160px;
               margin-top: 35px;

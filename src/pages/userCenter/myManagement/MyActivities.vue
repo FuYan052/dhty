@@ -26,7 +26,7 @@
       <!-- 活动列表 -->
       <div class="noActList" v-show="noActList"></div>
       <div class="actList" v-show="!noActList">
-        <div class="actiItem" v-for="(item,index) in actList" :key="index">
+        <div class="actiItem" v-for="(item,index) in actList" :key="index" @click="toDetail(item.id)">
           <div class="title">
             <div class="Img1">
               <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
@@ -78,12 +78,12 @@
       <div class="noActList" v-show="noActList2"></div>
       <div class="actList actList2" v-show="!noActList2">
         <div class="actiItem" v-for="(item,index) in actList" :key="index">
-          <div class="left">
+          <div class="left" @click="toDetail(item.id)">
             <div class="imgwrap">
               <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
             </div>
           </div>
-          <div class="right">
+          <div class="right" @click="toDetail(item.id)">
             <p class="p1">{{item.title}}</p>
             <div class="text text1">
               <span class="el-icon-house"></span>{{item.groupName}}
@@ -236,6 +236,13 @@ export default {
         this.state2 = '5'
         this.getList2()
       }
+    },
+    // 查看活动详情
+    toDetail(id) {
+      window.sessionStorage.setItem('activityDetailId',id)
+      this.$router.push({
+        path: '/activityDetail',
+      })
     },
     // 修改活动
     editActivies(id) {

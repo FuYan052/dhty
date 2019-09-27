@@ -7,7 +7,7 @@
     <!-- 俱乐部 -->
     <div class="clubBox" @click="toClub">
       <div class="imgWrap">
-        <img :src="imgurl" style="width: 100%; hight: 100% border-radius: 5px;" alt="">
+        <img :src="theDetail.venueImage" style="width: 100%; hight: 100% border-radius: 10px;" alt="">
       </div>
       <div class="text">
         {{theDetail.groupName}}
@@ -150,6 +150,7 @@ export default {
             //   path: '/activitySignUp'
             // })
             const redirectUrl = encodeURIComponent(`https://laihu.baogongxia.com/#/activitySignUp`)
+            // const redirectUrl = encodeURIComponent(`http://192.168.0.137:8082/#/activitySignUp`)
             // const appid = 'wxf1894ca38c849d17'  //测试号
             const appid = 'wxd3d4d3045a1213a1'  
             window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirectUrl}&response_type=code&scope=snsapi_base&state='1'#wechat_redirect`
@@ -169,7 +170,7 @@ export default {
     },
     // 倒计时
     countdowm(timestamp) {
-      console.log(timestamp)
+      // console.log(timestamp)
       let self = this
       let timer = setInterval(function() {
         let nowTime = new Date();
@@ -325,19 +326,19 @@ export default {
       }
       .list{
         .imgBox{
-          width: 66%;
+          width: 64.5%;
           height: 100px;
           float: right;
           // border: 1px solid red;
           overflow: hidden;
           padding-right: 15px;
-          padding-left: 12px;
+          // padding-left: 12px;
           .imgitem{
             width: 62px;
             height: 62px;
             border-radius: 50%;
             float: left;
-            margin-left: -10px;
+            margin-right: 5px;
             margin-top: 22px;
           }
         }
