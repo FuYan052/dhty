@@ -1,6 +1,6 @@
 <template>
   <div class="organization" v-title data-title="组织活动">
-    <div class="maxHeightBox">
+    <div class="maxHeightBox" :class="{upKeyBord : isInput}">
     <ul>
       <li @click="showPicker1">
         <span class="title">运动种类</span>
@@ -442,9 +442,16 @@ export default {
     },
     // 活动地点
     showMap() {
-      this.$router.push({
-        path: '/mapSelection'
-      })
+      if(this.type.skey == '') {
+        this.$toast({
+          message: '请先选择运动类型！',
+          duration: 3000
+        });
+      }else{
+        this.$router.push({
+          path: '/mapSelection'
+        })
+      }
     },
     // 人数减按钮
     descBtn() {
@@ -532,8 +539,16 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
-    position: relative;
-    padding-bottom: 20vh;
+    .maxHeightBox{
+      width: 100%;
+      height: 82vh;
+      overflow: auto;
+      padding: 20px 14px;
+      padding-bottom: 40px;
+    }
+    .upKeyBord{
+      height: 100vh;
+    }
     ul{
       width: 100%;
       height: auto;

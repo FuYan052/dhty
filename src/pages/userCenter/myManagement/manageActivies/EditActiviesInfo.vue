@@ -1,6 +1,6 @@
 <template>
   <div class="editActiviesInfo" v-title data-title="修改活动">
-    <div class="maxHeightBox">
+    <div class="maxHeightBox" :class="{upKeyBord : isInput}">
     <ul>
       <li @click="showPicker1">
         <span class="title">运动种类</span>
@@ -558,8 +558,16 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
-    position: relative;
-    padding-bottom: 20vh;
+    .maxHeightBox{
+      width: 100%;
+      height: 82vh;
+      overflow: auto;
+      padding: 20px 14px;
+      padding-bottom: 40px;
+    }
+    .upKeyBord{
+      height: 100vh;
+    }
     ul{
       width: 100%;
       height: auto;

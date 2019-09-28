@@ -5,7 +5,7 @@
       <p class="p2">{{theDetail.title}}</p>
     </div>
     <!-- 俱乐部 -->
-    <div class="clubBox" @click="toClub">
+    <div class="clubBox" @click="toClub(theDetail.groupId)">
       <div class="imgWrap">
         <img :src="theDetail.venueImage" style="width: 100%; hight: 100% border-radius: 10px;" alt="">
       </div>
@@ -79,7 +79,7 @@ export default {
       content: '',  //倒计时内容
       endTime: '',
       isTosignUp: '',
-      state: ''  //后端传过来为2时，则表示人员已满，不能报名
+      state: '',  //后端传过来为2时，则表示人员已满，不能报名
     }
   },
   created() {
@@ -109,22 +109,60 @@ export default {
       })
     },
     toMap() {
-      const location = {
-        lat: this.lat,
-        lng: this.lon
+      console.log(this.theDetail)
+      const url = location.href
+      const that =this
+      this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.timestamp = resp.data.timestamp
+        this.nonceStr = resp.data.nonceStr
+        this.signature = resp.data.signature
+        wx.config({
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: 'wxd3d4d3045a1213a1', // 必填，公众号的唯一标识
+          timestamp: that.timestamp,
+          nonceStr: that.nonceStr,
+          signature: that.signature,
+          jsApiList: [
+            'openLocation',
+          ]
+        });
       }
-      this.$router.push({
-        path: '/mapPage',
-        name: 'MapPage',
-        params: location
+    })
+    wx.ready(function() {
+      wx.openLocation({
+        longitude: that.theDetail.lon,
+        latitude: that.theDetail.lat,
+        scale: 13,
+        name: that.theDetail.venueName,
+        address: that.theDetail.address
       })
-      window.sessionStorage.setItem('location',JSON.stringify(location))
+    })
+      // const location = {
+      //   lat: this.lat,
+      //   lng: this.lon
+      // }
+      // this.$router.push({
+      //   path: '/mapPage',
+      //   name: 'MapPage',
+      //   params: location
+      // })
+      // window.sessionStorage.setItem('location',JSON.stringify(location))
     },
-    toClub() {
-      window.sessionStorage.setItem("groupDetailId",this.groupId)
-      this.$router.push({
-        path: `/club/clubInfo/${this.groupId}`,
-      })
+    toClub(id) {
+      console.log(id)
+      if(id == '1') {
+        this.$toast({
+          message: '只是临时组队哦！',
+          duration: 2000
+        });
+      }else{
+        window.sessionStorage.setItem("groupDetailId",this.groupId)
+        this.$router.push({
+          path: `/club/clubInfo/${this.groupId}`,
+        })
+      }
     },
     // 报名列表
     toList() {

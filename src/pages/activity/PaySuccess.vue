@@ -4,7 +4,7 @@
     <p class="p1">支付成功</p>
     <div class="itemBox">
       <p class="p_s p_s_1">支付金额：<span>￥{{orderDetail.totalPrice}}</span></p>
-      <div class="p_s name"><span class="span1">支付对象：</span><span>{{orderDetail.title}}</span></div>
+      <div class="p_s name"><span class="span1">支付对象：</span><span class="span2">{{orderDetail.title}}</span></div>
       <p class="p_s">支付时间：<span>{{orderDetail.timeStart}}</span></p>
       <p class="p_s">交易单号：<span>{{orderDetail.orderNo}}</span></p>
     </div>
@@ -101,15 +101,15 @@ export default {
       line-height: 45px;
       // border: 1px solid red;
       .span1{
-        width: 24%;
+        width: 23%;
         padding-left: 0px;
         display: inline-block;
         color: #686868;
       }
       .span2{
-        padding-left: 0px;
+        padding-left: 12px !important;
         display: inline-block;
-        width: 76%;
+        width: 77%;
         // border: 1px solid red;
       }
     }

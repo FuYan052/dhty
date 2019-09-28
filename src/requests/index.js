@@ -6,7 +6,7 @@ import { Indicator, Toast } from 'mint-ui'
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://mejixt.natappfree.cc/',
+  // baseURL: 'http://jxphvg.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -15,7 +15,7 @@ const ajax = axios.create({
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://mejixt.natappfree.cc/',
+  // baseURL: 'http://jxphvg.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -24,7 +24,7 @@ const ajax2 = axios.create({
 const ajax4 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://mejixt.natappfree.cc/',
+  // baseURL: 'http://jxphvg.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -358,4 +358,7 @@ export const postPay = (params) => {
 export const payOk = (params) => {
   return ajax.get(`/v1/rest/pay/ok?orderNo=${params}`)
 }
-
+// 取消活动
+export const cancelActive = (params) => {
+  return ajax.post(`/v1/rest/pay/refund?orderNo=${params}`)
+}

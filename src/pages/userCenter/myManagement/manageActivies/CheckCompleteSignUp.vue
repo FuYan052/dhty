@@ -5,9 +5,9 @@
     <ul class="memberItem" v-show="!isnoData">
         <li v-for="(item,index) in memberList" :key="index">
           <div class="iteImg">
-            <img :src="item.imgPath" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
+            <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
           </div>
-          <p class="name">{{item.name}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
+          <p class="name">{{item.nickName}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
           <div class="btn">确认收款</div>
           <div class="btn sure">退费</div>
         </li>
@@ -21,54 +21,28 @@ export default {
   data() {
     return {
       memberList: [],
-      isnoData: false
+      isnoData: false,
+      id: ''
     }
   },
   created() {
-    this.memberList = [
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '张三',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '李四',
-        sex: '男',
-        grade: 'Lv.11'
-      },
-      {
-        imgPath: require('../../../../assets/touxiang.jpg'),
-        name: '小丸子',
-        sex: '女',
-        grade: 'Lv.11'
-      },
-    ]
-    if(this.memberList.length == 0) {
-      this.isnoData = true
-    }else{
-      this.isnoData = false
-    }
+    this.id = window.sessionStorage.getItem('myOrangActId')
+    // 报名列表
+    this.$http.getSignUpList(this.id).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.memberList = resp.data
+        if(this.memberList.length == 0) {
+          this.noList = true
+        }else{
+          this.noList = false
+        }
+      }
+    })
   },
+  beforeDestroy() {
+    window.sessionStorage.removeItem('myOrangActId')
+  }
 }
 </script>
 

@@ -51,15 +51,15 @@ export default {
       _id: ''
     }
   },
-  computed: {
-    // 用户id
-    ...mapState(['userId']),
-  },
+  // computed: {
+  //   // 用户id
+  //   ...mapState(['userId']),
+  // },
   created() {
-    this._id = this.userId
-    if(this._id == null) {
-      this._id = this.$route.params._userId
-    }
+    this._id = window.localStorage.getItem('userId')
+    // if(this._id == null) {
+    //   this._id = this.$route.params._userId
+    // }
     this.$http.getPopularize(this._id).then(resp => {
       console.log(resp)
       if(resp.status == 200) {

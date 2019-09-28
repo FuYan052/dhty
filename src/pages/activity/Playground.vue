@@ -58,7 +58,7 @@
            <div class="g_bottom g_address">
              <div class="img"><span class="el-icon-s-home"></span></div>
              <p>{{item.address}}</p>
-             <div class="icon" @click="toMap(item.lat,item.lon)"><span class="el-icon-location"></span></div>
+             <div class="icon" @click="toMap(item.lat,item.lon,item.name,item.address)"><span class="el-icon-location"></span></div>
            </div>
          </div>
       </div>
@@ -130,12 +130,10 @@ export default {
           // timestamp: '1568982632',
           // nonceStr: '1f1a415c-a272-426f-84d2-7237d81519b0',
           // signature: '53ee80f7bf5b8fe27a32415dbd85d5d2692d67db',
-          timestamp: this.timestamp,
-          nonceStr: this.nonceStr,
-          signature: this.signature,
-          jsApiList: [
-            'getLocation',
-          ]
+          timestamp: that.timestamp,
+          nonceStr: that.nonceStr,
+          signature: that.signature,
+          jsApiList: ['getLocation','openLocation']
         });
         // 获取经纬度
         wx.ready(function() {
@@ -332,23 +330,40 @@ methods: {
     })
   },
   toDetail(id) {
+    const configData = {
+      timestamp: this.timestamp,
+      nonceStr: this.nonceStr,
+      signature: this.signature,
+    }
     window.sessionStorage.setItem('playGroundDetail',id)
+    window.sessionStorage.setItem('config',JSON.stringify(configData))  //详情页调微信接口的配置
     this.$router.push({
       path: '/playgroundDetail',
     })
   },
-  toMap(lat,lon) {
-    console.log('去地图')
+  toMap(lat,lon,name,address) {
     const location = {
       lat: lat,
       lng: lon
     }
-    this.$router.push({
-      path: '/mapPage',
-      name: 'MapPage',
-      params: location
+    const that = this
+    wx.openLocation({
+      longitude: lon,
+      latitude: lat,
+      scale: 13,
+      name: name,
+      address: address,
+      fail: function() {
+        that.$toast('抱歉，调起导航失败！')
+      }
     })
-    window.sessionStorage.setItem('location',JSON.stringify(location))
+
+    // this.$router.push({
+    //   path: '/mapPage',
+    //   name: 'MapPage',
+    //   params: location
+    // })
+    // window.sessionStorage.setItem('location',JSON.stringify(location))
   }
 },
   beforeDestroy() {
@@ -356,8 +371,6 @@ methods: {
     this.timer1 = null
     clearTimeout(this.timer2)
     this.timer2 = null
-    console.log(this.timer1)
-    console.log(this.timer2)
   }  
 }
 </script>
@@ -539,7 +552,7 @@ methods: {
               float: right;
               font-size: 34px;
               color: #fac51d;
-              margin-top: 4px;
+              margin-top: 12px;
               margin-right: 10px;
             }
           }

@@ -89,6 +89,12 @@ export default {
           console.log(resp)
           if(resp.status == 200) {
             this.list = resp.data
+            if(this.list.length == 0) {
+              this.$toast({
+              message: '暂时没有场地哦！',
+              duration: 3000
+              });
+            }
             const that = this
             for(let i=0; i<this.list.length; i++){
                 let data = this.list[i];
@@ -143,6 +149,12 @@ export default {
           console.log(resp)
           if(resp.status == 200) {
             this.list = resp.data
+            if(this.list.length == 0) {
+              this.$toast({
+              message: '暂时没有场地哦！',
+              duration: 3000
+            });
+            }
             const that = this
             for(let i=0; i<this.list.length; i++){
                 let data = this.list[i];

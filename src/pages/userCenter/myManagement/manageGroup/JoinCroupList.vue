@@ -25,14 +25,16 @@ export default {
   data() {
     return{
       groupList: [],
-      noJionGroup: false
+      noJionGroup: false,
+      userId: ''
     }
   },
-  computed: {
-    // 用户id
-    ...mapState(['userId']),
-  },
+  // computed: {
+  //   // 用户id
+  //   ...mapState(['userId']),
+  // },
   created() {
+    this.userId = window.localStorage.getItem('userId')
     // 获取参加的群列表
     this.$http.getJoinedGroup(this.userId).then(resp => {
       console.log(resp)

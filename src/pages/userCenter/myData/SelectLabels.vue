@@ -32,14 +32,16 @@ export default {
       selectedList: [],  
       selectedListIds: [],
       isShow: false,
-      addValue: ''
+      addValue: '',
+      userId: ''
     }
   },
-  computed: {
-    // 用户id
-    ...mapState(['userId']),
-  },
+  // computed: {
+  //   // 用户id
+  //   ...mapState(['userId']),
+  // },
   created() {
+    this.userId = window.localStorage.getItem('userId')
     // 从完善信息页传过来的标签集合
     this.selectedList =JSON.parse(window.sessionStorage.getItem('labels')) 
     for(let i in this.selectedList) {

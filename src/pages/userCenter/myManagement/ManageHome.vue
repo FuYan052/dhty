@@ -361,7 +361,7 @@ export default {
   }
 </style>
 <style>
-  /* .mint-msgbox {
+  .mint-msgbox {
     width: 70%;
   }
   .mint-msgbox-title{
@@ -377,5 +377,5 @@ export default {
   .mint-msgbox-btns{
     height: 80px;
     font-size: 28px;
-  } */
+  }
 </style>

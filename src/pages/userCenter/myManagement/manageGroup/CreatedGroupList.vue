@@ -26,14 +26,16 @@ export default {
   data() {
     return {
       createdGroupList: [],
-      noGroup: false
+      noGroup: false,
+      userId:''
     }
   },
-  computed: {
-    // 用户id
-    ...mapState(['userId']),
-  },
+  // computed: {
+  //   // 用户id
+  //   ...mapState(['userId']),
+  // },
   created() {
+    this.userId = window.localStorage.getItem('userId')
     // 获取创建的群
     this.$http.createGroupList(this.userId).then(resp => {
       console.log(resp)

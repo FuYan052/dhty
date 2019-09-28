@@ -26,39 +26,40 @@
       <!-- 活动列表 -->
       <div class="noActList" v-show="noActList"></div>
       <div class="actList" v-show="!noActList">
-        <div class="actiItem" v-for="(item,index) in actList" :key="index" @click="toDetail(item.id)">
-          <div class="title">
+        <div class="actiItem" v-for="(item,index) in actList" :key="index">
+          <div class="title" @click="toDetail(item.id)">
             <div class="Img1">
               <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
             </div>
             <p class="role">{{item.type}}</p>
             <p class="text">{{item.nickName}}</p>
           </div>
-          <div class="left">
+          <div class="left" @click="toDetail(item.id)">
             <div class="venueImage">
               <img :src="item.venueImage" style="width: 100%; height: 100%; border-radius: 5px;" alt="">
             </div>
           </div>
           <div class="right">
-            <p class="p1">{{item.title}}</p>
-            <div class="text text1">
+            <p class="p1" @click="toDetail(item.id)">{{item.title}}</p>
+            <div class="text text1" @click="toDetail(item.id)">
               <span class="el-icon-house"></span>{{item.groupName}}
             </div>
-            <div class="text text2">
+            <div class="text text2" @click="toDetail(item.id)">
               <span class="el-icon-location-information"></span>{{item.venueName}}
             </div>
-            <div class="text text2">
+            <div class="text text2" @click="toDetail(item.id)">
               <span class="el-icon-date"></span>{{item.time}}
             </div>
-            <div class="text text3">
+            <div class="text text3" @click="toDetail(item.id)">
               <span class="sp1 el-icon-time"></span>{{item.timeStart}}~{{item.timeEnd}}
               <span class="sp2 el-icon-coin"></span>{{item.cost}}元
               <!-- <span class="sp3 el-icon-user"></span>8/12 -->
             </div>
           </div>
-          <!-- <div class="cancle">取消</div>
-          <div class="complete">完成</div> -->
+          <div class="cancle" v-show="item.osStateId == '1'" @click="cancelAct(item.orderNo)">取消活动</div>
+          <!-- <div class="complete">完成</div> -->
           <div class="see">{{item.osState}}</div>
+          
         </div>
       </div>
     </div>
@@ -101,10 +102,10 @@
             </div>
           </div>
           <div class="btnWrap">
-            <div class="btn" v-show="isPublish" @click="publishSignUp">查看报名</div>
+            <div class="btn" v-show="isPublish" @click="publishSignUp(item.id)">查看报名</div>
             <div class="btn" v-show="isPublish" @click="editActivies(item.id)">修改</div>
 
-            <div class="btn" v-show="!isPublish" @click="completeSignUp">查看报名</div>
+            <div class="btn" v-show="!isPublish" @click="completeSignUp(item.id)">查看报名</div>
             <!-- <div class="btn" v-show="!isPublish">填写成绩</div> -->
           </div>
           <!-- <div class="cancle">取消 complete</div>  
@@ -136,7 +137,7 @@ export default {
       state: '0', //我参加的活动传给后端的状态标识
       state2: '1', //我组织的活动传给后端的状态标识
       actList: [],
-      userId: ''
+      userId: '',
     }
   },
   computed: {
@@ -148,6 +149,18 @@ export default {
     this.getList1()
   },
   methods:{
+    // 取消活动
+    cancelAct(orderNo) {
+      const isCancel = window.confirm('确定要取消活动吗？')
+      if(isCancel) {
+        this.$http.cancelActive(orderNo).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast('取消成功！')
+          }
+        })
+      }
+    },
     getList1() {
       // 我参加的活动
       const params = {
@@ -252,13 +265,15 @@ export default {
       })
     },
     // 已发布的活动查看报名
-    publishSignUp() {
+    publishSignUp(id) {
+      window.sessionStorage.setItem('myOrangActId',id)  //活动id
       this.$router.push({
         path: '/userCenter/checkPublishSignUp'
       })
     },
     // 已完成的活动查看报名
-    completeSignUp() {
+    completeSignUp(id) {
+      window.sessionStorage.setItem('myOrangActId',id)  //活动id
       this.$router.push({
         path: '/userCenter/checkCompleteSignUp'
       })
@@ -337,10 +352,13 @@ export default {
       .actiItem{
         width: 100%;
         // height: 308px;
-        min-height: 250px;
+        min-height: 270px;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
         background: #fff;
         padding-left: 40px;
-        border-top: 1px solid #e2e2e2;
+        border-top: 1px solid #f5f2f2;
+        border-bottom: 1px solid #f5f2f2;
         position: relative;
         font-size: 0;
         .title{
@@ -390,10 +408,10 @@ export default {
           display: inline-block;
           vertical-align: top;
           .venueImage{
-            width: 142px;
-            height: 142px;
+            width: 150px;
+            height: 150px;
             float: left;
-            margin-top: 30px;
+            margin-top: 40px;
             // border-radius: 10px;
             // border: 1px solid red;
             // img{
@@ -433,17 +451,19 @@ export default {
           }
         }
         .cancle{
-          width: 78px;
-          height: 34px;
-          font-size: 18px;
-          line-height: 30px;
+          width: 100px;
+          height: 40px;
+          font-size: 20px;
+          line-height: 38px;
           text-align: center;
-          color: #9fa1a0;
+          color: #fff;
           border: 1px solid #ff8c2f;
+          background: #ff8c2f;
           border-radius: 20px;
           position: absolute;
-          top: 75px;
+          top: 240px;
           right: 40px;
+          z-index: 9;
         }
         .complete{
           width: 78px;
@@ -457,13 +477,13 @@ export default {
           right: 40px;
         }
         .see{
-          width: 94px;
-          height: 34px;
-          background: #ff9036;
-          font-size: 18px;
-          line-height: 32px;
+          width: 120px;
+          height: 40px;
+          // background: #ff9036;
+          font-size: 24px;
+          line-height: 40px;
           text-align: center;
-          color: #fff;
+          color: #ff9036;
           border-radius: 20px;
           position: absolute;
           top: 180px;
@@ -476,7 +496,7 @@ export default {
     }
     .actList2{
       .actiItem{
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         border: none;
       }
       .left{
@@ -486,7 +506,7 @@ export default {
         .imgwrap{
           width: 165px;
           height: 165px;
-          margin-top: 20px;
+          margin-top: 32px;
         }
       }
       .btnWrap{

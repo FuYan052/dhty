@@ -10,6 +10,8 @@
           <el-upload
             class="avatar-uploader"
             action="none"
+            :multiple='false'
+            accept="image/png,image/jpg,image/jpeg"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -127,7 +129,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 // 省份城市数据
 import {city, privinceList, cityList} from '../../../../static/js/region'
 export default {
@@ -241,20 +243,18 @@ export default {
       addValue: '',
       _id: '',
       showLabels: true,
-      lll: []
+      lll: [],
+      userId: ''
     }
   },
-  computed: {
-    // 用户id
-    ...mapState(['userId']),
-  },
+  // computed: {
+  //   // 用户id
+  //   ...mapState(['userId']),
+  // },
   created() {
     // 获取信息
+    this.userId = window.localStorage.getItem('userId')
     this._id = window.localStorage.getItem('userId')
-    // console.log(this._id)
-    // if(this._id == null) {
-    //   this._id = this.$route.params._userId
-    // }
     this.getInfo()
   },
   mounted() {
@@ -361,18 +361,22 @@ export default {
       })
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
+      // const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < 3;
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
-      }
+      // if (!isJPG) {
+      //   this.$message.error('上传头像图片只能是 JPG 格式!');
+      // }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 3MB!');
-      }
-      if(isJPG && isLt2M) {
+      }else if(isLt2M) {
         this.$indicator.open('上传中...');
+      }else{
+        this.$toast({
+          message: '头像上传成功！',
+          duration: 2000
+        });
       }
-      return isJPG && isLt2M;
+      return isLt2M;
     },
     // 上传成功
     handleAvatarSuccess(res, file) {

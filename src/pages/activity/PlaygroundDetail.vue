@@ -16,7 +16,7 @@
         <div class="left">
           {{playgroundInfo.address}}
         </div>
-        <div class="right" @click="toMap(playgroundInfo.lat,playgroundInfo.lon)">
+        <div class="right" @click="toMap(playgroundInfo.lat,playgroundInfo.lon,playgroundInfo.name,playgroundInfo.address)">
           <span class="el-icon-map-location"></span>
           <p>地图/导航</p>
         </div>
@@ -59,6 +59,7 @@ export default {
     // 获取场馆id
     this.id = window.sessionStorage.getItem("playGroundDetail")
 
+
     // 获取场馆详情
     this.$http.getPlaygroundDetail(this.id).then(resp => {
       console.log(resp)
@@ -70,23 +71,48 @@ export default {
     })
   },
   methods: {
-    toMap(lat,lon) {
-      const location = {
-        lat: lat,
-        lng: lon
-      }
-      this.$router.push({
-        path: '/mapPage',
-        name: 'MapPage',
-        params: location
+    toMap(lat,lon,name,address) {
+      const configData = JSON.parse(window.sessionStorage.getItem('config'))
+      console.log(configData) 
+      wx.config({
+        // debug: true,
+        appId: 'wxd3d4d3045a1213a1',
+        timestamp: configData.timestamp,
+        nonceStr: configData.nonceStr,
+        signature: configData.signature,
+        jsApiList: ['openLocation']
+      });
+      wx.ready(function() {
+        wx.openLocation({
+          longitude: lon,
+          latitude: lat,
+          scale: 13,
+          name: name,
+          address: address,
+          fail: function() {
+            that.$toast('抱歉，调起导航失败！')
+          }
+        })
       })
-      window.sessionStorage.setItem('location',JSON.stringify(location))
+      // const location = {
+      //   lat: lat,
+      //   lng: lon
+      // }
+      // this.$router.push({
+      //   path: '/mapPage',
+      //   name: 'MapPage',
+      //   params: location
+      // })
+      // window.sessionStorage.setItem('location',JSON.stringify(location))
     },
     toActDetail() {
        this.$router.push({
         path: '/activityDetail',
       })
     }
+  },
+  beforeDestroy() {
+    window.sessionStorage.removeItem('config')
   }
 }
 </script>
