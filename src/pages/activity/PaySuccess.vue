@@ -139,7 +139,7 @@ export default {
     }
     .bottomBg{
       width: 100%;
-      height: 30vh;
+      height: 20vh;
       background: #f2f2f2;
       position: fixed;
       bottom: 0;

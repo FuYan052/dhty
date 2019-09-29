@@ -6,7 +6,7 @@ import { Indicator, Toast } from 'mint-ui'
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://jxphvg.natappfree.cc/',
+  // baseURL: 'http://yibc93.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -15,7 +15,7 @@ const ajax = axios.create({
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://jxphvg.natappfree.cc/',
+  // baseURL: 'http://yibc93.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -24,18 +24,11 @@ const ajax2 = axios.create({
 const ajax4 = axios.create({
   // baseURL: 'http://192.168.0.114:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://jxphvg.natappfree.cc/',
+  // baseURL: 'http://yibc93.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
-    // 'token': window.localStorage.getItem('ty-token')
   },
 })
-
-// const ajax3 = axios.create({
-//   headers: {
-//     'Content-Type': 'application/x-www-form-urlencoded'
-//   }
-// })
 
 // request拦截器
 ajax.interceptors.request.use(config => {
@@ -63,9 +56,6 @@ ajax.interceptors.response.use(resp => {
         message: resp.data.message,
         duration: 2000
       });
-      // window.localStorage.removeItem('ty-token')
-      // window.localStorage.removeItem('userId')
-      // window.localStorage.removeItem('userPhone')
     }
   },
   error => {
@@ -98,11 +88,6 @@ ajax2.interceptors.response.use(resp => {
         message: resp.data.message,
         duration: 2000
       });
-      // router.go(0)
-      // console.log(router)
-      // window.localStorage.removeItem('ty-token')
-      // window.localStorage.removeItem('userId')
-      // window.localStorage.removeItem('userPhone')
     }
   },
   error => {
@@ -110,9 +95,6 @@ ajax2.interceptors.response.use(resp => {
   })
 // request拦截器
 ajax4.interceptors.request.use(config => {
-  // Indicator.open();
-  // console.log(config)
-  // Do something before request is sent
   if (localStorage.getItem('ty-token')) {
     config.headers.common['token'] =window.localStorage.getItem('ty-token'); //让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
   }
@@ -134,11 +116,6 @@ ajax4.interceptors.response.use(resp => {
         message: resp.data.message,
         duration: 2000
       });
-      // router.go(0)
-      // console.log(router)
-      // window.localStorage.removeItem('ty-token')
-      // window.localStorage.removeItem('userId')
-      // window.localStorage.removeItem('userPhone')
     }
   },
   error => {
@@ -149,10 +126,6 @@ ajax4.interceptors.response.use(resp => {
 export const postCode = (params) => {
   return ajax.post(`/v1/rest/public/bgxsendcode?phone=${params}`)
 }  
-// 校验验证码  
-// export const checkCode = (params) => {
-//   return ajax.post(`/public_controller/bgxisphonecode?phone=${params.phoneNum}&verifyCode=${params.verifyCode}`)
-// }
 // 注册 
 export const postRegister = (params) => {
   return ajax.post(`/v1/rest/login/register?phone=${params.phone}&authCode=${params.authCode}&passWord=${params.passWord}`)
@@ -234,10 +207,6 @@ export const transferGroup = (params) => {
 export const updateGroupInfo = (params) => {
   return ajax.get(`/v1/rest/management/findGroup?id=${params}`)
 }
-// 修改社群
-// export const updateGroup = (params) => {
-//   return ajax2.post(`/v1/rest/management/updateGroup`,params)
-// }
 
 // 我的数据
 // 查询现有待完善信息 
@@ -353,6 +322,14 @@ export const getSignature = (params) => {
 // 微信支付
 export const postPay = (params) => {
   return ajax2.post(`/v1/rest/pay/pay`,params)
+}
+// 微信支付code返给后端换openId
+export const getOpenId = (params) => {
+  return ajax.get(`/v1/rest/login/updateOpenId?userId=${params.userId}&code=${params.code}`)
+}
+//微信取消支付回调
+export const cancelPay = (params) => {
+  return ajax.get(`/v1/rest/pay/cancel?res=${params}`)
 }
 // 支付成功
 export const payOk = (params) => {

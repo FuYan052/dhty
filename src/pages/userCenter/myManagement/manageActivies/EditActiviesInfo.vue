@@ -144,7 +144,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: 'Organization',
+  name: 'EditActiviesInfo',
   data() {
     return {
       id: '',  //活动id
@@ -219,16 +219,22 @@ export default {
   },
   watch: {
     $route(to, from) {
+      console.log(from.path)
       if(from.path == '/mapSelection') {
-        console.log(this.$route)
+        console.log(this.$route.params)
         this.placeName = this.$route.params.placeName || ''
         this.placeId = this.$route.params.placeId || ''
         this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+      }
+      if(from.path == '/userCenter/myActivities') {
+        // this.$router.go(0)
+        console.log('刷新')
       }
     },
   },
   created() {
     this.editId = window.sessionStorage.getItem('editGroupId')
+    // alert(this.editId)
     // 获取要修改的信息
     this.$http.findOrganizingActivities(this.editId).then(resp => {
       console.log(resp)
@@ -252,7 +258,6 @@ export default {
         this.isCkecked = resp.data.flag === 'true'  //字符串转Boolean
         window.sessionStorage.setItem('typeId',resp.data.typeId)
       }
-      console.log(this.lastTimeValue)
     })
     this.userId = window.localStorage.getItem('userId')
     // 获取运动类型

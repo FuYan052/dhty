@@ -109,46 +109,29 @@ export default {
       })
     },
     toMap() {
-      console.log(this.theDetail)
-      const url = location.href
-      const that =this
-      this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
-      console.log(resp)
-      if(resp.status == 200) {
-        this.timestamp = resp.data.timestamp
-        this.nonceStr = resp.data.nonceStr
-        this.signature = resp.data.signature
-        wx.config({
-          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-          appId: 'wxd3d4d3045a1213a1', // 必填，公众号的唯一标识
-          timestamp: that.timestamp,
-          nonceStr: that.nonceStr,
-          signature: that.signature,
-          jsApiList: [
-            'openLocation',
-          ]
-        });
-      }
-    })
-    wx.ready(function() {
-      wx.openLocation({
-        longitude: that.theDetail.lon,
-        latitude: that.theDetail.lat,
-        scale: 13,
-        name: that.theDetail.venueName,
-        address: that.theDetail.address
+      const that = this
+      const configData = JSON.parse(window.sessionStorage.getItem('config'))
+      // console.log(configData) 
+      wx.config({
+        // debug: true,
+        appId: 'wxd3d4d3045a1213a1',
+        timestamp: configData.timestamp,
+        nonceStr: configData.nonceStr,
+        signature: configData.signature,
+        jsApiList: ['openLocation']
+      });
+      wx.ready(function() {
+        wx.openLocation({
+          longitude: Number(that.theDetail.lon),
+          latitude: Number(that.theDetail.lat),
+          scale: 13,
+          name: that.theDetail.venueName,
+          address: that.theDetail.address,
+          fail: function() {
+            that.$toast('抱歉，调起导航失败，请重试！')
+          }
+        })
       })
-    })
-      // const location = {
-      //   lat: this.lat,
-      //   lng: this.lon
-      // }
-      // this.$router.push({
-      //   path: '/mapPage',
-      //   name: 'MapPage',
-      //   params: location
-      // })
-      // window.sessionStorage.setItem('location',JSON.stringify(location))
     },
     toClub(id) {
       console.log(id)
@@ -175,6 +158,7 @@ export default {
       // console.log(this.isChecked)
     },
     submit() {
+
       console.log(this.isTosignUp)
       if(this.state == 2) {
         this.$toast({
@@ -253,6 +237,9 @@ export default {
         this.callback(...this);
       }
     }
+  },
+  beforeDestroy() {
+    window.sessionStorage.removeItem('config')
   }
 }
 </script>  

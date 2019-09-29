@@ -167,6 +167,7 @@ export default {
     }
   },
   created() {
+    this.isNoData = false
     const url = location.href
     // console.log(url.substr(0, url.indexOf(location.hash)))
     this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
@@ -180,6 +181,7 @@ export default {
         this.timestamp = resp.data.timestamp
         this.nonceStr = resp.data.nonceStr
         this.signature = resp.data.signature
+
         const that = this
         wx.config({
           // debug: true,
@@ -507,6 +509,12 @@ export default {
     },
     // 去报名
     toSignUp(id) {
+      const configData = {
+        timestamp: this.timestamp,
+        nonceStr: this.nonceStr,
+        signature: this.signature,
+      }
+      window.sessionStorage.setItem('config',JSON.stringify(configData))  //详情页调微信接口的配置
       window.sessionStorage.setItem('activityDetailId',id)
       this.$router.push({
         path: '/activityDetail',

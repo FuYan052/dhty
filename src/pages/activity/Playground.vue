@@ -348,8 +348,8 @@ methods: {
     }
     const that = this
     wx.openLocation({
-      longitude: lon,
-      latitude: lat,
+      longitude: Number(lon),
+      latitude: Number(lat),
       scale: 13,
       name: name,
       address: address,
@@ -357,7 +357,6 @@ methods: {
         that.$toast('抱歉，调起导航失败！')
       }
     })
-
     // this.$router.push({
     //   path: '/mapPage',
     //   name: 'MapPage',

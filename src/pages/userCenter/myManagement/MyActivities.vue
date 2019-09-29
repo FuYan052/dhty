@@ -103,7 +103,7 @@
           </div>
           <div class="btnWrap">
             <div class="btn" v-show="isPublish" @click="publishSignUp(item.id)">查看报名</div>
-            <div class="btn" v-show="isPublish" @click="editActivies(item.id)">修改</div>
+            <div class="btn" v-show="isPublish" @click="editActivies(item.id, item.enrolledVoList)">修改</div>
 
             <div class="btn" v-show="!isPublish" @click="completeSignUp(item.id)">查看报名</div>
             <!-- <div class="btn" v-show="!isPublish">填写成绩</div> -->
@@ -156,7 +156,8 @@ export default {
         this.$http.cancelActive(orderNo).then(resp => {
           console.log(resp)
           if(resp.status == 200) {
-            this.$toast('取消成功！')
+            this.$toast(resp.data.msg)
+            // this.$toast(resp.info)
           }
         })
       }
@@ -258,11 +259,18 @@ export default {
       })
     },
     // 修改活动
-    editActivies(id) {
-      window.sessionStorage.setItem('editGroupId',id)
-      this.$router.push({
-        path: '/userCenter/editActiviesInfo'
-      })
+    editActivies(id,enrolledVoList) {
+      if(enrolledVoList.length === 0) {
+        window.sessionStorage.setItem('editGroupId',id)
+        this.$router.push({
+          path: '/userCenter/editActiviesInfo'
+        })
+      }else{
+        this.$toast({
+          message: '已有人员报名，无法进行修改！',
+          duration: 2000
+        });
+      }
     },
     // 已发布的活动查看报名
     publishSignUp(id) {
@@ -326,7 +334,7 @@ export default {
         height: 72px;
         line-height: 73px;
         text-align: center;
-        padding: 0 39px;
+        padding: 0 41.17px;
         float: left;
         color: #9fa0a2;
         font-size: 26px;

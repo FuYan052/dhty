@@ -73,7 +73,7 @@ export default {
   methods: {
     toMap(lat,lon,name,address) {
       const configData = JSON.parse(window.sessionStorage.getItem('config'))
-      console.log(configData) 
+      // console.log(configData) 
       wx.config({
         // debug: true,
         appId: 'wxd3d4d3045a1213a1',
@@ -84,8 +84,8 @@ export default {
       });
       wx.ready(function() {
         wx.openLocation({
-          longitude: lon,
-          latitude: lat,
+          longitude: Number(lon),
+          latitude: Number(lat),
           scale: 13,
           name: name,
           address: address,

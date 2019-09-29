@@ -82,6 +82,7 @@ export default {
       timer1: null,
       ableClickDesc1: false,
       ableClickDesc2: false,
+      timer: null 
     }
   },
   watch: {
@@ -126,6 +127,27 @@ export default {
       }
     }
     this.code = requertUrl.code
+    const params = {
+      code: this.code,
+      userId: window.localStorage.getItem('userId')
+    }
+    this.$http.getOpenId(params).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        console.log(resp)
+      }else{
+        this.$toast({
+          message: '抱歉，稍后重试！',
+          duration: 2000
+        })
+        const that = this
+        this.timer = setTimeout(() => {
+          that.$route.replace({
+            path: '/activityDetail'
+          })
+        }, 3000);
+      }
+    })
   },
   methods: {
     handleChange(value) {
@@ -138,7 +160,7 @@ export default {
         const params = {
           userId: window.localStorage.getItem('userId'),
           oaMoneyId: this.activityDetailId,
-          code: this.code,
+          // code: this.code,
           totalPrice: this.total
         }
         console.log(params)
@@ -175,13 +197,24 @@ export default {
                   fail: function (res) {
                     //失败回调函数
                     console.log(res);
-                    that.$toast('支付失败！')
+                    that.$toast({
+                      message: '支付失败!',
+                      duration: 2000
+                    })
+                  },
+                  cancel: function(res) {
+                    that.$toast({
+                      message: '取消支付!',
+                      duration: 2000
+                    })
                   }
               });
             }); 
-
             wx.error(function(res){
-              that.$toast('支付失败！')
+              that.$toast({
+                message: '支付失败！',
+                duration: 2000
+              })
             })
           }
         })
@@ -195,6 +228,8 @@ export default {
   },
   beforeDestroy() {
     // 清除定时器
+    clearTimeout(this.timer)
+    this.timer = null
     clearTimeout(this.timer1)
     this.timer1 = null
   }

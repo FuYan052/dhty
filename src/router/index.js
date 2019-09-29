@@ -395,11 +395,6 @@ export default new Router({
         requireAuth: true
       }
     },
-    // {
-    //   path: '/userCenter/MyOrder',
-    //   name: 'MyOrder',
-    //   component: MyOrder,
-    // },
     {
       path: '/userCenter/commonProblem',
       name: 'CommonProblem',  //常见问题
@@ -424,32 +419,5 @@ export default new Router({
         requireAuth: true
       }
     },
-    // 商城
-    // {
-    //   path: '/mall',
-    //   name: 'Mall',
-    //   component: Mall,
-    // },
-    // {
-    //   path: '/mall/searchPage',
-    //   name: 'SearchPage',
-    //   component: SearchPage,
-    // },
-    // 地址管理
-    // {
-    //   path: '/userCenter/addressManagement',
-    //   name: 'AddressManage',
-    //   component: AddressManage,
-    // },
-    // {
-    //   path: '/addressManagement/addAddress',
-    //   name: 'AddAddress',
-    //   component: AddAddress,
-    // },
-    // {
-    //   path: '/addressManagement/editAddress',
-    //   name: 'EditAddress',
-    //   component: EditAddress,
-    // },
   ]
 })
