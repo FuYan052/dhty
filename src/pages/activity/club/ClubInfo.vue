@@ -33,17 +33,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   name: 'ClubInfo',
   data() {
     return {
       clubInfo: '',
       activiList: [],  //群活动列表
-      groupId: ''
+      groupId: '',
+      userId: ''
     }
   },
   created() {
+    console.log(this.$route)
+    this.userId = window.localStorage.getItem('userId')
     // 群id
     // this.groupId = window.sessionStorage.getItem('groupDetailId')
     this.groupId = this.$route.params.id
@@ -57,10 +59,6 @@ export default {
         this.activiList = resp.data.oavoList
       }
     })
-  },
-  computed: {
-    // 用户id
-    ...mapState(['userId']),
   },
   methods: {
     // 申请加入俱乐部
@@ -82,7 +80,9 @@ export default {
           }
         })
       }else{
-        this.$router.push({
+        window.sessionStorage.setItem('routerPath',this.$route.path)
+        window.sessionStorage.setItem('routerPathName',this.$route.name)
+        this.$router.replace({
           path: '/home'
         })
       }

@@ -151,15 +151,6 @@ export default {
       }
     }
   },
-  // beforeRouteLeave(to, from, next)  {
-  //   if(to.path == '/userCenter/myData/completeInfo') {
-  //     to.meta.keepAlive = false
-  //     next()
-  //   }else{
-  //     to.meta.keepAlive = true
-  //     next()
-  //   }
-  // },
 }
 </script>
 
@@ -186,11 +177,6 @@ export default {
         border-radius: 50%;
         float: left;
         margin-top: 75px;
-        // img{
-        //   width: 100%;
-        //   height: 100%;
-        //   border-radius: 50%;
-        // }
       }
       .levelIcon{
         width: 42px;

@@ -185,7 +185,7 @@ export default {
       title: '',  //标题
       notes: '',   //参与须知
       isCkecked: false,   //是否为周活动
-      
+      timers: null,  //定时器
     }
   },
   computed: {
@@ -448,7 +448,7 @@ export default {
           duration: 3000
         });
       }else{
-        this.$router.push({
+        this.$router.replace({
           path: '/mapSelection'
         })
       }
@@ -483,9 +483,64 @@ export default {
     // 确认发布按钮
     submit() {
       // 判断金额是否是整形
-      if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
+      if(this.type.skey == '') {
+        this.$toast({
+          message: '请选择运动种类！',
+          duration: 2000
+        });
+      }else if(this.groupType.id == '') {
+        this.$toast({
+          message: '请选择所属群组！',
+          duration: 2000
+        });
+      }else if(this.sureDateValue == '') {
+        this.$toast({
+          message: '请选择日期！',
+          duration: 2000
+        });
+      }else if(this.startTime == '') {
+        this.$toast({
+          message: '请选择开始时间！',
+          duration: 2000
+        });
+      }else if(this.endTime == '') {
+        this.$toast({
+          message: '请选择结束时间！',
+          duration: 2000
+        });
+      }else if(this.deadlineValue == '') {
+        this.$toast({
+          message: '请选择报名截止时间！',
+          duration: 2000
+        });
+      }else if(this.placeId == '') {
+        this.$toast({
+          message: '请选择活动地点！',
+          duration: 2000
+        });
+      }else if(this.peopleNum == '') {
+        this.$toast({
+          message: '请填写活动人数！',
+          duration: 2000
+        });
+      }else if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
         this.$toast({
           message: '费用请填写整数！',
+          duration: 2000
+        });
+      }else if(this.cost == '') {
+        this.$toast({
+          message: '请填写费用！',
+          duration: 2000
+        });
+      }else if(this.phone == '') {
+        this.$toast({
+          message: '请填写联系方式！',
+          duration: 2000
+        });
+      }else if(this.notes == '') {
+        this.$toast({
+          message: '请填写参与须知！',
           duration: 2000
         });
       }else{
@@ -515,9 +570,16 @@ export default {
               message: '发布成功！',
               duration: 2000
             });
-            this.$router.replace({
-              path: '/userCenter/myActivities'
-            })
+            const that = this
+            this.timers = setTimeout(() => {
+              that.$router.replace({
+                path: '/userCenter/myActivities',
+                name: 'MyActivities',
+                params: {
+                  type: '1'
+                }
+              })
+            },800)
             // 清除sessionStorage里的字段
             window.sessionStorage.removeItem("typeId")
             window.sessionStorage.removeItem("typeValue")
@@ -531,6 +593,10 @@ export default {
       }
     },
   },
+  beforeDestroy () {
+    clearTimeout(this.timers)
+    this.timers = null
+  }
 }
 </script>
 

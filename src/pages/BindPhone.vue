@@ -105,13 +105,19 @@ export default {
           this.changeUserId(resp.data.userId)
           this.changeUserPhone(resp.data.phone)
           this.changeToken(resp.data.token)
-          this.$router.replace({
-            path: _toPath,
-            name: _toPathName,
-            params: {
-              _userId: resp.data.userId
-            }
-          })
+          if(_toPathName == 'ClubInfo') {
+            this.$router.replace({
+              path: _toPath,
+            })
+          }else{
+            this.$router.replace({
+              path: _toPath,
+              name: _toPathName,
+              params: {
+                _userId: resp.data.id
+              }
+            })
+          }
         }
       }else{
         this.isShowPage = false
@@ -201,13 +207,7 @@ export default {
             this.changeUserId(resp.data.userId)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
-            // this.$toast({
-            //   message: '登录成功！',
-            //   duration: 2000
-            // });
-            // 登录成功后跳转回之前要去的页面
-            // const toPath = window.sessionStorage.getItem('routerPath')
-            // const toPathName = window.sessionStorage.getItem('routerPathName')
+            
             this.$messagebox({
               title: '提示',
               message: `为了方便您下次登录，我们为您设置的初始密码为手机号后六位:${resp.data.initPassword}！`,

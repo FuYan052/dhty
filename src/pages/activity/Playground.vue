@@ -112,8 +112,8 @@ export default {
   },
   created() {
     // 获取用户当前位置
-    const url = location.href
-    this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
+    // const url = location.href
+    this.$http.getSignature().then(resp => {
       if(resp.status = 200) {
         this.$indicator.open({
           text: '获取位置信息中...',

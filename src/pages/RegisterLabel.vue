@@ -81,19 +81,27 @@ export default {
       this.$http.postRegisterInfo(params).then(resp => {
         console.log(resp)
         if(resp.status == 200) {
-          if(window.sessionStorage.getItem('isRegister')) {
+          if(window.sessionStorage.getItem('isRegister')) {  //如果是从注册页进入到的填选信息页，填完之后返回登录页
             this.$router.replace({
               path: '/home/login'
             })
             window.sessionStorage.removeItem('isRegister')
-          }else{
-            this.$router.replace({
-              path: window.sessionStorage.getItem('routerPath'),
-              name: window.sessionStorage.getItem('routerPathName'),
+          }else{  //第一次手机验证码或第一次微信登录进入到的填选信息页，填完之后去登录之前要去的页面
+            const toPath = window.sessionStorage.getItem('routerPath')
+            const toPathName = window.sessionStorage.getItem('routerPathName')
+            if(toPathName == 'ClubInfo') {
+              this.$router.replace({
+                path: toPath,
+              })
+            }else{
+              this.$router.replace({
+                path: toPath,
+                name: toPathName,
                 params: {
                   _userId: window.localStorage.getItem('userId')
                 }
-            })
+              })
+            }
           }
         }
       })
@@ -118,13 +126,21 @@ export default {
             })
             window.sessionStorage.removeItem('isRegister')
           }else{
-            this.$router.replace({
-              path: window.sessionStorage.getItem('routerPath'),
-              name: window.sessionStorage.getItem('routerPathName'),
+            const toPath = window.sessionStorage.getItem('routerPath')
+            const toPathName = window.sessionStorage.getItem('routerPathName')
+            if(toPathName == 'ClubInfo') {
+              this.$router.replace({
+                path: toPath,
+              })
+            }else{
+              this.$router.replace({
+                path: toPath,
+                name: toPathName,
                 params: {
                   _userId: window.localStorage.getItem('userId')
                 }
-            })
+              })
+            }
           }
         }
       })

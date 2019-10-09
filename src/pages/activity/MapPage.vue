@@ -26,9 +26,9 @@ export default {
   created() {
     this.long = JSON.parse(window.sessionStorage.getItem('location')).lng
     this.lat = JSON.parse(window.sessionStorage.getItem('location')).lat
-    const url = location.href
+    // const url = location.href
     const that = this
-    this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
+    this.$http.getSignature().then(resp => {
       console.log(resp)
       if(resp.status == 200) {
         this.timestamp = resp.data.timestamp

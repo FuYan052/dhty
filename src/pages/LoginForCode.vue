@@ -73,26 +73,7 @@ export default {
       isChecked: false  //是否同意用户协议
     }
   },
-  // router.beforeEach((to, from, next) => {
-  // let hasToken = localStorage.getItem('ty-token');
-  // console.log(hasToken)
-  // if (hasToken) {
-  //   next()
-  // }else {
-  //   if (to.meta.requireAuth) {
-  //     console.log(to.fullPath)
-  //     next({
-  //       path: '/home'
-  //     })
-  //     window.sessionStorage.setItem('routerPath',from.fullPath)
-  //     window.sessionStorage.setItem('routerPathName',from.name)
-  //   } else { 
-  //     next()
-  //   } 
-  // }
-  // beforeRouteEnter(to, from, next){
-  //   console.log(from.path)
-  // },
+ 
   computed: {
     ...mapState(['isLogin'])
   },
@@ -162,13 +143,19 @@ export default {
             }else{
               const toPath = window.sessionStorage.getItem('routerPath')
               const toPathName = window.sessionStorage.getItem('routerPathName')
-              this.$router.replace({
-                path: toPath,
-                name: toPathName,
-                params: {
-                  _userId: resp.data.id
-                }
-              })
+              if(toPathName == 'ClubInfo') {
+                this.$router.replace({
+                  path: toPath,
+                })
+              }else{
+                this.$router.replace({
+                  path: toPath,
+                  name: toPathName,
+                  params: {
+                    _userId: resp.data.id
+                  }
+                })
+              }
             }
           }
         })

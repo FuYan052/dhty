@@ -104,6 +104,7 @@
           <div class="btnWrap">
             <div class="btn" v-show="isPublish" @click="publishSignUp(item.id)">查看报名</div>
             <div class="btn" v-show="isPublish" @click="editActivies(item.id, item.enrolledVoList)">修改</div>
+            <div class="btn" v-show="isPublish" @click="cancelActivies(item.id, item.enrolledVoList)">取消</div>
 
             <div class="btn" v-show="!isPublish" @click="completeSignUp(item.id)">查看报名</div>
             <!-- <div class="btn" v-show="!isPublish">填写成绩</div> -->
@@ -146,7 +147,17 @@ export default {
   },
   created() {
     this.userId = window.localStorage.getItem('userId')
+    // 如果是从我的管理页进入此页面，则默认显示我参与的
     this.getList1()
+  },
+  mounted() {
+    // 如果是从组织活动页进入此页面，则默认显示我组织的
+    if(this.$route.params.type) {
+      this.currIndex = 1
+      this.isjion = false
+      this.state2 = '1'
+      this.getList2()
+    }
   },
   methods:{
     // 取消活动
@@ -157,6 +168,7 @@ export default {
           console.log(resp)
           if(resp.status == 200) {
             this.$toast(resp.data.msg)
+            this.getList1()
             // this.$toast(resp.info)
           }
         })
@@ -268,6 +280,28 @@ export default {
       }else{
         this.$toast({
           message: '已有人员报名，无法进行修改！',
+          duration: 2000
+        });
+      }
+    },
+    // 取消发布的活动
+    cancelActivies(id,enrolledVoList) {
+      if(enrolledVoList.length === 0) {
+        const isSureCancel = confirm('确定要取消吗？')
+        if(isSureCancel) {
+          this.$http.cancelOrgActivities(id).then(resp => {
+            if(resp.status == 200) {
+              this.getList2()
+              this.$toast({
+                message: '取消成功！',
+                duration: 2000
+              });
+            }
+          })
+        }
+      }else{
+        this.$toast({
+          message: '已有人员报名，无法取消！',
           duration: 2000
         });
       }
@@ -539,6 +573,10 @@ export default {
         }
         .btn:nth-child(2) {
           background: #fabd8c;
+          margin-right: 30px;
+        }
+        .btn:nth-child(3) {
+          background: #f5899d;
           margin-right: 30px;
         }
       }

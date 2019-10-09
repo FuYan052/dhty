@@ -17,15 +17,6 @@
 export default {
   name: 'LoginHome',
   created() {
-    // this.$http.getInfo().then( resp => {
-    //   console.log(resp)
-    // })
-
-  // beforeRouteEnter:(to,from,next)=>{
-  //   console.log(to)
-  //   console.log(from)
-  //   // console.log(to)
-  // },
   },
   mounted() {
     // this.$toast({

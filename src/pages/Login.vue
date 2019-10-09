@@ -138,13 +138,19 @@ export default {
             // 登录成功后跳转回之前要去的页面
             const toPath = window.sessionStorage.getItem('routerPath')
             const toPathName = window.sessionStorage.getItem('routerPathName')
-            this.$router.replace({
+            if(toPathName == 'ClubInfo') {
+              this.$router.replace({
+                path: toPath,
+              })
+            }else{
+              this.$router.replace({
                 path: toPath,
                 name: toPathName,
                 params: {
                   _userId: resp.data.id
                 }
               })
+            }
           }
         })
         console.log(params)

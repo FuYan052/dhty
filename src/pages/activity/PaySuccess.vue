@@ -27,6 +27,7 @@ export default {
   },
   created() {
     this.orderId = window.sessionStorage.getItem('orderId')
+    // this.orderId = 'LH2823706536127319645731'
     this.$http.payOk(this.orderId).then(resp => {
       console.log(resp)
       if(resp.status == 200) {

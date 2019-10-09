@@ -324,7 +324,7 @@ export default {
         }
         .span2{
           width: 100px;
-          height: 52px;
+          height: 112px;
           font-size: 38px;
           line-height: 112px;
           float: right;
@@ -332,6 +332,7 @@ export default {
           display: block;
           color: #2ebda1;
           text-align: center;
+          // border: 1px solid red;
           b{
             display: block;
             font-size: 14px;

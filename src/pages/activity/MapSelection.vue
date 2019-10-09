@@ -195,7 +195,7 @@ export default {
       },
       sure() {
         if(this.selectedPoint !== '') {
-          this.$router.push({
+          this.$router.replace({
             path: window.sessionStorage.getItem('mapToPath'),
             name: window.sessionStorage.getItem('mapToPathName'),
             params: {

@@ -53,7 +53,7 @@
           </div>
           <div class="top" @click="toSignUp(item.id)">
             <div class="title">
-              <p class="text">{{item.type}}<span class="name">{{item.nickName}}</span></p>
+              <p class="text">组织者<span class="name">{{item.nickName}}</span></p>
               <div class="rightBtn" :class="'rightColor' + item.osStateId">{{item.timeStart}}</div>
             </div>
             <div class="detailBox">
@@ -101,6 +101,7 @@ export default {
   name: 'ActivityHome',
   data() {
     return {
+      isNoData: false,
       inputText: '',
       isShowSearch: false,
       activityType: '1',
@@ -146,31 +147,20 @@ export default {
       },
     }
   },
-  // watch: {
-  //   pageInfo(val) {
-  //     if(val.totalPage > 1) {
-  //       console.log("显示")
-  //       this.showLoading = true
-  //     }else{
-  //       console.log("不显示")
-  //       this.showLoading = false
-  //     }
-  //   }
-  // },
-  computed: {
-    isNoData() {
-      if(this.activList.length === 0) {
-        return true
+  watch: {
+    activList(v) {
+      if(v.length > 0) {
+        this.isNoData = false
       }else{
-        return false
+        this.isNoData = true 
       }
     }
   },
   created() {
     this.isNoData = false
-    const url = location.href
+    // const url = location.href
     // console.log(url.substr(0, url.indexOf(location.hash)))
-    this.$http.getSignature(url.substr(0, url.indexOf(location.hash))).then(resp => {
+    this.$http.getSignature().then(resp => {
       // console.log(resp)
       if(resp.status = 200) {
         // this.$indicator.open()
@@ -766,7 +756,7 @@ export default {
                 -webkit-line-clamp: 1;
               }
               .cost{
-                margin-top: 15px;
+                margin-top: 13px;
               }
               .p1:nth-of-type(1){
                 margin-top: 35px;

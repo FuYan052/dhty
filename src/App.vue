@@ -28,21 +28,12 @@ export default {
       if(from.name == 'ActivityHome') {
         !this.include.includes(from.name) && this.include.push(from.name);
       }
-      // if (from.meta.keepAlive) {
-      //   !this.include.includes(to.name) && this.include.push(from.name);
-      // }
-      // console.log(this.include)
       //如果 要 form(离开) 的页面是 keepAlive缓存的，
       //如果是后退
       if (from.meta.keepAlive && !to.meta.needCacheLast) {
         var index = this.include.indexOf(from.name);
         index !== -1 && this.include.splice(index, 1);
       }
-      // console.log(this.include)
-      // if (from.meta.keepAlive && to.meta.deepth < from.meta.deepth) {
-      //   var index = this.include.indexOf(from.name);
-      //   index !== -1 && this.include.splice(index, 1);
-      // }
     }
   },
   created() {

@@ -4,7 +4,7 @@ import router from '../router'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
-  // baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'http://192.168.0.121:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://yibc93.natappfree.cc/',
   headers: {
@@ -13,7 +13,7 @@ const ajax = axios.create({
 })
 
 const ajax2 = axios.create({
-  // baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'http://192.168.0.121:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://yibc93.natappfree.cc/',
   headers: {
@@ -22,7 +22,7 @@ const ajax2 = axios.create({
   },
 })
 const ajax4 = axios.create({
-  // baseURL: 'http://192.168.0.114:9000/',
+  // baseURL: 'http://192.168.0.121:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://yibc93.natappfree.cc/',
   headers: {
@@ -294,6 +294,10 @@ export const organizingActivities = (params) => {
 export const findOrganizingActivities = (params) => {
   return ajax.post(`/v1/rest/login/findOrganizingActivities?id=${params}`)
 }
+// 取消发布的活动
+export const cancelOrgActivities = (params) => {
+  return ajax.get(`/v1/rest/management/cancelActivities?id=${params}`)
+}
 // 根据父集查询子集数据字典
 export const findDictList = (params) => {
   return ajax.get(`/v1/rest/public/findDictList?skey=${params}`)
@@ -316,8 +320,8 @@ export const postBindPhone = (params) => {
   return ajax2.post('/v1/rest/login/wxRegist', params)
 }
 // 微信
-export const getSignature = (params) => {
-  return ajax.get(`/v1/rest/login/getSignature?url=${params}`)
+export const getSignature = () => {
+  return ajax.get(`/v1/rest/login/getSignature`)
 }
 // 微信支付
 export const postPay = (params) => {
