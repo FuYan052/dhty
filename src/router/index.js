@@ -75,6 +75,9 @@ export default new Router({
       path: '/home/register/registerUserInfo',
       name: 'RegisterUserInfo',   //提交注册后选择个人信息
       component: RegisterUserInfo,
+      meta: {
+        keepAlive: true 
+      }
     },
     {
       path: '/home/register/registerLabel',

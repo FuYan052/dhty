@@ -27,7 +27,7 @@ export default {
   },
   created() {
     this.orderId = window.sessionStorage.getItem('orderId')
-    // this.orderId = 'LH2823706536127319645731'
+    // this.orderId = 'LH2834416780188050793484'
     this.$http.payOk(this.orderId).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
@@ -38,9 +38,10 @@ export default {
   methods: {
     // 返回活动首页
     goActHome() {
-      this.$router.replace({
-        path: '/activityHome'
-      })
+      // this.$router.replace({
+      //   path: '/activityHome'
+      // })
+      window.location.replace('https://laihu.baogongxia.com/#/activityHome')
     },
     // 查看活动
     goMyact() {

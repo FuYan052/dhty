@@ -121,27 +121,8 @@ export default {
         }
       }else{
         this.isShowPage = false
-    }
-      // if(resp.data.phone !== '') {
-      //   console.log("已注册")
-      //   window.localStorage.setItem('userId', resp.data.userId)
-      //   window.localStorage.setItem('userPhone', resp.data.phone)
-      //   window.localStorage.setItem('ty-token', resp.data.token)
-      //   this.changeLoginStatus(true)
-      //   this.changeUserId(resp.data.userId)
-      //   this.changeUserPhone(resp.data.phone)
-      //   this.changeToken(resp.data.token)
-      //   this.$router.replace({
-      //     path: _toPath,
-      //     name: _toPathName,
-      //     params: {
-      //       _userId: resp.data.userId
-      //     }
-      //   })
-      // }else{
-      //   this.isShowPage = true
-      // }
-     })
+      }
+    })
 
     this.ruleForm.phoneNum = window.sessionStorage.getItem('weixinInputPhone') || ''
   },
@@ -207,16 +188,34 @@ export default {
             this.changeUserId(resp.data.userId)
             this.changeUserPhone(resp.data.phone)
             this.changeToken(resp.data.token)
-            
-            this.$messagebox({
-              title: '提示',
-              message: `为了方便您下次登录，我们为您设置的初始密码为手机号后六位:${resp.data.initPassword}！`,
-              showCancelButton: false,
-              confirmButtonText: '知道了'
-            });
-            this.$router.replace({
-              path: '/home/register/registerUserInfo',
-            })
+
+            if(resp.data.initPassword === null) {  //当initPassword字段为空，则说明已注册，不走完善信息步骤
+              const _toPath = window.sessionStorage.getItem('routerPath')
+              const _toPathName = window.sessionStorage.getItem('routerPathName')
+              if(_toPathName == 'ClubInfo') {
+                this.$router.replace({
+                  path: _toPath,
+                })
+              }else{
+                this.$router.replace({
+                  path: _toPath,
+                  name: _toPathName,
+                  params: {
+                    _userId: resp.data.id
+                  }
+                })
+              }
+            }else{ //当initPassword字段不为空，则说明未注册并设置初始密码，走完善信息步骤
+              this.$messagebox({
+                title: '提示',
+                message: `为了方便您下次登录，我们为您设置的初始密码为手机号后六位:${resp.data.initPassword}！`,
+                showCancelButton: false,
+                confirmButtonText: '知道了'
+              });
+              this.$router.replace({
+                path: '/home/register/registerUserInfo',
+              })
+            }
           }
         })
       }else{
@@ -325,7 +324,7 @@ export default {
         width: 81px;
         height: 113px;
         margin: 0 auto;
-        margin-top: 400px;
+        margin-top: 250px;
         margin-bottom: 65px;
         img{
           width: 100%;

@@ -180,7 +180,8 @@ export default {
     },
     // 解散群
     disbandment() {
-      this.$messagebox.confirm('确定要解散此群?').then(action => {
+      const isSure = confirm('确定要解散此群?')
+      if(isSure) {
         this.$http.disbandmentGroup(this.groupId).then(resp => {
           console.log(resp)
           if(resp.status == 200) {
@@ -198,7 +199,7 @@ export default {
             });
           }
         })
-      })
+      }
     },
     // 转让群
     transferGroup() {
@@ -341,7 +342,7 @@ export default {
     height: 100%;
   } */
   .mint-msgbox {
-    width: 60%;
+    width: 70%;
   }
   .mint-msgbox-title{
     font-size: 24px;
@@ -354,6 +355,6 @@ export default {
     padding: 40px 10px;
   }
   .mint-msgbox-btns{
-    height: 70px;
+    height: 85px;
   }
 </style>

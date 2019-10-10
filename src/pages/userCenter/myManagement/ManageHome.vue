@@ -133,8 +133,8 @@ export default {
     handleMenu(index,path) {
       // console.log(index,path)
       if(index === 6) {
-        console.log(this)
-        this.$messagebox.confirm('确定退出登录?').then(action => {
+        const isSure = confirm('确定退出登录?')
+        if(isSure) {
           window.localStorage.removeItem('ty-token')
           window.localStorage.removeItem('userId')
           window.localStorage.removeItem('userPhone')
@@ -143,7 +143,7 @@ export default {
           })
           window.sessionStorage.setItem('routerPath','/userCenter/manageHome')
           window.sessionStorage.setItem('routerPathName','ManageHome')
-        });
+        }
       }else{
         this.$router.push({
           path: path
@@ -310,58 +310,25 @@ export default {
           }
         }
       }
-      li:nth-of-type(1) {
-        // .icon{
-        //   img{
-        //     display: inline-block;
-        //     width: 35px;
-        //     line-height: 102px;
-        //     margin-left: 5px;
-        //     margin-top: 34px;
-        //   }
-        // }
-      }
-      li:nth-of-type(4) {
-        // .icon{
-        //   img{
-        //     display: inline-block;
-        //     width: 30px;
-        //     line-height: 102px;
-        //     margin-left: 5px;
-        //     margin-top: 35px;
-        //   }
-        // }
-      }
-      li:nth-of-type(6) {
-        // .icon{
-        //   img{
-        //     display: inline-block;
-        //     width: 32px;
-        //     line-height: 102px;
-        //     margin-left: 5px;
-        //     margin-top: 36px;
-        //   }
-        // }
-      }
     }
   }
 </style>
 <style>
-  .mint-msgbox {
+  .manageHome .mint-msgbox {
     width: 70%;
   }
-  .mint-msgbox-title{
+  .manageHome .mint-msgbox-title{
     font-size: 26px;
   }
-  .mint-msgbox-message{
+  .manageHome .mint-msgbox-message{
     color: rgb(22, 21, 21);
     font-size: 30px;
   }
-  .mint-msgbox-content{
-    padding: 60px 10px;
+  .manageHome .mint-msgbox-content{
+    padding: 60px 10px !important;
   }
-  .mint-msgbox-btns{
-    height: 80px;
-    font-size: 28px;
+  .manageHome .mint-msgbox-btns{
+    height: 85px;
+    font-size: 30px;
   }
 </style>

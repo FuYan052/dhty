@@ -37,20 +37,12 @@ export default {
     }
   },
   created() {
-    // window.location.href = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx1fcb375df1c9ccb2&secret=566f06e42bbdfc1442f3269355af1f0d`
   },
   methods: {
 
   },
   mounted() {
-    // const params = {
-    //   grant_type: 'client_credential',
-    //   appid: 'wxd3d4d3045a1213a1',
-    //   secret: 'cb78c2c273d6b6e46634dded46fda369'
-    // }
-    // this.$http.getWXUserInfo(params).then(resp => {
-    //   console.log(resp)
-    // })
+
   },
 }
 </script>
@@ -118,7 +110,9 @@ table{
   font-size: 29px !important;
   line-height: 40px;
 }
-
+.mint-msgbox {
+  width: 70% !important;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

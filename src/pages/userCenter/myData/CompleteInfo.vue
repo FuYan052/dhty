@@ -851,8 +851,9 @@ export default {
     width: 75%;
   }
   .mint-msgbox-btns{
-  height: 70px;
+  height: 80px;
   line-height: 70px;
+  
 }
 .mint-msgbox-input{
   padding-top: 40px;

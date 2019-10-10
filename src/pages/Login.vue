@@ -178,12 +178,10 @@ export default {
     },
     // 微信登录
     wexinLogin() {
-      // this.$router.push({
-      //   path: '/home/bindPhone'
-      // })
       const state = window.sessionStorage.getItem('routerPath')
       const redirectUrl = encodeURIComponent(`https://laihu.baogongxia.com/#/home/bindPhone`)
-      // const appid = 'wxf1894ca38c849d17'  测试号
+      // const redirectUrl = encodeURIComponent(`http://192.168.0.137:8082/#/home/bindPhone`)
+      // const appid = 'wxf1894ca38c849d17'  //测试号
       const appid = 'wxd3d4d3045a1213a1'
       // console.log(this.state)
       // console.log(window.location.href)

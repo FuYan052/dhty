@@ -115,7 +115,7 @@ export default {
   data() {
     return {
       total: 3306, //步数
-      cateList: ['跑步','羽毛球'],
+      cateList: ['羽毛球','跑步'],
       currIndex: 0,
       dateList: [],
       myInfo: '',
@@ -127,19 +127,7 @@ export default {
     ...mapState(['userId']),
   },
   created() {
-    // // 获取信息
-    // this.$http.informationOthers(this.userId).then(resp => {
-    //   console.log(resp)
-    //   if(resp.status == 200) {
-    //     this.myInfo = resp.data
-    //   }
-    // })
-    // // 计算日期
-    // for(let i = -6; i<=0; i++){
-    //   const result = this.findDate(i)
-    //   this.dateList.push(result) 
-    // }
-    // console.log(this.dateList)
+    
   },
   mounted() {
     this.$messagebox({
@@ -284,9 +272,6 @@ export default {
                   {offset: 0.1, color: '#b3d5f2'},
                   {offset: 0.5, color: '#67b7fa'},
                   {offset: 1, color: '#b1d4f4'}
-                  // {offset: 0, color: '#83bff6'},
-                  // {offset: 0.5, color: '#188df0'},
-                  // {offset: 1, color: '#188df0'}
                 ]
               )
             },
@@ -297,9 +282,6 @@ export default {
                   {offset: 0, color: '#6fa1ed'},
                   {offset: 0.7, color: '#6ca3f7'},
                   {offset: 1, color: '#83bff6'}
-                  // {offset: 0, color: '#2378f7'},
-                  // {offset: 0.7, color: '#2378f7'},
-                  // {offset: 1, color: '#83bff6'}
                 ]
               )
             }

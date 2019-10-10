@@ -114,7 +114,8 @@ export default {
       if(this.selectedMemberIds.length === 0) {
         this.$toast("未选择群员！")
       }else{
-        this.$messagebox.confirm('确定删除?').then(action => {
+        const isSure = confirm('确定删除?')
+        if(isSure) {
           const params = {
             type: '3',  //根据后端约定的类型为1
             groupId: this.groupId,
@@ -132,7 +133,7 @@ export default {
               });
             }
           })
-        })
+        }
       }
     }
   }
@@ -359,7 +360,7 @@ export default {
     color: #767676;
   }
   .mint-msgbox {
-    width: 60%;
+    width: 70%;
   }
   .mint-msgbox-message{
     color: rgb(22, 21, 21);
@@ -368,7 +369,7 @@ export default {
     padding: 30px 10px;
   }
   .mint-msgbox-btns{
-    height: 60px;
+    height: 80px;
   }
 </style>
 
