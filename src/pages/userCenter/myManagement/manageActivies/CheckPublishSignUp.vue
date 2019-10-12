@@ -8,7 +8,6 @@
             <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
           </div>
           <p class="name">{{item.nickName}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
-          <!-- <div class="cancel">取消活动</div> -->
         </li>
     </ul>
   </div>

@@ -8,8 +8,8 @@
             <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
           </div>
           <p class="name">{{item.nickName}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
-          <div class="btn">确认收款</div>
-          <div class="btn sure">退费</div>
+          <!-- <div class="btn">确认收款</div>
+          <div class="btn sure">退费</div> -->
         </li>
     </ul>
   </div>
@@ -33,9 +33,9 @@ export default {
       if(resp.status == 200) {
         this.memberList = resp.data
         if(this.memberList.length == 0) {
-          this.noList = true
+          this.isnoData = true
         }else{
-          this.noList = false
+          this.isnoData = false
         }
       }
     })

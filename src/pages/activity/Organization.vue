@@ -533,11 +533,16 @@ export default {
           message: '请填写费用！',
           duration: 2000
         });
-      }else if(this.phone == '') {
+      }else if((!(/^(1\d{10})|(0\d{2,3}-?\d{7,8})$/.test(this.phone)))) {
         this.$toast({
-          message: '请填写联系方式！',
+          message: '请填写有效的联系方式！',
           duration: 2000
         });
+      // }else if(this.phone == '') {
+      //   this.$toast({
+      //     message: '请填写联系方式！',
+      //     duration: 2000
+      //   });
       }else if(this.notes == '') {
         this.$toast({
           message: '请填写参与须知！',

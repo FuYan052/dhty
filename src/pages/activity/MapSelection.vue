@@ -2,11 +2,27 @@
   <!-- 组织活动-地图选择地点 -->
   <div class="mapSelection" id="mapSelection" v-title data-title="选择地点">
     <div class="serchBox">
-      <el-input
+      <!-- <el-input
         placeholder="搜索场地"
         prefix-icon="el-icon-search"
         v-model="value">
-      </el-input>
+      </el-input> -->
+      <el-select
+        v-model="value"
+        @change="changeValue"
+        :clearable='true'
+        placeholder="请输入场馆"
+        filterable
+        :reserve-keyword='true'
+        :filter-method="filter"
+        :loading="loading">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
       <div class="serchBtn" @click="handleSearch">搜索</div>
     </div>
     <div class="mapBox">
@@ -34,7 +50,12 @@ export default {
       screenHeight: document.documentElement.clientHeight, 
       originHeight: document.documentElement.clientHeight,
       toPath: '',
-      toPathName: ''
+      toPathName: '',
+
+      options: [],
+      list2: [],
+      loading: false,
+      states: []
     }
   },
   watch: {
@@ -52,6 +73,22 @@ export default {
     next()
   },
   created() {
+    // 场地列表
+    const params = {
+      type: window.sessionStorage.getItem('typeId'),
+      name: this.value	
+    }
+    this.$http.getVenueInfo(params).then(resp => {
+      if(resp.status == 200) {
+        for(let item of resp.data) {
+          this.states.push(item.name)
+        }
+        this.list2 = this.states.map(item => {
+          return { value: item, label: item };
+        });
+        this.options = this.list2
+      }
+    })
   },
   // beforeMount() {
   //   this.showMap(30.657420,104.065840);
@@ -132,7 +169,7 @@ export default {
       // 搜索调用地图
       showMap2(latitude, longitude){
         var map = new qq.maps.Map(document.getElementById("mapBox"),{    //地图部分初始化
-            zoom: 12,               //设置地图缩放级别
+            zoom: 11,               //设置地图缩放级别
             center: new qq.maps.LatLng(latitude, longitude),     //设置中心点
             zoomControl: false,    //不启用缩放控件
             mapTypeControlOptions: {  //设置控件的地图类型为普通街道地图
@@ -190,6 +227,24 @@ export default {
         })
       },
       // 搜索
+      filter(query) {
+        console.log(query)
+        if (query !== '') {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.options = this.list2.filter(item => {
+              return item.label.indexOf(query) > -1;
+            });
+          }, 200);
+        }else {
+          this.options = [];
+        }
+      },
+      changeValue(v) {
+        this.value = v
+        this.showMap2(30.657420,104.065840)
+      },
       handleSearch() {
         this.showMap2(30.657420,104.065840)
       },
@@ -205,7 +260,7 @@ export default {
           })
         }else{
           this.$toast({
-            message: '请选择地点',
+            message: '请先选择地图上的点！',
             duration: 1000
           });
         }
@@ -297,33 +352,40 @@ export default {
   .mapSelection .el-input__icon{
     line-height: 60px;
   }
-  /* .mint-searchbar{
-    height: 110px;
-    padding: 10px 30px;
-    background-color: #e8e9e8;
-  }
-  .mint-searchbar-inner {
+  .el-select{
+    width: 88%;
     height: 70px;
+    margin-top: 5px;
+  }
+  .mapSelection .serchBox .el-input {
+    width: 100%;
+  }
+  .el-select .el-input__inner{
+    height: 60px;
+    font-size: 30px;
+  }
+  .el-select__input{
+    font-size: 28px;
+    color: #000;
+  }
+  .el-popper .popper__arrow:after {
+    content: '' !important;
+  }
+  .el-select-dropdown__item{
+    font-size: 30px;
+    height: 60px;
+    line-height: 60px;
+  }
+  .el-select-dropdown__wrap{
+    max-height: 39vh;
+  }
+  .el-input__suffix{
+    height: 90%;
+  }
+  .el-select-dropdown__empty{
+    font-size: 24px;
+  }
+  .el-select .el-input .el-select__caret{
     font-size: 28px;
   }
-  .mint-searchbar-inner .mintui-search {
-    font-size: 30px;
-    padding-left: 10px;
-    padding-right: 15px;
-  }
-  .mint-searchbar-core{
-    font-size: 27px;
-  } */
-  /* .mapInfo span{
-    display: block; 
-    width: 80px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    color: #0c9; 
-    background: #fafafb; 
-    border: 1px solid #0c9; 
-    border-radius: 12px;
-    margin-top: 10px;
-  } */
 </style>

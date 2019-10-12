@@ -715,13 +715,6 @@ export default {
                 float: left;
                 // border-radius: 5px;
                 margin-left: 17px;
-                // border: 1px solid red;
-                // img{
-                //   width: 100%;
-                //   height: 100%;
-                //   float: left;
-                //   border-radius: 5px;
-                // }
               }
               .p1{
                 width: 540px;
@@ -776,14 +769,8 @@ export default {
               height: 36px;
               display: block;
               float: left;
-              // line-height: 80px;
-              // border: 1px solid red;
               margin-top: 22px;
               margin-right: 45px;
-              // img{
-              //   width: 100%;
-              //   height: 100%;
-              // }
             }
             .imgBox{
               height: 80px;
@@ -798,11 +785,6 @@ export default {
                 border-radius: 50%;
                 margin-top: 12px;
                 margin-right: 10px;
-                // img{
-                //   width: 100%;
-                //   height: 100%;
-                //   border-radius: 50%;
-                // }
               }
             }
             .detailText{
@@ -835,7 +817,7 @@ export default {
                 color: #000;
               }
               .color4{  //正在进行
-                color: #000;
+                color: #ff9c00;
               }
             }
           }

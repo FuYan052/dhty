@@ -1,17 +1,12 @@
 <template>
   <!-- 管理群成员 -->
   <div class="manageGroupMembers" v-title data-title="管理群成员">
-    <!-- <div class="searchBox">
-      <el-input
-        prefix-icon="el-icon-search"
-        v-model="input2">
-      </el-input>
-    </div> -->
     <!-- 管理员 -->
     <div class="admin">
       <div class="title">管理员</div>
       <ul class="ul1">
-        <li @click="memberInfo(item.id)" v-for="(item,index) in memberList1" :key="index">
+        <li v-for="(item,index) in memberList1" :key="index"  @click="selected1(item,index)">
+          <span class="checkWrap" :class="{selected:selectedAdminIds.indexOf(item.id)>=0}"><i class="el-icon-check"></i></span>
           <div class="image1">
             <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
           </div>
@@ -25,7 +20,7 @@
     <div class="memberList">
       <div class="title">群员</div>
       <ul class="memberItem">
-        <li v-for="(item,index) in memberList2" :key="index" @click="selected(item,index)">
+        <li v-for="(item,index) in memberList2" :key="index" @click="selected2(item,index)">
           <span class="checkWrap" :class="{selected:selectedMemberIds.indexOf(item.id)>=0}"><i class="el-icon-check"></i></span>
           <div class="image2">
             <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
@@ -37,7 +32,7 @@
     </div>
     <div class="btnBox">
       <div @click="handle1">设为管理员</div>
-      <div @click="handle2">移除</div>
+      <div @click="handle2">移除管理员</div>
     </div>
   </div>
 </template>
@@ -50,7 +45,7 @@ export default {
       input2: '',
       memberList1: [],
       memberList2: [],
-      selectedList: [],
+      selectedAdminIds: [],
       selectedMemberIds: [],
       groupId: ''
     }
@@ -74,16 +69,25 @@ export default {
         }
       })
     },
-    selected(item,index) {
-      let selectedIndex = this.selectedList.indexOf(index)
+    // 选择管理员
+    selected1(item,index) {
+      let selectedIndex = this.selectedAdminIds.indexOf(item.id)
       if(selectedIndex >= 0) {
-        this.selectedList.splice(selectedIndex, 1)
+        this.selectedAdminIds.splice(selectedIndex, 1)
+      }else{
+        this.selectedAdminIds.push(item.id)
+      }
+      console.log(this.selectedAdminIds)
+    },
+    // 选择群员
+    selected2(item,index) {
+      let selectedIndex = this.selectedMemberIds.indexOf(item.id)
+      if(selectedIndex >= 0) {
         this.selectedMemberIds.splice(selectedIndex, 1)
       }else{
-        this.selectedList.push(index)
         this.selectedMemberIds.push(item.id)
       }
-      // console.log(this.selectedMemberIds)
+      console.log(this.selectedMemberIds)
     },
     // 设为管理员
     handle1() {
@@ -109,17 +113,17 @@ export default {
         })
       }
     },
-    // 移除
+    // 移除管理员
     handle2() {
-      if(this.selectedMemberIds.length === 0) {
-        this.$toast("未选择群员！")
+      if(this.selectedAdminIds.length === 0) {
+        this.$toast("未选择管理员！")
       }else{
-        const isSure = confirm('确定删除?')
+        const isSure = confirm('确定移除?')
         if(isSure) {
           const params = {
-            type: '3',  //根据后端约定的类型为1
+            type: '2',  //根据后端约定的类型为2
             groupId: this.groupId,
-            userId: this.selectedMemberIds
+            userId: this.selectedAdminIds
           }
           this.$http.setInfo(params).then(resp => {
             console.log(resp)
@@ -172,17 +176,38 @@ export default {
           height: 130px;
           padding: 0 40px;
           border-top: 1px solid #f6f6f6;
+          overflow: hidden;
+          .checkWrap{
+            display: block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #a9a9a9;
+            float: left;
+            margin-top: 50px;
+            i{
+              display: block;
+              width: 23px;
+              height: 23px;
+              margin-top: 4px;
+              margin-left: 0px;
+              float: left;
+              font-size: 23px;
+              font-weight: bolder;
+              color: #fff;
+            }
+          }
+          .selected{
+            background: #fac31e;
+            border: 1px solid #fac31e;
+          }
           .image1{
             width: 75px;
             height: 75px;
             float: left;
             border-radius: 50%;
             margin-top: 23px;
-            // img{
-            //   width: 100%;
-            //   height: 100%;
-            //   border-radius: 50%;
-            // }
+            margin-left: 30px;
           }
           .name{
             float: left;
@@ -250,6 +275,7 @@ export default {
           height: 128px;
           border-top: 1px solid #f4f4f4;
           padding: 0 40px;
+          overflow: hidden;
           .checkWrap{
             display: block;
             width: 30px;
