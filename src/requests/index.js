@@ -4,7 +4,7 @@ import router from '../router'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
-  // baseURL: 'http://192.168.0.121:9000/',
+  // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://qknip3.natappfree.cc/',
   headers: {
@@ -13,7 +13,7 @@ const ajax = axios.create({
 })
 
 const ajax2 = axios.create({
-  // baseURL: 'http://192.168.0.121:9000/',
+  // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://qknip3.natappfree.cc/',
   headers: {
@@ -22,7 +22,7 @@ const ajax2 = axios.create({
   },
 })
 const ajax4 = axios.create({
-  // baseURL: 'http://192.168.0.121:9000/',
+  // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://qknip3.natappfree.cc/',
   headers: {

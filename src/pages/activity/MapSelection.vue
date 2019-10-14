@@ -26,9 +26,9 @@
       <div class="serchBtn" @click="handleSearch">搜索</div>
     </div>
     <div class="mapBox">
-        <div id="mapBox">
-            <p id="mapInfo"></p>
-        </div>
+      <div id="mapBox">
+          <p id="mapInfo"></p>
+      </div>
     </div>
     <div class="sureBtn" v-show="isOriginHei" @click="sure">确&nbsp;&nbsp;&nbsp;定</div>
   </div>
@@ -51,7 +51,6 @@ export default {
       originHeight: document.documentElement.clientHeight,
       toPath: '',
       toPathName: '',
-
       options: [],
       list2: [],
       loading: false,
@@ -60,7 +59,7 @@ export default {
   },
   watch: {
     screenHeight (val) {
-      if(this.originHeight > val + 100) {        //加100为了兼容华为的返回键
+      if(this.originHeight > val + 100) {    //加100为了兼容华为的返回键
           this.isOriginHei = false;
       }else{
           this.isOriginHei = true;
@@ -90,9 +89,6 @@ export default {
       }
     })
   },
-  // beforeMount() {
-  //   this.showMap(30.657420,104.065840);
-  // },
   mounted() {
     // 显示地图
     this.showMap(30.657420,104.065840);
@@ -259,9 +255,9 @@ export default {
             }
           })
         }else{
-          this.$toast({
+          this.$toast({  
             message: '请先选择地图上的点！',
-            duration: 1000
+            duration: 3000
           });
         }
       }

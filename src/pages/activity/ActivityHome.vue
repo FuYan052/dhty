@@ -88,9 +88,14 @@
           <mt-spinner type="snake" class="loading-more"></mt-spinner>
           <span class="loading-more-txt">加载中...</span>
         </div>
-
         <div class="no-more" v-if="noMore">没有更多了~</div>
 
+      </div>
+    </div>
+    <!-- 提示优惠券 -->
+    <div class="coupon" v-show="isShowCoupon">
+      <div class="wraper">
+        <p @click="know">知道了</p>
       </div>
     </div>
   </div>
@@ -145,6 +150,7 @@ export default {
         total: 0, // 总条数
         totalPage: 1 // 总分页数
       },
+      isShowCoupon: false,  //优惠券
     }
   },
   watch: {
@@ -195,7 +201,6 @@ export default {
               _this.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
               _this.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
               const params = {
-                // activityType: this.activityType,
                 type: _this.type,
                 time: _this.time,
                 keyWord: '',
@@ -206,7 +211,7 @@ export default {
               }
               // console.log(params)
               _this.$http.activitiesList(params).then(resp => {
-                if(resp.status == 200) {
+                if(resp.status == 200) { 
                   _this.activList = resp.data.rows
                   // 分页信息
                   _this.pageInfo.totalPage = resp.data.pageNum
@@ -218,13 +223,12 @@ export default {
                   });
                   _this.activList = []
                 }
-                console.log(resp)
+                _this.ShowCoupon()
               })
             },
             // 当获取经纬度失败
             cancel: function (res) {
               const params = {
-                // activityType: this.activityType,
                 type: _this.type,
                 time: _this.time,
                 keyWord: '',
@@ -234,6 +238,7 @@ export default {
                 page: 1
               }
               _this.$http.activitiesList(params).then(resp => {
+                console.log(resp)
                 if(resp.status == 200) {
                   _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
                   _this.activList = resp.data.rows
@@ -247,6 +252,7 @@ export default {
                   });
                   _this.activList = []
                 }
+                _this.ShowCoupon()
               })
             }
           });
@@ -254,7 +260,6 @@ export default {
         // 当微信获取位置配置失败
         wx.error(function(res){
           const params = {
-            // activityType: this.activityType,
             type: _this.type,
             time: _this.time,
             keyWord: '',
@@ -263,21 +268,23 @@ export default {
             lon: '104.06476',
             page: 1
           }
-        _this.$http.activitiesList(params).then(resp => {
-           _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
-          if(resp.status == 200) {
-            _this.activList = resp.data.rows
-            // 分页信息
-            _this.pageInfo.totalPage = resp.data.pageNum
-            _this.pageInfo.page = resp.data.prePage
-          }else{
-            _this.$toast({
-              message: '获取列表失败！',
-              duration: 2000
-            });
-            _this.activList = []
-          }
-        })
+          _this.$http.activitiesList(params).then(resp => {
+            console.log(resp)
+            _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
+            if(resp.status == 200) {
+              _this.activList = resp.data.rows
+              // 分页信息
+              _this.pageInfo.totalPage = resp.data.pageNum
+              _this.pageInfo.page = resp.data.prePage
+            }else{
+              _this.$toast({
+                message: '获取列表失败！',
+                duration: 2000
+              });
+              _this.activList = []
+            }
+            _this.ShowCoupon()
+          })
         });
       }
     })
@@ -310,8 +317,7 @@ export default {
         this.isMoreLoading = true // 设置加载更多中
         this.isLoading = true // 加载中
         const params = {
-          // activityType: this.activityType,
-          type: this.type,
+          type: this.type, 
           time: this.time,
           keyWord: '',
           isTwoDaysLater: this.isTwoDaysLater,
@@ -510,6 +516,14 @@ export default {
         path: '/activityDetail',
       })
     },
+    // 控制是否显示优惠券
+    ShowCoupon() {
+      this.isShowCoupon = true
+    },
+    // 优惠券，点击知道了
+    know() {
+      this.isShowCoupon = false
+    }
   }
 }
 </script>
@@ -839,6 +853,27 @@ export default {
         }
       }
     }
+    .coupon{
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 99;
+      background: rgba(0,0,0,0.3);
+      .wraper{
+        width: 76%;
+        height: 22vh;
+        background: #fff;
+        z-index: 100;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      }
+    }
   }
 </style>
 <style>
@@ -879,7 +914,4 @@ export default {
     margin-top: 20px;
     text-align: center;
   }
-  /* .showLoading{
-    margin-top: 20px;
-  } */
 </style>

@@ -277,7 +277,7 @@ export default {
     }
     .introd{
       width: 100%;
-      min-height: 370px;
+      min-height: 340px;
       background: #fff;
       margin-top: 20px;
       position: relative;

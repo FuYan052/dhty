@@ -48,8 +48,8 @@ import TransferGroup from '@/pages/userCenter/myManagement/manageGroup/TransferG
 import ManageGroupMembers from '@/pages/userCenter/myManagement/manageGroup/ManageGroupMembers'
 import CreatedGroupList from '@/pages/userCenter/myManagement/manageGroup/CreatedGroupList'
 import JoinCroupList from '@/pages/userCenter/myManagement/manageGroup/JoinCroupList'
+import Coupon from '@/pages/userCenter/myManagement/Coupon'
 import CommonProblem from '@/pages/userCenter/myManagement/CommonProblem'
-// import MyOrder from '@/pages/userCenter/MyOrder'
 import Cash from '@/pages/userCenter/myManagement/Cash'
 import AccountDetails from '@/pages/userCenter/myManagement/AccountDetails'
 
@@ -362,6 +362,14 @@ export default new Router({
       path: '/userCenter/groupManagement/manageGroupMembers',
       name: 'ManageGroupMembers',  //管理社群成员
       component: ManageGroupMembers,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/userCenter/Coupon',
+      name: 'Coupon',  //我的优惠券
+      component: Coupon,
       meta: {
         requireAuth: true
       }

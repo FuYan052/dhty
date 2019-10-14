@@ -53,7 +53,6 @@ export default {
   .clubHome{
     width: 100%;
     min-height: 100vh;
-    padding-bottom: 70px;
     .tabbar{
       width: 100%;
       height: 90px;

@@ -38,9 +38,7 @@ export default {
   methods: {
     // 返回活动首页
     goActHome() {
-      // this.$router.replace({
-      //   path: '/activityHome'
-      // })
+      
       window.location.replace('https://laihu.baogongxia.com/#/activityHome')
     },
     // 查看活动

@@ -68,6 +68,11 @@ export default {
           routerPath: '/userCenter/joinCroupList'
         },
         {
+          icon: require("../../../assets/user_icon6.png"),
+          title: '我的优惠券',
+          routerPath: '/userCenter/Coupon'
+        },
+        {
           icon: require("../../../assets/user_icon7.png"),
           title: '马上推广',
           routerPath: '/userCenter/popularize'
