@@ -108,10 +108,14 @@ export default {
   },
   created() {
     this.activityDetailId = window.sessionStorage.getItem('activityDetailId')
-    this.$http.activitiesDetail(this.activityDetailId).then(resp => {
+    const params = {
+      id: this.activityDetailId,
+      userId: window.localStorage.getItem('userId')
+    }
+    this.$http.getPayActInfo(params).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
-        this.theDetail = resp.data
+        this.theDetail = resp.data.activitiesDetailsInfoVOList
       }
     })
   },
@@ -263,18 +267,6 @@ export default {
           border-radius: 10px;
           margin-top: 2px;
         }
-        // .time{
-        //   font-size: 34px;
-        //   color: #f9c41e;
-        //   font-weight: bold;
-        //   text-align: center;
-        //   line-height: 65px;
-        // }
-        // .date{
-        //   font-size: 25px;
-        //   color: #a5a5a5;
-        //   text-align: center;
-        // }
       }
       .right{
         width: 520px;

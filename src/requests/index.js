@@ -207,7 +207,10 @@ export const transferGroup = (params) => {
 export const updateGroupInfo = (params) => {
   return ajax.get(`/v1/rest/management/findGroup?id=${params}`)
 }
-
+// 我的优惠券
+export const findCouponInfo = (params) => {
+  return ajax.get(`/v1/rest/coupon/findCouponInfo?userId=${params.userId}&state=${params.state}`)
+}
 // 我的数据
 // 查询现有待完善信息 
 export const findPersonalInformation = (params) => {
@@ -335,6 +338,10 @@ export const getOpenId = (params) => {
 export const cancelPay = (params) => {
   return ajax.get(`/v1/rest/pay/cancel?res=${params}`)
 }
+// 支付页信息
+export const getPayActInfo = (params) => {
+  return ajax.get(`/v1/rest/login/signUpInfo?id=${params.id}&userId=${params.userId}`)
+}
 // 支付成功
 export const payOk = (params) => {
   return ajax.get(`/v1/rest/pay/ok?orderNo=${params}`)
@@ -342,4 +349,8 @@ export const payOk = (params) => {
 // 取消活动
 export const cancelActive = (params) => {
   return ajax.post(`/v1/rest/pay/refund?orderNo=${params}`)
+}
+// 优惠券弹框提示'知道了'操作，用于下次是否还弹框
+export const isShowCoupon = (params) => {
+  return ajax.get(`/v1/rest/login/activitiesListIsNoRead?userId=${params}`)
 }

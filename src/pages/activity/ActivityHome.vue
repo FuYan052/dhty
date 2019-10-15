@@ -93,9 +93,10 @@
       </div>
     </div>
     <!-- 提示优惠券 -->
-    <div class="coupon" v-show="isShowCoupon">
+    <div class="coupon" v-show="showCoupon">
       <div class="wraper">
-        <p @click="know">知道了</p>
+        <div class="toCheck" @click="toCheck">点击查看</div>
+        <div class="closeBox" @click="know"></div>
       </div>
     </div>
   </div>
@@ -150,7 +151,7 @@ export default {
         total: 0, // 总条数
         totalPage: 1 // 总分页数
       },
-      isShowCoupon: false,  //优惠券
+      showCoupon: false,  //优惠券
     }
   },
   watch: {
@@ -207,7 +208,8 @@ export default {
                 isTwoDaysLater: _this.isTwoDaysLater,
                 lat: _this.latitude,
                 lon: _this.longitude,
-                page: 1
+                page: 1,
+                userId: Number(window.localStorage.getItem('userId'))
               }
               // console.log(params)
               _this.$http.activitiesList(params).then(resp => {
@@ -216,6 +218,8 @@ export default {
                   // 分页信息
                   _this.pageInfo.totalPage = resp.data.pageNum
                   _this.pageInfo.page = resp.data.prePage
+                  // 判断优惠券是否显示
+                  _this.showCoupon = resp.data.noRead
                 }else{
                   _this.$toast({
                     message: '获取列表失败！',
@@ -223,7 +227,6 @@ export default {
                   });
                   _this.activList = []
                 }
-                _this.ShowCoupon()
               })
             },
             // 当获取经纬度失败
@@ -235,7 +238,8 @@ export default {
                 isTwoDaysLater: _this.isTwoDaysLater,
                 lat: '30.5702',
                 lon: '104.06476',
-                page: 1
+                page: 1,
+                userId: Number(window.localStorage.getItem('userId'))
               }
               _this.$http.activitiesList(params).then(resp => {
                 console.log(resp)
@@ -245,6 +249,8 @@ export default {
                   // 分页信息
                   _this.pageInfo.totalPage = resp.data.pageNum
                   _this.pageInfo.page = resp.data.prePage
+                  // 判断是否提示优惠券
+                  _this.showCoupon = resp.data.noRead
                 }else{
                   _this.$toast({
                     message: '获取列表失败！',
@@ -252,7 +258,6 @@ export default {
                   });
                   _this.activList = []
                 }
-                _this.ShowCoupon()
               })
             }
           });
@@ -266,7 +271,8 @@ export default {
             isTwoDaysLater: _this.isTwoDaysLater,
             lat: '30.5702',
             lon: '104.06476',
-            page: 1
+            page: 1,
+            userId: Number(window.localStorage.getItem('userId'))
           }
           _this.$http.activitiesList(params).then(resp => {
             console.log(resp)
@@ -276,6 +282,8 @@ export default {
               // 分页信息
               _this.pageInfo.totalPage = resp.data.pageNum
               _this.pageInfo.page = resp.data.prePage
+              // 判断是否提示优惠券
+              _this.showCoupon = resp.data.noRead
             }else{
               _this.$toast({
                 message: '获取列表失败！',
@@ -283,7 +291,6 @@ export default {
               });
               _this.activList = []
             }
-            _this.ShowCoupon()
           })
         });
       }
@@ -516,13 +523,27 @@ export default {
         path: '/activityDetail',
       })
     },
-    // 控制是否显示优惠券
-    ShowCoupon() {
-      this.isShowCoupon = true
+    // 查看优惠券
+    toCheck() {
+      this.$router.push({
+        path: '/userCenter/manageHome'
+      })
+      const user_id = window.localStorage.getItem('userId')
+      if(user_id) {
+        this.$http.isShowCoupon(user_id).then(resp => {
+          console.log(resp)
+        })
+      }
     },
-    // 优惠券，点击知道了
+    // 优惠券，点击关闭
     know() {
-      this.isShowCoupon = false
+      this.showCoupon = false
+      const user_id = window.localStorage.getItem('userId')
+      if(user_id) {
+        this.$http.isShowCoupon(user_id).then(resp => {
+          console.log(resp)
+        })
+      }
     }
   }
 }
@@ -860,18 +881,38 @@ export default {
       top: 0;
       left: 0;
       z-index: 99;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0,0,0,0.5);
       .wraper{
-        width: 76%;
-        height: 22vh;
-        background: #fff;
+        width: 100%;
+        height: 66vh;
+        background: url('../../assets/couponBg.png') no-repeat center;
+        background-size: 95% auto;
+        background-position-y: 0;
+        background-position-x: -0.5%;
         z-index: 100;
         position: absolute;
-        top: 0;
+        top: 8.2vh;
         left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
+        .toCheck{
+          width: 560px;
+          height: 73px;
+          margin: 0 auto;
+          background: #f05a4c;
+          color: #fefffd;
+          font-size: 46px;
+          line-height: 74px;
+          text-align: center;
+          border-radius: 10px;
+          margin-top:625px;
+        }
+        .closeBox{
+          width: 68px;
+          height: 68px;
+          margin-left: 46.1%;
+          margin-top: 193px;
+          background: url('../../assets/closeBtn.png') no-repeat center;
+          background-size: contain;
+        }
       }
     }
   }

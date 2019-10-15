@@ -28,18 +28,32 @@ export default {
       currCateIndex: 0,
     }
   },
+  created() {
+    // 查询优惠券，默认先查未使用
+    this.getCoupon()
+  },
   methods: {
+    // 查询优惠券
+    getCoupon() {
+      const params = {
+        userId: window.localStorage.getItem('userId'),
+        state: this.currCateIndex
+      }
+      this.$http.findCouponInfo(params).then(resp => {
+        console.log(resp)
+      })
+    },
     // 切换分类
     changeCate(index) {
       this.currCateIndex = index
       if(index === 0) {  //未使用
-
+        this.getCoupon()
       }
       if(index === 1) {  //已使用
-
+        this.getCoupon()
       }
       if(index === 2) {  //已过期
-
+        this.getCoupon()
       }
     }
   }

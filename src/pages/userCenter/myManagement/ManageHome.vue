@@ -137,7 +137,7 @@ export default {
     },
     handleMenu(index,path) {
       // console.log(index,path)
-      if(index === 6) {
+      if(index === 7) {
         const isSure = confirm('确定退出登录?')
         if(isSure) {
           window.localStorage.removeItem('ty-token')
