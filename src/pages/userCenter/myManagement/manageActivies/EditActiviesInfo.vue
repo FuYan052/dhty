@@ -222,8 +222,12 @@ export default {
       console.log(from.path)
       if(from.path == '/mapSelection') {
         console.log(this.$route.params)
-        this.placeName = this.$route.params.placeName || ''
-        this.placeId = this.$route.params.placeId || ''
+        if(this.$route.params.placeId) {
+          console.log("修改地点")
+          this.placeName = this.$route.params.placeName
+          this.placeId = this.$route.params.placeId
+        }
+        console.log(this.placeName)
         this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       }
       if(from.path == '/userCenter/myActivities') {
@@ -469,7 +473,6 @@ export default {
         
       }
       console.log(this.deadlineValue)
-
     },
     // 活动地点
     showMap() {

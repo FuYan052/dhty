@@ -533,7 +533,7 @@ export default {
           message: '请填写费用！',
           duration: 2000
         });
-      }else if((!(/^(1\d{10})|(0\d{2,3}-?\d{7,8})$/.test(this.phone)))) {
+      }else if((!(/^[1][3,4,5,7,8][0-9]{9}$/.test(this.phone)))) {
         this.$toast({
           message: '请填写有效的联系方式！',
           duration: 2000

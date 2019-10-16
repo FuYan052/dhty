@@ -94,17 +94,6 @@ export default {
   computed: {
     ...mapState(['isLogin'])
   },
-  watch: {
-    isLogin () {
-      // 当isLogin为true的时候，执行跳转
-      // const {
-      //   from = '/home'
-      // } = this.$route.params
-      // this.$router.push(from)
-    }
-  },
-  created() {
-  },
   methods: {
     ...mapMutations(['changeLoginStatus','changeUserId','changeUserPhone','changeToken']),
     // 输入值合法时的回调
@@ -293,11 +282,6 @@ export default {
             width: 85px;
             height: 85px;
             margin: 0 auto;
-            // border: 1px solid red;
-            // img{
-            //   width: 100%;
-            //   height: 100%;
-            // }
           }
           p{
             color: #909090;
