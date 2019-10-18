@@ -35,7 +35,7 @@
       </li>
       <li>
         <span class="title">人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数</span>
-        <input type="text" class="inputValue inputNumber" v-model="peopleNum" placeholder="填写人数"/>
+        <input type="text" class="inputValue inputNumber" @blur="blur" v-model="peopleNum" placeholder="填写人数"/>
         <div class="numberInputBox">
           <span class="btn desc" @click="descBtn"><i class="el-icon-minus"></i></span><input type="number" v-model="peopleNum" name="" id=""/><span class="btn add" @click="addBtn"><i class="el-icon-plus"></i></span>
         </div>
@@ -43,17 +43,18 @@
       <li>
         <!-- <span class="title">费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用</span> -->
         <span class="title">费用&nbsp;/&nbsp;人</span>
-        <input type="text" class="inputValue" v-model="cost" placeholder="填写费用，如:60"/>
+        <input type="text" class="inputValue" @blur="blur" v-model="cost" placeholder="填写费用，如:60"/>
       </li>
       <li>
         <span class="title">联系方式</span>
-        <input type="text" class="inputValue" v-model="phone" placeholder="填写电话"/>
+        <input type="text" class="inputValue" @blur="blur" v-model="phone" placeholder="填写电话"/>
       </li>
     </ul>
     <div class="inputTitleBox">标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题</div>
     <div class="textAreaBox">
       <textarea
         class="textareaTitle"
+        @blur="blur"
         v-model="title"
         placeholder="时间+地点"
         />
@@ -62,6 +63,7 @@
     <div class="textAreaBox">
       <textarea
         class="textareaTitle"
+        @blur="blur"
         v-model="notes"
         placeholder="请填写活动须知"
         />
@@ -76,7 +78,6 @@
         <p class="bottomText">作为群组内周循环活动发布</p>
       </div>
     </div>
-    
     <!-- 选择弹框 -->
     <mt-popup
       v-model="popupVisible"
@@ -109,6 +110,7 @@
         date-format="{value} 日"
         @confirm="handleConfirmDate">
       </mt-datetime-picker>
+      <!-- 选择开始时间 -->
       <mt-datetime-picker
         v-show="startTimePicker"
         :visibleItemCount='5'
@@ -135,6 +137,7 @@
         date-format="{value} 日"
         hour-format="{value} 时"
         minute-format="{value} 分"
+        v-model="defaultDeadline"
         @confirm="handleConfirmDeadline">
       </mt-datetime-picker>
     </mt-popup>
@@ -153,7 +156,6 @@ export default {
       startTimePicker: false,
       endTimePicker: false,
       deadlinePicker: false,
-      isInput: false,  //当手机输入键盘弹起时不显示提交按钮
       textarea_1: '',
       textarea_2: '',
       currSlots: [], //渲染
@@ -178,6 +180,7 @@ export default {
       currSure: function() {},
       peopleNum: '',  //人数
       deadlineValue: '',  //报名截止时间
+      defaultDeadline: '',  //默认显示的报名截止时间
       placeName: '',   //活动地点名称
       placeId: '',  //活动地点id
       cost: null,  //费用
@@ -186,6 +189,11 @@ export default {
       notes: '',   //参与须知
       isCkecked: false,   //是否为周活动
       timers: null,  //定时器
+      isInput: false,  //当手机输入键盘弹起时不显示提交按钮
+      showHeight: document.documentElement.clientHeight, // 实时屏幕高度
+      /*---------监听函数--------------*/
+      handler:function(e){e.preventDefault();}
+
     }
   },
   computed: {
@@ -226,6 +234,20 @@ export default {
         this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       }
     },
+    showHeight(newVal , oldVal) {
+      if (newVal > oldVal) {
+        this.isInput = true
+      } else {
+        this.isInput = false
+      }
+    },
+    signReasonVisible:function(newvs,oldvs){//picker关闭没有回调函数，所以侦听该属性替代
+        if(newvs){
+            this.closeTouch();
+        }else{
+            this.openTouch();
+        }
+    }
   },
   created() {
     this.userId = window.localStorage.getItem('userId')
@@ -245,27 +267,44 @@ export default {
     })
     //当天日期
     this.startDate = new Date()  
-    // 键盘弹起事件
-    const that = this
-    var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-    window.onresize = function() {
-      var nowClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-      if (clientHeight - nowClientHeight > 60 ) {//因为ios有自带的底部高度
-        //键盘弹出的事件处理
-        that.isInput = true
-      }
-      else {
-        //键盘收起的事件处理
-        that.isInput = false
-      } 
-    };
+  },
+  mounted() {
+    const vm = this
+    // window.resize监听页面高度的变化
+    window.onresize = () => {
+      return (() => {
+        vm.showHeight = document.body.clientHeight
+      })()
+    }
   },
   methods: {
+    // 失去焦点事件
+    blur() {
+      setTimeout(() => {
+        const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop || 0
+        // window.scrollTo(0,0)
+        window.scrollTo(0, Math.max(scrollHeight - 1, 0))
+      }, 100)
+    },
+    /*解决iphone页面层级相互影响滑动的问题*/
+    closeTouch:function(){
+      document.getElementsByTagName("body")[0].addEventListener('touchmove',
+        this.handler,{passive:false});//阻止默认事件
+      console.log("closeTouch haved happened.");
+    },
+    openTouch:function(){
+      document.getElementsByTagName("body")[0].removeEventListener('touchmove',
+        this.handler,{passive:false});//打开默认事件
+      console.log("openTouch haved happened.");
+    },
     // 运动类型
     showPicker1() {
       this.isShowPicker = true
-      this.isShowDatePicker = false
       this.popupVisible = true
+      this.isShowDatePicker = false
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.deadlinePicker = false
       this.currSlots = this.slotsType
       this.currChange = this.onChangeType
       this.currSure = this.sureType
@@ -293,6 +332,9 @@ export default {
       this.isShowPicker = true
       this.isShowDatePicker = false
       this.popupVisible = true
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.deadlinePicker = false
       this.currSlots = this.slotsGroup
       this.currChange = this.onChangeGroup
       this.currSure = this.sureGroup
@@ -323,12 +365,15 @@ export default {
       this.endTimePicker = false
       this.startTimePicker = false
       this.deadlinePicker = false
+      this.closeTouch();//关闭默认事件
+
     },
     handleConfirmDate(v) {
       this.sureDateValue = this.formatDate(v)
       this.popupVisible = !this.popupVisible
       this.isShowDatePicker = false
       this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+      this.openTouch();//打开默认事件
     },
     // 格式化选择的日期
     formatDate(Time) {
@@ -353,17 +398,18 @@ export default {
       this.isShowDatePicker = false
       this.endTimePicker = false
       this.startTimePicker = true
+      this.deadlinePicker = false
+      this.closeTouch();//关闭默认事件
     },
     handleConfirmStart(v) {
       this.popupVisible = !this.popupVisible
-      this.startTimePicker = false
-      this.isShowPicker = false
-      this.isShowDatePicker = false
-      this.endTimePicker = false
-      this.startTimePicker = false
-      this.deadlinePicker = false
       this.startTime = v
+      this.startTimePicker = false
       this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+      // 开始时间作为报名截止时间的默认值
+      console.log(this.sureDateValue + ' ' + this.startTime)
+      this.defaultDeadline = new Date(this.sureDateValue + ' ' + this.startTime)
+      this.openTouch();//打开默认事件
     },
     // 结束时间
     showEndTime() {
@@ -372,16 +418,16 @@ export default {
       this.isShowDatePicker = false
       this.endTimePicker = true
       this.startTimePicker = false
+      this.deadlinePicker = false
+      this.closeTouch();//关闭默认事件
     },
     handleConfirmEnd(v) {
       this.popupVisible = !this.popupVisible
-      this.isShowPicker = false
-      this.isShowDatePicker = false
       this.endTimePicker = false
-      this.startTimePicker = false
       this.endTime = v
       const tStart = Number(this.startTime.substring(0,2)) * 60 + Number(this.startTime.substring(4,6))
       const tEnd = Number(this.endTime.substring(0,2)) * 60 + Number(this.endTime.substring(4,6))
+      this.openTouch();//打开默认事件
       if(tStart > tEnd) {
         this.endTime = ''
         this.$toast({
@@ -415,6 +461,7 @@ export default {
       this.endTimePicker = false
       this.startTimePicker = false
       this.deadlinePicker = true
+      this.closeTouch();//关闭默认事件
     },
     handleConfirmDeadline(v) {
       this.popupVisible = !this.popupVisible
@@ -423,6 +470,7 @@ export default {
       this.endTimePicker = false
       this.startTimePicker = false
       this.deadlinePicker = false
+      this.openTouch();//打开默认事件 
       console.log(v)
       this.deadlineValue = this.formatDate2(v)
       // 判断选的时间是否大于活动结束时间
@@ -533,7 +581,7 @@ export default {
           message: '请填写费用！',
           duration: 2000
         });
-      }else if((!(/^[1][3,4,5,7,8][0-9]{9}$/.test(this.phone)))) {
+      }else if((!(/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.phone)))) {
         this.$toast({
           message: '请填写有效的联系方式！',
           duration: 2000
@@ -584,7 +632,7 @@ export default {
                   type: '1'
                 }
               })
-            },800)
+            },300)
             // 清除sessionStorage里的字段
             window.sessionStorage.removeItem("typeId")
             window.sessionStorage.removeItem("typeValue")
@@ -612,13 +660,14 @@ export default {
     background: #f2f2f2;
     .maxHeightBox{
       width: 100%;
-      height: 82vh;
+      height: auto;
       overflow: auto;
       padding: 20px 14px;
-      padding-bottom: 40px;
+      padding-bottom: 20vh;
+      // padding-bottom: px;
     }
     .upKeyBord{
-      height: 100vh;
+      padding-bottom: 2vh;
     }
     ul{
       width: 100%;
@@ -786,8 +835,10 @@ export default {
       // padding-bottom: 30px;
       height: 18vh;
       background: #fff;
+      z-index: 9;
       position: fixed;
-      top: 82vh;
+      // top: 82vh;
+      bottom: 0;
       left: 0;
     }
     .sureBtn{

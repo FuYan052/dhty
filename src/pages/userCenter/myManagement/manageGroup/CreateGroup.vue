@@ -8,6 +8,7 @@
           <!-- <el-input v-model="ruleForm.name"></el-input> -->
           <el-input
             type="textarea"
+            @blur="blur"
             autosize
             v-model="ruleForm.name">
           </el-input>
@@ -21,6 +22,7 @@
           <!-- <el-input v-model="ruleForm.introd"></el-input> -->
           <el-input
             type="textarea"
+            @blur="blur"
             autosize
             v-model="ruleForm.introd">
           </el-input>
@@ -84,6 +86,13 @@ export default {
     this.userId = window.localStorage.getItem('userId')
   },
   methods: {
+    // 失去焦点事件
+    blur() {
+      setTimeout(() => {
+        const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop || 0
+        window.scrollTo(0,0)
+      }, 100)
+    },
     // 上传图片
     beforeAvatarUpload(file) {
       // const isJPG = file.type === 'image/jpeg';

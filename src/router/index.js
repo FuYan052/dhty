@@ -25,6 +25,7 @@ import Playground from '@/pages/activity/Playground'
 import PlaygroundDetail from '@/pages/activity/PlaygroundDetail'
 import MapPage from '@/pages/activity/MapPage'
 import ActivitySignUp from '@/pages/activity/ActivitySignUp'
+import SelectCoupon from '@/pages/activity/SelectCoupon'
 import PaySuccess from '@/pages/activity/PaySuccess'
 import SignUpList from '@/pages/activity/SignUpList'
 import Organization from '@/pages/activity/Organization'
@@ -214,6 +215,14 @@ export default new Router({
       path: '/activitySignUp',
       name: 'ActivitySignUp',  //活动报名页
       component: ActivitySignUp,
+      meta: {
+        requireAuth: true,
+      }
+    },
+    {
+      path: '/activitySignUp/selectCoupon',
+      name: 'SelectCoupon',  //活动报名页选择优惠券
+      component: SelectCoupon,
       meta: {
         requireAuth: true,
       }

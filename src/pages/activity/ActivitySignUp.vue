@@ -56,6 +56,15 @@
             {{theDetail.cost}}元/人
           </div>
         </li>
+        <li class="coupon_li" @click="toSelectCoup">
+          <div class="left">
+            <div class="circle" @click="isUseCoup"><span v-show="isUse"></span></div><div class="text">优惠券</div>
+          </div>
+          <div class="right">
+            <span>暂无可用</span>
+            <span class="el-icon-arrow-right"></span>
+          </div>
+        </li>
       </ul>
     <!-- 确认按钮 -->
     <div class="bottom">
@@ -82,7 +91,12 @@ export default {
       timer1: null,
       ableClickDesc1: false,
       ableClickDesc2: false,
-      timer: null 
+      timer: null ,
+      people: null,  //活动限制人数
+      enrolled: null,  //已报名人数
+      isUse: true,  //默认使用优惠券
+      useCoupList: [],  //可使用优惠券列表
+      notUserCoupList: [],  //不可使用优惠券列表
     }
   },
   watch: {
@@ -99,7 +113,7 @@ export default {
       }else{
         this.ableClickDesc2 = false
       }
-    }
+    },
   },
   computed: {
     total() {
@@ -116,6 +130,10 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.theDetail = resp.data.activitiesDetailsInfoVOList
+        this.people = resp.data.activitiesDetailsInfoVOList.people
+        this.enrolled = resp.data.activitiesDetailsInfoVOList.enrolled
+        this.useCoupList = resp.data.couponVoList
+        this.notUserCoupList = resp.data.noCouponVoList
       }
     })
   },
@@ -157,15 +175,41 @@ export default {
     handleChange(value) {
       // console.log(value);
     },
+    // 是否使用优惠券
+    isUseCoup() {
+      this.isUse = !this.isUse
+    },
+    // 选择优惠券
+    toSelectCoup() {
+      // 将优惠券列表传给下一页
+      window.sessionStorage.setItem('useCouponList' ,JSON.stringify(this.useCoupList))
+      window.sessionStorage.setItem('notUserCoupList' ,JSON.stringify(this.notUserCoupList))
+      this.$router.push({
+        path: '/activitySignUp/selectCoupon'
+      })
+    },
     // 支付
     surePay() {
-      if(this.total > 0) {
+      if(this.total <= 0){
+        this.$toast({
+          message: '请添加报名人数！',
+          duration: 2000
+        })
+      }else if(this.total > this.people - this.enrolled) {
+        this.$toast({
+          message: '人数已超过限制！',
+          duration: 2000
+        })
+      }else if(this.total > 0 && this.total < this.people) {
         const that = this
         const params = {
+          couponId: '',
           userId: window.localStorage.getItem('userId'),
           oaMoneyId: this.activityDetailId,
           // code: this.code,
-          totalPrice: this.total
+          totalPrice: this.total,
+          mNumber: this.num1,
+          gNumber: this.num2
         }
         console.log(params)
         this.$http.postPay(params).then(resp => {
@@ -221,11 +265,6 @@ export default {
               })
             })
           }
-        })
-      }else{
-        this.$toast({
-          message: '请添加报名人数！',
-          duration: 2000
         })
       }
     }
@@ -446,6 +485,16 @@ export default {
           line-height: 100px;
           text-align: right;
           color: #6e6e6e;
+        }
+      }
+      .coupon_li{
+        .left{
+          .circle{
+            border: 1px solid #febe14;
+            span{
+              background: #febe14;
+            }
+          }
         }
       }
     }

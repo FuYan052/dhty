@@ -10,36 +10,44 @@
         :class="{actCate: index === currCateIndex}"
         >{{item}}</li>
     </ul>
-    <!-- 未使用列表 -->
-    <ul class="listBox">
-      <li v-for="(item,index) in 3" :key="index">
+    <!-- 无数据时缺省页 -->
+    <div class="noList" v-show="noList"></div>
+    <!-- 有数据时 -->
+    <ul class="listBox" v-show="!noList">
+      <li v-for="(item,index) in coupList" :key="index">
         <div class="couItem">
           <!-- 优惠券左边 -->
-          <div class="left">
-            <p class="p1"><span>￥</span>5</p>
+          <div class="left" :class="{alreadyUsed : currCateIndex === 1 || currCateIndex === 2}">
+            <p class="p1"><span>￥</span>{{item.money}}</p>
             <p class="p2">无门槛优惠券</p>
           </div>
           <!-- 优惠券右边 -->
           <div class="right">
             <div class="title">
-              <div class="tip">优惠券</div>
-              <div class="titleText">双十一嘉年华5元券</div>
+              <div class="tip" :class="{alreadyUsedTip : currCateIndex === 1 || currCateIndex === 2}">优惠券</div>
+              <div class="titleText">{{item.name}}</div>
             </div>
-            <p class="dateRange">2019.09.17-2019.10.19</p>
+            <p class="dateRange" v-show="currCateIndex === 0 || currCateIndex === 2">{{item.startTime}}-{{item.endTime}}</p>
+            <p class="dateRange" v-show="currCateIndex === 1">{{item.useTime}}</p>
             <div class="Instructions">
               <span class="span1"></span>
-              <span class="span2">使用说明</span>
+              <span class="span2" @click="showUseDetail(index)">使用说明</span>
             </div>
           </div>
           <!-- 快过期 -->
           <!-- <div class="ExpireSoon"></div> -->
+          <!-- 已过期 -->
+          <div class="Expired" v-show="currCateIndex === 2"></div>
           <!-- 立即使用 -->
-          <div class="ImmediateUse">立即使用</div>
+          <div class="couBtn ImmediateUse" v-show="currCateIndex === 0" @click="toUse">立即使用</div>
+          <div class="couBtn alreadyUsedBtn" v-show="currCateIndex === 1">已使用</div>
           <!-- 箭头朝上 -->
-          <div class="arrow arrowUp" v-show="isUp"></div>
+          <div class="arrow arrowUp" @click="showUseDetail(index)" v-show="index === i"></div>
           <!-- 箭头朝下 -->
-          <div class="arrow arrowDown" v-show="!isUp"></div>
+          <div class="arrow arrowDown" @click="showUseDetail(index)" v-show="!(index === i)"></div>
         </div>
+        <!-- 使用说明 -->
+        <div class="InstrDetail" v-show="index === i">{{item.content}}</div>
       </li>
     </ul>
   </div>
@@ -52,7 +60,10 @@ export default {
     return {
       cateList: ['未使用',"已使用","已过期"],
       currCateIndex: 0,
-      isUp: true,
+      coupList: [],
+      isShowDetail: false,
+      i: -1,
+      noList: false,
     }
   },
   created() {
@@ -68,19 +79,45 @@ export default {
       }
       this.$http.findCouponInfo(params).then(resp => {
         console.log(resp)
+        if(resp.status == 200) {
+          this.coupList = resp.data
+          if(this.coupList.length == 0) {
+            this.noList = true
+          }else{
+            this.noList = false
+          }
+        }
       })
     },
     // 切换分类
     changeCate(index) {
       this.currCateIndex = index
       if(index === 0) {  //未使用
+        window.scrollTo(0,0)
         this.getCoupon()
       }
       if(index === 1) {  //已使用
+        window.scrollTo(0,0)
         this.getCoupon()
       }
       if(index === 2) {  //已过期
+        window.scrollTo(0,0)
         this.getCoupon()
+      }
+    },
+    // 立即使用
+    toUse() {
+      this.$router.push({
+        path: '/activityHome'
+      })
+    },
+    // 点击使用说明
+    showUseDetail(index) {
+      this.isShowDetail = !this.isShowDetail
+      if(this.isShowDetail){
+        this.i = index
+      }else{
+        this.i = -1
       }
     }
   }
@@ -91,12 +128,23 @@ export default {
   .coupon{
     width: 100%;
     min-height: 100vh;
-    background: #fdfdfd;
+    background: #fff;
+    position: relative;
+    padding-top: 96px;
+    .noList{
+      width: 100%;
+      height: 93vh;
+      background: url('../../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     .cate{
       width: 100%;
       height: 96px;
       background: #fff;
       padding: 0 55px;
+      z-index: 9;
+      position: fixed;
+      top: 0;
       li{
         width: 140px;
         height: 96px;
@@ -117,6 +165,7 @@ export default {
       width: 100%;
       height: auto;
       padding: 0 18px;
+      padding-bottom: 40px;
       li{
         width: 100%;
         height: auto;
@@ -150,11 +199,15 @@ export default {
               margin-top: 15px;
             }
           }
+          .alreadyUsed{  //已使用左边灰色背景
+            background: url('../../../assets/disableBg.png') no-repeat center;
+            background-size: 100% 100%;
+          }
           .right{
             width: 66.2%;
             height: 200px;
             float: left;
-            background: #fff;
+            background: #fdfdfd;
             // border: 1px solid red;
             padding-left: 20px;
             .title{
@@ -172,16 +225,19 @@ export default {
                 float: left;
                 margin-top: 28px;
               }
+              .alreadyUsedTip{  //已使用标题
+                background: #c6c6c6;
+              }
               .titleText{
                 float: left;
-                font-size: 22px;
+                font-size: 24px;
                 height: 57px;
-                padding-top: 23px;
+                padding-top: 20px;
                 margin-left: 11px;
               }
             }
             .dateRange{
-              font-size: 18px;
+              font-size: 21px;
               line-height: 18px;
               margin-top: 50px;
             }
@@ -214,12 +270,21 @@ export default {
             right: 0;
             top: 0;
           }
-          .ImmediateUse{
+          .Expired{
+            width: 110px;
+            height: 120px;
+            background: url('../../../assets/ExpiredBg.png') no-repeat center;
+            background-size: 100% 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+          }
+          .couBtn{
             width: 118px;
             height: 40px;
             text-align: center;
             line-height: 39px;
-            font-size: 18px;
+            font-size: 20px;
             color: #fec013;
             border: 1px solid #fec013;
             border-radius: 20px;
@@ -227,21 +292,41 @@ export default {
             top: 95px;
             right: 45px;
           }
+          .ImmediateUse{
+            color: #fec013;
+            border: 1px solid #fec013;
+          }
+          .alreadyUsedBtn{
+            color: #c6c6c6;
+            border: 1px solid #c6c6c6;
+          }
           .arrow{
-            width: 25px;
-            height: 25px;
-            border: 1px solid red;
-            // border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transform: scale(.5);
             background: url('../../../assets/upIcon.png') no-repeat center;
-            background-size: contain;
+            background-size: 100% 100%;
+            border: 1px solid #dddddd;
             position: absolute;
-            top: 160px;
+            top: 152px;
             right: 20px;
           }
           .arrowDown{
             background: url('../../../assets/downIcon.png') no-repeat center;
             background-size: 100% 100%;
           }
+        }
+        .InstrDetail{
+          width: 100%;
+          height: auto;
+          padding: 0 22px;
+          border-top: 3px dashed #f8f6f6;
+          font-size: 20px;
+          line-height: 35px;
+          padding-top: 10px;
+          padding-bottom: 15px;
+          color: rgb(88, 87, 87);
         }
       }
     }

@@ -91,7 +91,7 @@ export default {
         this.lat = resp.data.lat
         this.lon = resp.data.lon
         this.state = resp.data.state
-        this.peopleLength = resp.data.enrolledVoList.length
+        this.peopleLength = resp.data.enrolled
         this.groupId = resp.data.groupId
         this.imgurl = resp.data.image
         this.endTime = (new Date(resp.data.endTime.replace(/-/g,'/')).getTime()) / 1000

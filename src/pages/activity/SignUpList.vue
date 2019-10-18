@@ -11,6 +11,7 @@
               <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
             </div>
             <p class="name">{{item.nickName}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
+            <div class="signNum">报名：<span v-show="item.mNumber > 0">男{{item.mNumber}}人</span><span v-show="item.mNumber > 0 && item.gNumber > 0">&nbsp;|&nbsp;</span><span v-show="item.gNumber > 0">女{{item.gNumber}}人</span></div>
             <div class="grade">Lv.{{item.level}}</div>
           </li>
       </ul>
@@ -25,7 +26,7 @@ export default {
     return {
       input3: '',
       memberList: [],
-      noData: false
+      noData: false,
     }
   },
   created() {
@@ -72,7 +73,6 @@ export default {
       height: auto;
       background: #fff;
       border-bottom: 1px solid #e0dfe4;
-      margin-top: 20px;
       ul{
         width: 100%;
         height: auto;
@@ -81,6 +81,7 @@ export default {
           height: 130px;
           padding: 0 20px;
           border-top: 1px solid #f6f6f6;
+          position: relative;
           .listItemImg{
             width: 75px;
             height: 75px;
@@ -96,8 +97,8 @@ export default {
           }
           .name{
             float: left;
-            font-size: 25px;
-            line-height: 130px;
+            font-size: 26px;
+            line-height: 90px;
             margin-left: 28px;
             span{
               padding-left: 12px;
@@ -121,6 +122,14 @@ export default {
             border-radius: 20px;
             float: right;
             margin-top: 45px;
+          }
+          .signNum{
+            font-size: 23px;
+            margin-right: 60px;
+            color: rgb(122, 122, 122);
+            position: absolute;
+            top: 70px;
+            left: 120px;
           }
         }
         li:nth-child(1){

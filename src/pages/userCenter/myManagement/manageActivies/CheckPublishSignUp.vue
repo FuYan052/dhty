@@ -1,13 +1,16 @@
 <template>
   <!-- 已发布活动查看报名 -->
   <div class="checkPublishSignUp" v-title data-title="查看报名">
+    <!-- 无数据时缺省页 -->
     <div class="noData" v-show="noList"></div>
+    <!-- 有数据时 -->
     <ul class="memberItem" v-show="!noList">
         <li v-for="(item,index) in memberList" :key="index">
           <div class="itImg1">
             <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
           </div>
           <p class="name">{{item.nickName}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
+          <div class="signNum">报名：<span v-show="item.mNumber > 0">男{{item.mNumber}}人</span><span v-show="item.mNumber > 0 && item.gNumber > 0">&nbsp;|&nbsp;</span><span v-show="item.gNumber > 0">女{{item.gNumber}}人</span></div>
         </li>
     </ul>
   </div>
@@ -64,6 +67,7 @@ export default {
         height: 130px;
         padding: 0 40px;
         border-top: 1px solid #f6f6f6;
+        position: relative;
         .itImg1{
           width: 75px;
           height: 75px;
@@ -91,6 +95,14 @@ export default {
           .el-icon-female{
             color: #ff756b;
           }
+        }
+        .signNum{
+          font-size: 23px;
+          margin-right: 60px;
+          color: rgb(122, 122, 122);
+          position: absolute;
+          top: 70px;
+          left: 120px;
         }
         .cancel{
           width: 130px;

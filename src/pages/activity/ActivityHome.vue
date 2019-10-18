@@ -61,6 +61,7 @@
                 <img :src="item.venueImage" style="width: 100%; height: 100%; float:left; border-radius: 5px;" alt="">
               </div>
               <div class="p1 venueName">{{item.venueName}}<span>{{item.distance}}km</span></div>
+              <!-- <div class="p1 venueName">{{item.venueName}}<span>{{item.lat | GetDistance(item.lon,latitude,longitude)}}km</span></div> -->
               <div class="p1 tit">{{item.title}}</div>
               <div class="p1 cost">{{item.cost}}元/人</div>
             </div>
@@ -76,7 +77,7 @@
               </div>
             </div>
             <div class="detailText">
-              <span class="num">{{item.enrolledVoList.length}}/{{item.people}}</span>
+              <span class="num">{{item.enrolled}}/{{item.people}}</span>
               <span class="status" :class="'color' + item.osStateId">{{item.osState}}</span>
             </div>
           </div>
@@ -95,6 +96,7 @@
     <!-- 提示优惠券 -->
     <div class="coupon" v-show="showCoupon">
       <div class="wraper">
+        <div class="content"><span>{{couNum}}</span>张<span class="redText">{{couMoney}}</span>元优惠券已经存入您的账户~</div>
         <div class="toCheck" @click="toCheck">点击查看</div>
         <div class="closeBox" @click="know"></div>
       </div>
@@ -152,6 +154,8 @@ export default {
         totalPage: 1 // 总分页数
       },
       showCoupon: false,  //优惠券
+      couNum: null, //优惠券数量
+      couMoney: null  //优惠券金额
     }
   },
   watch: {
@@ -164,145 +168,119 @@ export default {
     }
   },
   created() {
-    this.isNoData = false
-    // const url = location.href
-    // console.log(url.substr(0, url.indexOf(location.hash)))
-    this.$http.getSignature().then(resp => {
-      // console.log(resp)
-      if(resp.status = 200) {
-        // this.$indicator.open()
-        this.$indicator.open({
-          text: '获取位置信息中...',
-          spinnerType: 'fading-circle'
-        });
-        this.timestamp = resp.data.timestamp
-        this.nonceStr = resp.data.nonceStr
-        this.signature = resp.data.signature
-
-        const that = this
-        wx.config({
-          // debug: true,
-          appId: 'wxd3d4d3045a1213a1',
-          // appId: 'wxf1894ca38c849d17',  //测试号
-          timestamp: this.timestamp,
-          nonceStr: this.nonceStr,
-          signature: this.signature,
-          jsApiList: [
-            'getLocation',
-          ]
-        });
-        // 获取经纬度
-        const _this = this
-        wx.ready(function(){
-          _this.$indicator.close()
-          wx.getLocation({
-            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-            success: function (res) {
-              // console.log(res)
-              _this.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-              _this.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              const params = {
-                type: _this.type,
-                time: _this.time,
-                keyWord: '',
-                isTwoDaysLater: _this.isTwoDaysLater,
-                lat: _this.latitude,
-                lon: _this.longitude,
-                page: 1,
-                userId: Number(window.localStorage.getItem('userId'))
-              }
-              // console.log(params)
-              _this.$http.activitiesList(params).then(resp => {
-                if(resp.status == 200) { 
-                  _this.activList = resp.data.rows
-                  // 分页信息
-                  _this.pageInfo.totalPage = resp.data.pageNum
-                  _this.pageInfo.page = resp.data.prePage
-                  // 判断优惠券是否显示
-                  _this.showCoupon = resp.data.noRead
-                }else{
-                  _this.$toast({
-                    message: '获取列表失败！',
-                    duration: 2000
-                  });
-                  _this.activList = []
-                }
-              })
-            },
-            // 当获取经纬度失败
-            cancel: function (res) {
-              const params = {
-                type: _this.type,
-                time: _this.time,
-                keyWord: '',
-                isTwoDaysLater: _this.isTwoDaysLater,
-                lat: '30.5702',
-                lon: '104.06476',
-                page: 1,
-                userId: Number(window.localStorage.getItem('userId'))
-              }
-              _this.$http.activitiesList(params).then(resp => {
-                console.log(resp)
-                if(resp.status == 200) {
-                  _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
-                  _this.activList = resp.data.rows
-                  // 分页信息
-                  _this.pageInfo.totalPage = resp.data.pageNum
-                  _this.pageInfo.page = resp.data.prePage
-                  // 判断是否提示优惠券
-                  _this.showCoupon = resp.data.noRead
-                }else{
-                  _this.$toast({
-                    message: '获取列表失败！',
-                    duration: 2000
-                  });
-                  _this.activList = []
-                }
-              })
-            }
-          });
-        });
-        // 当微信获取位置配置失败
-        wx.error(function(res){
-          const params = {
-            type: _this.type,
-            time: _this.time,
-            keyWord: '',
-            isTwoDaysLater: _this.isTwoDaysLater,
-            lat: '30.5702',
-            lon: '104.06476',
-            page: 1,
-            userId: Number(window.localStorage.getItem('userId'))
-          }
-          _this.$http.activitiesList(params).then(resp => {
-            console.log(resp)
-            _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
-            if(resp.status == 200) {
-              _this.activList = resp.data.rows
-              // 分页信息
-              _this.pageInfo.totalPage = resp.data.pageNum
-              _this.pageInfo.page = resp.data.prePage
-              // 判断是否提示优惠券
-              _this.showCoupon = resp.data.noRead
-            }else{
-              _this.$toast({
-                message: '获取列表失败！',
-                duration: 2000
-              });
-              _this.activList = []
-            }
-          })
-        });
-      }
-    })
-    
     for(let i = 0; i< 4; i++){
       const result = this.findDate(i)
       this.dateList[i].date1 = result
     }
     // 计算日期
     this.time = this.dateList[0].date1.year + '-' + this.dateList[0].date1.month +'-'+ this.dateList[0].date1.day  //实际动态日期
-    
+    // 默认先不显示缺省页
+    this.isNoData = false
+    // 先加载活动列表
+    const params = {
+      type: this.type,
+      time: this.time,
+      keyWord: '',
+      isTwoDaysLater: this.isTwoDaysLater,
+      lat: '30.5702',
+      lon: '104.06476',
+      page: 1,
+      userId: Number(window.localStorage.getItem('userId'))
+    }
+    this.$http.activitiesList(params).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        // _this.$toast('获取地理位置失败，当前距离为平台默认距离！')
+        this.activList = resp.data.rows
+        // 分页信息
+        this.pageInfo.totalPage = resp.data.pageNum
+        this.pageInfo.page = resp.data.prePage
+        // 判断是否提示优惠券
+        this.showCoupon = resp.data.noRead
+        this.couNum = resp.data.howMany
+        this.couMoney = resp.data.money
+
+      }else{
+        this.$toast({
+          message: '获取列表失败！',
+          duration: 2000
+        });
+        this.activList = []
+      }
+    })
+
+    // 获取用户当前经纬度，计算距离场馆的距离
+    const that = this
+    this.$http.getSignature().then(resp => {
+      // console.log(resp)
+      if(resp.status = 200) {
+        this.timestamp = resp.data.timestamp
+        this.nonceStr = resp.data.nonceStr
+        this.signature = resp.data.signature
+        // this.$indicator.open({
+        //   text: '正在获取您与场馆的距离...',
+        //   spinnerType: 'fading-circle'
+        // });
+        wx.config({
+          // debug: true,
+          appId: 'wxd3d4d3045a1213a1',
+          // appId: 'wxf1894ca38c849d17',  //测试号
+          timestamp: that.timestamp,
+          nonceStr: that.nonceStr,
+          signature: that.signature,
+          jsApiList: [
+            'getLocation',
+          ]
+        });
+        // 获取经纬度
+        wx.ready(function(){
+          // that.$indicator.close()
+          wx.getLocation({
+            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function (res) {
+              // console.log(res)
+              that.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+              that.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+              
+              const params = {
+                type: that.type,
+                // activityType: this.activityType,
+                time: that.time,
+                keyWord: that.inputText,
+                isTwoDaysLater: that.isTwoDaysLater,
+                lat: that.latitude,
+                lon: that.longitude,
+                page: 1
+              }
+              console.log(params)
+              that.$http.activitiesList(params).then(resp => {
+                if(resp.status == 200) {
+                  that.activList = resp.data.rows
+                  // 分页信息
+                  that.pageInfo.totalPage = resp.data.pageNum
+                  that.pageInfo.page = resp.data.prePage
+                }else{
+                  that.$toast({
+                    message: '获取列表失败！',
+                    duration: 2000
+                  });
+                  that.activList = []
+                }
+                console.log(resp)
+              })
+            },
+            // 当获取经纬度失败
+            cancel: function (res) {
+              that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+            }
+          });
+        });
+        // 当微信获取位置配置失败
+        wx.error(function(res){
+          that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+        });
+      }
+    })
   },
   methods: {
     // 加载等多
@@ -328,8 +306,8 @@ export default {
           time: this.time,
           keyWord: '',
           isTwoDaysLater: this.isTwoDaysLater,
-          lat: '30.5702',
-          lon: '104.06476',
+          lat: this.latitude,
+          lon: this.longitude,
           page: this.pageInfo.page
         }
         // console.log(params)
@@ -429,6 +407,7 @@ export default {
     },
     // 切换日期
     changeDate(index,clickDate) {
+      console.log(this.latitude)
       this.showLoading = false
       this.isLoading = false // 加载中转菊花
       this.isMoreLoading = false // 加载更多中
@@ -554,11 +533,11 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
-    padding-bottom: 40px;
-    padding-top: 214px;
+    // padding-bottom: 20px;
+    // padding-top: 214px;
     .nolist{
       width: 100%;
-      height: 83vh;
+      height: 82vh;
       background: url('../../assets/noDataBg.jpg') no-repeat center;
       background-size: cover;
       background-position: 0 10%;
@@ -567,9 +546,9 @@ export default {
       width: 100%;
       height: 214px;
       background: #fff;
-      position: fixed;
-      top: 0;
-      z-index: 9;
+      // position: fixed;
+      // top: 0;
+      // z-index: 9;
     }
     .cateNav{
       width: 100%;
@@ -680,7 +659,7 @@ export default {
       position: relative;
       .content{
         width: 100%;
-        max-height: 96vh;
+        max-height: 82.5vh;
         padding-bottom: 3px;
         overflow: auto;
         // border: 1px solid red;
@@ -885,14 +864,28 @@ export default {
       .wraper{
         width: 100%;
         height: 66vh;
-        background: url('../../assets/couponBg.png') no-repeat center;
-        background-size: 95% auto;
+        padding-left: 3%;
+        background: url('../../assets/couponBg.png') no-repeat;
+        background-size: 97% auto;
+        background-position-y: -3%;
         background-position-y: 0;
-        background-position-x: -0.5%;
         z-index: 100;
         position: absolute;
         top: 8.2vh;
         left: 0;
+        .content{
+          width: 470px;
+          height: auto;
+          margin: 0 auto;
+          font-size: 45px;
+          line-height: 55px;
+          margin-top: 485px;
+          text-align: center;
+          color: #000;
+          .redText{
+            color: #cd0a09;
+          }
+        }
         .toCheck{
           width: 560px;
           height: 73px;
@@ -903,7 +896,7 @@ export default {
           line-height: 74px;
           text-align: center;
           border-radius: 10px;
-          margin-top:625px;
+          margin-top:40px;
         }
         .closeBox{
           width: 68px;

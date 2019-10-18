@@ -43,7 +43,7 @@
          </div>
          <div class="g_detail">
            <p class="g_name" @click="toDetail(item.id)">
-             {{item.name}}<span>{{item.distance}}km</span>
+             {{item.name}}<span>{{item.lat | GetDistance(item.lon,latitude,longitude)}}km</span>
            </p>
            <div class="playGroundImg" @click="toDetail(item.id)" >
              <img :src="item.image" style="width: 100%; height: 100%;" alt="">
@@ -92,8 +92,8 @@ export default {
       timestamp: '',
       nonceStr: '',
       signature: '',
-      latitude: '',
-      longitude: '',
+      latitude: '30.5702',
+      longitude: '104.057150',
       showLoading: false,  //是否显示底部加载信息
       isLoading: false, // 加载中转菊花
       isMoreLoading: false, // 加载更多中
@@ -111,18 +111,41 @@ export default {
     }
   },
   created() {
-    // 获取用户当前位置
-    // const url = location.href
+    // 获取场馆列表
+    const params = {
+      type: this.type,
+      keyWord:'',
+      lon: this.longitude,
+      lat: this.latitude,
+      page: 1
+    }
+    this.$http.getPlaygroundList(params).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.playGroungList = resp.data.rows
+        if(this.playGroungList.length == 0) {
+          this.noData = true
+        }else{
+          this.noData = false
+        }
+        // 分页信息
+        this.pageInfo.totalPage = resp.data.pageNum
+        this.pageInfo.page = resp.data.prePage
+        // console.log(this.playGroungList)
+      }
+    })
+
+    // 获取用户当前位置，计算距离场馆的距离
+    const that = this
     this.$http.getSignature().then(resp => {
       if(resp.status = 200) {
-        this.$indicator.open({
-          text: '获取位置信息中...',
-          spinnerType: 'fading-circle'
-        });
+        // this.$indicator.open({
+        //   text: '获取位置信息中...',
+        //   spinnerType: 'fading-circle'
+        // });
         this.timestamp = resp.data.timestamp
         this.nonceStr = resp.data.nonceStr
         this.signature = resp.data.signature
-        const that = this
         wx.config({
           // debug: true,
           appId: 'wxd3d4d3045a1213a1',
@@ -137,82 +160,84 @@ export default {
         });
         // 获取经纬度
         wx.ready(function() {
-          that.$indicator.close()
+          // that.$indicator.close()
           wx.getLocation({
             type: 'wgs84', 
             success: function (res) {
               // console.log(res)
               that.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
               that.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              const params = {
-                type: that.type,
-                keyWord:'',
-                lon: that.longitude,
-                lat: that.latitude,
-                page: 1
-              }
-              that.$http.getPlaygroundList(params).then(resp => {
-                console.log(resp)
-                if(resp.status == 200) {
-                  that.playGroungList = resp.data.rows
-                  if(that.playGroungList.length == 0) {
-                    that.noData = true
-                  }else{
-                    that.noData = false
-                  }
-                  // 分页信息
-                  that.pageInfo.totalPage = resp.data.pageNum
-                  that.pageInfo.page = resp.data.prePage
+              // const params = {
+              //   type: that.type,
+              //   keyWord:'',
+              //   lon: that.longitude,
+              //   lat: that.latitude,
+              //   page: 1
+              // }
+              // that.$http.getPlaygroundList(params).then(resp => {
+              //   console.log(resp)
+              //   if(resp.status == 200) {
+              //     that.playGroungList = resp.data.rows
+              //     if(that.playGroungList.length == 0) {
+              //       that.noData = true
+              //     }else{
+              //       that.noData = false
+              //     }
+              //     // 分页信息
+              //     that.pageInfo.totalPage = resp.data.pageNum
+              //     that.pageInfo.page = resp.data.prePage
 
-                  // console.log(this.playGroungList)
-                }
-              })
+              //     // console.log(this.playGroungList)
+              //   }
+              // })
             },
             cancel: function (res) {
-              const params = {
-                type: that.type,
-                keyWord:'',
-                lon: that.currLon,
-                lat: that.currLat,
-                page: 1
-              }
-              that.$http.getPlaygroundList(params).then(resp => {
-                console.log(resp)
-                if(resp.status == 200) {
-                  that.$toast('获取地理位置失败，当前距离为平台默认距离！')
-                  that.playGroungList = resp.data.rows
-                  if(that.playGroungList.length == 0) {
-                    that.noData = true
-                  }else{
-                    that.noData = false
-                  }
-                  // console.log(this.playGroungList)
-                  that.pageInfo.totalPage = resp.data.pageNum
-                  that.pageInfo.page = resp.data.prePage
-                }
-              })
+              that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+              // const params = {
+              //   type: that.type,
+              //   keyWord:'',
+              //   lon: that.currLon,
+              //   lat: that.currLat,
+              //   page: 1
+              // }
+              // that.$http.getPlaygroundList(params).then(resp => {
+              //   console.log(resp)
+              //   if(resp.status == 200) {
+              //     that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+              //     that.playGroungList = resp.data.rows
+              //     if(that.playGroungList.length == 0) {
+              //       that.noData = true
+              //     }else{
+              //       that.noData = false
+              //     }
+              //     // console.log(this.playGroungList)
+              //     that.pageInfo.totalPage = resp.data.pageNum
+              //     that.pageInfo.page = resp.data.prePage
+              //   }
+              // })
             }
           })
         });
         // 调取微信接口失败
         wx.error(function(res){
-          const params = {
-            type: that.type,
-            keyWord:'',
-            lon: that.currLon,
-            lat: that.currLat,
-            page: 1
-          }
-          that.$http.getPlaygroundList(params).then(resp => {
-            console.log(resp)
-            if(resp.status == 200) {
-              that.$toast('获取地理位置失败，当前距离为平台默认距离！')
-              that.playGroungList = resp.data.rows
-              // console.log(this.playGroungList)
-              that.pageInfo.totalPage = resp.data.pageNum
-              that.pageInfo.page = resp.data.prePage
-            }
-          })
+          that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+          // const params = {
+          //   type: that.type,
+          //   keyWord:'',
+          //   lon: that.currLon,
+          //   lat: that.currLat,
+          //   page: 1
+          // }
+          // that.$http.getPlaygroundList(params).then(resp => {
+          //   console.log(resp)
+          //   if(resp.status == 200) {
+          //     that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+          //     that.playGroungList = resp.data.rows
+          //     // console.log(this.playGroungList)
+          //     that.pageInfo.totalPage = resp.data.pageNum
+          //     that.pageInfo.page = resp.data.prePage
+          //   }
+          // })
         })
       }
     })

@@ -8,6 +8,7 @@
             <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
           </div>
           <p class="name">{{item.nickName}}<span class="el-icon-male" v-show="item.sex === '男'"></span><span v-show="item.sex === '女'" class="el-icon-female"></span></p>
+          <div class="signNum">报名：<span v-show="item.mNumber > 0">男{{item.mNumber}}人</span><span v-show="item.mNumber > 0 && item.gNumber > 0">&nbsp;|&nbsp;</span><span v-show="item.gNumber > 0">女{{item.gNumber}}人</span></div>
           <!-- <div class="btn">确认收款</div>
           <div class="btn sure">退费</div> -->
         </li>
@@ -66,6 +67,7 @@ export default {
         height: 130px;
         padding: 0 40px;
         border-top: 1px solid #f6f6f6;
+        position: relative;
         .iteImg{
           width: 75px;
           height: 75px;
@@ -81,7 +83,7 @@ export default {
         .name{
           float: left;
           font-size: 25px;
-          line-height: 130px;
+          line-height: 90px;
           margin-left: 28px;
           span{
             padding-left: 12px;
@@ -93,6 +95,14 @@ export default {
           .el-icon-female{
             color: #ff756b;
           }
+        }
+        .signNum{
+          font-size: 23px;
+          margin-right: 60px;
+          color: rgb(122, 122, 122);
+          position: absolute;
+          top: 70px;
+          left: 120px;
         }
         .btn{
           width: 130px;
