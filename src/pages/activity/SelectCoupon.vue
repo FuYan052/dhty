@@ -6,8 +6,10 @@
       <li @click="changeCate(1)" :class="{actCate: act1}">可用优惠券({{num1}})</li>
       <li @click="changeCate(2)" :class="{actCate: act2}">不可以优惠券({{num2}})</li>
     </ul>
-    <!-- 优惠券列表 -->
-    <ul class="listBox">
+    <!-- 当没有优惠券时显示 -->
+    <div class="noData" v-show="isnoData"></div>
+    <!-- 当有优惠券时显示 -->
+    <ul class="listBox" v-show="!isnoData">
       <li v-for="(item,index) in currList" :key="index" @click="clickCoup(item,index)">
         <div class="couItem">
           <!-- 优惠券左边 -->
@@ -28,8 +30,8 @@
         </div>
       </li>
     </ul>
-    <div class="bottomBox">
-      <div class="sureBtn">确定</div>
+    <div class="bottomBox" v-show="!isnoData">
+      <div class="sureBtn" @click="handleSure">确定</div>
     </div>
   </div>
 </template>
@@ -39,6 +41,7 @@ export default {
   name: 'SelectCoupon',
   data() {
     return {
+      isnoData: false,
       act1: true,
       act2: false,
       list1: [],  //可用优惠券
@@ -53,6 +56,11 @@ export default {
     this.list2 = JSON.parse(window.sessionStorage.getItem('useCouponList'))
     this.currList = this.list1
     console.log(this.currList)
+    if(this.currList.length == 0) {
+      this.isnoData = true
+    }else{
+      this.isnoData = false
+    }
   },
   computed: {
     num1() {
@@ -75,10 +83,21 @@ export default {
         this.act2 = true
         this.currList = this.list2
       }
+      if(this.currList.length == 0) {
+        this.isnoData = true
+      }else{
+        this.isnoData = false
+      }
     },
     clickCoup(item,index) {
       this.i = index
       this.selectedCoupon = item
+    },
+    handleSure() {
+      window.sessionStorage.removeItem('notUserCoupList')
+      window.sessionStorage.removeItem('useCouponList')
+      window.sessionStorage.setItem('selectedCoupon', JSON.stringify(this.selectedCoupon))
+      this.$router.go(-1)
     }
   }
 }
@@ -91,6 +110,12 @@ export default {
     background: #f7f7f7;
     padding-top: 96px;
     padding-bottom: 166px;
+    .noData{
+      width: 100%;
+      height: 100vh;
+      background: url('../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     .cate{
       width: 100%;
       height: 96px;
@@ -193,7 +218,7 @@ export default {
             .radiuBox{
               width: 30px;
               height: 30px;
-              line-height: 30px;
+              line-height: 28px;
               text-align: center;
               border: 1px solid #d4d4d4;
               border-radius: 50%;

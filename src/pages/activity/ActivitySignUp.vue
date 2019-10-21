@@ -61,7 +61,8 @@
             <div class="circle" @click="isUseCoup"><span v-show="isUse"></span></div><div class="text">优惠券</div>
           </div>
           <div class="right">
-            <span>暂无可用</span>
+            <span v-show="isShowNoUse">暂无可用</span>
+            <span v-show="!isShowNoUse">111</span>
             <span class="el-icon-arrow-right"></span>
           </div>
         </li>
@@ -97,6 +98,8 @@ export default {
       isUse: true,  //默认使用优惠券
       useCoupList: [],  //可使用优惠券列表
       notUserCoupList: [],  //不可使用优惠券列表
+      selectedCoupon: null,  //选中的优惠券
+      isShowNoUse: false
     }
   },
   watch: {
@@ -114,6 +117,25 @@ export default {
         this.ableClickDesc2 = false
       }
     },
+    $route(to, from) {
+      if(from.path == '/activitySignUp/selectCoupon') {
+        this.selectedCoupon = JSON.parse(window.sessionStorage.getItem('selectedCoupon')) || ''
+        // content: "嘉年华双十一活动"
+        // endTime: "2019.11.11"
+        // id: 1
+        // money: 5
+        // name: "嘉年华双十一"
+        // startTime: "2019.11.30"
+        // state: 0
+        // stateName: null
+        // useTime: null
+      }
+    },
+    useCoupList(v) {
+      if(v.length === 0) {
+        this.isShowNoUse = true
+      }
+    }
   },
   computed: {
     total() {
@@ -275,6 +297,7 @@ export default {
     this.timer = null
     clearTimeout(this.timer1)
     this.timer1 = null
+    window.sessionStorage.removeItem('selectedCoupon')
   }
 }
 </script>

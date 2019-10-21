@@ -10,6 +10,7 @@ import LoginForCode from '@/pages/LoginForCode'
 import BindPhone from '@/pages/BindPhone'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ChildrenActivities from '@/pages/activity/ChildrenActivities'
+import IntelligenceTreatyBall from '@/pages/activity/IntelligenceTreatyBall'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import ActivityDetail from '@/pages/activity/ActivityDetail'
 import EscapeClause from '@/pages/activity/EscapeClause'
@@ -129,6 +130,11 @@ export default new Router({
       }
     },
     {
+      path: '/intelligenceTreatyBall',
+      name: 'IntelligenceTreatyBall',
+      component: IntelligenceTreatyBall,  //智能约球
+    },
+    {
       path: '/playground',
       name: 'Playground',  //场馆列表页
       component: Playground,
@@ -217,6 +223,7 @@ export default new Router({
       component: ActivitySignUp,
       meta: {
         requireAuth: true,
+        keepAlive: true 
       }
     },
     {
@@ -225,6 +232,7 @@ export default new Router({
       component: SelectCoupon,
       meta: {
         requireAuth: true,
+        needCacheLast: true  //是否需要缓存上一页
       }
     },
     {
