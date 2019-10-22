@@ -52,10 +52,10 @@ export default {
     }
   },
   created() {
-    this.list1 = JSON.parse(window.sessionStorage.getItem('notUserCoupList'))
-    this.list2 = JSON.parse(window.sessionStorage.getItem('useCouponList'))
+    this.list1 = JSON.parse(window.sessionStorage.getItem('useCouponList'))
+    this.list2 = JSON.parse(window.sessionStorage.getItem('notUserCoupList'))
     this.currList = this.list1
-    console.log(this.currList)
+    // console.log(this.currList)
     if(this.currList.length == 0) {
       this.isnoData = true
     }else{
@@ -97,7 +97,9 @@ export default {
       window.sessionStorage.removeItem('notUserCoupList')
       window.sessionStorage.removeItem('useCouponList')
       window.sessionStorage.setItem('selectedCoupon', JSON.stringify(this.selectedCoupon))
-      this.$router.go(-1)
+      this.$router.replace({
+        path: '/activitySignUp'
+      })
     }
   }
 }

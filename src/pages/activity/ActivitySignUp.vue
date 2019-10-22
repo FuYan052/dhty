@@ -27,13 +27,13 @@
         <li>
           <div class="left"><span></span><span class="text">男</span></div>
           <div class="right">
-            <el-input-number :class="{actDesc : ableClickDesc1}" v-model="num1" @change="handleChange" :min="0"></el-input-number>
+            <el-input-number :class="{actDesc : ableClickDesc1}" v-model="num1" @change="handleChangeMen" :min="0"></el-input-number>
           </div>
         </li>
         <li>
           <div class="left"><span></span><span class="text">女</span></div>
           <div class="right">
-            <el-input-number :class="{actDesc : ableClickDesc2}" v-model="num2" @change="handleChange" :min="0"></el-input-number>
+            <el-input-number :class="{actDesc : ableClickDesc2}" v-model="num2" @change="handleChangeWomen" :min="0"></el-input-number>
           </div>
         </li>
       </ul>
@@ -61,8 +61,11 @@
             <div class="circle" @click="isUseCoup"><span v-show="isUse"></span></div><div class="text">优惠券</div>
           </div>
           <div class="right">
-            <span v-show="isShowNoUse">暂无可用</span>
-            <span v-show="!isShowNoUse">111</span>
+            <p v-if="isShowNoUse">暂无可用</p>
+            <p v-else>
+              <span class="useNum" v-show="!haveSelected">11张可用</span>
+              <span v-show="haveSelected">嘉年华优惠券&nbsp;&nbsp;&nbsp;<b>-￥5</b></span>
+            </p>
             <span class="el-icon-arrow-right"></span>
           </div>
         </li>
@@ -98,8 +101,9 @@ export default {
       isUse: true,  //默认使用优惠券
       useCoupList: [],  //可使用优惠券列表
       notUserCoupList: [],  //不可使用优惠券列表
-      selectedCoupon: null,  //选中的优惠券
-      isShowNoUse: false
+      selectedCoupon: '',  //选中的优惠券
+      couponId: '',  //选中的优惠券id
+      haveSelected: false,
     }
   },
   watch: {
@@ -117,29 +121,30 @@ export default {
         this.ableClickDesc2 = false
       }
     },
-    $route(to, from) {
-      if(from.path == '/activitySignUp/selectCoupon') {
-        this.selectedCoupon = JSON.parse(window.sessionStorage.getItem('selectedCoupon')) || ''
-        // content: "嘉年华双十一活动"
-        // endTime: "2019.11.11"
-        // id: 1
-        // money: 5
-        // name: "嘉年华双十一"
-        // startTime: "2019.11.30"
-        // state: 0
-        // stateName: null
-        // useTime: null
-      }
-    },
-    useCoupList(v) {
-      if(v.length === 0) {
-        this.isShowNoUse = true
+    selectedCoupon(v) {
+      console.log(v)
+      if(v !== '') {
+        this.haveSelected = true
+        this.couponId = v.id
+      }else{
+        this.haveSelected = false
       }
     }
   },
   computed: {
     total() {
-      return Number(this.theDetail.cost) * (this.num1 + this.num2)
+      if(this.haveSelected) {
+        if((Number(this.theDetail.cost) * (this.num1 + this.num2)) - Number(this.selectedCoupon.money) <= 0){
+          return 0
+        }else{
+          return (Number(this.theDetail.cost) * (this.num1 + this.num2)) - Number(this.selectedCoupon.money)
+        }
+      }else{
+        return Number(this.theDetail.cost) * (this.num1 + this.num2)
+      }
+    },
+    isShowNoUse(){
+      return this.useCoupList.length === 0
     }
   },
   created() {
@@ -193,9 +198,17 @@ export default {
       }
     })
   },
+  activated() {
+    this.num1 = window.sessionStorage.getItem('menNum') || ''
+    this.num2 = window.sessionStorage.getItem('womenNum') || ''
+    this.selectedCoupon = JSON.parse(window.sessionStorage.getItem('selectedCoupon')) || ''
+  },
   methods: {
-    handleChange(value) {
-      // console.log(value);
+    handleChangeWomen(value) {
+      window.sessionStorage.setItem('womenNum' ,value)
+    },
+    handleChangeMen(value) {
+      window.sessionStorage.setItem('menNum' ,value)
     },
     // 是否使用优惠券
     isUseCoup() {
@@ -212,20 +225,20 @@ export default {
     },
     // 支付
     surePay() {
-      if(this.total <= 0){
+      if((this.num1 + this.num2) <= 0){
         this.$toast({
           message: '请添加报名人数！',
           duration: 2000
         })
-      }else if(this.total > this.people - this.enrolled) {
+      }else if((this.num1 + this.num2) > this.people - this.enrolled) {
         this.$toast({
           message: '人数已超过限制！',
           duration: 2000
         })
-      }else if(this.total > 0 && this.total < this.people) {
+      }else if((this.num1 + this.num2) > 0 && (this.num1 + this.num2) < this.people) {
         const that = this
         const params = {
-          couponId: '',
+          couponId: this.couponId,
           userId: window.localStorage.getItem('userId'),
           oaMoneyId: this.activityDetailId,
           // code: this.code,
@@ -238,6 +251,10 @@ export default {
           console.log(resp)
           if(resp.status == 200) {
             const configData = resp.data
+            window.sessionStorage.removeItem('womenNum')
+            window.sessionStorage.removeItem('menNum')
+            window.sessionStorage.removeItem('selectedCoupon')
+
             wx.config({
               debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
               appId: configData.appId, // 必填，公众号的唯一标识
@@ -297,7 +314,6 @@ export default {
     this.timer = null
     clearTimeout(this.timer1)
     this.timer1 = null
-    window.sessionStorage.removeItem('selectedCoupon')
   }
 }
 </script>
@@ -468,7 +484,7 @@ export default {
         padding-left: 30px;
         padding-right: 40px;
         .left{
-          width: 300px;
+          width: 250px;
           line-height: 20px;
           font-size: 0;
           float: left;
@@ -512,10 +528,26 @@ export default {
       }
       .coupon_li{
         .left{
+          width: 160px;
           .circle{
             border: 1px solid #febe14;
             span{
               background: #febe14;
+            }
+          }
+        }
+        .right{
+          width: auto;
+          p{
+            display: inline-block;
+            span{
+              b{
+                font-weight: normal;
+                color: red;
+              }
+            }
+            .useNum{
+              color: red;
             }
           }
         }

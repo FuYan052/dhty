@@ -14,7 +14,7 @@ export default {
   name: 'App',
   data() {
     return {
-      include: ['Organization','Playground','CompleteInfo','MyActivities']
+      include: ['Organization','Playground','CompleteInfo','MyActivities','ActivitySignUp']
     }
   },
   watch: {

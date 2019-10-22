@@ -239,6 +239,9 @@ export default new Router({
       path: '/activitySignUp/paySuccess',
       name: 'PaySuccess',  //活动报名支付成功
       component: PaySuccess,
+      meta: {
+        needCacheLast: false
+      }
     },
     {
       path: '/signUpList',
