@@ -13,25 +13,26 @@
       <li v-for="(item,index) in currList" :key="index" @click="clickCoup(item,index)">
         <div class="couItem">
           <!-- 优惠券左边 -->
-          <div class="left">
+          <div class="left" :class="{disableUse : act2}">
             <p class="p1"><span>￥</span>{{item.money}}</p>
             <p class="p2">无门槛优惠券</p>
           </div>
           <!-- 优惠券右边 -->
           <div class="right">
             <div class="title">
-              <div class="tip">优惠券</div>
+              <div class="tip" :class="{distipBg : act2}">优惠券</div>
               <div class="titleText">{{item.name}}</div>
             </div>
-            <p class="dateRange">{{item.startTime}}-{{item.endTime}}</p>
+            <p class="dateRange" :class="{dateRange2 : act2}">{{item.startTime}}-{{item.endTime}}</p>
+            <div class="rule" v-show="act2">不满足使用条件</div>
             <!-- 单选框 -->
-            <div class="radiuBox"><span class="el-icon-check" v-show="i === index"></span></div>
+            <div class="radiuBox" v-show="act1"><span class="el-icon-check" v-show="i === index"></span></div>
           </div>
         </div>
       </li>
     </ul>
     <div class="bottomBox" v-show="!isnoData">
-      <div class="sureBtn" @click="handleSure">确定</div>
+      <div class="sureBtn" @click="handleNotUse">不使用优惠券</div>
     </div>
   </div>
 </template>
@@ -48,7 +49,8 @@ export default {
       list2: [],  //不可用优惠券
       currList: [],  //页面渲染
       i: null,
-      selectedCoupon: ''
+      selectedCoupon: '',
+      timer: null,  //定时器
     }
   },
   created() {
@@ -90,17 +92,32 @@ export default {
       }
     },
     clickCoup(item,index) {
-      this.i = index
-      this.selectedCoupon = item
+      if(this.act1) {
+        this.i = index
+        this.selectedCoupon = item
+        window.sessionStorage.removeItem('notUserCoupList')
+        window.sessionStorage.removeItem('useCouponList')
+        window.sessionStorage.setItem('selectedCoupon', JSON.stringify(this.selectedCoupon))
+        const that = this
+        this.timer = setTimeout(() => {
+          that.$router.replace({
+            path: '/activitySignUp'
+          })
+        }, 200);
+      }
     },
-    handleSure() {
+    handleNotUse() {
       window.sessionStorage.removeItem('notUserCoupList')
       window.sessionStorage.removeItem('useCouponList')
-      window.sessionStorage.setItem('selectedCoupon', JSON.stringify(this.selectedCoupon))
+      window.sessionStorage.removeItem('selectedCoupon')
       this.$router.replace({
         path: '/activitySignUp'
       })
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer)
+    this.timer = null
   }
 }
 </script>
@@ -174,10 +191,10 @@ export default {
               margin-top: 15px;
             }
           }
-          // .alreadyUsed{  //已使用左边灰色背景
-          //   background: url('../../../assets/disableBg.png') no-repeat center;
-          //   background-size: 100% 100%;
-          // }
+          .disableUse{  //不可使用灰色背景
+            background: url('../../assets/disableBg.png') no-repeat center;
+            background-size: 100% 100%;
+          }
           .right{
             width: 66.2%;
             height: 200px;
@@ -201,6 +218,9 @@ export default {
                 float: left;
                 margin-top: 28px;
               }
+              .distipBg{
+                background: #c6c6c6;
+              }
               .alreadyUsedTip{  //已使用标题
                 background: #c6c6c6;
               }
@@ -216,6 +236,18 @@ export default {
               font-size: 21px;
               line-height: 18px;
               margin-top: 70px;
+            }
+            .dateRange2{
+              margin-top: 35px;
+            }
+            .rule{
+              width: 410px;
+              height: 54px;
+              line-height: 54px;
+              margin-top: 23px;
+              font-size: 20px;
+              color: #626262;
+              border-top: 2px dashed #c6c6c6;
             }
             .radiuBox{
               width: 30px;
