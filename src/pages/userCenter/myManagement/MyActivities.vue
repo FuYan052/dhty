@@ -2,7 +2,7 @@
   <!-- 我的活动 -->
   <div class="myActivities" v-title data-title="我的活动">
     <!-- 活动分类 -->
-    <div class="topCate1">
+    <!-- <div class="topCate1">
       <div 
         class="wrap"
         :class="{currStyle : currIndex === index}" 
@@ -10,7 +10,7 @@
         :key="index"
         @click="changeCate(item,index)"
         >{{item}}</div>
-    </div>
+    </div> -->
     <!-- 我参加的活动 -->
     <div v-show="isjion">
       <!-- 参加状态 -->
@@ -125,8 +125,8 @@ export default {
   name: 'MyActivities',
   data() {
     return {
-      isjion: true,
-      isPublish: true,
+      isjion: false,
+      isPublish: false,
       cateList1: ['我参加的','我组织的'],
       currIndex: 0,
       cateList2: ['全部','已预约','进行中','已完成','取消'],
@@ -139,6 +139,7 @@ export default {
       state2: '1', //我组织的活动传给后端的状态标识
       actList: [],
       userId: '',
+      userType: ''
     }
   },
   computed: {
@@ -147,18 +148,28 @@ export default {
   },
   created() {
     this.userId = window.localStorage.getItem('userId')
-    // 如果是从我的管理页进入此页面，则默认显示我参与的
-    this.getList1()
-  },
-  mounted() {
-    // 如果是从组织活动页进入此页面，则默认显示我组织的
-    if(this.$route.params.type) {
-      this.currIndex = 1
-      this.isjion = false
+    this.userType = window.localStorage.getItem('userType')
+    if(this.userType === '1') {  //普通用户
+      this.isjion = true
+      this.getList1()
+    }
+    if(this.userType === '2') {  //管理员
+      this.isPublish = true
       this.state2 = '1'
       this.getList2()
     }
+    // 如果是从我的管理页进入此页面，则默认显示我参与的
+    
   },
+  // mounted() {
+  //   // 如果是从组织活动页进入此页面，则默认显示我组织的
+  //   if(this.$route.params.type) {
+  //     this.currIndex = 1
+  //     this.isjion = false
+  //     this.state2 = '1'
+  //     this.getList2()
+  //   }
+  // },
   methods:{
     // 取消活动
     cancelAct(orderNo) {
@@ -213,19 +224,19 @@ export default {
       })
     },
     // 切换分类
-    changeCate(item,index) {
-      this.currIndex = index
-      if(item === '我参加的') {
-        this.isjion = true
-        this.state = '0'
-        this.getList1()
-      }
-      if(item === '我组织的') {
-        this.isjion = false
-        this.state2 = '1'
-        this.getList2()
-      }
-    },
+    // changeCate(item,index) {
+    //   this.currIndex = index
+    //   if(item === '我参加的') {
+    //     this.isjion = true
+    //     this.state = '0'
+    //     this.getList1()
+    //   }
+    //   if(item === '我组织的') {
+    //     this.isjion = false
+    //     this.state2 = '1'
+    //     this.getList2()
+    //   }
+    // },
     changeCate2(item,index) {
       this.currIndex2 = index
       if(index == 0) {
@@ -380,6 +391,7 @@ export default {
         color: #1f1b10;
         // background: #ffbc00;
         background: rgba(250,195,30,0.5);
+        border-bottom: 4px solid #ffbc00;
       }
     }
     .noActList{

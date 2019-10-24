@@ -68,7 +68,7 @@ export default {
   name: 'IntelligenceTreatyBall',
   data() {
     return {
-      dateCateList: ['今天','明天'],
+      dateCateList: ['今天','明天','后天'],
       currIndex: 0,
     }
   },
@@ -95,7 +95,7 @@ export default {
       left: 0;
       z-index: 10;
       .wrap{
-        width: 158px;
+        width: 256px;
         height: 112px;
         margin: 0 auto;
         .date{
@@ -111,6 +111,9 @@ export default {
         }
       }
       .date:nth-of-type(2){
+        margin-left: 38px;
+      }
+      .date:nth-of-type(3){
         float: right;
       }
       .currDate{

@@ -29,7 +29,7 @@
       </li>
     </ul>
     <ul class="menu2">
-      <li v-for="(item,index) in menu2List" :key="index" @click="handleMenu(index,item.routerPath)">
+      <li v-for="(item,index) in currMenuList" :key="index" @click="handleMenu(index,item.routerPath)">
         <div class="icon"><img :src="item.icon" style="width: 100%; height: 100%;" alt=""></div>
         <div class="title">{{item.title}}</div>
         <div class="right">
@@ -46,41 +46,68 @@ export default {
   name: 'ManageHome',
   data() {
     return {
-      menu2List: [
+      currMenuList: [],
+      menu1List: [  //普通用户展示菜单
         {
           icon: require("../../../assets/user_icon3.png"),
           title: '我的活动',
           routerPath: '/userCenter/myActivities'
         },
         {
-          icon: require("../../../assets/user_icon4.png"),
-          title: '创建新群',
-          routerPath: '/userCenter/groupManagement/createGroup'
-        },
-        {
           icon: require("../../../assets/user_icon5.png"),
-          title: '管理我的群',
-          routerPath: '/userCenter/createdGroupList'
-        },
-        {
-          icon: require("../../../assets/user_icon6.png"),
-          title: '我参加的群',
-          routerPath: '/userCenter/joinCroupList'
+          title: '我的数据',
+          routerPath: '/userCenter/myData'
         },
         {
           icon: require("../../../assets/user_icon6.png"),
           title: '我的优惠券',
           routerPath: '/userCenter/Coupon'
         },
-        {
-          icon: require("../../../assets/user_icon7.png"),
-          title: '马上推广',
-          routerPath: '/userCenter/popularize'
-        },
+        // {
+        //   icon: require("../../../assets/user_icon7.png"),
+        //   title: '马上推广',
+        //   routerPath: '/userCenter/popularize'
+        // },
         {
           icon: require("../../../assets/user_icon9.png"),
           title: '常见问题',
           routerPath: '/userCenter/commonProblem'
+        },
+        {
+          icon: require("../../../assets/user_icon4.png"),
+          title: '修改密码',
+          routerPath: '/home/forgetPassword'
+        },
+        {
+          icon: require("../../../assets/user_icon8.png"),
+          title: '退出登录',
+          routerPath: ''
+        },
+      ],
+      menu2List: [  //管理员展示菜单
+        {
+          icon: require("../../../assets/user_icon3.png"),
+          title: '发布活动',
+          routerPath: '/organization'
+        },{
+          icon: require("../../../assets/user_icon5.png"),
+          title: '我的活动',
+          routerPath: '/userCenter/myActivities'
+        },
+        // {
+        //   icon: require("../../../assets/user_icon7.png"),
+        //   title: '马上推广',
+        //   routerPath: '/userCenter/popularize'
+        // },
+        {
+          icon: require("../../../assets/user_icon9.png"),
+          title: '常见问题',
+          routerPath: '/userCenter/commonProblem'
+        },
+        {
+          icon: require("../../../assets/user_icon4.png"),
+          title: '修改密码',
+          routerPath: '/home/forgetPassword'
         },
         {
           icon: require("../../../assets/user_icon8.png"),
@@ -90,22 +117,21 @@ export default {
       ],
       info: '',
       _id: '',
+      userType: ''
     }
-  },
-  mounted() {
-    // console.log(window.localStorage.getItem('ty-token')) 
-    this.$nextTick(() => {
-      if(!window.localStorage.getItem('ty-token')) {
-        console.log('过期')
-        this.$router.go(0)
-      }
-    })
   },
   computed: {
     // 用户id
     ...mapState(['userId']),
   },
   created() {
+    this.userType = window.localStorage.getItem('userType')
+    if(this.userType === '1') {  //普通会员
+      this.currMenuList = this.menu1List
+    }
+    if(this.userType === '2') {  //来虎管理员
+      this.currMenuList = this.menu2List
+    }
     this._id = window.localStorage.getItem('userId')
     // if(this._id == null) {
     //   this._id = this.$route.params._userId
@@ -137,22 +163,43 @@ export default {
     },
     handleMenu(index,path) {
       // console.log(index,path)
-      if(index === 7) {
-        const isSure = confirm('确定退出登录?')
-        if(isSure) {
-          window.localStorage.removeItem('ty-token')
-          window.localStorage.removeItem('userId')
-          window.localStorage.removeItem('userPhone')
-          this.$router.replace({
-            path: '/home'
+      if(this.userType === '1') {
+        if(index === 5) {
+          const isSure = confirm('确定退出登录?')
+          if(isSure) {
+            window.localStorage.removeItem('ty-token')
+            window.localStorage.removeItem('userId')
+            window.localStorage.removeItem('userPhone')
+            this.$router.replace({
+              path: '/home'
+            })
+            window.sessionStorage.setItem('routerPath','/userCenter/manageHome')
+            window.sessionStorage.setItem('routerPathName','ManageHome')
+          }
+        }else{
+          this.$router.push({
+            path: path
           })
-          window.sessionStorage.setItem('routerPath','/userCenter/manageHome')
-          window.sessionStorage.setItem('routerPathName','ManageHome')
         }
-      }else{
-        this.$router.push({
-          path: path
-        })
+      }
+      if(this.userType === '2') {
+        if(index === 4) {
+          const isSure = confirm('确定退出登录?')
+          if(isSure) {
+            window.localStorage.removeItem('ty-token')
+            window.localStorage.removeItem('userId')
+            window.localStorage.removeItem('userPhone')
+            this.$router.replace({
+              path: '/home'
+            })
+            window.sessionStorage.setItem('routerPath','/userCenter/manageHome')
+            window.sessionStorage.setItem('routerPathName','ManageHome')
+          }
+        }else{
+          this.$router.push({
+            path: path
+          })
+        }
       }
     }
   },

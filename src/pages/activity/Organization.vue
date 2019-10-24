@@ -2,16 +2,17 @@
   <div class="organization" v-title data-title="组织活动">
     <div class="maxHeightBox" :class="{upKeyBord : isInput}">
     <ul>
-      <li @click="showPicker1">
+      <!-- <li @click="showPicker1">   -->
+      <li>
         <span class="title">运动种类</span>
         <input type="text" readonly class="inputValue" placeholder="填写种类" v-model="type.name"/>
         <span class="el-icon-arrow-right"></span>
       </li>
-      <li @click="showPicker2">
+      <!-- <li @click="showPicker2">
         <span class="title">所属群组</span>
         <input type="text" readonly class="inputValue" placeholder="填写群组" v-model="groupType.name">
         <span class="el-icon-arrow-right"></span>
-      </li>
+      </li> -->
       <li @click="showDate">
         <span class="title">日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期</span>
         <input type="text" readonly class="inputValue" v-model="sureDateValue" placeholder="填写日期"/>
@@ -23,11 +24,11 @@
         <span class="range">至</span>
         <input readonly type="text" class="timeInput time2" @click="showEndTime" v-model="endTime" placeholder="几点">
       </li>
-      <li @click="showDeadline ">
+      <!-- <li @click="showDeadline ">
         <span class="title">报名截止</span>
         <input type="text" readonly class="inputValue" v-model="deadlineValue" placeholder="填写时间"/>
         <span class="el-icon-arrow-right"></span>
-      </li>
+      </li> -->
       <li @click="showMap">
         <span class="title">活动地点</span>
         <input type="text" class="inputValue inputPlaceValue" readonly v-model="placeName" placeholder="填写位置"/>
@@ -41,13 +42,21 @@
         </div>
       </li>
       <li>
+        <span class="title">候补人数</span>
+        <input type="text" class="inputValue inputNumber" @blur="blur" v-model="HBpeopleNum" placeholder="填写人数"/>
+        <div class="numberInputBox">
+          <span class="btn desc" @click="HBdescBtn"><i class="el-icon-minus"></i></span><input type="number" v-model="HBpeopleNum" name="" id=""/><span class="btn add" @click="HBaddBtn"><i class="el-icon-plus"></i></span>
+        </div>
+      </li>
+      <li>
         <!-- <span class="title">费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用</span> -->
         <span class="title">费用&nbsp;/&nbsp;人</span>
         <input type="text" class="inputValue" @blur="blur" v-model="cost" placeholder="填写费用，如:60"/>
       </li>
-      <li>
-        <span class="title">联系方式</span>
-        <input type="text" class="inputValue" @blur="blur" v-model="phone" placeholder="填写电话"/>
+      <li @click="selectService">
+        <span class="title">选择客服</span>
+        <input type="text" readonly class="inputValue" placeholder="选择客服" v-model="serviceType.name"/>
+        <span class="el-icon-arrow-right"></span>
       </li>
     </ul>
     <div class="inputTitleBox">标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题</div>
@@ -57,9 +66,9 @@
         @blur="blur"
         v-model="title"
         placeholder="时间+地点"
-        />
+      />
     </div>
-    <div class="inputTitleBox noteTitle">参与须知</div>
+    <!-- <div class="inputTitleBox noteTitle">参与须知</div>
     <div class="textAreaBox">
       <textarea
         class="textareaTitle"
@@ -67,7 +76,7 @@
         v-model="notes"
         placeholder="请填写活动须知"
         />
-    </div>
+    </div> -->
     </div>
     <div class="bottomWrap" v-show="!isInput">
       <div class="sureBtn" @click="submit">
@@ -75,7 +84,7 @@
       </div>
       <div class="bottom">
         <span class="box" :class="{activeBox:isCkecked}" @click="isWeekActivie"><b class="el-icon-check" v-show="isCkecked"></b></span>
-        <p class="bottomText">作为群组内周循环活动发布</p>
+        <p class="bottomText">作为周循环活动发布</p>
       </div>
     </div>
     <!-- 选择弹框 -->
@@ -126,20 +135,6 @@
         type="time"
         @confirm="handleConfirmEnd">
       </mt-datetime-picker>
-      <!-- 报名截止 -->
-      <mt-datetime-picker
-        v-show="deadlinePicker"
-        type="datetime"
-        :visibleItemCount='5'
-        :startDate="startDate"
-        year-format="{value} 年"
-        month-format="{value} 月"
-        date-format="{value} 日"
-        hour-format="{value} 时"
-        minute-format="{value} 分"
-        v-model="defaultDeadline"
-        @confirm="handleConfirmDeadline">
-      </mt-datetime-picker>
     </mt-popup>
   </div>
 </template>
@@ -155,17 +150,16 @@ export default {
       isShowDatePicker: false,
       startTimePicker: false,
       endTimePicker: false,
-      deadlinePicker: false,
       textarea_1: '',
       textarea_2: '',
       currSlots: [], //渲染
       typeValues: [],  //运动类型slots
       type: {
-        name: '',
-        skey: ''
+        name: '羽毛球',
+        skey: 'sportsKinds_01'
       },  //运动类型选择的值
-      groupSlots: [],  //所属群组slots
-      groupType: {
+      serviceList: [],  //客服slots
+      serviceType: {
         id: '',
         name: ''
       },
@@ -179,6 +173,7 @@ export default {
       currChange: function(){},
       currSure: function() {},
       peopleNum: '',  //人数
+      HBpeopleNum: '',  //候补人数
       deadlineValue: '',  //报名截止时间
       defaultDeadline: '',  //默认显示的报名截止时间
       placeName: '',   //活动地点名称
@@ -212,18 +207,18 @@ export default {
       ]
       return slots1
     },
-    slotsGroup() {
+    serviceSlots() {
       let slots2 = [
         {
           flex: 1,
-          values: this.groupSlots,
+          values: this.serviceList,
           className: 'slot1',
           textAlign: 'center',
-          defaultIndex: 0
+          defaultIndex: 0,
         }
       ]
       return slots2
-    },
+    }
   },
   watch: {
     $route(to, from) {
@@ -231,7 +226,7 @@ export default {
         console.log(this.$route)
         this.placeName = this.$route.params.placeName || ''
         this.placeId = this.$route.params.placeId || ''
-        this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+        // this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       }
     },
     showHeight(newVal , oldVal) {
@@ -258,13 +253,21 @@ export default {
         this.typeValues = resp.data
       }
     })
+    // 获取客服
+    this.serviceList = [{
+      id: 1,
+      name: '张三'
+    },{
+      id: 2,
+      name: '李四'
+    }]
     // 获取所属群组
-    this.$http.getGroupList(this.userId).then(resp => {
-      console.log(resp)
-      if(resp.status == 200) {
-        this.groupSlots = resp.data
-      }
-    })
+    // this.$http.getGroupList(this.userId).then(resp => {
+    //   console.log(resp)
+    //   if(resp.status == 200) {
+    //     this.groupSlots = resp.data
+    //   }
+    // })
     //当天日期
     this.startDate = new Date()  
   },
@@ -318,7 +321,6 @@ export default {
     },
     sureType() {
       this.popupVisible = !this.popupVisible
-      this.isShowPicker = false
       this.isShowPicker = false 
       if(this.type.name == '') {
         this.type.name = this.typeValues[0].name
@@ -327,34 +329,30 @@ export default {
       window.sessionStorage.setItem('typeValue',this.type.name)
       window.sessionStorage.setItem('typeId',this.type.skey)
     },
-    // // 所属群组
-    showPicker2() {
+    // 选择客服
+    selectService() {
       this.isShowPicker = true
-      this.isShowDatePicker = false
       this.popupVisible = true
+      this.isShowDatePicker = false
       this.endTimePicker = false
       this.startTimePicker = false
-      this.deadlinePicker = false
-      this.currSlots = this.slotsGroup
-      this.currChange = this.onChangeGroup
-      this.currSure = this.sureGroup
+      this.currSlots = this.serviceSlots
+      this.currChange = this.changeService
+      this.currSure = this.sureService
     },
-    onChangeGroup(picker, values) {
-      this.groupType = values[0]
-      console.log(this.groupType)
+    changeService(picker, values) {
+      this.serviceType.name = values[0].name
+      this.serviceType.id = values[0].id
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0]);
       }
     },
-    sureGroup() {
+    sureService() {
       this.popupVisible = !this.popupVisible
-      this.isShowPicker = false
-      if(this.groupType.name == '') {
-        this.groupType.name = this.groupSlots[0].name
-        this.groupType.id = this.groupSlots[0].id
-      }
-      if(this.groupType.id == '1') {  //临时组队
-        this.isCkecked = false
+      this.isShowPicker = false 
+      if(this.serviceType.name == '') {
+        this.serviceType.name = this.serviceList[0].name
+        this.serviceType.id = this.serviceList[0].id
       }
     },
     // 日期选择
@@ -372,7 +370,7 @@ export default {
       this.sureDateValue = this.formatDate(v)
       this.popupVisible = !this.popupVisible
       this.isShowDatePicker = false
-      this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+      // this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       this.openTouch();//打开默认事件
     },
     // 格式化选择的日期
@@ -405,7 +403,7 @@ export default {
       this.popupVisible = !this.popupVisible
       this.startTime = v
       this.startTimePicker = false
-      this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+      // this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       // 开始时间作为报名截止时间的默认值
       console.log(this.sureDateValue + ' ' + this.startTime)
       this.defaultDeadline = new Date(this.sureDateValue + ' ' + this.startTime)
@@ -438,56 +436,6 @@ export default {
         this.endTime = v
       }
     },
-    // 报名截止
-    formatDate2(Time) {
-      var date = Time;
-      var y = date.getFullYear();
-      var m = date.getMonth() + 1;
-      m = m < 10 ? ('0' + m) : m;
-      var d = date.getDate();
-      d = d < 10 ? ('0' + d) : d;
-      var h = date.getHours();
-      h = h < 10 ? ('0' + h) : h;
-      var minute = date.getMinutes();
-      minute = minute < 10 ? ('0' + minute) : minute;
-      var second = date.getSeconds();
-      second = second < 10 ? ('0' + second) : second;
-      return y + '-' + m + '-' + d + " " +  h + ":" + minute;
-    },
-    showDeadline() {
-      this.popupVisible = true
-      this.isShowPicker = false
-      this.isShowDatePicker = false
-      this.endTimePicker = false
-      this.startTimePicker = false
-      this.deadlinePicker = true
-      this.closeTouch();//关闭默认事件
-    },
-    handleConfirmDeadline(v) {
-      this.popupVisible = !this.popupVisible
-      this.isShowPicker = false
-      this.isShowDatePicker = false
-      this.endTimePicker = false
-      this.startTimePicker = false
-      this.deadlinePicker = false
-      this.openTouch();//打开默认事件 
-      console.log(v)
-      this.deadlineValue = this.formatDate2(v)
-      // 判断选的时间是否大于活动结束时间
-      const maxDateTime = new Date(this.sureDateValue + ' ' + this.endTime).getTime()
-      const last = new Date(this.deadlineValue).getTime()
-      if(last > maxDateTime) {
-        this.$toast({
-          message: '报名截止时间不得大于活动结束时间！',
-          duration: 3000
-        });
-        console.log(this.endTime)
-        this.deadlineValue = this.sureDateValue + ' ' + this.endTime
-        
-      }
-      console.log(this.deadlineValue)
-
-    },
     // 活动地点
     showMap() {
       if(this.type.skey == '') {
@@ -516,32 +464,28 @@ export default {
     addBtn() {
       this.peopleNum++
     },
+    // 候补人数减按钮
+    HBdescBtn() {
+      if(this.HBpeopleNum >= 0) {
+        this.HBpeopleNum--
+        if(this.HBpeopleNum <= 0) {
+          this.HBpeopleNum = 0
+        }
+      }else{
+        this.HBpeopleNum = 0
+      }
+    },
+    // 候补人数加按钮
+    HBaddBtn() {
+      this.HBpeopleNum++
+    },
     // 是否为周活动
     isWeekActivie() {
-      if(this.groupType.id == '1') {  //临时组队
-        this.isCkecked = false
-        this.$toast({
-          message: '临时组队不可作为周活动发布！',
-          duration: 3000
-        });
-      } else{
-        this.isCkecked = !this.isCkecked
-      }
+      this.isCkecked = !this.isCkecked
     },
     // 确认发布按钮
     submit() {
-      // 判断金额是否是整形
-      if(this.type.skey == '') {
-        this.$toast({
-          message: '请选择运动种类！',
-          duration: 2000
-        });
-      }else if(this.groupType.id == '') {
-        this.$toast({
-          message: '请选择所属群组！',
-          duration: 2000
-        });
-      }else if(this.sureDateValue == '') {
+      if(this.sureDateValue == '') {
         this.$toast({
           message: '请选择日期！',
           duration: 2000
@@ -554,11 +498,6 @@ export default {
       }else if(this.endTime == '') {
         this.$toast({
           message: '请选择结束时间！',
-          duration: 2000
-        });
-      }else if(this.deadlineValue == '') {
-        this.$toast({
-          message: '请选择报名截止时间！',
           duration: 2000
         });
       }else if(this.placeId == '') {
@@ -581,37 +520,23 @@ export default {
           message: '请填写费用！',
           duration: 2000
         });
-      }else if((!(/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.phone)))) {
-        this.$toast({
-          message: '请填写有效的联系方式！',
-          duration: 2000
-        });
-      // }else if(this.phone == '') {
-      //   this.$toast({
-      //     message: '请填写联系方式！',
-      //     duration: 2000
-      //   });
-      }else if(this.notes == '') {
-        this.$toast({
-          message: '请填写参与须知！',
-          duration: 2000
-        });
       }else{
         const params = {
           id: '',
           userId: window.localStorage.getItem('userId'),
           type: this.type.skey,
-          groupId: this.groupType.id,
+          // groupId: this.groupType.id,
           title: this.title,
           time: this.sureDateValue,
           timeStart: this.startTime,
           timeEnd: this.endTime,
           venueId: this.placeId,
           people: this.peopleNum,
-          phone: this.phone,
+          HBpeople: this.HBpeopleNum,
+          phone: this.serviceType.id,
           cost: this.cost,
-          content: this.notes,
-          endTime: this.deadlineValue,
+          // content: this.notes,
+          // endTime: this.deadlineValue,
           flag: this.isCkecked
         }
         console.log(params)
@@ -866,7 +791,7 @@ export default {
         border: 1px solid #f9c732;
         border-radius: 50%;
         position: absolute;
-        left: 210px;
+        left: 240px;
         top: 16px;
         b{
           font-size: 22px;

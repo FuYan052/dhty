@@ -2,16 +2,17 @@
   <div class="editActiviesInfo" v-title data-title="修改活动">
     <div class="maxHeightBox" :class="{upKeyBord : isInput}">
     <ul>
-      <li @click="showPicker1">
+      <!-- <li @click="showPicker1">   -->
+      <li>
         <span class="title">运动种类</span>
         <input type="text" readonly class="inputValue" placeholder="填写种类" v-model="type.name"/>
         <span class="el-icon-arrow-right"></span>
       </li>
-      <li @click="showPicker2">
+      <!-- <li @click="showPicker2">
         <span class="title">所属群组</span>
         <input type="text" readonly class="inputValue" placeholder="填写群组" v-model="groupType.name">
         <span class="el-icon-arrow-right"></span>
-      </li>
+      </li> -->
       <li @click="showDate">
         <span class="title">日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;期</span>
         <input type="text" readonly class="inputValue" v-model="sureDateValue" placeholder="填写日期"/>
@@ -23,11 +24,11 @@
         <span class="range">至</span>
         <input readonly type="text" class="timeInput time2" @click="showEndTime" v-model="endTime" placeholder="几点">
       </li>
-      <li @click="showDeadline ">
+      <!-- <li @click="showDeadline ">
         <span class="title">报名截止</span>
         <input type="text" readonly class="inputValue" v-model="deadlineValue" placeholder="填写时间"/>
         <span class="el-icon-arrow-right"></span>
-      </li>
+      </li> -->
       <li @click="showMap">
         <span class="title">活动地点</span>
         <input type="text" class="inputValue inputPlaceValue" readonly v-model="placeName" placeholder="填写位置"/>
@@ -35,37 +36,47 @@
       </li>
       <li>
         <span class="title">人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数</span>
-        <input type="text" class="inputValue inputNumber" v-model="peopleNum" placeholder="填写人数"/>
+        <input type="text" class="inputValue inputNumber" @blur="blur" v-model="peopleNum" placeholder="填写人数"/>
         <div class="numberInputBox">
           <span class="btn desc" @click="descBtn"><i class="el-icon-minus"></i></span><input type="number" v-model="peopleNum" name="" id=""/><span class="btn add" @click="addBtn"><i class="el-icon-plus"></i></span>
         </div>
       </li>
       <li>
-        <!-- <span class="title">费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用</span> -->
-        <span class="title">费用&nbsp;/&nbsp;人</span>
-        <input type="text" class="inputValue" v-model="cost" placeholder="填写费用，如:60"/>
+        <span class="title">候补人数</span>
+        <input type="text" class="inputValue inputNumber" @blur="blur" v-model="HBpeopleNum" placeholder="填写人数"/>
+        <div class="numberInputBox">
+          <span class="btn desc" @click="HBdescBtn"><i class="el-icon-minus"></i></span><input type="number" v-model="HBpeopleNum" name="" id=""/><span class="btn add" @click="HBaddBtn"><i class="el-icon-plus"></i></span>
+        </div>
       </li>
       <li>
-        <span class="title">联系方式</span>
-        <input type="text" class="inputValue" v-model="phone" placeholder="填写电话"/>
+        <!-- <span class="title">费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用</span> -->
+        <span class="title">费用&nbsp;/&nbsp;人</span>
+        <input type="text" class="inputValue" @blur="blur" v-model="cost" placeholder="填写费用，如:60"/>
+      </li>
+      <li @click="selectService">
+        <span class="title">选择客服</span>
+        <input type="text" readonly class="inputValue" placeholder="选择客服" v-model="serviceType.name"/>
+        <span class="el-icon-arrow-right"></span>
       </li>
     </ul>
     <div class="inputTitleBox">标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题</div>
     <div class="textAreaBox">
       <textarea
         class="textareaTitle"
+        @blur="blur"
         v-model="title"
         placeholder="时间+地点"
-        />
+      />
     </div>
-    <div class="inputTitleBox noteTitle">参与须知</div>
+    <!-- <div class="inputTitleBox noteTitle">参与须知</div>
     <div class="textAreaBox">
       <textarea
         class="textareaTitle"
+        @blur="blur"
         v-model="notes"
         placeholder="请填写活动须知"
         />
-    </div>
+    </div> -->
     </div>
     <div class="bottomWrap" v-show="!isInput">
       <div class="sureBtn" @click="submit">
@@ -73,10 +84,9 @@
       </div>
       <div class="bottom">
         <span class="box" :class="{activeBox:isCkecked}" @click="isWeekActivie"><b class="el-icon-check" v-show="isCkecked"></b></span>
-        <p class="bottomText">作为群组内周循环活动发布</p>
+        <p class="bottomText">作为周循环活动发布</p>
       </div>
     </div>
-    
     <!-- 选择弹框 -->
     <mt-popup
       v-model="popupVisible"
@@ -109,6 +119,7 @@
         date-format="{value} 日"
         @confirm="handleConfirmDate">
       </mt-datetime-picker>
+      <!-- 选择开始时间 -->
       <mt-datetime-picker
         v-show="startTimePicker"
         :visibleItemCount='5'
@@ -123,19 +134,6 @@
         ref="picker"
         type="time"
         @confirm="handleConfirmEnd">
-      </mt-datetime-picker>
-      <!-- 报名截止 -->
-      <mt-datetime-picker
-        v-show="deadlinePicker"
-        type="datetime"
-        :visibleItemCount='5'
-        :startDate="startDate"
-        year-format="{value} 年"
-        month-format="{value} 月"
-        date-format="{value} 日"
-        hour-format="{value} 时"
-        minute-format="{value} 分"
-        @confirm="handleConfirmDeadline">
       </mt-datetime-picker>
     </mt-popup>
   </div>
@@ -153,18 +151,16 @@ export default {
       isShowDatePicker: false,
       startTimePicker: false,
       endTimePicker: false,
-      deadlinePicker: false,
-      isInput: false,  //当手机输入键盘弹起时不显示提交按钮
       textarea_1: '',
       textarea_2: '',
       currSlots: [], //渲染
       typeValues: [],  //运动类型slots
       type: {
-        name: '',
-        skey: ''
+        name: '羽毛球',
+        skey: 'sportsKinds_01'
       },  //运动类型选择的值
-      groupSlots: [],  //所属群组slots
-      groupType: {
+      serviceList: [],  //客服slots
+      serviceType: {
         id: '',
         name: ''
       },
@@ -178,7 +174,9 @@ export default {
       currChange: function(){},
       currSure: function() {},
       peopleNum: '',  //人数
+      HBpeopleNum: '',  //候补人数
       deadlineValue: '',  //报名截止时间
+      defaultDeadline: '',  //默认显示的报名截止时间
       placeName: '',   //活动地点名称
       placeId: '',  //活动地点id
       cost: null,  //费用
@@ -186,6 +184,11 @@ export default {
       title: '',  //标题
       notes: '',   //参与须知
       isCkecked: false,   //是否为周活动
+      timers: null,  //定时器
+      isInput: false,  //当手机输入键盘弹起时不显示提交按钮
+      showHeight: document.documentElement.clientHeight, // 实时屏幕高度
+      /*---------监听函数--------------*/
+      handler:function(e){e.preventDefault();}
     }
   },
   computed: {
@@ -204,18 +207,18 @@ export default {
       ]
       return slots1
     },
-    slotsGroup() {
+    serviceSlots() {
       let slots2 = [
         {
           flex: 1,
-          values: this.groupSlots,
+          values: this.serviceList,
           className: 'slot1',
           textAlign: 'center',
-          defaultIndex: 0
+          defaultIndex: 0,
         }
       ]
       return slots2
-    },
+    }
   },
   watch: {
     $route(to, from) {
@@ -223,16 +226,12 @@ export default {
       if(from.path == '/mapSelection') {
         console.log(this.$route.params)
         if(this.$route.params.placeId) {
-          console.log("修改地点")
+          // console.log("修改地点")
           this.placeName = this.$route.params.placeName
           this.placeId = this.$route.params.placeId
         }
-        console.log(this.placeName)
-        this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
-      }
-      if(from.path == '/userCenter/myActivities') {
-        // this.$router.go(0)
-        console.log('刷新')
+        // console.log(this.placeName)
+        // this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       }
     },
   },
@@ -246,17 +245,15 @@ export default {
         this.id = resp.data.id
         this.type.skey = resp.data.typeId
         this.type.name = resp.data.type
-        this.groupType.name = resp.data.groupName
-        this.groupType.id = resp.data.groupId
+        // this.serviceType.name = resp.data.groupName
+        // this.serviceType.id = resp.data.groupId
         this.title = resp.data.title
         this.sureDateValue = resp.data.time
         this.startTime = resp.data.timeStart
         this.endTime = resp.data.timeEnd
         this.peopleNum = resp.data.people
-        this.phone = resp.data.phone
-        this.deadlineValue = resp.data.endTime
+        // this.serviceType = resp.data.phone
         this.cost = resp.data.cost
-        this.notes = resp.data.content
         this.placeName = resp.data.venueName
         this.placeId = resp.data.venueId
         this.isCkecked = resp.data.flag === 'true'  //字符串转Boolean
@@ -271,31 +268,53 @@ export default {
         this.typeValues = resp.data
       }
     })
+    // 获取客服
+    this.serviceList = [{
+      id: 1,
+      name: '张三'
+    },{
+      id: 2,
+      name: '李四'
+    }]
     // 获取所属群组
-    this.$http.getGroupList(this.userId).then(resp => {
-      console.log(resp)
-      if(resp.status == 200) {
-        this.groupSlots = resp.data
-      }
-    })
+    // this.$http.getGroupList(this.userId).then(resp => {
+    //   console.log(resp)
+    //   if(resp.status == 200) {
+    //     this.groupSlots = resp.data
+    //   }
+    // })
     //当天日期
     this.startDate = new Date()  
-    // 键盘弹起事件
-    const that = this
-    var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-    window.onresize = function() {
-      var nowClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-      if (clientHeight - nowClientHeight > 60 ) {//因为ios有自带的底部高度
-        //键盘弹出的事件处理
-        that.isInput = true
-      }
-      else {
-        //键盘收起的事件处理
-        that.isInput = false
-      } 
-    };
+  },
+  mounted () {
+    const vm = this
+    // window.resize监听页面高度的变化
+    window.onresize = () => {
+      return (() => {
+        vm.showHeight = document.body.clientHeight
+      })()
+    }
   },
   methods: {
+    // 失去焦点事件
+    blur() {
+      setTimeout(() => {
+        const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop || 0
+        // window.scrollTo(0,0)
+        window.scrollTo(0, Math.max(scrollHeight - 1, 0))
+      }, 100)
+    },
+    /*解决iphone页面层级相互影响滑动的问题*/
+    closeTouch:function(){
+      document.getElementsByTagName("body")[0].addEventListener('touchmove',
+        this.handler,{passive:false});//阻止默认事件
+      console.log("closeTouch haved happened.");
+    },
+    openTouch:function(){
+      document.getElementsByTagName("body")[0].removeEventListener('touchmove',
+        this.handler,{passive:false});//打开默认事件
+      console.log("openTouch haved happened.");
+    },
     // 运动类型
     showPicker1() {
       this.isShowPicker = true
@@ -323,31 +342,30 @@ export default {
       window.sessionStorage.setItem('typeValue',this.type.name)
       window.sessionStorage.setItem('typeId',this.type.skey)
     },
-    // // 所属群组
-    showPicker2() {
+    // 选择客服
+    selectService() {
       this.isShowPicker = true
-      this.isShowDatePicker = false
       this.popupVisible = true
-      this.currSlots = this.slotsGroup
-      this.currChange = this.onChangeGroup
-      this.currSure = this.sureGroup
+      this.isShowDatePicker = false
+      this.endTimePicker = false
+      this.startTimePicker = false
+      this.currSlots = this.serviceSlots
+      this.currChange = this.changeService
+      this.currSure = this.sureService
     },
-    onChangeGroup(picker, values) {
-      this.groupType = values[0]
-      console.log(this.groupType)
+    changeService(picker, values) {
+      this.serviceType.name = values[0].name
+      this.serviceType.id = values[0].id
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0]);
       }
     },
-    sureGroup() {
+    sureService() {
       this.popupVisible = !this.popupVisible
-      this.isShowPicker = false
-      if(this.groupType.name == '') {
-        this.groupType.name = this.groupSlots[0].name
-        this.groupType.id = this.groupSlots[0].id
-      }
-      if(this.groupType.id == '1') {  //临时组队
-        this.isCkecked = false
+      this.isShowPicker = false 
+      if(this.serviceType.name == '') {
+        this.serviceType.name = this.serviceList[0].name
+        this.serviceType.id = this.serviceList[0].id
       }
     },
     // 日期选择
@@ -427,53 +445,6 @@ export default {
         this.endTime = v
       }
     },
-    // 报名截止
-    formatDate2(Time) {
-      var date = Time;
-      var y = date.getFullYear();
-      var m = date.getMonth() + 1;
-      m = m < 10 ? ('0' + m) : m;
-      var d = date.getDate();
-      d = d < 10 ? ('0' + d) : d;
-      var h = date.getHours();
-      h = h < 10 ? ('0' + h) : h;
-      var minute = date.getMinutes();
-      minute = minute < 10 ? ('0' + minute) : minute;
-      var second = date.getSeconds();
-      second = second < 10 ? ('0' + second) : second;
-      return y + '-' + m + '-' + d + " " +  h + ":" + minute;
-    },
-    showDeadline() {
-      this.popupVisible = true
-      this.isShowPicker = false
-      this.isShowDatePicker = false
-      this.endTimePicker = false
-      this.startTimePicker = false
-      this.deadlinePicker = true
-    },
-    handleConfirmDeadline(v) {
-      this.popupVisible = !this.popupVisible
-      this.isShowPicker = false
-      this.isShowDatePicker = false
-      this.endTimePicker = false
-      this.startTimePicker = false
-      this.deadlinePicker = false
-      console.log(v)
-      this.deadlineValue = this.formatDate2(v)
-      // 判断选的时间是否大于活动结束时间
-      const maxDateTime = new Date(this.sureDateValue + ' ' + this.endTime).getTime()
-      const last = new Date(this.deadlineValue).getTime()
-      if(last > maxDateTime) {
-        this.$toast({
-          message: '报名截止时间不得大于活动结束时间！',
-          duration: 3000
-        });
-        console.log(this.endTime)
-        this.deadlineValue = this.sureDateValue + ' ' + this.endTime
-        
-      }
-      console.log(this.deadlineValue)
-    },
     // 活动地点
     showMap() {
       this.$router.push({
@@ -495,24 +466,60 @@ export default {
     addBtn() {
       this.peopleNum++
     },
+    // 候补人数减按钮
+    HBdescBtn() {
+      if(this.HBpeopleNum >= 0) {
+        this.HBpeopleNum--
+        if(this.HBpeopleNum <= 0) {
+          this.HBpeopleNum = 0
+        }
+      }else{
+        this.HBpeopleNum = 0
+      }
+    },
+    // 候补人数加按钮
+    HBaddBtn() {
+      this.HBpeopleNum++
+    },
     // 是否为周活动
     isWeekActivie() {
-      if(this.groupType.id == '1') {  //临时组队
-        this.isCkecked = false
-        this.$toast({
-          message: '临时组队不可作为周活动发布！',
-          duration: 3000
-        });
-      } else{
-        this.isCkecked = !this.isCkecked
-      }
+      this.isCkecked = !this.isCkecked
     },
     // 确认发布按钮
     submit() {
-      // 判断金额是否是整形
-      if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
+      if(this.sureDateValue == '') {
+        this.$toast({
+          message: '请选择日期！',
+          duration: 2000
+        });
+      }else if(this.startTime == '') {
+        this.$toast({
+          message: '请选择开始时间！',
+          duration: 2000
+        });
+      }else if(this.endTime == '') {
+        this.$toast({
+          message: '请选择结束时间！',
+          duration: 2000
+        });
+      }else if(this.placeId == '') {
+        this.$toast({
+          message: '请选择活动地点！',
+          duration: 2000
+        });
+      }else if(this.peopleNum == '') {
+        this.$toast({
+          message: '请填写活动人数！',
+          duration: 2000
+        });
+      }else if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
         this.$toast({
           message: '费用请填写整数！',
+          duration: 2000
+        });
+      }else if(this.cost == '') {
+        this.$toast({
+          message: '请填写费用！',
           duration: 2000
         });
       }else{
@@ -520,41 +527,39 @@ export default {
           id: this.id,
           userId: window.localStorage.getItem('userId'),
           type: this.type.skey,
-          groupId: this.groupType.id,
           title: this.title,
           time: this.sureDateValue,
           timeStart: this.startTime,
           timeEnd: this.endTime,
           venueId: this.placeId,
           people: this.peopleNum,
-          phone: this.phone,
+          HBpeople: this.HBpeopleNum,
+          // phone: this.serviceType.id,
           cost: this.cost,
-          content: this.notes,
-          endTime: this.deadlineValue,
           flag: this.isCkecked
         }
         console.log(params)
         // 提交后台
-        this.$http.organizingActivities(params).then(resp => {
-          console.log(resp)
-          if(resp.status == 200) {
-            this.$toast({
-              message: '提交成功！',
-              duration: 2000
-            });
-            this.$router.replace({
-              path: '/userCenter/myActivities'
-            })
-            // 清除sessionStorage里的字段
-            window.sessionStorage.removeItem("typeId")
-            window.sessionStorage.removeItem("typeValue")
-          }else{
-            this.$toast({
-              message: '发布失败！',
-              duration: 2000
-            });
-          }
-        })
+        // this.$http.organizingActivities(params).then(resp => {
+        //   console.log(resp)
+        //   if(resp.status == 200) {
+        //     this.$toast({
+        //       message: '提交成功！',
+        //       duration: 2000
+        //     });
+        //     this.$router.replace({
+        //       path: '/userCenter/myActivities'
+        //     })
+        //     // 清除sessionStorage里的字段
+        //     window.sessionStorage.removeItem("typeId")
+        //     window.sessionStorage.removeItem("typeValue")
+        //   }else{
+        //     this.$toast({
+        //       message: '发布失败！',
+        //       duration: 2000
+        //     });
+        //   }
+        // })
       }
     },
   },
@@ -771,7 +776,7 @@ export default {
         border: 1px solid #f9c732;
         border-radius: 50%;
         position: absolute;
-        left: 210px;
+        left: 240px;
         top: 16px;
         b{
           font-size: 22px;

@@ -1,6 +1,6 @@
 <template>
   <!-- 忘记密码 -->
-  <div class="forgetPassword" v-title data-title="忘记密码">
+  <div class="forgetPassword" v-title data-title="重置密码">
     <div class="resetPassword">
         <ul>
           <li>
