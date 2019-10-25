@@ -254,20 +254,20 @@ export default {
       }
     })
     // 获取客服
-    this.serviceList = [{
-      id: 1,
-      name: '张三'
-    },{
-      id: 2,
-      name: '李四'
-    }]
-    // 获取所属群组
-    // this.$http.getGroupList(this.userId).then(resp => {
-    //   console.log(resp)
-    //   if(resp.status == 200) {
-    //     this.groupSlots = resp.data
-    //   }
-    // })
+    // this.serviceList = [{
+    //   id: 1,
+    //   name: '张三'
+    // },{
+    //   id: 2,
+    //   name: '李四'
+    // }]
+    // 获取客服人员
+    this.$http.customerService().then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.serviceList = resp.data
+      }
+    })
     //当天日期
     this.startDate = new Date()  
   },
@@ -293,12 +293,12 @@ export default {
     closeTouch:function(){
       document.getElementsByTagName("body")[0].addEventListener('touchmove',
         this.handler,{passive:false});//阻止默认事件
-      console.log("closeTouch haved happened.");
+      // console.log("closeTouch haved happened.");
     },
     openTouch:function(){
       document.getElementsByTagName("body")[0].removeEventListener('touchmove',
         this.handler,{passive:false});//打开默认事件
-      console.log("openTouch haved happened.");
+      // console.log("openTouch haved happened.");
     },
     // 运动类型
     showPicker1() {
@@ -438,6 +438,7 @@ export default {
     },
     // 活动地点
     showMap() {
+      window.sessionStorage.setItem('typeId',this.type.skey)
       if(this.type.skey == '') {
         this.$toast({
           message: '请先选择运动类型！',
@@ -532,8 +533,8 @@ export default {
           timeEnd: this.endTime,
           venueId: this.placeId,
           people: this.peopleNum,
-          HBpeople: this.HBpeopleNum,
-          phone: this.serviceType.id,
+          alternatePeople: this.HBpeopleNum,
+          serviceId: this.serviceType.id,
           cost: this.cost,
           // content: this.notes,
           // endTime: this.deadlineValue,

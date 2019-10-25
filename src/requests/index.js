@@ -1,11 +1,10 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import router from '../router'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
-  // baseURL: 'http://192.168.0.116:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://192.168.0.116:9000/',
+  // baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://qknip3.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
@@ -13,8 +12,8 @@ const ajax = axios.create({
 })
 
 const ajax2 = axios.create({
-  // baseURL: 'http://192.168.0.116:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://192.168.0.116:9000/',
+  // baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://qknip3.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
@@ -22,8 +21,8 @@ const ajax2 = axios.create({
   },
 })
 const ajax4 = axios.create({
-  // baseURL: 'http://192.168.0.116:9000/',
-  baseURL: 'https://laihu.baogongxia.com/',
+  baseURL: 'http://192.168.0.116:9000/',
+  // baseURL: 'https://laihu.baogongxia.com/',
   // baseURL: 'http://qknip3.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
@@ -292,6 +291,10 @@ export const getGroupList = (params) => {
 // 创建组织活动 
 export const organizingActivities = (params) => {
   return ajax2.post(`/v1/rest/login/organizingActivities`,params)
+}
+// 组织活动可选择的客服人员
+export const customerService = () => {
+  return ajax.get(`/v1/rest/login/customerService`)
 }
 // 修改活动
 export const findOrganizingActivities = (params) => {

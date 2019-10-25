@@ -126,10 +126,10 @@ export default {
   },
   created() {
     this.userType = window.localStorage.getItem('userType')
-    if(this.userType === '1') {  //普通会员
+    if(this.userType == '100') {  //普通会员,后端约定
       this.currMenuList = this.menu1List
     }
-    if(this.userType === '2') {  //来虎管理员
+    if(this.userType == '200') {  //来虎管理员,后端约定
       this.currMenuList = this.menu2List
     }
     this._id = window.localStorage.getItem('userId')
@@ -163,7 +163,7 @@ export default {
     },
     handleMenu(index,path) {
       // console.log(index,path)
-      if(this.userType === '1') {
+      if(this.userType == '100') {
         if(index === 5) {
           const isSure = confirm('确定退出登录?')
           if(isSure) {
@@ -182,7 +182,7 @@ export default {
           })
         }
       }
-      if(this.userType === '2') {
+      if(this.userType === '200') {
         if(index === 4) {
           const isSure = confirm('确定退出登录?')
           if(isSure) {

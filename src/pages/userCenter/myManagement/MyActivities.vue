@@ -41,10 +41,10 @@
           </div>
           <div class="right">
             <p class="p1" @click="toDetail(item.id)">{{item.title}}</p>
-            <div class="text text1" @click="toDetail(item.id)">
+            <!-- <div class="text text1" @click="toDetail(item.id)">
               <span class="el-icon-house"></span>{{item.groupName}}
-            </div>
-            <div class="text text2" @click="toDetail(item.id)">
+            </div> -->
+            <div class="text text1" @click="toDetail(item.id)">
               <span class="el-icon-location-information"></span>{{item.venueName}}
             </div>
             <div class="text text2" @click="toDetail(item.id)">
@@ -52,8 +52,11 @@
             </div>
             <div class="text text3" @click="toDetail(item.id)">
               <span class="sp1 el-icon-time"></span>{{item.timeStart}}~{{item.timeEnd}}
+              <!-- <span class="sp2 el-icon-coin"></span>{{item.cost}}元 -->
+            </div>
+            <div class="text text4" @click="toDetail(item.id)">
+              <!-- <span class="sp1 el-icon-time"></span>{{item.timeStart}}~{{item.timeEnd}} -->
               <span class="sp2 el-icon-coin"></span>{{item.cost}}元
-              <!-- <span class="sp3 el-icon-user"></span>8/12 -->
             </div>
           </div>
           <div class="cancle" v-show="item.osStateId == '1'" @click="cancelAct(item.orderNo)">取消活动</div>
@@ -86,19 +89,22 @@
           </div>
           <div class="right" @click="toDetail(item.id)">
             <p class="p1">{{item.title}}</p>
-            <div class="text text1">
+            <!-- <div class="text text1">
               <span class="el-icon-house"></span>{{item.groupName}}
-            </div>
-            <div class="text text2">
+            </div> -->
+            <div class="text text1">
               <span class="el-icon-location-information"></span>{{item.venueName}}
             </div>
             <div class="text text2">
               <span class="el-icon-date"></span>{{item.time}}
             </div>
-            <div class="text text3">
+            <div class="text text3" @click="toDetail(item.id)">
               <span class="sp1 el-icon-time"></span>{{item.timeStart}}~{{item.timeEnd}}
+              <!-- <span class="sp2 el-icon-coin"></span>{{item.cost}}元 -->
+            </div>
+            <div class="text text4" @click="toDetail(item.id)">
+              <!-- <span class="sp1 el-icon-time"></span>{{item.timeStart}}~{{item.timeEnd}} -->
               <span class="sp2 el-icon-coin"></span>{{item.cost}}元
-              <!-- <span class="sp3 el-icon-user"></span>8/12 -->
             </div>
           </div>
           <div class="btnWrap">
@@ -149,11 +155,11 @@ export default {
   created() {
     this.userId = window.localStorage.getItem('userId')
     this.userType = window.localStorage.getItem('userType')
-    if(this.userType === '1') {  //普通用户
+    if(this.userType == '100') {  //普通用户
       this.isjion = true
       this.getList1()
     }
-    if(this.userType === '2') {  //管理员
+    if(this.userType == '200') {  //管理员
       this.isPublish = true
       this.state2 = '1'
       this.getList2()
@@ -270,7 +276,7 @@ export default {
       }
       if(item === '已完成') {
         this.isPublish = false
-        this.state2 = '5'
+        this.state2 = '2'
         this.getList2()
       }
     },
@@ -502,6 +508,9 @@ export default {
               padding: 0 10px;
               font-size: 26px;
             }
+          }
+          .text1{
+            margin-top: 10px;
           }
         }
         .cancle{

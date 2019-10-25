@@ -230,8 +230,6 @@ export default {
           this.placeName = this.$route.params.placeName
           this.placeId = this.$route.params.placeId
         }
-        // console.log(this.placeName)
-        // this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       }
     },
   },
@@ -245,14 +243,14 @@ export default {
         this.id = resp.data.id
         this.type.skey = resp.data.typeId
         this.type.name = resp.data.type
-        // this.serviceType.name = resp.data.groupName
-        // this.serviceType.id = resp.data.groupId
+        this.serviceType.name = resp.data.serviceName
+        this.serviceType.id = resp.data.serviceId
         this.title = resp.data.title
         this.sureDateValue = resp.data.time
         this.startTime = resp.data.timeStart
         this.endTime = resp.data.timeEnd
         this.peopleNum = resp.data.people
-        // this.serviceType = resp.data.phone
+        this.HBpeopleNum = resp.data.alternatePeople
         this.cost = resp.data.cost
         this.placeName = resp.data.venueName
         this.placeId = resp.data.venueId
@@ -268,21 +266,13 @@ export default {
         this.typeValues = resp.data
       }
     })
-    // 获取客服
-    this.serviceList = [{
-      id: 1,
-      name: '张三'
-    },{
-      id: 2,
-      name: '李四'
-    }]
-    // 获取所属群组
-    // this.$http.getGroupList(this.userId).then(resp => {
-    //   console.log(resp)
-    //   if(resp.status == 200) {
-    //     this.groupSlots = resp.data
-    //   }
-    // })
+    // 获取客服人员
+    this.$http.customerService().then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.serviceList = resp.data
+      }
+    })
     //当天日期
     this.startDate = new Date()  
   },
@@ -363,7 +353,11 @@ export default {
     sureService() {
       this.popupVisible = !this.popupVisible
       this.isShowPicker = false 
-      if(this.serviceType.name == '') {
+      if(this.serviceType.id == '') {
+        this.serviceType.name = this.serviceList[0].name
+        this.serviceType.id = this.serviceList[0].id
+      }
+      if(this.serviceType.id == null) {
         this.serviceType.name = this.serviceList[0].name
         this.serviceType.id = this.serviceList[0].id
       }
@@ -381,7 +375,7 @@ export default {
       this.sureDateValue = this.formatDate(v)
       this.popupVisible = !this.popupVisible
       this.isShowDatePicker = false
-      this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+      // this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
     },
     // 格式化选择的日期
     formatDate(Time) {
@@ -416,7 +410,7 @@ export default {
       this.startTimePicker = false
       this.deadlinePicker = false
       this.startTime = v
-      this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
+      // this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
     },
     // 结束时间
     showEndTime() {
@@ -447,6 +441,7 @@ export default {
     },
     // 活动地点
     showMap() {
+      window.sessionStorage.setItem('typeId',this.type.skey)
       this.$router.push({
         path: '/mapSelection'
       })
@@ -507,6 +502,11 @@ export default {
           message: '请选择活动地点！',
           duration: 2000
         });
+      }else if(this.serviceType.id == '') {
+        this.$toast({
+          message: '请选择客服！',
+          duration: 2000
+        });
       }else if(this.peopleNum == '') {
         this.$toast({
           message: '请填写活动人数！',
@@ -533,33 +533,33 @@ export default {
           timeEnd: this.endTime,
           venueId: this.placeId,
           people: this.peopleNum,
-          HBpeople: this.HBpeopleNum,
-          // phone: this.serviceType.id,
+          alternatePeople: this.HBpeopleNum,
+          serviceId: this.serviceType.id,
           cost: this.cost,
           flag: this.isCkecked
         }
         console.log(params)
         // 提交后台
-        // this.$http.organizingActivities(params).then(resp => {
-        //   console.log(resp)
-        //   if(resp.status == 200) {
-        //     this.$toast({
-        //       message: '提交成功！',
-        //       duration: 2000
-        //     });
-        //     this.$router.replace({
-        //       path: '/userCenter/myActivities'
-        //     })
-        //     // 清除sessionStorage里的字段
-        //     window.sessionStorage.removeItem("typeId")
-        //     window.sessionStorage.removeItem("typeValue")
-        //   }else{
-        //     this.$toast({
-        //       message: '发布失败！',
-        //       duration: 2000
-        //     });
-        //   }
-        // })
+        this.$http.organizingActivities(params).then(resp => {
+          console.log(resp)
+          if(resp.status == 200) {
+            this.$toast({
+              message: '提交成功！',
+              duration: 2000
+            });
+            this.$router.replace({
+              path: '/userCenter/myActivities'
+            })
+            // 清除sessionStorage里的字段
+            window.sessionStorage.removeItem("typeId")
+            window.sessionStorage.removeItem("typeValue")
+          }else{
+            this.$toast({
+              message: '发布失败！',
+              duration: 2000
+            });
+          }
+        })
       }
     },
   },

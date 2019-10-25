@@ -265,6 +265,7 @@ export default {
   beforeDestroy() {
     window.sessionStorage.removeItem('mapToPath')
     window.sessionStorage.removeItem('mapToPathName')
+    window.sessionStorage.removeItem('typeId')
   }
 }
 </script>
