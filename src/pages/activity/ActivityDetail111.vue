@@ -158,7 +158,6 @@ export default {
       // console.log(this.isChecked)
     },
     submit() {
-
       console.log(this.isTosignUp)
       if(this.state == 2) {
         this.$toast({

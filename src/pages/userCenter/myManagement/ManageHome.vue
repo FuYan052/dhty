@@ -15,18 +15,22 @@
       </div>
     </div>
     <ul class="menu1">
-      <li @click="toCash">
-        <p>账户余额</p>
-        <p><span>{{info.accountBalance}}</span>元</p>
+      <li @click="toDetail">
+        <div class="icon"><img src="../../../assets/user_icon3.png" style="width: 100%; height: 100%;" alt=""></div>
+        <div class="title">账户明细</div>
+        <div class="right">
+          <span>100元</span>
+          <span class="el-icon-arrow-right"></span>
+        </div>
       </li>
-      <li>
+      <!-- <li>
         <p>累计收入</p>
         <p><span>{{info.accumulatedIncome}}</span>元</p>
       </li>
       <li>
         <p>即将到账</p>
         <p><span>{{info.upcomingAccount}}</span>元</p>
-      </li>
+      </li> -->
     </ul>
     <ul class="menu2">
       <li v-for="(item,index) in currMenuList" :key="index" @click="handleMenu(index,item.routerPath)">
@@ -155,10 +159,10 @@ export default {
         path: '/userCenter/myData/completeInfo'
       })
     },
-    // 提现
-    toCash() {
+    // 账户明细
+    toDetail() {
       this.$router.push({
-        path: '/userCenter/cash'
+        path: '/userCenter/cash/accountDetails'
       })
     },
     handleMenu(index,path) {
@@ -289,36 +293,47 @@ export default {
     }
     .menu1{
       width: 100%;
-      height: 180px;
-      padding: 0 15px;
+      height: 102px;
       li{
-        width: 33.3%;
-        height: 176px;
-        float: left;
-        p:nth-of-type(1) {
-          font-size: 22px;
-          line-height: 22px;
-          color: #7a7977;
-          margin-top: 44px;
+        width: 100%;
+        height: 102px;
+        padding-right: 15px;
+        border-top: 2px solid #efefef;
+        .icon{
+          width: 35px;
+          height: 35px;
+          float: left;
+          margin-left: 5px;
+          margin-top: 35px;
         }
-        p:nth-of-type(2) {
-          font-size: 24px;
-          line-height: 34px;
-          color: #4a4742;
-          margin-top: 44px;
+        .title{
+          width: 300px;
+          height: 102px;
+          margin-left: 45px;
+          line-height: 102px;
+          font-size: 28px;
+          color: #3d3d3d;
+          float: left;
+        }
+        .right{
+          width: 200px;
+          height: 102px;
+          float: right;
+          text-align: right;
           span{
-            font-size: 34px;
-            color: #fd8100;
-            padding-right: 12px;
-            // font-weight: bold;
+            line-height: 102px;
+            font-size: 40px;
+            color: #5e5d5b;
+          }
+          span:nth-of-type(1){
+            display: inline-block;
+            line-height: 102px;
+            font-size: 30px;
+            color: #5e5d5b;
+            margin-right: 10px;
+            vertical-align: top;
           }
         }
-      }
-      li:nth-of-type(2){
-        text-align: center;
-      }
-      li:nth-of-type(3){
-        text-align: right;
       }
     }
     .menu2{

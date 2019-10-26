@@ -89,6 +89,9 @@ export default {
       currIndex: 0,
       clickDate: '',
       type: 'sportsKinds_01',  //运动类型
+      timestamp: '',  //微信接口后台签名返回参数
+      nonceStr: '',  //微信接口后台签名返回参数
+      signature: '',  //微信接口后台签名返回参数
       latitude: '30.5702',
       longitude: '104.06476',
       showLoading: false,  //是否显示底部加载信息
@@ -159,11 +162,19 @@ export default {
         this.timestamp = resp.data.timestamp
         this.nonceStr = resp.data.nonceStr
         this.signature = resp.data.signature
+
+        const configData = {
+          timestamp: this.timestamp,
+          nonceStr: this.nonceStr,
+          signature: this.signature,
+        }
+        window.sessionStorage.setItem('config',JSON.stringify(configData))  //存sessionStorage给详情页调微信位置接口
+        
         wx.config({
           // debug: true,
           appId: 'wxd3d4d3045a1213a1',
           // appId: 'wxf1894ca38c849d17',  //测试号
-          timestamp: that.timestamp,
+          timestamp: that.timestamp, 
           nonceStr: that.nonceStr,
           signature: that.signature,
           jsApiList: [
@@ -344,7 +355,7 @@ export default {
       window.sessionStorage.setItem('config',JSON.stringify(configData))  //详情页调微信接口的配置
       window.sessionStorage.setItem('activityDetailId',id)
       this.$router.push({
-        path: '/activityDetail',
+        path: `/activityDetail/${id}`,
       })
     },
     // 查看优惠券
