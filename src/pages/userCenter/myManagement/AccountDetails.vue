@@ -2,7 +2,7 @@
   <!-- 账户明细 -->
   <div class="accountDetails" v-title data-title="账户明细">
     <ul>
-      <li v-for="(item,index) in 10" :key="index">
+      <li v-for="(item,index) in 10" :key="index" @click="toDetail(index)">
         <div class="leftImg">
           <div class="imgBox">
             <img src="../../../assets/touxiang.jpg" style="width: 100%; height:100%; border-radius: 50%;" alt="">
@@ -13,7 +13,7 @@
             男一号-18884052456
             <span>+25.00</span>
           </div>
-          <div class="date">2019-10-26  15:00</div>
+          <div class="date">2019-10-26 15:00</div>
         </div>
       </li>
     </ul>
@@ -22,7 +22,14 @@
 
 <script>
 export default {
-  name: 'AccountDetails'
+  name: 'AccountDetails',
+  methods: {
+    toDetail(index) {
+      this.$router.push({
+        path: `/accountDetails/accountDetailsItem/${index}`
+      })
+    }
+  }
 }
 </script>
 

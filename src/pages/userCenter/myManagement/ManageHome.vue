@@ -14,7 +14,7 @@
         <span class="el-icon-arrow-right"></span>
       </div>
     </div>
-    <ul class="menu1">
+    <ul class="menu1" v-show="userType == '200'">
       <li @click="toDetail">
         <div class="icon"><img src="../../../assets/user_icon3.png" style="width: 100%; height: 100%;" alt=""></div>
         <div class="title">账户明细</div>

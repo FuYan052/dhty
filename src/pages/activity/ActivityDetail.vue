@@ -18,38 +18,47 @@
         <div class="p1">时间：{{theDetail.time}}&nbsp;&nbsp;{{theDetail.timeStart}}-{{theDetail.timeEnd}}</div>
         <div class="p1 p2">地点：{{theDetail.venueName}}<span @click="toMap" class="el-icon-map-location"></span></div>
         <p>已报名会员:</p>
-        <div class="headImgBox">
-          <div class="left">
-            <div class="imgItem" v-for="(it,ind) in theDetail.enrolledVoList" :key="ind">
+        <div class="headImgBox" >
+          <div class="left" @click="toList">
+            <div 
+              class="imgItem" v-for="(it,ind) in theDetail.enrolledVoList" 
+              :key="ind"
+              :class="{groupOwner : it.group}"
+              >
               <img :src="it.image" style="width: 100; height:100%; border-radius: 50%;" alt="">
             </div>
           </div>
-          <span class="el-icon-arrow-right"></span>
+          <span class="el-icon-arrow-right" @click="toList"></span>
         </div>
       </div>
       <!-- 规则 -->
-      <div class="regularBox">
+      <div class="regularBox" ref="rule">
         <div class="regularTitle">规则</div>
-        <p>1、在来虎羽毛球贩卖机已经布置的球馆，将由球员刷码去球</p>
-        <p>2、在来虎羽毛球贩卖机已经布置的球馆，将由球员刷码去前台领取</p>
+        <p>1、新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话：187（微信同号）。</p>
+        <p>2、活动人请按照客服通知的场地编号对号入场，球员按水平被分组，6人一个场地，练习热身实行15分钟轮换，双打比赛实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
+        <p>3、请参与者自带球拍，穿运动装和羽毛球球鞋（如果没有球拍或球鞋可提前到来虎小店购买，我们将免费给你配送到场地）。运动前可吃少许易消化食物，不宜空腹或者饱胀进行剧烈活动，可自带温水。</p>
+        <p>4、活动开始前2小时可取消参与活动；报名未到或者未在活动开始前两小时取消的。均按照当场活动费用扣费。</p>
+        <p>5、所有活动均属个人自愿自主参与的，确认报名前请仔细阅读《免责声明》，所有参与者都是独立的责任人，户外及体育活动具有一定的危险性，可能发生危及生命的意外事故和疾病，活动参与者应特别注意安全并自己购买意外保险，没有人对活动中发生的意外事故负责。</p>
+        <p>6、因本次活动属于低价半自助打球行为，所以羽毛球会由本次活动的临时群主在活动开始前领取并分配给球友，若活动开始前发现临时群主还未发放羽毛球的，可与客服联系，客服电话：187.（临时群主的资格获取、福利、责任等，详见“临时群主的福利与义务”）。</p>
       </div>
       <!-- 特殊服务 -->
-      <div class="service">
+      <!-- <div class="service">
         <div class="serviceTitle">特殊服务</div>
         <p>1、在来虎羽毛球贩卖机已经布置的球馆，将由球员刷码去球</p>
         <p>2、在来虎羽毛球贩卖机已经布置的球馆，将由球员刷码去前台领取</p>
-      </div>
+      </div> -->
       <!-- 来虎领队义务与福利 -->
-      <div class="tourLeaderService">
+      <div class="tourLeaderService" ref="leader">
         <div class="title">来虎领队义务与福利</div>
-        <p>1、在来虎羽毛球贩卖机已经布置的球馆，将由球员刷码去球</p>
-        <p>2、在来虎羽毛球贩卖机已经布置的球馆，将由球员刷码去前台领取</p>
+        <p>1、在“确认支付”页面选择“担任临时群主”并成功担任的，本次活动可直接抵扣8元报名费用。</p>
+        <p>2、一场活动有且仅有一个临时群主，所以若有其他人已经担任，则您在支付时会失败，此时需要您取消“担任临时群主”的选择，继续按照普通球友的方式支付。</p>
+        <p>3、在选择担任临时群主时，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地；在活动结束后主动收拾残球，并回收入柜。</p>
       </div>
       <!-- 来虎领队 -->
       <div class="tourLeader">
         <div class="title">来虎领队</div>
         <p class="p1">手机：13345436788<span class="el-icon-arrow-right"></span><a :href="'tel:' + theDetail.phone"><span class="el-icon-phone"></span></a></p>
-        <p class="p2">电话：028-85514712<span class="el-icon-arrow-right"></span><span class="el-icon-phone-outline"></span></p>
+        <p class="p2">电话：028-85514712<span class="el-icon-arrow-right"></span><a href="tel: 028-85514712"><span class="el-icon-phone-outline"></span></a></p>
         <div class="text">如有疑问可添加来虎领队微信或拨打来虎领队电话咨询</div>
       </div>
     </div>
@@ -97,6 +106,18 @@ export default {
       }
     })
   },
+  mounted () {
+    // 当前一页点击的是‘临时领队’时滚动条滚动到临时领队位置
+    if(window.sessionStorage.getItem('clickType') === '领队') {
+      const scrollHeight = this.$refs.leader.offsetTop - 10
+      window.scrollTo(0,scrollHeight)
+    }
+    // 当前一页点击的是‘规则’时滚动条滚动到规则位置
+    if(window.sessionStorage.getItem('clickType') === '规则') {
+      const scrollHeight = this.$refs.rule.offsetTop - 10
+      window.scrollTo(0,scrollHeight)
+    }
+  },
   methods: {
     // 免责条款
     toEscapeClause() {
@@ -125,10 +146,20 @@ export default {
           name: that.theDetail.venueName,
           address: that.theDetail.address,
           fail: function() {
-            that.$toast('抱歉，调起导航失败，请重试！')
+            that.$toast({
+              message: '抱歉，调起导航失败，请重试！',
+              duration: 2000
+            });
           }
         })
       })
+      // 当微信获取位置配置失败
+      wx.error(function(res){
+        that.$toast({
+          message: '抱歉，调起导航失败，请重试！',
+          duration: 2000
+        });
+      });
     },
     // 报名列表
     toList() {
@@ -226,6 +257,7 @@ export default {
   },
   beforeDestroy() {
     window.sessionStorage.removeItem('config')
+    window.sessionStorage.removeItem('clickType')
   }
 }
 </script>
@@ -235,7 +267,8 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f2f2f2;
-    padding-bottom: 165px;
+    // padding-bottom: 165px;
+    padding-bottom: 700px;
     .wrap{
       padding: 0 20px;
       .topimg{
@@ -310,6 +343,9 @@ export default {
               border-radius: 50%;
               border: 1px solid #fff;
             }
+            .groupOwner{
+              border: 2px solid #fac31e;
+            }
           }
           span{
             float: right;
@@ -325,6 +361,7 @@ export default {
         margin-top: 20px;
         overflow: hidden;
         padding: 0 20px;
+        padding-bottom: 20px;
         .regularTitle{
           width: 100%;
           height: 60px;
@@ -337,20 +374,20 @@ export default {
           margin-top: 10px;
         }
       }
-      .service{
-        width: 100%;
-        min-height: 300px;
-        background: #fff;
-        margin-top: 20px;
-        overflow: hidden;
-        padding: 0 20px;
-        .serviceTitle{
-          width: 100%;
-          height: 60px;
-          font-size: 28px;
-          line-height: 60px;
-        }
-      }
+      // .service{
+      //   width: 100%;
+      //   min-height: 300px;
+      //   background: #fff;
+      //   margin-top: 20px;
+      //   overflow: hidden;
+      //   padding: 0 20px;
+      //   .serviceTitle{
+      //     width: 100%;
+      //     height: 60px;
+      //     font-size: 28px;
+      //     line-height: 60px;
+      //   }
+      // }
       .tourLeaderService{
         width: 100%;
         min-height: 300px;
@@ -358,6 +395,7 @@ export default {
         margin-top: 20px;
         overflow: hidden;
         padding: 0 20px;
+        padding-bottom: 20px;
         .title{
           width: 100%;
           height: 60px;
@@ -387,20 +425,32 @@ export default {
           }
         }
         .p1{
+          span{
+            font-size: 34px;
+            float: right;
+            line-height: 45px;
+          }
           a{
             color: #68df62;
             font-size: 34px;
             float: right;
             margin-right: 15px;
-            line-height: 23px;
+            // line-height: 23px;
+            line-height: 45px;
           }
         }
         .p2{
-          span:nth-of-type(2){
+          span{
+            font-size: 34px;
+            float: right;
+            line-height: 45px;
+          }
+          a{
             color: #e9c628;
             font-size: 34px;
+            float: right;
             margin-right: 15px;
-            line-height: 23px;
+            line-height: 45px;
           }
         }
         .text{

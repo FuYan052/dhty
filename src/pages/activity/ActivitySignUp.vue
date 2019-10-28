@@ -11,13 +11,26 @@
       </div>
       <div class="right">
         <p class="title">{{theDetail.title}}</p>
-        <p class="p name">俱乐部：{{theDetail.groupName}}</p>
+        <p class="p name">费&nbsp;&nbsp;&nbsp;用：{{theDetail.cost}}/人</p>
         <p class="p organizer">组织者：{{theDetail.nickName}}</p>
         <p class="p place">体育馆：{{theDetail.venueName}}</p>
       </div>
       <div class="timeWrap">
         <h1 class="time">{{theDetail.timeStart}}</h1>
         <div class="date">{{theDetail.time}}</div>
+      </div>
+    </div>
+    <!-- 临时群主 -->
+    <div class="leader">
+      <div class="radiuBox" @click="isSelect = !isSelect"><span class="el-icon-check" v-show="isSelect"></span></div>
+      <div class="descr">
+        <p>担任本场活动临时领队</p>
+        <p @click="isShowLeaderDetail = !isShowLeaderDetail">《来虎临时领队义务和责任》</p>
+      </div>
+      <div class="detail" v-show="isShowLeaderDetail">
+        <p>1、在“确认支付”页面选择“担任临时群主”并成功担任的，本次活动可直接抵扣8元报名费用。</p>
+        <p>2、一场活动有且仅有一个临时群主，所以若有其他人已经担任，则您在支付时会失败，此时需要您取消“担任临时群主”的选择，继续按照普通球友的方式支付。</p>
+        <p>3、在选择担任临时群主时，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地；在活动结束后主动收拾残球，并回收入柜。</p>
       </div>
     </div>
     <!-- 报名人数 -->
@@ -56,11 +69,11 @@
             {{theDetail.cost}}元/人
           </div>
         </li>
-        <li class="coupon_li" @click="toSelectCoup">
+        <li class="coupon_li">
           <div class="left">
             <div class="circle" @click="isUseCoup"><span v-show="isUse"></span></div><div class="text">优惠券</div>
           </div>
-          <div class="right">
+          <div class="right" @click="toSelectCoup">
             <p v-if="isShowNoUse">暂无可用</p>
             <p v-else>
               <span class="useNum" v-show="!haveSelected">11张可用</span>
@@ -104,6 +117,9 @@ export default {
       selectedCoupon: '',  //选中的优惠券
       couponId: '',  //选中的优惠券id
       haveSelected: false,
+      state: '',  //活动状态
+      isSelect: false,  //默认不选择临时领队
+      isShowLeaderDetail: false,  //是否展示领队义务与责任
     }
   },
   watch: {
@@ -133,8 +149,20 @@ export default {
   },
   computed: {
     total() {
-      if(this.haveSelected) {
-        if((Number(this.theDetail.cost) * (this.num1 + this.num2)) - Number(this.selectedCoupon.money) <= 0){
+      if(this.haveSelected && this.isSelect) {
+        if(((Number(this.theDetail.cost) * (this.num1 + this.num2)) - Number(this.selectedCoupon.money) - 8) <= 0) {
+          return 0
+        }else{
+          return (Number(this.theDetail.cost) * (this.num1 + this.num2)) - Number(this.selectedCoupon.money) - 8
+        }
+      }else if(this.isSelect) {
+        if(((Number(this.theDetail.cost) * (this.num1 + this.num2)) - 8) <= 0) {
+          return 0
+        }else{
+          return (Number(this.theDetail.cost) * (this.num1 + this.num2)) - 8
+        }
+      }else if(this.haveSelected) {
+        if((Number(this.theDetail.cost) * (this.num1 + this.num2)) - Number(this.selectedCoupon.money) <= 0) {
           return 0
         }else{
           return (Number(this.theDetail.cost) * (this.num1 + this.num2)) - Number(this.selectedCoupon.money)
@@ -161,6 +189,7 @@ export default {
         this.enrolled = resp.data.activitiesDetailsInfoVOList.enrolled
         this.useCoupList = resp.data.couponVoList
         this.notUserCoupList = resp.data.noCouponVoList
+        this.state = resp.data.state
       }
     })
   },
@@ -213,6 +242,7 @@ export default {
     // 是否使用优惠券
     isUseCoup() {
       this.isUse = !this.isUse
+      this.haveSelected = false
     },
     // 选择优惠券
     toSelectCoup() {
@@ -244,7 +274,9 @@ export default {
           // code: this.code,
           totalPrice: this.total,
           mNumber: this.num1,
-          gNumber: this.num2
+          gNumber: this.num2,
+          state: this.state,
+          isGroup: this.isShowLeaderDetail
         }
         console.log(params)
         this.$http.postPay(params).then(resp => {
@@ -396,6 +428,63 @@ export default {
           font-size: 25px;
           color: #a5a5a5;
           text-align: center;
+        }
+      }
+    }
+    .leader{
+      width: 100%;
+      min-height: 110px;
+      background: #fff;
+      margin-top: 20px;
+      overflow: hidden;
+      .radiuBox{
+        width: 60px;
+        height: 60px;
+        transform: scale(0.8);
+        float: left;
+        border-radius: 50%;
+        border: 1px solid rgb(192, 192, 192);
+        margin-top: 15px;
+        margin-left: 30px;
+        span{
+          font-size: 45px;
+          line-height: 60px;
+          margin-left: 3px;
+          font-weight: bold;
+          display: inline-block;
+          text-align: center;
+        }
+      }
+      .descr{
+        height: 100px;
+        float: left;
+        // border: 1px solid red;
+        margin-left: 15px;
+        p{
+          font-size: 27px;
+          line-height: 27px;
+          margin-top: 20px;
+        }
+        p:nth-of-type(2){
+          font-size: 22px;
+          margin-top: 20px;
+          margin-left: -10px;
+          color: #fac31e;
+        }
+      }
+      .detail{
+        width: 92%;
+        height: auto;
+        margin: 0 auto;
+        margin-top: 110px;
+        border-top: 1px dashed #dedede;
+        padding-top: 10px;
+        padding-bottom: 18px;
+        p{
+          width: 100%;
+          font-size: 26px;
+          line-height: 40px;
+          margin-top: 5px;
         }
       }
     }

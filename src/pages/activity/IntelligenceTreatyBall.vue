@@ -42,13 +42,18 @@
             <!-- 规则 -->
             <div class="ruler">
               <div class="wrap1">LI-NING&nbsp;&nbsp;A6(来虎专用球)</div>
-              <div class="wrap2">临时领队</div>
-              <div class="wrap3">规则</div>
+              <div class="wrap2" @click="leader(item.id)">临时领队</div>
+              <div class="wrap3" @click="rule(item.id)">规则</div>
             </div>
             <!-- 正在报名 -->
             <div class="signUp">
-              <div class="imgBox">
-                <div class="imgItem" v-for="(it,ind) in item.enrolledVoList" :key="ind">
+              <div class="imgBox" @click="toSignUp(item.id)">
+                <div 
+                  class="imgItem" 
+                  v-for="(it,ind) in item.enrolledVoList" 
+                  :key="ind"
+                  :class="{groupOwner : it.group}"
+                  >
                   <img :src="it.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
                 </div>
               </div>
@@ -169,7 +174,7 @@ export default {
           signature: this.signature,
         }
         window.sessionStorage.setItem('config',JSON.stringify(configData))  //存sessionStorage给详情页调微信位置接口
-        
+
         wx.config({
           // debug: true,
           appId: 'wxd3d4d3045a1213a1',
@@ -219,13 +224,19 @@ export default {
             },
             // 当获取经纬度失败
             cancel: function (res) {
-              that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+              that.$toast({
+                message: '获取地理位置失败，当前距离为平台默认距离！',
+                duration: 2500
+              });
             }
           });
         });
         // 当微信获取位置配置失败
         wx.error(function(res){
-          that.$toast('获取地理位置失败，当前距离为平台默认距离！')
+          that.$toast({
+            message: '获取地理位置失败，当前距离为平台默认距离！',
+            duration: 2500
+          });
         });
       }
     })
@@ -343,6 +354,20 @@ export default {
           });
           this.activList = []
         }
+      })
+    },
+    // 点击临时领队
+    leader(id) {
+      window.sessionStorage.setItem('clickType', '领队')
+      this.$router.push({
+        path: `/activityDetail/${id}`,
+      })
+    },
+    // 点击规则
+    rule(id) {
+      window.sessionStorage.setItem('clickType', '规则')
+      this.$router.push({
+        path: `/activityDetail/${id}`,
       })
     },
     // 去报名
@@ -574,6 +599,9 @@ export default {
                   border-radius: 50%;
                   float: left;
                   margin-left: -23px;
+                }
+                .groupOwner{
+                  border: 2px solid #fac31e;
                 }
               }
               .peopleNUm{

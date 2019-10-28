@@ -54,6 +54,7 @@ import Coupon from '@/pages/userCenter/myManagement/Coupon'
 import CommonProblem from '@/pages/userCenter/myManagement/CommonProblem'
 import Cash from '@/pages/userCenter/myManagement/Cash'
 import AccountDetails from '@/pages/userCenter/myManagement/AccountDetails'
+import AccountDetailsItem from '@/pages/userCenter/myManagement/AccountDetailsItem'
 
 Vue.use(Router)
 
@@ -444,8 +445,16 @@ export default new Router({
     },
     {
       path: '/userCenter/cash/accountDetails',
-      name: 'AccountDetails',  //提现账户明细
+      name: 'AccountDetails',  //账户明细
       component: AccountDetails,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/accountDetails/accountDetailsItem/:id',
+      name: 'AccountDetailsItem',  //账户明细详情
+      component: AccountDetailsItem,
       meta: {
         requireAuth: true
       }
