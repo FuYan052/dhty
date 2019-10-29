@@ -3,31 +3,34 @@
     <div class="content">
       <div class="top">
         <div class="ImgBox">
-          <img src="../../../assets/LOGO1.png" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
+          <img :src="accountDetail.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
         </div>
-        <p class="title">来虎体育</p>
-        <p class="money">+25.00</p>
+        <p class="title">{{accountDetail.name}}</p>
+        <p class="money" v-if="accountDetail.paymentType">+{{accountDetail.totalFee}}</p>
+        <p class="money tui" v-else>-{{accountDetail.totalFee}}</p>
       </div>
       <ul class="bottom">
         <li>
           <div class="left">支付类型</div>
-          <div class="right">收报名费</div>
+          <div class="right" v-if="accountDetail.paymentType">收报名费</div>
+          <div class="right" v-else>退报名费</div>
         </li>
         <li>
           <div class="left">支付会员</div>
-          <div class="right">西拉-18884521325</div>
+          <div class="right">{{accountDetail.name}}-{{accountDetail.phone}}</div>
         </li>
         <li>
           <div class="left">支付时间</div>
-          <div class="right">2019-10-28  13:25:00</div>
+          <div class="right">{{accountDetail.timeStart}}</div>
         </li>
         <li>
           <div class="left">交易单号</div>
-          <div class="right">524675568565269569569556</div>
+          <div class="right" v-if="accountDetail.paymentType">{{accountDetail.outTradeNo}}</div>
+          <div class="right" v-else>{{accountDetail.outRefundNo}}</div>
         </li>
         <li>
           <div class="left">备注</div>
-          <div class="right">智能约球-高级场-波利羽毛球馆</div>
+          <div class="right">{{accountDetail.remark}}</div>
         </li>
       </ul>
     </div>
@@ -36,7 +39,21 @@
 
 <script>
 export default {
-  name: 'AccountDetailsItem'
+  name: 'AccountDetailsItem',
+  data() {
+    return {
+      accountDetail: ''
+    }
+  },
+  created() {
+    const id = this.$route.params.id
+    this.$http.getAccountDetail(id).then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.accountDetail = resp.data
+      }
+    })
+  }
 }
 </script>
 
@@ -76,6 +93,10 @@ export default {
           text-align: center;
           font-weight: bold;
           margin-top: 42px;
+          color: #222222;
+        }
+        .tui{
+          color: #e55e27;
         }
       }
       .bottom{

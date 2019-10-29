@@ -16,10 +16,10 @@
     </div>
     <ul class="menu1" v-show="userType == '200'">
       <li @click="toDetail">
-        <div class="icon"><img src="../../../assets/user_icon3.png" style="width: 100%; height: 100%;" alt=""></div>
+        <div class="icon"><img src="../../../assets/user_icon7.png" style="width: 100%; height: 100%;" alt=""></div>
         <div class="title">账户明细</div>
         <div class="right">
-          <span>100元</span>
+          <span class="money"><b>{{info.accumulatedIncome}}</b>元</span>
           <span class="el-icon-arrow-right"></span>
         </div>
       </li>
@@ -111,7 +111,7 @@ export default {
         {
           icon: require("../../../assets/user_icon4.png"),
           title: '修改密码',
-          routerPath: '/home/forgetPassword'
+          // routerPath: '/home/forgetPassword'
         },
         {
           icon: require("../../../assets/user_icon8.png"),
@@ -132,9 +132,10 @@ export default {
     this.userType = window.localStorage.getItem('userType')
     if(this.userType == '100') {  //普通会员,后端约定
       this.currMenuList = this.menu1List
-    }
-    if(this.userType == '200') {  //来虎管理员,后端约定
+    }else if(this.userType == '200') {  //来虎管理员,后端约定
       this.currMenuList = this.menu2List
+    }else{
+      this.currMenuList = this.menu1List
     }
     this._id = window.localStorage.getItem('userId')
     // if(this._id == null) {
@@ -168,7 +169,13 @@ export default {
     handleMenu(index,path) {
       // console.log(index,path)
       if(this.userType == '100') {
-        if(index === 5) {
+        if(index === 4){
+          this.$router.push({
+            path: '/home/forgetPassword'
+          })
+          window.sessionStorage.setItem('routerPath','/userCenter/manageHome')
+          window.sessionStorage.setItem('routerPathName','ManageHome')
+        }else if(index === 5) {
           const isSure = confirm('确定退出登录?')
           if(isSure) {
             window.localStorage.removeItem('ty-token')
@@ -187,12 +194,19 @@ export default {
         }
       }
       if(this.userType === '200') {
-        if(index === 4) {
+        if(index === 3){
+          this.$router.push({
+            path: '/home/forgetPassword'
+          })
+          window.sessionStorage.setItem('routerPath','/userCenter/manageHome')
+          window.sessionStorage.setItem('routerPathName','ManageHome')
+        }else if(index === 4) {
           const isSure = confirm('确定退出登录?')
           if(isSure) {
             window.localStorage.removeItem('ty-token')
             window.localStorage.removeItem('userId')
             window.localStorage.removeItem('userPhone')
+            window.localStorage.removeItem('userType')
             this.$router.replace({
               path: '/home'
             })
@@ -328,10 +342,18 @@ export default {
           span:nth-of-type(1){
             display: inline-block;
             line-height: 102px;
-            font-size: 30px;
+            font-size: 28px;
             color: #5e5d5b;
             margin-right: 10px;
             vertical-align: top;
+          }
+          .money{
+            b{
+              font-weight: normal;
+              color: #ffb200;
+              font-size: 32px;
+              padding-right: 8px;
+            }
           }
         }
       }

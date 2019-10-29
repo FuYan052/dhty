@@ -187,9 +187,9 @@ export default {
         this.theDetail = resp.data.activitiesDetailsInfoVOList
         this.people = resp.data.activitiesDetailsInfoVOList.people
         this.enrolled = resp.data.activitiesDetailsInfoVOList.enrolled
+        this.state = resp.data.activitiesDetailsInfoVOList.state
         this.useCoupList = resp.data.couponVoList
         this.notUserCoupList = resp.data.noCouponVoList
-        this.state = resp.data.state
       }
     })
   },

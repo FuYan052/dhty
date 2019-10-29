@@ -1,19 +1,24 @@
 <template>
   <!-- 账户明细 -->
   <div class="accountDetails" v-title data-title="账户明细">
-    <ul>
-      <li v-for="(item,index) in 10" :key="index" @click="toDetail(index)">
+    <!-- 无数据时缺省页 -->
+    <div class="noData" v-show="noList"></div>
+    <!-- 有数据时 -->
+    <ul v-show="!noList">
+      <li v-for="(item,index) in accountList" :key="index" @click="toDetail(item)">
         <div class="leftImg">
           <div class="imgBox">
-            <img src="../../../assets/touxiang.jpg" style="width: 100%; height:100%; border-radius: 50%;" alt="">
+            <img :src="item.image" style="width: 100%; height:100%; border-radius: 50%;" alt="">
           </div>
         </div>
         <div class="right">
           <div class="title">
-            男一号-18884052456
-            <span>+25.00</span>
+            {{item.name}}-{{item.phone}}
+            <span class="zheng" v-if="item.paymentType">+{{item.totalFee}}</span>
+            <span class="fu" v-else>-{{item.totalFee}}</span>
           </div>
-          <div class="date">2019-10-26 15:00</div>
+          <!-- 时间 -->
+          <div class="date">{{item.timeStart}}</div>
         </div>
       </li>
     </ul>
@@ -23,10 +28,29 @@
 <script>
 export default {
   name: 'AccountDetails',
+  data() {
+    return {
+      accountList: [],
+      noList: false,
+    }
+  },
+  created() {
+    this.$http.getAccount().then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.accountList = resp.data
+        if(this.accountList.length == 0) {
+          this.noList = true
+        }else{
+          this.noList = false
+        }
+      }
+    })
+  },
   methods: {
-    toDetail(index) {
+    toDetail(item) {
       this.$router.push({
-        path: `/accountDetails/accountDetailsItem/${index}`
+        path: `/accountDetails/accountDetailsItem/${item.id}`
       })
     }
   }
@@ -38,6 +62,12 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #fff;
+    .noData{
+      width: 100%;
+      height: 100vh;
+      background: url('../../../assets/noDataBg.jpg') no-repeat center;
+      background-size: cover;
+    }
     ul{
       width: 100%;
       height: auto;
@@ -69,7 +99,11 @@ export default {
             margin-top: 40px;
             span{
               float: right;
-              color: #f4b544;
+              font-size: 36px;
+              color: #222222;
+            }
+            .fu{
+              color: #e55e27;
             }
           }
           .date{

@@ -139,12 +139,7 @@ export default {
 
 
     // 获取信息
-    this._id = this.userId
-    // console.log(this._id)
-    if(this._id == null) {
-      this._id = this.$route.params._userId
-    }
-    // console.log(this._id)
+    this._id = window.localStorage.getItem('userId')
     this.$http.informationOthers(this._id).then(resp => {
       console.log(resp)
       if(resp.status == 200) {

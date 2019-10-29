@@ -64,9 +64,9 @@
           <div class="bottom">
             <ul class="muneList">
               <li>客服</li>
-              <li>聚会</li>
-              <li>装备</li>
-              <li>活动</li>
+              <li @click="handleAlert">聚会</li>
+              <li @click="handleAlert">装备</li>
+              <li @click="handleAlert">活动</li>
             </ul>
           </div>
           <div class="bottomBg"></div>
@@ -80,6 +80,14 @@
         </div>
         <div class="no-more" v-if="noMore">没有更多了~</div>
       </div>
+      <!-- 提示优惠券 -->
+    <div class="coupon" v-show="showCoupon">
+      <div class="wraper">
+        <div class="content"><span>{{couNum}}</span>张<span class="redText">{{couMoney}}</span>元优惠券已经存入您的账户~</div>
+        <div class="toCheck" @click="toCheck">点击查看</div>
+        <div class="closeBox" @click="know"></div>
+      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -125,6 +133,12 @@ export default {
     }
   },
   created() {
+    // 先清除之前的登录状态
+    window.localStorage.removeItem('ty-token')
+    window.localStorage.removeItem('userId')
+    window.localStorage.removeItem('userPhone')
+    window.localStorage.removeItem('userType')
+
     // 默认日期为当天日期
     this.clickDate = this.findDate(0)
     // 先加载活动列表
@@ -136,7 +150,7 @@ export default {
       lat: '30.5702',
       lon: '104.06476',
       page: 1,
-      userId: Number(window.localStorage.getItem('userId'))
+      userId: window.localStorage.getItem('userId')
     }
     this.$http.activitiesList(params).then(resp => {
       console.log(resp)
@@ -404,6 +418,9 @@ export default {
           console.log(resp)
         })
       }
+    },
+    handleAlert() {
+      alert('暂未开通，敬请期待！')
     }
   }
 }
@@ -695,6 +712,61 @@ export default {
             bottom: 0px;
             background: #c2c1c1;
           }
+        }
+      }
+    }
+    .coupon{
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 99;
+      background: rgba(0,0,0,0.5);
+      .wraper{
+        width: 100%;
+        height: 66vh;
+        padding-left: 3%;
+        background: url('../../assets/couponBg.png') no-repeat;
+        background-size: 97% auto;
+        background-position-y: -3%;
+        background-position-y: 0;
+        z-index: 100;
+        position: absolute;
+        top: 8.2vh;
+        left: 0;
+        .content{
+          width: 470px;
+          height: auto;
+          margin: 0 auto;
+          font-size: 45px;
+          line-height: 55px;
+          margin-top: 485px;
+          text-align: center;
+          color: #000;
+          .redText{
+            color: #cd0a09;
+          }
+        }
+        .toCheck{
+          width: 560px;
+          height: 73px;
+          margin: 0 auto;
+          background: #f05a4c;
+          color: #fefffd;
+          font-size: 46px;
+          line-height: 74px;
+          text-align: center;
+          border-radius: 10px;
+          margin-top:40px;
+        }
+        .closeBox{
+          width: 68px;
+          height: 68px;
+          margin-left: 46.1%;
+          margin-top: 193px;
+          background: url('../../assets/closeBtn.png') no-repeat center;
+          background-size: contain;
         }
       }
     }

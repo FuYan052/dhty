@@ -284,7 +284,7 @@ export default {
     toDetail(id) {
       window.sessionStorage.setItem('activityDetailId',id)
       this.$router.push({
-        path: '/activityDetail',
+        path: `/activityDetail/${id}`,
       })
     },
     // 修改活动
@@ -346,6 +346,8 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f7f8fa;
+    padding-top: 78px;
+    overflow: hidden;
     .topCate1{
       width: 100%;
       height: 96px;
@@ -378,17 +380,20 @@ export default {
     }
     .cate2{
       width: 100%;
-      height: 72px;
-      line-height: 73px;
-      // background: #f7f8fa;
+      height: 78px;
+      line-height: 78px;
+      background: #f7f8fa;
+      position: fixed;
+      top: 0;
+      z-index: 9;
       .cateItem{
-        height: 72px;
-        line-height: 73px;
+        height: 78px;
+        line-height: 78px;
         text-align: center;
-        padding: 0 41.17px;
+        padding: 0 38.17px;
         float: left;
         color: #9fa0a2;
-        font-size: 26px;
+        font-size: 28px;
       }
       .cateItem2{
         width: 50%;
@@ -402,7 +407,7 @@ export default {
     }
     .noActList{
       width: 100%;
-      height: 90vh;
+      height: 95vh;
       background: url('../../../assets/noListPage.jpg') no-repeat center;
       background-size: cover;
     }
@@ -430,13 +435,6 @@ export default {
             height: 60px;
             float: left;
             margin-top: 12px;
-            // border-radius: 50%;
-            // border: 1px solid red;
-            // img{
-            //   width: 100%;
-            //   height: 100%;
-            //   border-radius: 50%;
-            // }
           }
           .text{
             display: block;

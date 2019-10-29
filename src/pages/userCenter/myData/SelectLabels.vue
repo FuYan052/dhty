@@ -136,18 +136,18 @@ export default {
     },
     //保存
     saveSelectLabels() {
+      // const labelIds =   //用逗号隔开连成字符串传给后端
       window.sessionStorage.removeItem('labelsIds')
-      // window.sessionStorage.setItem('labelIds',labelIds)
-      // window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
-      const labelIds = this.selectedListIds.join(',')  //用逗号隔开连成字符串传给后端
-      const params = {
-        labelId: labelIds,
-        selectedLabels: this.selectedList
-      }
+      window.sessionStorage.setItem('labelIds',this.selectedListIds.join(','))
+      window.sessionStorage.setItem('labels',JSON.stringify(this.selectedList))
+      // const params = {
+      //   labelId: labelIds,
+      //   selectedLabels: this.selectedList
+      // }
       this.$router.replace({
         path: '/userCenter/myData/completeInfo',
         name: 'CompleteInfo',
-        params: params
+        // params: params
       })
     }
   }

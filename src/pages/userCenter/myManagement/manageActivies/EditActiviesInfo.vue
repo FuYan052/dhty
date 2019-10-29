@@ -516,7 +516,7 @@ export default {
         this.$toast({
           message: '费用请填写整数！',
           duration: 2000
-        });
+        }); 
       }else if(this.cost == '') {
         this.$toast({
           message: '请填写费用！',

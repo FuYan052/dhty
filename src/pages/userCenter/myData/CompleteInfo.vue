@@ -68,16 +68,9 @@
         </ul>
         <div class="label">
           <p>标签</p>
-          <!-- <p>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签</p> -->
-          <div class="itemBox" v-show="showLabels">
+          <div class="itemBox">
             <div class="addBtn" @click="selectLabel"><span class="el-icon-plus"></span></div>
             <div class="itemLabel" v-for="(item,index) in selectedList" :key="index">
-              {{item.name}}
-            </div>
-          </div>
-          <div class="itemBox" v-show="!showLabels">
-            <div class="addBtn" @click="selectLabel"><span class="el-icon-plus"></span></div>
-            <div class="itemLabel" v-for="(item,index) in lll" :key="index">
               {{item.name}}
             </div>
           </div>
@@ -152,7 +145,7 @@ export default {
       currSure: this.sureSex,
       sex: '男',
       sexValue: '',  //确定后的性别选择
-      height: '',
+      height: '160',
       heightValue: '',  //  确定后的身高选择
       birthdayStartDate: new Date('1930/1/1'),  //生日最小可选择
       birthdayEndDate: new Date(),  //生日最大可选择
@@ -234,16 +227,15 @@ export default {
       ],
       showToolbar: true,
       popupVisible: false,
-      selectedLabels: [],
-      labelsId: '',
       infoId: '',  //个人信息id,传给后端做标识
       selectedList: [],
       selectedListIds: [],
+      labelsId: '',  //传给后端
       isShow: false,
       addValue: '',
       _id: '',
       showLabels: true,
-      lll: [],
+      // lll: [],
       userId: ''
     }
   },
@@ -280,24 +272,15 @@ export default {
     showlabelList() {
       return JSON.parse(window.sessionStorage.getItem('labels'))
     },
-
-    // $route(to, from) {
-    //   if(from.name == 'SelectLabels') {
-    //     console.log(from)
-    //     console.log(this.$route)
-    //     this.labelsId = this.$route.params.labelId || ''
-    //     this.selectedLabels = this.$route.params.selectedLabels || []
-    //     console.log(this.labelsId)
-    //     console.log(this.selectedLabels)
-    //   }
-    // },
-  },
-  activated() {
-    this.lll = this.$route.params.selectedLabels || []  //由于selectedList在此更新后，视图不更新，重新渲染了一组标签并控制显示
-    if(this.$route.params.selectedLabels) {
-      this.showLabels = false
-    }
-    this.labelsId = this.$route.params.labelId || this.labelsId
+    $route(to, from) {
+      if(from.path == '/userCenter/selectLabels') {
+        console.log(from)
+        this.labelsId = window.sessionStorage.getItem('labelIds')
+        this.selectedList = JSON.parse(window.sessionStorage.getItem('labels'))
+        console.log(this.labelsId)
+        console.log(this.selectedLabels)
+      }
+    },
   },
   methods: {
     getInfo() {
@@ -322,7 +305,6 @@ export default {
             this.birthdayValue = resp.data.birthday
           }else{
             this.birthdayValue = '请选择'
-            // console.log(this.birthdayValue)
           }
           this.birthRangeValue = resp.data.ageGroup
           this.levelValue = resp.data.occupationLevel
@@ -341,7 +323,6 @@ export default {
             let currLab = _Ids[i]
             this.selectedListIds.push(currLab.id)
           }
-          // this.labelsId = this.selectedListIds
           this.labelsId = this.selectedListIds.join(',')
           
           // 计算年龄段
@@ -361,11 +342,7 @@ export default {
       })
     },
     beforeAvatarUpload(file) {
-      // const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < 3;
-      // if (!isJPG) {
-      //   this.$message.error('上传头像图片只能是 JPG 格式!');
-      // }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 3MB!');
       }else if(isLt2M) {
@@ -385,10 +362,7 @@ export default {
     uploadSectionFile(file) {
       this.formData = new FormData()
       this.formData.append('file', file.file);
-      // console.log(file)
       this.$http.postUpolad(this.formData).then((resp) => {
-        // console.log(resp);
-        // console.log('上传成功');
         if (resp.status == 200) {
           this.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
           this.$indicator.close();
@@ -414,10 +388,6 @@ export default {
         // console.log(value)
         this.inputNickNameValue = value
       })
-
-      // this.isShowInputName = true
-      // this.inputNickName = this.inputNickNameValue
-      // this.inputNickNameValue = ''
     },
     blurInputName() {
       this.isShowInputName = false
@@ -597,6 +567,7 @@ export default {
     },
     // 提交信息
     submit() {
+      window.scrollTo(0,0)
       if(this.height == '请选择') {
         this.height = null
       }
@@ -620,7 +591,6 @@ export default {
         ageGroup: this.birthRangeValue,
         labelId: this.labelsId
       }
-      this.getInfo()
       console.log(params)
       this.$http.completeInfo(params).then(resp => {
         console.log(resp)
@@ -629,7 +599,6 @@ export default {
             message: '保存成功！',
             duration: 1000
           });
-          this.getInfo()
           const _this = this
           setTimeout(function() {
             _this.$router.replace({
@@ -640,6 +609,10 @@ export default {
       })
     },
   },  
+  beforeDestroy() {
+    window.sessionStorage.removeItem('labelIds')
+    window.sessionStorage.removeItem('labels')
+  }
 }
 </script>
 
