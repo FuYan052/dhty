@@ -226,7 +226,7 @@ export default new Router({
         requireAuth: true,
         keepAlive: true 
       }
-    },
+    }, 
     {
       path: '/activitySignUp/selectCoupon',
       name: 'SelectCoupon',  //活动报名页选择优惠券

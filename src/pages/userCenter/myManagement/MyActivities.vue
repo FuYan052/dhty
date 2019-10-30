@@ -407,7 +407,7 @@ export default {
     }
     .noActList{
       width: 100%;
-      height: 95vh;
+      height: 94.5vh;
       background: url('../../../assets/noListPage.jpg') no-repeat center;
       background-size: cover;
     }

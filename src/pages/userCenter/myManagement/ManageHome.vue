@@ -128,15 +128,25 @@ export default {
     // 用户id
     ...mapState(['userId']),
   },
+  beforeRouteEnter(to, from, next) {
+    // 先清除改版之前的登录状态
+    if(!window.localStorage.getItem('userType')) {
+      window.localStorage.removeItem('userId')
+      window.localStorage.removeItem('userPhone')
+      window.localStorage.removeItem('ty-token')
+      next('/home')
+    }else { 
+      next()
+    } 
+  },
   created() {
     this.userType = window.localStorage.getItem('userType')
     if(this.userType == '100') {  //普通会员,后端约定
       this.currMenuList = this.menu1List
     }else if(this.userType == '200') {  //来虎管理员,后端约定
       this.currMenuList = this.menu2List
-    }else{
-      this.currMenuList = this.menu1List
     }
+
     this._id = window.localStorage.getItem('userId')
     // if(this._id == null) {
     //   this._id = this.$route.params._userId
@@ -181,6 +191,7 @@ export default {
             window.localStorage.removeItem('ty-token')
             window.localStorage.removeItem('userId')
             window.localStorage.removeItem('userPhone')
+            window.localStorage.removeItem('userType')
             this.$router.replace({
               path: '/home'
             })

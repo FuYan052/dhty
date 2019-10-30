@@ -230,7 +230,8 @@ export default {
       }
     },
     showHeight(newVal , oldVal) {
-      if (newVal > oldVal) {
+      // alert(newVal)
+      if (newVal < oldVal) {
         this.isInput = true
       } else {
         this.isInput = false

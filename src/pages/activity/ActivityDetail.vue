@@ -93,6 +93,7 @@ export default {
   },
   created() {
     this.activityDetailId = this.$route.params.id
+    window.sessionStorage.setItem('activityDetailId',this.activityDetailId)
     this.$http.activitiesDetail(this.activityDetailId).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
@@ -283,7 +284,7 @@ export default {
         overflow: hidden;
         padding: 0 20px;
         .titleText{
-          font-size: 30px;
+          font-size: 3px;
           line-height: 30px;
           margin-top: 20px;
         }
@@ -364,9 +365,9 @@ export default {
         padding-bottom: 20px;
         .regularTitle{
           width: 100%;
-          height: 60px;
-          font-size: 28px;
-          line-height: 60px;
+          height: 66px;
+          font-size: 31px;
+          line-height: 66px;
         }
         p{
           font-size: 27px;
@@ -395,26 +396,26 @@ export default {
         margin-top: 20px;
         overflow: hidden;
         padding: 0 20px;
-        padding-bottom: 20px;
+        padding-bottom: 30px;
         .title{
           width: 100%;
-          height: 60px;
-          font-size: 28px;
-          line-height: 60px;
+          height: 66px;
+          font-size: 31px;
+          line-height: 66px;
         }
       }
       .tourLeader{
         width: 100%;
-        min-height: 250px;
+        min-height: 270px;
         background: #fff;
         margin-top: 20px;
         overflow: hidden;
         padding: 0 20px;
         .title{
           width: 100%;
-          height: 60px;
-          font-size: 28px;
-          line-height: 60px;
+          height: 66px;
+          font-size: 31px;
+          line-height: 66px;
           border-bottom: 1px solid #dedede;
         }
         p{

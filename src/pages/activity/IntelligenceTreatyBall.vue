@@ -133,12 +133,6 @@ export default {
     }
   },
   created() {
-    // 先清除之前的登录状态
-    window.localStorage.removeItem('ty-token')
-    window.localStorage.removeItem('userId')
-    window.localStorage.removeItem('userPhone')
-    window.localStorage.removeItem('userType')
-
     // 默认日期为当天日期
     this.clickDate = this.findDate(0)
     // 先加载活动列表
@@ -211,10 +205,8 @@ export default {
               
               const params = {
                 type: that.type,
-                // activityType: this.activityType,
                 time: that.clickDate,
                 keyWord: that.inputText,
-                // isTwoDaysLater: that.isTwoDaysLater,
                 lat: that.latitude,
                 lon: that.longitude,
                 page: 1
@@ -254,9 +246,6 @@ export default {
         });
       }
     })
-  },
-  mounted () {
-    // alert('暂无')
   },
   methods: {
     // 获取当前日期及后面范围内的日期
@@ -481,7 +470,7 @@ export default {
     }
     .nolist{
       width: 100%;
-      height: 86vh;
+      height: 91.5vh;
       background: url('../../assets/noDataBg.jpg') no-repeat center;
       background-size: cover;
       background-position: 0 10%;
@@ -606,7 +595,7 @@ export default {
                 height: 44px;
                 float: left;
                 margin-top: 25px;
-                padding-left: 23px;
+                padding-left: 18px;
                 padding-right: 35px;
                 overflow: hidden;
                 .imgItem{
@@ -615,7 +604,7 @@ export default {
                   border: 1px solid #fff;
                   border-radius: 50%;
                   float: left;
-                  margin-left: -23px;
+                  margin-left: -18px;
                 }
                 .groupOwner{
                   border: 2px solid #fac31e;

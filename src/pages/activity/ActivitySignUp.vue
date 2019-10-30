@@ -11,7 +11,7 @@
       </div>
       <div class="right">
         <p class="title">{{theDetail.title}}</p>
-        <p class="p name">费&nbsp;&nbsp;&nbsp;用：{{theDetail.cost}}/人</p>
+        <p class="p name">费&nbsp;&nbsp;&nbsp;用：{{theDetail.cost}}元/人</p>
         <p class="p organizer">组织者：{{theDetail.nickName}}</p>
         <p class="p place">体育馆：{{theDetail.venueName}}</p>
       </div>
@@ -276,7 +276,7 @@ export default {
           mNumber: this.num1,
           gNumber: this.num2,
           state: this.state,
-          isGroup: this.isShowLeaderDetail
+          isGroup: this.isSelect
         }
         console.log(params)
         this.$http.postPay(params).then(resp => {
@@ -316,10 +316,10 @@ export default {
                   fail: function (res) {
                     //失败回调函数
                     console.log(res);
-                    that.$toast({
-                      message: '支付失败!',
-                      duration: 2000
-                    })
+                    // that.$toast({
+                    //   message: '支付失败!',
+                    //   duration: 2000
+                    // })
                   },
                   cancel: function(res) {
                     that.$toast({
@@ -329,12 +329,12 @@ export default {
                   }
               });
             }); 
-            wx.error(function(res){
-              that.$toast({
-                message: '支付失败！',
-                duration: 2000
-              })
-            })
+            // wx.error(function(res){
+            //   that.$toast({
+            //     message: '支付失败！',
+            //     duration: 2000
+            //   })
+            // })
           }
         })
       }
