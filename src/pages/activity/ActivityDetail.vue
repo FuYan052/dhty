@@ -1,85 +1,124 @@
 <template>
   <div class="activityDetail" v-title data-title="活动详情">
-    <div class="wrap">
+    <div class="scrollBox" ref="scrollBox">
       <!-- 图片 -->
       <div class="topimg">
-        <img :src="theDetail.cVenueImage" style="width:100%; height: 100%;" alt="">
+        <div class="img">
+          <!-- <img src="../../assets/bg1.png" style="width:100%; height: 100%; border-radius: 8px;" alt=""> -->
+          <img :src="theDetail.cVenueImage" style="width:100%; height: 100%; border-radius: 8px;" alt="">
+        </div>
+        <div class="titleTop">
+          <p class="p1">{{theDetail.title}}</p>
+          <p class="p2">LTYTOBALANCETOSP</p>
+        </div>
       </div>
       <!-- 标题及报名情况 -->
       <div class="titleBox">
         <div class="titleText">{{theDetail.title}}</div>
         <div class="people">
-          <span class="span1">￥{{theDetail.cost}}/人</span>
-          <span class="span2">报名情况：{{theDetail.enrolled}}/{{theDetail.people}}</span>
+          <span class="span1">￥<b>{{theDetail.cost}}</b>/人</span>
+          <span class="span2">{{theDetail.enrolled}}/{{theDetail.people}}</span>
         </div>
       </div>
-      <!-- 时间详情 -->
-      <div class="detailBox">
-        <div class="p1">时间：{{theDetail.time}}&nbsp;&nbsp;{{theDetail.timeStart}}-{{theDetail.timeEnd}}</div>
-        <div class="p1 p2">地点：{{theDetail.venueName}}<span @click="toMap" class="el-icon-map-location"></span></div>
-        <p>已报名会员:</p>
-        <div class="headImgBox" >
-          <div class="left" @click="toList">
-            <div 
-              class="imgItem" v-for="(it,ind) in theDetail.enrolledVoList" 
-              :key="ind"
-              :class="{groupOwner : it.group}"
-              >
-              <img :src="it.image" style="width: 100; height:100%; border-radius: 50%;" alt="">
+      <div class="dateBox">
+        <div class="common date">
+          <span class="span1">时间</span>
+          <span class="span2">{{theDetail.time}}</span>
+          <span class="span3">{{theDetail.timeStart}}-{{theDetail.timeEnd}}</span>
+        </div>
+        <div class="common place" @click="toMap">
+          <span class="span1">地点</span>
+          <span class="span2">{{theDetail.venueName}}</span>
+          <span class="span4"></span>
+        </div>
+        <!-- 已报名会员 -->
+        <div class="people" @click="toList">
+          <p>已报名会员<span class="el-icon-arrow-right"></span></p>
+          <div class="headImgBox" v-show="theDetail.enrolled !== 0">
+            <div class="left">
+              <div 
+                class="imgItem" v-for="(it,ind) in 5" 
+                :key="ind"
+                >
+                <img src="../../assets/touxiang.jpg" style="width: 100; height:100%; border-radius: 50%;" alt="">
+              </div>
+              <!-- <div 
+                class="imgItem" v-for="(it,ind) in theDetail.enrolledVoList" 
+                :key="ind"
+                :class="{groupOwner : it.group}"
+                >
+                <img :src="it.image" style="width: 100; height:100%; border-radius: 50%;" alt="">
+              </div> -->
             </div>
           </div>
-          <span class="el-icon-arrow-right" @click="toList"></span>
         </div>
       </div>
-      <!-- 规则 -->
-      <div class="regularBox" ref="rule">
-        <div class="regularTitle">规则</div>
-        <p>1、新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话：187（微信同号）。</p>
-        <p>2、活动人请按照客服通知的场地编号对号入场，球员按水平被分组，6人一个场地，练习热身实行15分钟轮换，双打比赛实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
-        <p>3、请参与者自带球拍，穿运动装和羽毛球球鞋（如果没有球拍或球鞋可提前到来虎小店购买，我们将免费给你配送到场地）。运动前可吃少许易消化食物，不宜空腹或者饱胀进行剧烈活动，可自带温水。</p>
-        <p>4、活动开始前2小时可取消参与活动；报名未到或者未在活动开始前两小时取消的。均按照当场活动费用扣费。</p>
-        <p>5、所有活动均属个人自愿自主参与的，确认报名前请仔细阅读《免责声明》，所有参与者都是独立的责任人，户外及体育活动具有一定的危险性，可能发生危及生命的意外事故和疾病，活动参与者应特别注意安全并自己购买意外保险，没有人对活动中发生的意外事故负责。</p>
-        <p>6、因本次活动属于低价半自助打球行为，所以羽毛球会由本次活动的临时群主在活动开始前领取并分配给球友，若活动开始前发现临时群主还未发放羽毛球的，可与客服联系，客服电话：187.（临时群主的资格获取、福利、责任等，详见“临时群主的福利与义务”）。</p>
-      </div>
-      <!-- 特殊服务 -->
-      <!-- <div class="service">
-        <div class="serviceTitle">特殊服务</div>
-        <p>1、在来虎羽毛球贩卖机已经布置的球馆，将由球员刷码去球</p>
-        <p>2、在来虎羽毛球贩卖机已经布置的球馆，将由球员刷码去前台领取</p>
-      </div> -->
-      <!-- 来虎领队义务与福利 -->
-      <div class="tourLeaderService" ref="leader">
-        <div class="title">来虎领队义务与福利</div>
-        <p>1、在“确认支付”页面选择“担任临时群主”并成功担任的，本次活动可直接抵扣8元报名费用。</p>
-        <p>2、一场活动有且仅有一个临时群主，所以若有其他人已经担任，则您在支付时会失败，此时需要您取消“担任临时群主”的选择，继续按照普通球友的方式支付。</p>
-        <p>3、在选择担任临时群主时，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地；在活动结束后主动收拾残球，并回收入柜。</p>
-      </div>
-      <!-- 来虎领队 -->
-      <div class="tourLeader">
-        <div class="title">来虎领队</div>
-        <p class="p1">手机：13345436788<span class="el-icon-arrow-right"></span><a :href="'tel:' + theDetail.phone"><span class="el-icon-phone"></span></a></p>
-        <p class="p2">电话：028-85514712<span class="el-icon-arrow-right"></span><a href="tel: 028-85514712"><span class="el-icon-phone-outline"></span></a></p>
-        <div class="text">如有疑问可添加来虎领队微信或拨打来虎领队电话咨询</div>
-      </div>
+      <!-- 收缩项 -->
+      <ul class="ul1">
+        <li class="li1" ref="leader">
+          <div class="title" @click="show1 = !show1">
+            临时群主的福利和义务<span class="sp1">(直降8元)</span><span class="sp2 el-icon-arrow-down"></span>
+          </div>
+          <div class="detail" v-show="show1">
+            <p>1、担任临时群主，本次活动可直接<span class="sp1">抵扣8元</span>打球费。</p>
+            <p>2、一场活动仅有一名临时群主，如有其他人抢先担任，请按照普通球友的方式支付。</p>
+            <p>3、在选择担任临时群主前，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地。</p>
+          </div>
+        </li>
+        <li class="li2" ref="rule">
+          <div class="title" @click="show2 = !show2">
+            规则<span class="sp2 el-icon-arrow-down"></span>
+          </div>
+          <div class="detail" v-show="show2">
+            <p>1、新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话：18113011911（微信同号）。</p>
+            <p>2、活动人请按照客服通知的场地编号对号入场，球员会水平被分组，6人一个场地，练习热身实行15分钟轮换，双打比赛实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
+            <p>3、活动开始前2小时可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若互补成功，会短信通知。</p>
+          </div>
+        </li>
+        <li class="li3">
+          <div class="title" @click="show3 = !show3">
+            <div class="left" v-show="show3">
+              <div class="imgbox">
+                <img src="../../assets/laihuHeaderImg.png" style="width:100%; height: 100%; border-radius: 50%;" alt="">
+              </div>
+            </div>
+            <div class="name">
+              来虎客服
+            </div>
+            <div class="nameText" v-show="show3">虎妞</div>
+            <span class="sp2 el-icon-arrow-down"></span>
+          </div>
+          <div class="detail" v-show="show3">
+            <div class="comm phone">
+              手机<span class="Num">18113011911</span><a href='tel: 18113011911' ><span class="phoneIcon"></span></a>
+            </div>
+            <div class="comm weixin">
+              微信<span class="Num">laihu007&nbsp;(添加微信号咨询)</span><span class="phoneIcon"></span>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
-    
-    <!-- 报名截止 -->
-    <div class="time">
+    <!-- 底部按钮 -->
+    <div class="signupWrap">
       <p class="p1">报名截止还有：<span>{{content}}</span></p>
-      <div class="p2">
-        <div class="checkbox" @click="checked" :class="{checked:isChecked}"><span v-show="isChecked" class="span1 el-icon-check"></span></div>
-        <div class="span2">我已阅读并同意<span class="span3" @click="toEscapeClause">《免责条款》</span></div>
+      <div class="check">
+        <span class="text" @click="toEscapeClause">我已同意《免责条款》</span>
+        <span class="checkBox" @click="checked"><b class="el-icon-check" v-show="isChecked"></b></span>
       </div>
-      <el-button @click="submit">{{theDetail.osState}}</el-button>
+      <div class="btn" @click="submit">{{theDetail.osState}}</div>
     </div>
   </div>
 </template>
 
-<script>
+<script> 
 export default {
   name: 'ActivityDetail',
   data() {
     return {
+      show1: true,
+      show2: true,
+      show3: false,
       activityDetailId: '',
       theDetail: '',
       imgurl: '',
@@ -110,13 +149,13 @@ export default {
   mounted () {
     // 当前一页点击的是‘临时领队’时滚动条滚动到临时领队位置
     if(window.sessionStorage.getItem('clickType') === '领队') {
-      const scrollHeight = this.$refs.leader.offsetTop - 10
-      window.scrollTo(0,scrollHeight)
+      const scrollHeight = this.$refs.leader.offsetTop - 50
+      this.$refs.scrollBox.scrollTo(0,scrollHeight)
     }
     // 当前一页点击的是‘规则’时滚动条滚动到规则位置
     if(window.sessionStorage.getItem('clickType') === '规则') {
-      const scrollHeight = this.$refs.rule.offsetTop - 10
-      window.scrollTo(0,scrollHeight)
+      const scrollHeight = this.$refs.rule.offsetTop - 50
+      this.$refs.scrollBox.scrollTo(0,scrollHeight)
     }
   },
   methods: {
@@ -146,18 +185,18 @@ export default {
           scale: 13,
           name: that.theDetail.venueName,
           address: that.theDetail.address,
-          fail: function() {
-            that.$toast({
-              message: '抱歉，调起导航失败，请重试！',
-              duration: 2000
-            });
-          }
+          // fail: function() {
+          //   that.$toast({
+          //     message: '抱歉，调起导航失败，请重试！',
+          //     duration: 2000
+          //   });
+          // }
         })
       })
       // 当微信获取位置配置失败
       wx.error(function(res){
         that.$toast({
-          message: '抱歉，调起导航失败，请重试！',
+          message: '抱歉，调起导航失败，请稍后重试！',
           duration: 2000
         });
       });
@@ -267,280 +306,331 @@ export default {
   .activityDetail{
     width: 100%;
     min-height: 100vh;
-    background: #f2f2f2;
-    // padding-bottom: 165px;
-    padding-bottom: 700px;
-    .wrap{
+    background: #1e1e1c;
+    overflow: hidden;
+    .topimg{
+      width: 100%;
+      height: 380px;
       padding: 0 20px;
-      .topimg{
-        width: 100%;
-        height: 300px;
+      padding-top: 20px;
+      position: relative;
+      .img{
+        width: 720px;
+        height: 368px;
+        position: absolute;
+        left: 15px;
+        top: 20px;
+        z-index: 9;
       }
+      .titleTop{
+        width: 100%;
+        height: 380px;
+        position: absolute;
+        top: 20px;
+        left: 0;
+        background: rgba(0,0,0,0.2);
+        z-index: 19;
+        .p1{
+          width: 30%;
+          height: 32px;
+          line-height: 34px;
+          font-size: 32px;
+          color: #fff;
+          margin: 0 auto;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+          margin-top: 160px;
+        }
+        .p2{
+          font-size: 20px;
+          line-height: 72px;
+          color: #fff;
+          text-align: center;
+          letter-spacing: 7px;
+          font-weight: 700;
+        }
+      }
+    }
+    .scrollBox{
+      height: 82.4vh;
+      overflow: auto;
       .titleBox{
         width: 100%;
-        height: 130px;
-        background: #fff;
+        height: 140px;
         margin-top: 20px;
         overflow: hidden;
-        padding: 0 20px;
+        padding: 0 30px;
         .titleText{
-          font-size: 3px;
-          line-height: 30px;
-          margin-top: 20px;
+          font-size: 34px;
+          line-height: 70px;
+          color: #fff;
         }
         .people{
           width: 100%;
-          margin-top: 20px;
           span{
             display: block;
           }
           .span1{
             float: left;
             color: #fdb20f;
+            line-height: 50px;
+            font-size: 26px;
+            b{
+              font-size: 34px;
+            }
           }
           .span2{
+            font-size: 26px;
+            color: #fff;
             float: right;
           }
         }
       }
-      .detailBox{
-        width: 100%;
-        height: 320px;
+      .dateBox{
+        width: 96%;
+        // height: 376px;
+        min-height: 262px;
         background: #fff;
-        margin-top: 20px;
-        padding: 0 20px;
+        margin: 0 auto;
+        border-radius: 15px;
+        padding: 0 32px;
         overflow: hidden;
-        .p1{
+        .common{
           width: 100%;
-          height: 80px;
-          font-size: 28px;
-          line-height: 80px;
-          border-bottom: 1px solid #dedede;
-        }
-        p{
-          margin-top: 20px;
-        }
-        .p2{
-          padding-right: 10px;
+          height: 96px;
+          border-bottom: 1px solid #e5e5e5;
+          font-size: 0;
+          padding-left: 6px;
           span{
-            font-size: 32px;
-            float: right;
-            color: #43bcf1;
-            line-height: 80px;
+            font-size: 30px;
+            line-height: 96px;
+            display: inline-block;
+            color: #474747;
+          }
+          .span2{
+            margin-left: 59px;
+          }
+          .span3{
+            margin-left: 59px;
           }
         }
-        .headImgBox{
+        .place{
           width: 100%;
-          height: 80px;
-          .left{
-            width: 80%;
-            height: 80px;
-            float: left;
-            padding-top: 10px;
-            .imgItem{
-              width: 60px;
-              height: 60px;
+          padding-right: 4px;
+          .span4{
+            display: block;
+            width: 38px;
+            height: 96px;
+            float: right;
+            margin-right: 15px;
+            background: url('../../assets/placeIcon.png') no-repeat center;
+            background-size: 100% auto;
+          }
+        }
+        .people{
+          width: 100%;
+          min-height: 66px;
+          padding: 0 6px;
+          p{
+            font-size: 30px;
+            color: #474747;
+            line-height: 30px;
+            margin-top: 30px;
+            span{
+              float: right;
+              font-size: 32px;
+              line-height: 30px;
+              margin-right: 10px;
+            }
+          }
+          .headImgBox{
+            width: 100%;
+            height: 92px;
+            margin-top: 20px;
+            // border: 1px solid red;
+            .left{
+              width: 100%;
+              height: 62px;
+              overflow: hidden;
               float: left;
-              border-radius: 50%;
-              border: 1px solid #fff;
-            }
-            .groupOwner{
-              border: 2px solid #fac31e;
+              margin-left: -10px;
+              .imgItem{
+                width: 60px;
+                height: 60px;
+                float: left;
+                margin-left: 10px;
+                border-radius: 50%;
+                border: 1px solid #fff;
+              }
+              .groupOwner{
+                border: 2px solid #fac31e;
+              }
             }
           }
-          span{
+        }
+      }
+      .ul1{
+        width: 100%;
+        height: auto;
+        padding: 0 2%;
+        margin-top: 15px;
+        li{
+          width: 100%;
+          min-height: 99px;
+          background: #fff;
+          border-radius: 13px;
+          margin-bottom: 15px;
+          padding-left: 37px;
+          padding-right: 32px;
+          .title{
+            width: 100%;
+            height: 99px;
+            color: #464646;
+            line-height: 99px;
+          }
+          .el-icon-arrow-down{
             float: right;
+            margin-right: 18px;
+            line-height: 99px;
             font-size: 32px;
-            line-height: 80px;
+          }
+          .detail{
+            width: 100%;
+            height: auto;
+            border-top: 1px solid #e8e8e8;
+            padding: 15px 0;
+            p{
+              font-size: 28px;
+              line-height: 48px;
+              color: #4a4a4a;
+            }
+          }
+        }
+        .li1{
+          .sp1{
+            color: #ffbb02;
+          }
+        }
+        .li3{
+          .title{
+            font-size: 0;
+            .left{
+              width: 130px;
+              height: 99px;
+              display: inline-block;
+              padding-top: 20px;
+              vertical-align: top;
+              .imgbox{
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                float: left;
+              }
+            }
+            .name{
+              width: 160px;
+              height: 99px;
+              font-size: 30px;
+              color: #464646;
+              line-height: 99px;
+              display: inline-block; 
+              vertical-align: top;
+            }
+            .nameText{
+              height: 99px;
+              font-size: 30px;
+              color: #464646;
+              line-height: 99px;
+              display: inline-block;
+              vertical-align: top;
+            }
+          }
+          .detail{
+            .comm{
+              width: 100%;
+              height: 96px;
+              font-size: 30px;
+              line-height: 96px;
+              padding-left: 5px;
+              color: #4d4d4d;
+              .Num{
+                padding-left: 71px;
+                font-size: 30px;
+              }
+            }
+            .phone{
+              border-bottom: 1px solid #e6e6e6;
+              .phoneIcon{
+                display: block;
+                width: 38px;
+                height: 96px;
+                float: right;
+                margin-right: 20px;
+                background: url('../../assets/phoneIcon.png') no-repeat center;
+                background-size: 100% auto;
+              }
+            }
           }
         }
       }
-      .regularBox{
-        width: 100%;
-        min-height: 300px;
-        background: #fff;
-        margin-top: 20px;
-        overflow: hidden;
-        padding: 0 20px;
-        padding-bottom: 20px;
-        .regularTitle{
-          width: 100%;
-          height: 66px;
-          font-size: 31px;
-          line-height: 66px;
-        }
-        p{
-          font-size: 27px;
-          line-height: 40px;
-          margin-top: 10px;
+    }
+    .signupWrap{
+      width: 100%;
+      height: 17.6vh;
+      padding: 0 15px;
+      .p1{
+        height: 72px;
+        line-height: 72px;
+        padding-left: 6px;
+        font-size: 28px;
+        color: #fff;
+        span{
+          font-size: 32px;
+          color: #e6ab09;
         }
       }
-      // .service{
-      //   width: 100%;
-      //   min-height: 300px;
-      //   background: #fff;
-      //   margin-top: 20px;
-      //   overflow: hidden;
-      //   padding: 0 20px;
-      //   .serviceTitle{
-      //     width: 100%;
-      //     height: 60px;
-      //     font-size: 28px;
-      //     line-height: 60px;
-      //   }
-      // }
-      .tourLeaderService{
+      .check{
         width: 100%;
-        min-height: 300px;
-        background: #fff;
-        margin-top: 20px;
-        overflow: hidden;
-        padding: 0 20px;
-        padding-bottom: 30px;
-        .title{
-          width: 100%;
-          height: 66px;
-          font-size: 31px;
-          line-height: 66px;
-        }
-      }
-      .tourLeader{
-        width: 100%;
-        min-height: 270px;
-        background: #fff;
-        margin-top: 20px;
-        overflow: hidden;
-        padding: 0 20px;
-        .title{
-          width: 100%;
-          height: 66px;
-          font-size: 31px;
-          line-height: 66px;
-          border-bottom: 1px solid #dedede;
-        }
-        p{
-          width: 100%;
-          margin-top: 15px;
-          span{
-            float: right;
-          }
-        }
-        .p1{
-          span{
-            font-size: 34px;
-            float: right;
-            line-height: 45px;
-          }
-          a{
-            color: #68df62;
-            font-size: 34px;
-            float: right;
-            margin-right: 15px;
-            // line-height: 23px;
-            line-height: 45px;
-          }
-        }
-        .p2{
-          span{
-            font-size: 34px;
-            float: right;
-            line-height: 45px;
-          }
-          a{
-            color: #e9c628;
-            font-size: 34px;
-            float: right;
-            margin-right: 15px;
-            line-height: 45px;
-          }
+        height: 52px;
+        font-size: 0;
+        padding-right: 6px;
+        span{
+          display: block;
+          color: #fff;
+          float: right;
         }
         .text{
-          width: 100%;
-          height: 60px;
-          font-size: 23px;
-          line-height: 60px;
-          border-top: 1px solid #dedede;
-          margin-top: 20px;
-        }
-      }
-    }
-    .time{
-      width: 100%;
-      height: 146px;
-      background: #fff;
-      margin-top: 45px;
-      border-top: 1px solid #f5f2f2;
-      border-bottom: 1px solid #f5f2f2;
-      position: fixed;
-      bottom: 0;
-      // position: relative;
-      .p1{
-        font-size: 25px;
-        padding-left: 20px;
-        color: #636468;
-        margin-top: 25px;
-        span{
+          vertical-align: top;
           font-size: 25px;
-          color: #ee5e39;
+          line-height: 28px;
+          border-bottom: 1px solid #fff;
         }
-      }
-      .p2{
-        width: 490px;
-        height: 60px;
-        position: relative;
-        // padding-top: 20px;
-        line-height: 60px;
-        padding-left: 20px;
-        position: relative;
-        .checkbox{
-          width: 35px;
-          height: 35px;
-          margin-top: 12px;
-          float: left;
-          line-height: 32px;
-          text-align: center;
-          border: 2px solid #c8c8ca;
-          border-radius: 50%;
-          .span1{
-            font-size: 25px;
+        .checkBox{
+          width: 22px;
+          height: 22px;
+          border: 1px solid #fff;
+          margin-right: 5px;
+          margin-top: 3px;
+          line-height: 28px;
+          b{
+            color: #f8c026;
+            line-height: 22px;
+            font-size: 18px;
             text-align: center;
-            color: #fff;
           }
         }
-        .checked{
-          border: 2px solid #ffd200;
-          background: #ffd200;
-        }
-        .span2{
-          height: 60px;
-          line-height: 60px;
-          float: left;
-          padding-left: 10px;
-          font-size: 22px;
-          color: #4a5157;
-          // position: absolute;
-          // top: 13px;
-          // .span3{
-          //   color: #6a9cbf;
-          // }
-        }
+      }
+      .btn{
+        width: 100%;
+        height: 96px;
+        line-height: 96px;
+        text-align: center;
+        background: #ffbc01;
+        border-radius: 15px;
+        font-size: 33px;
       }
     }
-  }
-</style>
-<style>
-  .activityDetail .el-button{
-    width: 160px;
-    height: 80px;
-    color: #fff;
-    background: #ee5e39;
-    float: right;
-    border-radius: 10px;
-    position: absolute;
-    top: 28px;
-    right: 15px;
-    outline: none;
-    border: none;
-    font-size: 28px;
   }
 </style>

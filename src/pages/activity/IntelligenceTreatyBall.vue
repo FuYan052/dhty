@@ -42,7 +42,7 @@
             <!-- 规则 -->
             <div class="ruler">
               <div class="wrap1">LI-NING&nbsp;&nbsp;A6(来虎专用球)</div>
-              <div class="wrap2" @click="leader(item.id)">临时领队</div>
+              <div class="wrap2" @click="leader(item.id)">临时群主</div>
               <div class="wrap3" @click="rule(item.id)">规则</div>
             </div>
             <!-- 正在报名 -->
@@ -420,29 +420,29 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #f4f4f4;
-    padding-top: 112px;
+    padding-top: 90px;
     .dateCate{
       width: 100%;
-      height: 112px;
+      height: 90px;
       background: #f4f4f4;
       position: fixed;
       top: 0;
       left: 0;
       z-index: 10;
       .wrap{
-        width: 256px;
-        height: 112px;
+        width: 286px;
+        height: 90px;
         margin: 0 auto;
         .date{
-          width: 60px;
-          height: 60px;
+          width: 70px;
+          height: 70px;
           border-radius: 50%;
-          line-height: 60px;
+          line-height: 70px;
           text-align: center;
           float: left;
           color: #000;
-          font-size: 25px;
-          margin-top: 16px;
+          font-size: 28px;
+          // margin-top: 16px;
         }
       }
       .date:nth-of-type(2){
@@ -453,7 +453,7 @@ export default {
       }
       .currDate{
         background: #ffb200;
-        color: #fff;
+        color: #fff !important;
         position: relative;
       }
       .currDate::before{
@@ -463,7 +463,7 @@ export default {
         height: 15px;
         position: absolute;
         bottom: -18px;
-        left: 2px;
+        left: 6px;
         background: url('../../assets/yelloCircle.png') no-repeat center bottom;
         background-size: auto 60%;
       }
@@ -482,7 +482,7 @@ export default {
       .activeList{
         width: 100%;
         max-height: 90.5vh;
-        padding: 0 34px;
+        padding: 0 15px;
         margin-top: 10px;
         overflow: auto;
         li{
@@ -576,7 +576,7 @@ export default {
                 width: 172px;
                 float: left;
                 padding-left: 32px;
-                background: url('../../assets/badmintonIcon.png') no-repeat left center;
+                background: url('../../assets/timeIcon.png') no-repeat left center;
                 background-size: 28px auto;
               }
               .wrap3{
@@ -640,6 +640,10 @@ export default {
               }
               .currbtnBg2{
                 background: url('../../assets/btnBg3.png') no-repeat center;
+                background-size: 100% 100%;
+              }
+              .currbtnBg4{
+                background: url('../../assets/btnBg4.png') no-repeat center;
                 background-size: 100% 100%;
               }
             }
