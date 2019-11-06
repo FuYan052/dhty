@@ -653,7 +653,7 @@ export default {
       height: auto;
       overflow: auto;
       padding: 20px 14px;
-      padding-bottom: 20vh;
+      padding-bottom: 310px;
       // padding-bottom: px;
     }
     .upKeyBord{
@@ -823,7 +823,7 @@ export default {
       width: 100%;
       padding: 10px 0;
       // padding-bottom: 30px;
-      height: 18vh;
+      height: 290px;
       background: #fff;
       z-index: 9;
       position: fixed;

@@ -45,7 +45,7 @@
             <!-- 生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日 -->
             <span class="right">{{birthdayValue}}<i class="el-icon-arrow-right"></i></span>
           </li>
-          <li >
+          <li @click="birRange">
             年龄段
             <!-- 年&nbsp;龄&nbsp;段 -->
             <span class="right">{{birthRangeValue}}<i class="el-icon-arrow-right"></i></span>
@@ -54,7 +54,7 @@
             级别
             <!-- 级&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别 -->
 
-            <span class="right">{{levelValue}}<i class="el-icon-arrow-right"></i></span>
+            <span class="right">{{levelName}}<i class="el-icon-arrow-right"></i></span>
           </li>
           <li @click="showprofessionPicker">
             职业
@@ -101,9 +101,24 @@
             <div class="usi-btn-sure" @click="currSure">确定</div>
           </div>
         </mt-picker>
+        <!-- 等级选择 -->
+        <mt-picker 
+          v-show="levelPicker"
+          :slots="currSlots" 
+          value-key="name"
+          :visibleItemCount='3'
+          :itemHeight='50'
+          showToolbar
+          @change="currChange"
+          >
+          <div class="picker-toolbar-title">
+            <div class="usi-btn-cancel" @click="popupVisible = !popupVisible">取消</div>
+            <div class="usi-btn-sure" @click="currSure">确定</div>
+          </div>
+        </mt-picker>
         <!-- 日期选择 -->
         <mt-datetime-picker
-          v-show="!commonPicker"
+          v-show="!commonPicker && !levelPicker"
           ref="picker"
           type="date"
           :startDate='birthdayStartDate'
@@ -134,6 +149,7 @@ export default {
       imageUrl: '',
       formData: '',
       commonPicker: true,
+      levelPicker: false,
       // value1: '',  //昵称
 
       isShowInputName: false,
@@ -151,8 +167,9 @@ export default {
       birthdayEndDate: new Date(),  //生日最大可选择
       birthday: new Date('2000,6,15'),  //默认
       birthdayValue: '',  //确定后的生日选择
-      level: '',  //级别
-      levelValue: '',
+      levelName: '',  //级别
+      levelSkey: '',
+      levelList: [],
       birthRangeValue: '',  //年龄段
       profession: '公职人员',
       professionValue: '',  //确定后职业选择
@@ -187,14 +204,14 @@ export default {
           textAlign: 'center'
         }
       ],
-      levelSlots: [
-        {
-          flex: 1,
-          values: ['初级', '中级','高级', '专业'],
-          className: 'slotL',
-          textAlign: 'center'
-        }
-      ],
+      // levelSlots: [
+      //   {
+      //     flex: 1,
+      //     values: ['初级', '中级','高级', '专业'],
+      //     className: 'slotL',
+      //     textAlign: 'center'
+      //   }
+      // ],
       professionSlots: [
         {
           flex: 1,
@@ -239,15 +256,33 @@ export default {
       userId: ''
     }
   },
-  // computed: {
-  //   // 用户id
-  //   ...mapState(['userId']),
-  // },
+  computed: {
+    levelSlots() {
+      let slots2 = [
+        {
+          flex: 1,
+          values: this.levelList,
+          className: 'slot1',
+          textAlign: 'center',
+          defaultIndex: 0,
+        }
+      ]
+      return slots2
+    }
+  },
   created() {
     // 获取信息
     this.userId = window.localStorage.getItem('userId')
     this._id = window.localStorage.getItem('userId')
     this.getInfo()
+
+    // 获取水平
+    this.$http.findDictList('level').then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.levelList = resp.data
+      }
+    })
   },
   mounted() {
     this.$nextTick(() => { //vue里面全部加载好了再执行的函数 （类似于setTimeout）
@@ -307,7 +342,9 @@ export default {
             this.birthdayValue = '请选择'
           }
           this.birthRangeValue = resp.data.ageGroup
-          this.levelValue = resp.data.occupationLevel
+          this.levelName = resp.data.occupationLevelName
+          this.levelSkey = resp.data.occupationLevelSkey
+
           this.professionValue = resp.data.occupation
           this.addressValue = resp.data.region
           if(resp.data.region !== null) {
@@ -397,6 +434,7 @@ export default {
     showSexPicker() {
       this.popupVisible = true
       this.commonPicker = true
+      this.levelPicker = false
       this.currSlots = this.slots1
       this.currChange = this.changeSex
       this.currSure = this.sureSex
@@ -418,6 +456,7 @@ export default {
     showHeightPicker() {
       this.popupVisible = true
       this.commonPicker = true
+      this.levelPicker = false
       this.currSlots = this.slots2
       this.currChange = this.changeHeight
       this.currSure = this.sureHeight
@@ -436,10 +475,17 @@ export default {
         this.heightValue = this.height + 'cm'
       }
     },
+    birRange() {
+      this.$toast({
+        message: '选择生日后自动改变！',
+        duration: 1000
+      });
+    },
     // 显示生日选择
     showBirthdayPicker() {
       this.popupVisible = true
       this.commonPicker = false
+      this.levelPicker = false
       // console.log(this.birthdayStartDate)
     },
     // 格式化选择的日期
@@ -473,28 +519,32 @@ export default {
     // 级别选择
     showLevl() {
       this.popupVisible = true
-      this.commonPicker = true
+      this.commonPicker = false
+      this.levelPicker = true
       this.currSlots = this.levelSlots
       this.currChange = this.changeLevel
       this.currSure = this.sureLevle
     },
     changeLevel(picker, values) {
-      this.level = values[0]
+      this.levelSkey = values[0].skey
+      this.levelName = values[0].name
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0]);
       }
     },
     sureLevle() {
-      if(this.level == '') {
-        this.level = this.levelSlots[0].values[0]
+      if(this.levelName == '') {
+        this.levelSkey = this.levelSlots[0].values[0].skey
+        this.levelName = this.levelSlots[0].values[0].name
       }
       this.popupVisible = !this.popupVisible
-      this.levelValue = this.level
+      // this.levelName = this.levelName
     },
     //显示职业选择
     showprofessionPicker() {
       this.popupVisible = true
       this.commonPicker = true
+      this.levelPicker = false
       this.currSlots = this.professionSlots
       this.currChange = this.changeProfession
       this.currSure = this.sureProfession
@@ -514,6 +564,7 @@ export default {
     showLocation() {
       this.popupVisible = true
       this.commonPicker = true
+      this.levelPicker = false
       this.currSlots = this.addressSlots
       this.currChange = this.onAddressChange
       this.currSure = this.sureAddress
@@ -587,7 +638,7 @@ export default {
         birthday: this.birthdayValue,
         occupation: this.professionValue,
         region: this.addressValue,
-        occupationLevel: this.levelValue,
+        occupationLevel: this.levelSkey,
         ageGroup: this.birthRangeValue,
         labelId: this.labelsId
       }
@@ -622,18 +673,18 @@ export default {
     min-height: 100vh;
     background: #f2f2f2;
     padding-top: 25px;
+    overflow: hidden;
     // position: relative;
     .maxHeightBox{
       width: 100%;
-      height: 83vh;
+      height: 81.5vh;
       overflow: auto;
       padding: 0 47px;
     }
     .heightBox2{
       width: 100%;
-      height: 15vh;
+      height: 17vh;
       padding: 0 47px;
-      padding-top: 1vh;
       overflow: hidden;
     }
     .touxiang{
@@ -767,7 +818,7 @@ export default {
       color: #fff;
       text-align: center;
       background: #fac31e;
-      margin-top: 50px;
+      margin-top: 45px;
       border-radius: 14px;
       letter-spacing: 1px;
       font-size: 32px;

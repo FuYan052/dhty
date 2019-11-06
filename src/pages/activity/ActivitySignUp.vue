@@ -1,36 +1,30 @@
 <template>
-  <!-- 活动报名 -->
   <div class="activitySignUp" v-title data-title="活动报名">
-    <div class="actDetail">
-      <div class="left">
-        <div class="imgbox">
-          <img :src="theDetail.venueImage" style="width: 100%; hight: 100% border-radius: 10px;" alt="">
+    <div class="topBox">
+      <div class="wrap1">
+        <div class="date">
+          <p class="time">{{theDetail.timeStart}}</p>
+          <p class="time2">{{theDetail.time}}</p>
         </div>
-        <!-- <h1 class="time">{{theDetail.timeStart}}</h1>
-        <div class="date">{{theDetail.time}}</div> -->
+        <div class="title">
+          <p class="titleText">
+            {{theDetail.title}}
+          </p>
+          <p class="place">场馆：{{theDetail.venueName}}</p>
+        </div>
       </div>
-      <div class="right">
-        <p class="title">{{theDetail.title}}</p>
-        <p class="p name">费&nbsp;&nbsp;&nbsp;用：{{theDetail.cost}}元/人</p>
-        <p class="p organizer">组织者：{{theDetail.nickName}}</p>
-        <p class="p place">体育馆：{{theDetail.venueName}}</p>
-      </div>
-      <div class="timeWrap">
-        <h1 class="time">{{theDetail.timeStart}}</h1>
-        <div class="date">{{theDetail.time}}</div>
-      </div>
-    </div>
-    <!-- 临时群主 -->
-    <div class="leader">
-      <div class="radiuBox" @click="isSelect = !isSelect"><span class="el-icon-check" v-show="isSelect"></span></div>
-      <div class="descr">
-        <p>担任本场活动临时领队</p>
-        <p @click="isShowLeaderDetail = !isShowLeaderDetail">《来虎临时领队义务和责任》</p>
-      </div>
-      <div class="detail" v-show="isShowLeaderDetail">
-        <p>1、在“确认支付”页面选择“担任临时群主”并成功担任的，本次活动可直接抵扣8元报名费用。</p>
-        <p>2、一场活动有且仅有一个临时群主，所以若有其他人已经担任，则您在支付时会失败，此时需要您取消“担任临时群主”的选择，继续按照普通球友的方式支付。</p>
-        <p>3、在选择担任临时群主时，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地；在活动结束后主动收拾残球，并回收入柜。</p>
+      <!-- 临时群主 -->
+      <div class="leader">
+        <div class="radiuBox" @click="isSelect = !isSelect"><span class="el-icon-check" v-show="isSelect"></span></div>
+        <div class="descr">
+          <p>担任本场临时群主<span>直降8元</span></p>
+          <p @click="isShowLeaderDetail = !isShowLeaderDetail">《来虎临时领队义务和责任》</p>
+        </div>
+        <div class="detail" v-show="isShowLeaderDetail">
+          <p>1.担任临时群主，本次活动可直接抵扣8元打球费。</p>
+          <p>2.一场活动仅有一名临时群主，如有其他人抢先担任，请按照普通球友的方式支付。</p>
+          <p>3.在选择担任临时群主前，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地。</p>
+        </div>
       </div>
     </div>
     <!-- 报名人数 -->
@@ -53,42 +47,46 @@
     </div>
     <!-- 支付方式 -->
     <div class="payType">支付方式</div>
-      <ul class="pay">
-        <!-- <li>
-          <div class="left">
-            <el-radio v-model="radio" label="1">会费支付</el-radio>
-          </div>
-          <div class="right">
-          </div>
-        </li> -->
-        <li>
-          <div class="left">
-            <div class="circle"><span></span></div><div class="text">微信支付</div>
-          </div>
-          <div class="right">
-            {{theDetail.cost}}元/人
-          </div>
-        </li>
-        <li class="coupon_li">
-          <div class="left">
-            <div class="circle" @click="isUseCoup"><span v-show="isUse"></span></div><div class="text">优惠券</div>
-          </div>
-          <div class="right" @click="toSelectCoup">
-            <p v-if="isShowNoUse">暂无可用</p>
-            <p v-else>
-              <span class="useNum" v-show="!haveSelected">11张可用</span>
-              <span v-show="haveSelected">嘉年华优惠券&nbsp;&nbsp;&nbsp;<b>-￥5</b></span>
-            </p>
-            <span class="el-icon-arrow-right"></span>
-          </div>
-        </li>
-      </ul>
-    <!-- 确认按钮 -->
-    <div class="bottom">
-      <div class="left">
-        <p class="p1">合计：</p>
-        <p class="p2">现金：{{total}}元</p>
+    <ul class="pay">
+      <li>
+        <div class="left">
+          <div class="circle"><span></span></div><div class="text">微信支付</div>
+        </div>
+        <div class="right">
+          {{theDetail.cost}}元/人
+        </div>
+      </li>
+    </ul>
+    <!-- 优惠券 -->
+    <div class="coupon">
+      <div class="title" @click="toSelectCoup">
+        <div class="t1">优惠</div>
+        <div class="t2">{{selectedCoupon.name}}</div>
+        <div class="t3">
+          <p v-if="isShowNoUse">暂无可用</p>
+          <p v-else>
+            <span class="useNum" v-show="!haveSelected">11张可用</span>
+            <span v-show="haveSelected">-￥{{selectedCoupon.money}}</span>
+          </p>
+          <span class="el-icon-arrow-right"></span>
+        </div>
       </div>
+      <!-- 暂不使用优惠券 -->
+      <div class="noUse">
+        <div class="text">暂不使用优惠券</div>
+        <div class="switchBtn">
+          <el-switch
+            @change='isUseCoup'
+            v-model="isnoUse"
+            active-color="#ffbc01"
+            inactive-color="#cdcbce">
+          </el-switch>
+        </div>
+      </div>
+    </div>
+    <!-- 支付按钮 -->
+    <div class="bottomWrap">
+      <div class="total">合计：<span>{{total}}</span>元</div>
       <div class="btn" @click="surePay">确定</div>
     </div>
   </div>
@@ -98,7 +96,7 @@
 export default {
   name: 'ActivitySignUp',
   data() {
-    return {
+    return{
       theDetail: '',
       num1: 0,
       num2: 0,
@@ -111,7 +109,7 @@ export default {
       timer: null ,
       people: null,  //活动限制人数
       enrolled: null,  //已报名人数
-      isUse: true,  //默认使用优惠券
+      isnoUse: false,  //默认使用优惠券
       useCoupList: [],  //可使用优惠券列表
       notUserCoupList: [],  //不可使用优惠券列表
       selectedCoupon: '',  //选中的优惠券
@@ -120,6 +118,7 @@ export default {
       state: '',  //活动状态
       isSelect: false,  //默认不选择临时领队
       isShowLeaderDetail: false,  //是否展示领队义务与责任
+      // switchVuale: false,
     }
   },
   watch: {
@@ -241,7 +240,6 @@ export default {
     },
     // 是否使用优惠券
     isUseCoup() {
-      this.isUse = !this.isUse
       this.haveSelected = false
     },
     // 选择优惠券
@@ -341,6 +339,9 @@ export default {
     }
   },
   beforeDestroy() {
+    window.sessionStorage.removeItem('womenNum')
+    window.sessionStorage.removeItem('menNum')
+    window.sessionStorage.removeItem('selectedCoupon')
     // 清除定时器
     clearTimeout(this.timer)
     this.timer = null
@@ -354,159 +355,167 @@ export default {
   .activitySignUp{
     width: 100%;
     min-height: 100vh;
-    background: #f2f2f2;
-    .actDetail{
+    background: #1e1e1e;
+    overflow: hidden;
+    padding: 0 16px;
+    padding-bottom: 340px;
+    .topBox{
       width: 100%;
-      height: 228px;
+      min-height: 318px;
       background: #fff;
-      overflow: hidden;
-      position: relative;
-      .left{
-        width: 190px;
-        height: 135px;
-        border-right: 1px solid #e8e8e8;
-        float: left;
-        margin-top: 45px;
-        padding-right: 20px;
-        overflow: hidden;
-        .imgbox{
-          width: 128px;
-          height: 128px;
-          // border: 1px solid red;
-          margin-left: 25px;
-          border-radius: 10px;
-          margin-top: 2px;
-        }
-      }
-      .right{
-        width: 520px;
-        height: 100%;
-        float: right;
-        // padding-top: 42px;
-        white-space: nowrap;
-        padding-right: 20px;
-        .title{
-          width: 90%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          color: #000;
-          margin-top: 40px;
-          font-size: 32px;
-          line-height: 34px;
-        }
-        .p{
-          width: 60%;
-          font-size: 22px;
-          color: #797979;
-          line-height: 37px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .name{
-          margin-top: 5px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-      }
-      .timeWrap{
-        width: 190px;
-        height: 135px;
-        border-right: 1px solid #e8e8e8;
-        // margin-top: 65px;
-        padding-right: 20px;
-        position: absolute;
-        right: 0;
-        top: 80px;
-        .time{
-          font-size: 36px;
-          color: #f9c41e;
-          font-weight: bold;
-          text-align: center;
-          line-height: 65px;
-        }
+      margin-top: 25px;
+      border-radius: 15px;
+      padding: 0 30px;
+      .wrap1{
+        width: 100%;
+        height: 180px;
+        border-bottom: 1px solid #e8e8e8;
+        padding-top: 41px;
         .date{
-          font-size: 25px;
-          color: #a5a5a5;
-          text-align: center;
+          width: 170px;
+          height: 100px;
+          border-right: 1px solid #e8e8e8;
+          float: left;
+          .time{
+            font-size: 34px;
+            color: #f7b706;
+            font-weight: bold;
+            line-height: 34px;
+            margin-top: 10px;
+          }
+          .time2{
+            font-size: 24px;
+            color: #7d7d7d;
+            line-height: 24px;
+            margin-top: 20px;
+          }
+        }
+        .title{
+          float: left;
+          padding-left: 40px;
+          .titleText{
+            height: 36px;
+            font-size: 34px;
+            line-height: 36px;
+            margin-top: 7px;
+            width: 440px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+          }
+          .place{
+            height: 26;
+            font-size: 26px;
+            line-height: 30px;
+            width: 440px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            margin-top: 28px;
+            color: #4b4b4b;
+          }
         }
       }
-    }
-    .leader{
-      width: 100%;
-      min-height: 110px;
-      background: #fff;
-      margin-top: 20px;
-      overflow: hidden;
-      .radiuBox{
-        width: 60px;
-        height: 60px;
-        transform: scale(0.8);
-        float: left;
-        border-radius: 50%;
-        border: 1px solid rgb(192, 192, 192);
-        margin-top: 15px;
-        margin-left: 30px;
-        span{
-          font-size: 45px;
-          line-height: 60px;
-          margin-left: 3px;
-          font-weight: bold;
-          display: inline-block;
-          text-align: center;
-        }
-      }
-      .descr{
-        height: 100px;
-        float: left;
+      .leader{
+        width: 100%;
+        min-height: 110px;
+        background: #fff;
         // border: 1px solid red;
-        margin-left: 15px;
-        p{
-          font-size: 27px;
-          line-height: 27px;
-          margin-top: 20px;
+        margin-top: 22px;
+        overflow: hidden;
+        .radiuBox{
+          width: 50px;
+          height: 50px;
+          transform: scale(0.8);
+          float: left;
+          border-radius: 50%;
+          border: 1px solid rgb(192, 192, 192);
+          font-size: 0;
+          span{
+            font-size: 36px;
+            line-height: 50px;
+            margin-left: 5px;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+            color: #7a7979;
+          }
         }
-        p:nth-of-type(2){
-          font-size: 22px;
-          margin-top: 20px;
-          margin-left: -10px;
-          color: #fac31e;
+        .descr{
+          height: 100px;
+          float: left;
+          // border: 1px solid red;
+          margin-left: 12px;
+          p{
+            font-size: 27px;
+            line-height: 22px;
+            margin-top: 13px;
+            span{
+              color: #fdc925;
+            }
+          }
+          p:nth-of-type(2){
+            font-size: 22px;
+            margin-top: 25px;
+            margin-left: -10px;
+            padding-bottom: 5px;
+            color: #5b5b5b;
+            position: relative;
+          }
+          p:nth-of-type(2)::after{
+            content: '';
+            display: inline-block;
+            width: 274px;
+            height: 26px;
+            position: absolute;
+            left: 5px;
+            top:-3px;
+            border-bottom: 1px solid #ababab;
+          }
         }
-      }
-      .detail{
-        width: 92%;
-        height: auto;
-        margin: 0 auto;
-        margin-top: 110px;
-        border-top: 1px dashed #dedede;
-        padding-top: 10px;
-        padding-bottom: 18px;
-        p{
+        .detail{
           width: 100%;
-          font-size: 26px;
-          line-height: 40px;
-          margin-top: 5px;
+          height: auto;
+          margin: 0 auto;
+          margin-top: 110px;
+          border-top: 1px dashed #e8e8e8;
+          padding-top: 10px;
+          padding-bottom: 18px;
+          p{
+            width: 100%;
+            font-size: 28px;
+            line-height: 48px;
+            color: #4a4a4a;
+            margin-top: 5px;
+          }
         }
       }
     }
     .number{
       width: 100%;
-      height: 100px;
+      height: 128px;
       padding-left: 20px;
-      line-height: 100px;
+      line-height: 30px;
       font-size: 30px;
+      color: #fff;
+      padding-top: 60px;
     }
     .numberWrap{
       width: 100%;
-      height: auto;
+      height: 208px;
+      border-radius: 15px;
       background: #fff;
+      padding: 0 30px;
       ul{
         width: 100%;
         height: auto;
         li{
           width: 100%;
           height: 100px;
-          padding-left: 30px;
-          padding-right: 25px;
+          // padding-left: 30px;
+          // padding-right: 25px;
           .left{
             width: 200px;
             height: 96px;
@@ -558,23 +567,26 @@ export default {
     }
     .payType{
       width: 100%;
-      height: 100px;
+      height: 128px;
       padding-left: 20px;
-      line-height: 100px;
+      line-height: 30px;
       font-size: 30px;
+      color: #fff;
+      padding-top: 60px;
     }
     .pay{
       width: 100%;
-      height: auto;
+      height: 126px;
       background: #fff;
+      border-radius: 15px;
+      padding: 0 38px;
       li{
         width: 100%;
-        height: 100px;
-        padding-left: 30px;
-        padding-right: 40px;
+        height: 126px;
         .left{
           width: 250px;
-          line-height: 20px;
+          height: 126px;
+          // line-height: 20px;
           font-size: 0;
           float: left;
           .circle{
@@ -602,7 +614,7 @@ export default {
           .text{
             display: inline-block;
             margin-left: 20px;
-            line-height: 96px;
+            line-height: 126px;
             font-size: 28px;
             vertical-align: middle;
           }
@@ -610,9 +622,10 @@ export default {
         .right{
           float: right;
           width: 200px;
-          line-height: 100px;
+          font-size: 24px;
+          line-height: 126px;
           text-align: right;
-          color: #6e6e6e;
+          color: #000;
         }
       }
       .coupon_li{
@@ -642,49 +655,101 @@ export default {
         }
       }
     }
-    .bottom{
+    .coupon{
       width: 100%;
-      height: 128px;
-      padding-left: 20px;
-      border-top: 1px solid #e6eaeb;
+      height: 151px;
       background: #fff;
+      border-radius: 15px;
+      margin-top: 15px;
+      padding: 0 40px;
+      padding-left: 47px;
+      .title{
+        width: 100%;
+        height: 80px;
+        overflow: hidden;
+        .t1{
+          width: 80px;
+          height: 40px;
+          font-size: 24px;
+          line-height: 40px;
+          text-align: center;
+          background: #ffbc01;
+          float: left;
+          margin-top: 22px;
+        }
+        .t2{
+          font-size: 24px;
+          line-height: 80px;
+          float: left;
+          margin-left: 15px;
+        }
+        .t3{
+          float: right;
+          line-height: 80px;
+          color: red;
+          font-size: 29px;
+          p{
+            float: left;
+          }
+          .el-icon-arrow-right{
+            float: right;
+            line-height: 82px;
+            font-size: 28px;
+            color: #000;
+            padding-left: 10px;
+          }
+        }
+      }
+      .noUse{
+        width: 100%;
+        height: 60px;
+        .text{
+          font-size: 26px;
+          line-height: 60px;
+          float: left;
+        }
+        .switchBtn{
+          width: 100px;
+          height: 60px;
+          float: right;
+          margin-right: -15px;
+        }
+      }
+    }
+    .bottomWrap{
+      width: 100%;
+      height: 272px;
+      padding: 0 15px;
+      background: #1e1e1e;
       position: fixed;
       bottom: 0;
-      .left{
-        width: 50%;
-        height: 128px;
-        float: left;
-        padding-left: 20px;
-        .p1{
-          font-size: 24px;
-          color: #717171;
-          line-height: 22px;
-          margin-top: 24px;
-        }
-        .p2{
-          font-size: 28px;
-          color: #ec532a;
-          line-height: 24px;
-          margin-top: 20px;
+      left: 0;
+      .total{
+        width: 100%;
+        height: 74px;
+        line-height: 74px;
+        color: #fff;
+        font-size: 29px;
+        span{
+          color: #e8b310;
+          font-size: 34px;
+          line-height: 74px;
         }
       }
       .btn{
-        width: 152px;
-        height: 76px;
-        color: #fff;
-        background: #ee5e39;
-        line-height: 76px;
+        width: 100%;
+        height: 96px;
+        line-height: 96px;
         text-align: center;
-        float: right;
-        margin-top: 27px;
-        margin-right: 17px;
-        border-radius: 10px;
+        margin-top: 12px;
+        background: #ffbc01;
+        border-radius: 15px;
       }
     }
   }
 </style>
-<style>   
-  .activitySignUp .numberWrap .right .el-input-number{
+<style>
+.activitySignUp .numberWrap .right .el-input-number{
     width: 250px;
     height: 45px;
     margin-top: 25px;
@@ -727,4 +792,24 @@ export default {
     font-size: 26px;
     line-height: 50px;
   }
+  .switchBtn .el-switch__core{
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 20px;
+}
+.switchBtn .el-switch__core:after{
+  top:3px;
+  left: 0;
+  content: '';
+  width: 30px;
+  height: 30px;
+}
+.switchBtn .el-switch.is-checked .el-switch__core:after{
+  margin-left: -30px;
+  top:3px;
+  content: '';
+  width: 30px;
+  height: 30px;
+}
 </style>

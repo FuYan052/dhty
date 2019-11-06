@@ -39,7 +39,7 @@
             @click="changeLevel(item,index)"
             :class="{activeColor: index === currLevelIndex}"
             >
-            {{item}}
+            {{item.name}}
           </li>
         </ul>
       </div>
@@ -79,12 +79,19 @@ export default {
       currWorkIndex: '',
       sexValue: '',
       birthdayValue: '',
-      levelValue: '',
+      levelSkey: '',
       workValue: '',
     }
   },
   created() {
-    console.log(window.localStorage.getItem('userId'))
+    // console.log(window.localStorage.getItem('userId'))
+    // 获取水平
+    this.$http.findDictList('level').then(resp => {
+      console.log(resp)
+      if(resp.status == 200) {
+        this.list3 = resp.data
+      }
+    })
   },
   methods: {
     changeSex(item,index) {
@@ -97,7 +104,7 @@ export default {
     },
     changeLevel(item,index) {
       this.currLevelIndex = index
-      this.levelValue = item
+      this.levelSkey = item.skey
     },
     changeWork(item,index) {
       this.currWorkIndex = index
@@ -114,7 +121,7 @@ export default {
           message: '请选择年龄段！',
           duration: 2000
         });
-      }else if(this.levelValue == '') {
+      }else if(this.levelSkey == '') {
         this.$toast({
           message: '请选择水平！',
           duration: 2000
@@ -128,7 +135,7 @@ export default {
         const params = {
           sexValue: this.sexValue,
           birthdayValue: this.birthdayValue,
-          levelValue: this.levelValue,
+          levelValue: this.levelSkey,
           workValue: this.workValue
         }
         window.sessionStorage.setItem('registerInfo',JSON.stringify(params))

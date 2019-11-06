@@ -9,7 +9,7 @@
         </div>
         <div class="titleTop">
           <p class="p1">{{theDetail.title}}</p>
-          <p class="p2">LTYTOBALANCETOSP</p>
+          <p class="p2">FASRER HIGHER STRONGER </p>
         </div>
       </div>
       <!-- 标题及报名情况 -->
@@ -36,19 +36,19 @@
           <p>已报名会员<span class="el-icon-arrow-right"></span></p>
           <div class="headImgBox" v-show="theDetail.enrolled !== 0">
             <div class="left">
-              <div 
+              <!-- <div 
                 class="imgItem" v-for="(it,ind) in 5" 
                 :key="ind"
                 >
                 <img src="../../assets/touxiang.jpg" style="width: 100; height:100%; border-radius: 50%;" alt="">
-              </div>
-              <!-- <div 
+              </div> -->
+              <div 
                 class="imgItem" v-for="(it,ind) in theDetail.enrolledVoList" 
                 :key="ind"
                 :class="{groupOwner : it.group}"
                 >
                 <img :src="it.image" style="width: 100; height:100%; border-radius: 50%;" alt="">
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -60,9 +60,9 @@
             临时群主的福利和义务<span class="sp1">(直降8元)</span><span class="sp2 el-icon-arrow-down"></span>
           </div>
           <div class="detail" v-show="show1">
-            <p>1、担任临时群主，本次活动可直接<span class="sp1">抵扣8元</span>打球费。</p>
-            <p>2、一场活动仅有一名临时群主，如有其他人抢先担任，请按照普通球友的方式支付。</p>
-            <p>3、在选择担任临时群主前，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地。</p>
+            <p>1.担任临时群主，本次活动可直接<span class="sp1">抵扣8元</span>打球费。</p>
+            <p>2.一场活动仅有一名临时群主，如有其他人抢先担任，请按照普通球友的方式支付。</p>
+            <p>3.在选择担任临时群主前，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地。</p>
           </div>
         </li>
         <li class="li2" ref="rule">
@@ -70,9 +70,9 @@
             规则<span class="sp2 el-icon-arrow-down"></span>
           </div>
           <div class="detail" v-show="show2">
-            <p>1、新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话：18113011911（微信同号）。</p>
-            <p>2、活动人请按照客服通知的场地编号对号入场，球员会水平被分组，6人一个场地，练习热身实行15分钟轮换，双打比赛实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
-            <p>3、活动开始前2小时可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若互补成功，会短信通知。</p>
+            <p>1.新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话：18113011911（微信同号）。</p>
+            <p>2.活动人请按照客服通知的场地编号对号入场，球员会水平被分组，6人一个场地，练习热身实行15分钟轮换，双打比赛实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
+            <p>3.活动开始前2小时可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若互补成功，会短信通知。</p>
           </div>
         </li>
         <li class="li3">
@@ -150,12 +150,14 @@ export default {
     // 当前一页点击的是‘临时领队’时滚动条滚动到临时领队位置
     if(window.sessionStorage.getItem('clickType') === '领队') {
       const scrollHeight = this.$refs.leader.offsetTop - 50
-      this.$refs.scrollBox.scrollTo(0,scrollHeight)
+      // this.$refs.scrollBox.scrollTo(0,scrollHeight)
+      window.scrollTo(0,scrollHeight)
     }
     // 当前一页点击的是‘规则’时滚动条滚动到规则位置
     if(window.sessionStorage.getItem('clickType') === '规则') {
       const scrollHeight = this.$refs.rule.offsetTop - 50
-      this.$refs.scrollBox.scrollTo(0,scrollHeight)
+      // this.$refs.scrollBox.scrollTo(0,scrollHeight)
+      window.scrollTo(0,scrollHeight)
     }
   },
   methods: {
@@ -170,6 +172,7 @@ export default {
       const that = this
       const configData = JSON.parse(window.sessionStorage.getItem('config'))
       // console.log(configData) 
+      this.$indicator.open();
       wx.config({
         // debug: true,
         appId: 'wxd3d4d3045a1213a1',
@@ -179,6 +182,7 @@ export default {
         jsApiList: ['openLocation']
       });
       wx.ready(function() {
+        that.$indicator.close();
         wx.openLocation({
           longitude: Number(that.theDetail.lon),
           latitude: Number(that.theDetail.lat),
@@ -195,6 +199,7 @@ export default {
       })
       // 当微信获取位置配置失败
       wx.error(function(res){
+        that.$indicator.close();
         that.$toast({
           message: '抱歉，调起导航失败，请稍后重试！',
           duration: 2000
@@ -307,13 +312,17 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #1e1e1c;
-    overflow: hidden;
+    // overflow: hidden;
+    padding-bottom: 21vh;
     .topimg{
       width: 100%;
-      height: 380px;
+      height: 408px;
       padding: 0 20px;
       padding-top: 20px;
       position: relative;
+      background: url('../../assets/acvDetailBg.png') no-repeat center bottom;
+      background-size: 700px auto;
+      background-position: 25px 388px;
       .img{
         width: 720px;
         height: 368px;
@@ -323,12 +332,13 @@ export default {
         z-index: 9;
       }
       .titleTop{
-        width: 100%;
-        height: 380px;
+        width: 720px;
+        height: 368px;
+        border-radius: 15px;
         position: absolute;
         top: 20px;
-        left: 0;
-        background: rgba(0,0,0,0.2);
+        left: 15px;
+        background: rgba(0,0,0,0.5);
         z-index: 19;
         .p1{
           width: 30%;
@@ -341,21 +351,23 @@ export default {
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 1;
-          margin-top: 160px;
+          margin-top: 120px;
+          padding-left: 20px;
         }
         .p2{
-          font-size: 20px;
+          font-size: 22px;
           line-height: 72px;
           color: #fff;
           text-align: center;
-          letter-spacing: 7px;
+          letter-spacing: 4px;
           font-weight: 700;
+          margin-top: 10px;
         }
       }
     }
     .scrollBox{
-      height: 82.4vh;
-      overflow: auto;
+      // height: 82.4vh;
+      // overflow: auto;
       .titleBox{
         width: 100%;
         height: 140px;
@@ -371,6 +383,7 @@ export default {
           width: 100%;
           span{
             display: block;
+            letter-spacing: 1px;
           }
           .span1{
             float: left;
@@ -383,6 +396,7 @@ export default {
           }
           .span2{
             font-size: 26px;
+            line-height: 50px;
             color: #fff;
             float: right;
           }
@@ -578,8 +592,11 @@ export default {
     }
     .signupWrap{
       width: 100%;
-      height: 17.6vh;
+      height: 21vh;
       padding: 0 15px;
+      position: fixed;
+      bottom: 0;
+      background: #1e1e1c;
       .p1{
         height: 72px;
         line-height: 72px;
@@ -595,16 +612,26 @@ export default {
         width: 100%;
         height: 52px;
         font-size: 0;
-        padding-right: 6px;
         span{
           display: block;
           color: #fff;
           float: right;
         }
         .text{
+          width: 250px;
           vertical-align: top;
           font-size: 25px;
           line-height: 28px;
+          position: relative;
+        }
+        .text::after{
+          content: '';
+          width: 233px;
+          height: 28px;
+          display: inline-block;
+          position: absolute;
+          top: 0;
+          left: 0;
           border-bottom: 1px solid #fff;
         }
         .checkBox{
@@ -612,7 +639,7 @@ export default {
           height: 22px;
           border: 1px solid #fff;
           margin-right: 5px;
-          margin-top: 3px;
+          margin-top: 4px;
           line-height: 28px;
           b{
             color: #f8c026;

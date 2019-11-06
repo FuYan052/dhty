@@ -24,6 +24,7 @@
         <p class="changeHandle">
           <!-- <span @click="doRegister">注册</span> -->
           忘记密码？<span @click="doReset">点此找回</span>
+          <span class="toRegister" @click="handleRegister">注册</span>
         </p>
         <div class="loginBtn" @click="doLodin">
           登录
@@ -33,7 +34,7 @@
             <div class="loginImg" @click="handleChangeType">
               <img src="../assets/loginPhone.png" style="width: 100%;" alt="">
             </div>
-          <p>手机登录</p>
+          <p>短信快捷</p>
           </div>
           <div class="changeType">
             <!-- <img src="../assets/weinxinIcon.png" alt=""> -->
@@ -156,7 +157,7 @@ export default {
         path: '/home/loginForCode'
       })
     },
-    doRegister() {
+    handleRegister() {
       this.$router.replace({
         path: '/home/register'
       })
@@ -266,7 +267,7 @@ export default {
           display: inline-block;
           color: #fac31e;
         }
-        span:nth-child(2){
+        .toRegister{
           float: right;
         }
       }

@@ -11,6 +11,7 @@ import BindPhone from '@/pages/BindPhone'
 import ForgetPassword from '@/pages/ForgetPassword'
 import ChildrenActivities from '@/pages/activity/ChildrenActivities'
 import IntelligenceTreatyBall from '@/pages/activity/IntelligenceTreatyBall'
+import Match from '@/pages/activity/Match'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import ActivityDetail from '@/pages/activity/ActivityDetail'
 import EscapeClause from '@/pages/activity/EscapeClause'
@@ -134,6 +135,11 @@ export default new Router({
       path: '/intelligenceTreatyBall',
       name: 'IntelligenceTreatyBall',
       component: IntelligenceTreatyBall,  //智能约球
+    },
+    {
+      path: '/match',
+      name: 'Match',
+      component: Match,  //美孚杯羽毛球赛
     },
     {
       path: '/playground',

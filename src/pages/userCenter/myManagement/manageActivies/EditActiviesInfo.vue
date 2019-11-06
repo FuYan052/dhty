@@ -1,7 +1,7 @@
 <template>
   <div class="editActiviesInfo" v-title data-title="修改活动">
     <div class="maxHeightBox" :class="{upKeyBord : isInput}">
-    <ul>
+    <ul class="ul1">
       <!-- <li @click="showPicker1">   -->
       <li>
         <span class="title">运动种类</span>
@@ -53,11 +53,16 @@
         <span class="title">费用&nbsp;/&nbsp;人</span>
         <input type="text" class="inputValue" @blur="blur" v-model="cost" placeholder="填写费用，如:60"/>
       </li>
-      <li @click="selectService">
+      <li @click="showLevelList = !showLevelList">
+        <span class="title">选择水平</span>
+        <input type="text" readonly class="inputValue" placeholder="选择水平" v-model="showLevelName"/>
+        <span class="el-icon-arrow-right"></span>
+      </li>
+      <!-- <li @click="selectService">
         <span class="title">选择客服</span>
         <input type="text" readonly class="inputValue" placeholder="选择客服" v-model="serviceType.name"/>
         <span class="el-icon-arrow-right"></span>
-      </li>
+      </li> -->
     </ul>
     <div class="inputTitleBox">标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题</div>
     <div class="textAreaBox">
@@ -82,9 +87,13 @@
       <div class="sureBtn" @click="submit">
         保存修改
       </div>
-      <div class="bottom">
+      <div class="bottom bottom1">
         <span class="box" :class="{activeBox:isCkecked}" @click="isWeekActivie"><b class="el-icon-check" v-show="isCkecked"></b></span>
         <p class="bottomText">作为周循环活动发布</p>
+      </div>
+      <div class="bottom bottom2">
+        <span class="box" :class="{activeBox:isCkecked2}" @click="iscompActivie"><b class="el-icon-check" v-show="isCkecked2"></b></span>
+        <p class="bottomText">作为比赛活动发布</p>
       </div>
     </div>
     <!-- 选择弹框 -->
@@ -136,6 +145,22 @@
         @confirm="handleConfirmEnd">
       </mt-datetime-picker>
     </mt-popup>
+    <!-- 选择水平时弹框 -->
+    <div class="levelBox" v-show="showLevelList">
+      <div class="contentBox">
+        <p>选择水平<span>(可多选)</span></p>
+        <ul class="ul2">
+          <li v-for="(item,index) in levelList" :key="index" @click="selectLevel(item)">
+            <div class="checkBox"><span class="el-icon-check" v-show="selectedLevelList.indexOf(item.skey)>=0"></span></div>
+            <div class="text">{{item.name}}</div>
+          </li>
+        </ul>
+        <div class="btnWrap">
+          <div class="cancel" @click="showLevelList = !showLevelList">取消</div>
+          <div class="sure" @click="handleSelectLevel">确定</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -164,6 +189,11 @@ export default {
         id: '',
         name: ''
       },
+      levelList: [],  //水平
+      showLevelList: false,  //显示水平选择
+      selectedLevelList: [],  //选中的水平id
+      selectedLevelName: [],  //选中的水平名字
+      showLevelName: '',  //显示选中的水平名字
       datePickerValue: '',  //日期选择
       startDate: '',  //可选日期当天以后
       // dateValue: '',  //选择日期
@@ -184,6 +214,7 @@ export default {
       title: '',  //标题
       notes: '',   //参与须知
       isCkecked: false,   //是否为周活动
+      isCkecked2: false,   //是否为比赛活动
       timers: null,  //定时器
       isInput: false,  //当手机输入键盘弹起时不显示提交按钮
       showHeight: document.documentElement.clientHeight, // 实时屏幕高度
@@ -255,7 +286,17 @@ export default {
         this.placeName = resp.data.venueName
         this.placeId = resp.data.venueId
         this.isCkecked = resp.data.flag === 'true'  //字符串转Boolean
+        this.isCkecked2 = resp.data.matchs === 'true'  //字符串转Boolean
         window.sessionStorage.setItem('typeId',resp.data.typeId)
+
+        // 提取水平skey
+          var _Ids = resp.data.occupationLevelList
+          for(let i=0; i<_Ids.length; i++) {
+            let currLab = _Ids[i]
+            this.selectedLevelList.push(currLab.skey)
+            this.selectedLevelName.push(currLab.name)
+            this.showLevelName = this.selectedLevelName.join('、')
+          }
       }
     })
     this.userId = window.localStorage.getItem('userId')
@@ -266,11 +307,20 @@ export default {
         this.typeValues = resp.data
       }
     })
+
     // 获取客服人员
-    this.$http.customerService().then(resp => {
+    // this.$http.customerService().then(resp => {
+    //   console.log(resp)
+    //   if(resp.status == 200) {
+    //     this.serviceList = resp.data
+    //   }
+    // })
+
+    // 获取水平
+    this.$http.findDictList('level').then(resp => {
       console.log(resp)
       if(resp.status == 200) {
-        this.serviceList = resp.data
+        this.levelList = resp.data
       }
     })
     //当天日期
@@ -361,6 +411,24 @@ export default {
         this.serviceType.name = this.serviceList[0].name
         this.serviceType.id = this.serviceList[0].id
       }
+    },
+    // 选择水平
+    selectLevel(item) {
+      this.closeTouch();//关闭默认事件
+      // 选中的标签id集合
+      let selectedIdIndex = this.selectedLevelList.indexOf(item.skey)
+      if(selectedIdIndex >= 0) {
+        this.selectedLevelList.splice(selectedIdIndex, 1)
+        this.selectedLevelName.splice(selectedIdIndex, 1)
+      }else{
+        this.selectedLevelList.push(item.skey)
+        this.selectedLevelName.push(item.name)
+      }
+    },
+    // 确定选择的水平
+    handleSelectLevel() {
+      this.showLevelList = false
+      this.showLevelName = this.selectedLevelName.join('、')
     },
     // 日期选择
     showDate() {
@@ -479,6 +547,12 @@ export default {
     // 是否为周活动
     isWeekActivie() {
       this.isCkecked = !this.isCkecked
+      this.isCkecked2 = false
+    },
+    // 是否为比赛活动
+    iscompActivie() {
+      this.isCkecked2 = !this.isCkecked2
+      this.isCkecked = false
     },
     // 确认发布按钮
     submit() {
@@ -502,9 +576,9 @@ export default {
           message: '请选择活动地点！',
           duration: 2000
         });
-      }else if(this.serviceType.id == '') {
+      }else if(this.selectedLevelList.length === 0){
         this.$toast({
-          message: '请选择客服！',
+          message: '请选择水平！',
           duration: 2000
         });
       }else if(this.peopleNum == '') {
@@ -536,7 +610,9 @@ export default {
           alternatePeople: this.HBpeopleNum,
           serviceId: this.serviceType.id,
           cost: this.cost,
-          flag: this.isCkecked
+          occupationLevel: this.selectedLevelList.join(','),
+          flag: this.isCkecked,
+          matchs: this.isCkecked2,
         }
         console.log(params)
         // 提交后台
@@ -581,7 +657,7 @@ export default {
     .upKeyBord{
       height: 100vh;
     }
-    ul{
+    .ul1{
       width: 100%;
       height: auto;
       li{
@@ -765,10 +841,12 @@ export default {
       font-size: 32px;
     }
     .bottom{
-      width: 100%;
+      width: 41%;
       height: 60px;
       margin-top: 10px;
       position: relative;
+      float: left;
+      margin-left: 20px;
       .box{
         display: inline-block;
         width: 30px;
@@ -776,7 +854,7 @@ export default {
         border: 1px solid #f9c732;
         border-radius: 50%;
         position: absolute;
-        left: 240px;
+        left: 25px;
         top: 16px;
         b{
           font-size: 22px;
@@ -800,6 +878,87 @@ export default {
         letter-spacing: 1px;
         line-height: 60px;
         padding-left: 50px;
+      }
+    }
+    .bottom2{
+      width:50%;
+      float: left;
+      margin-left: 40px;
+      .box{
+        left: 73px;
+      }
+    }
+    .levelBox{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      background: rgba(0,0,0,0.5);
+      .contentBox{
+        width: 76%;
+        height: 570px;
+        background: #fff;
+        margin: 0 auto;
+        margin-top: 30vh;
+        padding: 0 40px;
+        overflow: hidden;
+        p{
+          height: 80px;
+          font-size: 32px;
+          line-height: 80px;
+          margin-top: 10px;
+          border-bottom: 1px dashed #dedede;
+          span{
+            color: #f9c732;
+          }
+        }
+        .ul2{
+          padding-top: 40px;
+          padding-left: 20px;
+          li{
+            width: 100%;
+            height: 86px;
+            font-size: 32px;
+            // margin-to p: 30px;
+            .checkBox{
+              width: 40px;
+              height: 40px;
+              border: 1px solid #f9c732;
+              float: left;
+              vertical-align: middle;
+              span{
+                display: block;
+                color: #f9c732;
+                font-size: 36px;
+                line-height: 40px;
+              }
+            }
+            .text{
+              float: left;
+              line-height: 40px;
+              margin-left: 15px;
+            }
+          }
+        }
+        .btnWrap{
+          width: 100%;
+          height: 100px;
+          border-top: 1px dashed #dedede;
+          div{
+            width: 50%;
+            height: 86px;
+            float: left;
+            text-align: center;
+            line-height: 86px;
+            font-size: 30px;
+          }
+          .sure{
+            border-left: 1px dashed #dedede;
+            color: #fac31e;
+          }
+        }
       }
     }
   }

@@ -80,15 +80,15 @@
         </div>
         <div class="no-more" v-if="noMore">没有更多了~</div>
       </div>
-      <!-- 提示优惠券 -->
-    <div class="coupon" v-show="showCoupon">
-      <div class="wraper">
-        <div class="content"><span>{{couNum}}</span>张<span class="redText">{{couMoney}}</span>元优惠券已经存入您的账户~</div>
-        <div class="toCheck" @click="toCheck">点击查看</div>
-        <div class="closeBox" @click="know"></div>
+    </div>
+    <!-- 提示优惠券 -->
+      <div class="coupon" v-show="showCoupon">
+        <div class="wraper">
+          <div class="content"><span>{{couNum}}</span>张<span class="redText">{{couMoney}}</span>元优惠券已经存入您的账户~</div>
+          <div class="toCheck" @click="toCheck">点击查看</div>
+          <div class="closeBox" @click="know"></div>
+        </div>
       </div>
-    </div>
-    </div>
   </div>
 </template>
 
@@ -144,7 +144,7 @@ export default {
       lat: '30.5702',
       lon: '104.06476',
       page: 1,
-      userId: window.localStorage.getItem('userId')
+      userId: window.localStorage.getItem('userId'),
     }
     this.$http.activitiesList(params).then(resp => {
       console.log(resp)
@@ -421,6 +421,7 @@ export default {
     min-height: 100vh;
     background: #f4f4f4;
     padding-top: 90px;
+    position: relative;
     .dateCate{
       width: 100%;
       height: 90px;
@@ -430,23 +431,25 @@ export default {
       left: 0;
       z-index: 10;
       .wrap{
-        width: 286px;
+        width: 270px;
         height: 90px;
         margin: 0 auto;
+        // border: 1px solid red;
         .date{
           width: 70px;
           height: 70px;
           border-radius: 50%;
-          line-height: 70px;
+          line-height: 68px;
           text-align: center;
           float: left;
           color: #000;
           font-size: 28px;
+          // border: 1px solid red;
           // margin-top: 16px;
         }
       }
       .date:nth-of-type(2){
-        margin-left: 38px;
+        margin-left: 30px;
       }
       .date:nth-of-type(3){
         float: right;
@@ -463,7 +466,7 @@ export default {
         height: 15px;
         position: absolute;
         bottom: -18px;
-        left: 6px;
+        left: 5px;
         background: url('../../assets/yelloCircle.png') no-repeat center bottom;
         background-size: auto 60%;
       }
@@ -714,7 +717,7 @@ export default {
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 99;
+      z-index: 999;
       background: rgba(0,0,0,0.5);
       .wraper{
         width: 100%;
