@@ -6,7 +6,7 @@
     <!-- 有活动 -->
     <div class="memberList" v-show="!noData">
         <ul class="memberItem">
-          <li v-for="(item,index) in memberList" :key="index" @click="memberInfo(item.id)">
+          <li v-for="(item,index) in memberList" :key="index">
             <div class="listItemImg">
               <img :src="item.image" style="width: 100%; height: 100%; border-radius: 50%;" alt="">
             </div>
@@ -47,12 +47,7 @@ export default {
     })
   },
   methods: {
-    memberInfo(id) {
-      window.sessionStorage.setItem('userInfoId' , id)
-      this.$router.push({
-        path: '/club/member/memberData'
-      })
-    }
+    
   }
 }
 </script>

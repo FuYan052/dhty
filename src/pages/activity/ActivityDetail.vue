@@ -57,7 +57,7 @@
       <ul class="ul1">
         <li class="li1" ref="leader">
           <div class="title" @click="show1 = !show1">
-            临时群主的福利和义务<span class="sp1">(直降8元)</span><span class="sp2 el-icon-arrow-down"></span>
+            临时群主的福利和义务<span class="sp1">(直降8元)</span><span v-show="!show1" class="sp2 el-icon-arrow-down"></span><span v-show="show1" class="sp2 el-icon-arrow-up"></span>
           </div>
           <div class="detail" v-show="show1">
             <p>1.担任临时群主，本次活动可直接<span class="sp1">抵扣8元</span>打球费。</p>
@@ -67,10 +67,10 @@
         </li>
         <li class="li2" ref="rule">
           <div class="title" @click="show2 = !show2">
-            规则<span class="sp2 el-icon-arrow-down"></span>
+            规则<span v-show="!show2" class="sp2 el-icon-arrow-down"></span><span  v-show="show2" class="sp2 el-icon-arrow-up"></span>
           </div>
           <div class="detail" v-show="show2">
-            <p>1.新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话：18113011911（微信同号）。</p>
+            <p>1.新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话:18113011911（微信同号）。</p>
             <p>2.活动人请按照客服通知的场地编号对号入场，球员会水平被分组，6人一个场地，练习热身实行15分钟轮换，双打比赛实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
             <p>3.活动开始前2小时可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若互补成功，会短信通知。</p>
           </div>
@@ -86,7 +86,7 @@
               来虎客服
             </div>
             <div class="nameText" v-show="show3">虎妞</div>
-            <span class="sp2 el-icon-arrow-down"></span>
+            <span v-show="!show3" class="sp2 el-icon-arrow-down"></span><span  v-show="show3" class="sp2 el-icon-arrow-up"></span>
           </div>
           <div class="detail" v-show="show3">
             <div class="comm phone">
@@ -172,7 +172,11 @@ export default {
       const that = this
       const configData = JSON.parse(window.sessionStorage.getItem('config'))
       // console.log(configData) 
-      this.$indicator.open();
+      // this.$indicator.open();
+      this.$toast({
+        message: '获取中...',
+        duration: 800
+      });
       wx.config({
         // debug: true,
         appId: 'wxd3d4d3045a1213a1',
@@ -182,7 +186,7 @@ export default {
         jsApiList: ['openLocation']
       });
       wx.ready(function() {
-        that.$indicator.close();
+        // that.$indicator.close();
         wx.openLocation({
           longitude: Number(that.theDetail.lon),
           latitude: Number(that.theDetail.lat),
@@ -199,7 +203,7 @@ export default {
       })
       // 当微信获取位置配置失败
       wx.error(function(res){
-        that.$indicator.close();
+        // that.$indicator.close();
         that.$toast({
           message: '抱歉，调起导航失败，请稍后重试！',
           duration: 2000
@@ -370,7 +374,7 @@ export default {
       // overflow: auto;
       .titleBox{
         width: 100%;
-        height: 140px;
+        min-height: 140px;
         margin-top: 20px;
         overflow: hidden;
         padding: 0 30px;
@@ -504,7 +508,7 @@ export default {
             color: #464646;
             line-height: 99px;
           }
-          .el-icon-arrow-down{
+          .sp2{
             float: right;
             margin-right: 18px;
             line-height: 99px;

@@ -377,16 +377,16 @@ export default {
           border-right: 1px solid #e8e8e8;
           float: left;
           .time{
-            font-size: 34px;
+            font-size: 38px;
             color: #f7b706;
             font-weight: bold;
-            line-height: 34px;
-            margin-top: 10px;
+            line-height: 38px;
+            margin-top: 6px;
           }
           .time2{
-            font-size: 24px;
+            font-size: 26px;
             color: #7d7d7d;
-            line-height: 24px;
+            line-height: 26px;
             margin-top: 20px;
           }
         }
@@ -395,9 +395,9 @@ export default {
           padding-left: 40px;
           .titleText{
             height: 36px;
-            font-size: 34px;
+            font-size: 36px;
             line-height: 36px;
-            margin-top: 7px;
+            margin-top: 4px;
             width: 440px;
             overflow: hidden;
             display: -webkit-box;
@@ -590,8 +590,9 @@ export default {
           font-size: 0;
           float: left;
           .circle{
-            width: 47px;
-            height: 47px;
+            width: 60px;
+            height: 60px;
+            transform: scale(0.8);
             display: inline-block;
             border: 1px solid #00b766;
             border-radius: 50%;

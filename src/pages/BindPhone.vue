@@ -185,6 +185,7 @@ export default {
             window.localStorage.setItem('userId', resp.data.userId)
             window.localStorage.setItem('userPhone', resp.data.phone)
             window.localStorage.setItem('ty-token', resp.data.token)
+            window.localStorage.setItem('userType', resp.data.type)
             this.changeLoginStatus(true)
             this.changeUserId(resp.data.userId)
             this.changeUserPhone(resp.data.phone)

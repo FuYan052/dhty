@@ -12,6 +12,7 @@ import ForgetPassword from '@/pages/ForgetPassword'
 import ChildrenActivities from '@/pages/activity/ChildrenActivities'
 import IntelligenceTreatyBall from '@/pages/activity/IntelligenceTreatyBall'
 import Match from '@/pages/activity/Match'
+import MatchSignUp from '@/pages/activity/MatchSignUp'
 import ActivityHome from '@/pages/activity/ActivityHome'
 import ActivityDetail from '@/pages/activity/ActivityDetail'
 import EscapeClause from '@/pages/activity/EscapeClause'
@@ -231,6 +232,14 @@ export default new Router({
       meta: {
         requireAuth: true,
         keepAlive: true 
+      }
+    }, 
+    {
+      path: '/matchSignUp',
+      name: 'MatchSignUp',  //比赛报名页
+      component: MatchSignUp,
+      meta: {
+        requireAuth: true,
       }
     }, 
     {

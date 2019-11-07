@@ -134,6 +134,8 @@ export default {
       window.localStorage.removeItem('userId')
       window.localStorage.removeItem('userPhone')
       window.localStorage.removeItem('ty-token')
+      window.sessionStorage.setItem('routerPath','/userCenter/manageHome')
+      window.sessionStorage.setItem('routerPathName','ManageHome')
       next('/home')
     }else { 
       next()

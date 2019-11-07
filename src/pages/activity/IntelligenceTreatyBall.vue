@@ -439,7 +439,7 @@ export default {
           width: 70px;
           height: 70px;
           border-radius: 50%;
-          line-height: 68px;
+          line-height: 70px;
           text-align: center;
           float: left;
           color: #000;

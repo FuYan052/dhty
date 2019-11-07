@@ -263,6 +263,21 @@ export default {
         }
       }
     },
+    showHeight(newVal , oldVal) {
+      // alert(newVal)
+      if (newVal < oldVal) {
+        this.isInput = true
+      } else {
+        this.isInput = false
+      }
+    },
+    signReasonVisible:function(newvs,oldvs){//picker关闭没有回调函数，所以侦听该属性替代
+      if(newvs){
+        this.closeTouch();
+      }else{
+        this.openTouch();
+      }
+    }
   },
   created() {
     this.editId = window.sessionStorage.getItem('editGroupId')
@@ -326,12 +341,22 @@ export default {
     //当天日期
     this.startDate = new Date()  
   },
-  mounted () {
+  // mounted () {
+  //   const vm = this
+  //   // window.resize监听页面高度的变化
+  //   window.onresize = () => {
+  //     return (() => {
+  //       vm.showHeight = document.body.clientHeight
+  //     })()
+  //   }
+  // },
+  activated() {
     const vm = this
     // window.resize监听页面高度的变化
     window.onresize = () => {
       return (() => {
         vm.showHeight = document.body.clientHeight
+        // alert(document.body.clientHeight)
       })()
     }
   },
@@ -414,7 +439,6 @@ export default {
     },
     // 选择水平
     selectLevel(item) {
-      this.closeTouch();//关闭默认事件
       // 选中的标签id集合
       let selectedIdIndex = this.selectedLevelList.indexOf(item.skey)
       if(selectedIdIndex >= 0) {

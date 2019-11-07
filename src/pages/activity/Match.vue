@@ -15,7 +15,7 @@
       </div>
       <!-- 标题及报名情况 -->
       <div class="titleBox">
-        <div class="titleText">美孚杯羽毛球赛</div>
+        <div class="titleText">{{theDetail.title}}</div>
         <div class="people">
           <span class="span1">￥<b>{{theDetail.cost}}</b>/人</span>
           <span class="span2">{{theDetail.enrolled}}/{{theDetail.people}}</span>
@@ -50,9 +50,9 @@
       </div>
       <!-- 收缩项 -->
       <ul class="ul1">
-        <li class="li2" ref="rule">
+        <li class="li2">
           <div class="title" @click="show4 = !show4">
-            参赛条件<span class="sp2 el-icon-arrow-down"></span>
+            参赛条件<span v-show="!show4" class="sp2 el-icon-arrow-down"></span><span  v-show="show4" class="sp2 el-icon-arrow-up"></span>
           </div>
           <div class="detail" v-show="show4">
             <p>1.参赛选手需要身体健康，无遗传病、心脏病等疾病。</p>
@@ -60,9 +60,9 @@
             <p>3.本次比赛仅接受男双和混双报名。</p>
           </div>
         </li>
-        <li class="li2" ref="rule">
+        <li class="li2">
           <div class="title" @click="show5 = !show5">
-            赛事安排<span class="sp2 el-icon-arrow-down"></span>
+            赛事安排<span v-show="!show5" class="sp2 el-icon-arrow-down"></span><span  v-show="show5" class="sp2 el-icon-arrow-up"></span>
           </div>
           <div class="detail" v-show="show5">
             <p>1.半决赛前采取单轮淘汰赛，一局31分制，16分交换场地，30平不加分，先到31分为胜。</p>
@@ -71,9 +71,9 @@
             <p>4.男双遇到混双时让6分。</p>
           </div>
         </li>
-        <li class="li2" ref="rule">
+        <li class="li2">
           <div class="title" @click="show6 = !show6">
-            赛事流程<span class="sp2 el-icon-arrow-down"></span>
+            赛事流程<span v-show="!show6" class="sp2 el-icon-arrow-down"></span><span  v-show="show6" class="sp2 el-icon-arrow-up"></span>
           </div>
           <div class="detail" v-show="show6">
             <p>13:00~13:30 签到、参赛队员抽签及热身</p>
@@ -82,6 +82,31 @@
             <p>16:00-17:00 半决赛、决赛及颁奖仪式</p>
             <p>注：15:00后两片、16点后四片场地可供淘汰球员自由切磋</p>
          </div>
+        </li>
+        <li class="li2 prize">
+          <div class="title" @click="show7 = !show7">
+            奖品设置<span v-show="!show7" class="sp2 el-icon-arrow-down"></span><span  v-show="show7" class="sp2 el-icon-arrow-up"></span>
+          </div>
+          <ul class="prizeDetail" v-show="show7">
+            <li v-for="(item,index) in prizeList" :key="index">
+              <div class="left">
+                <div class="imgBox">
+                  <img :src="item.image" style="height: 100%; width: auto;" alt="">
+                </div>
+              </div>
+              <div class="right">
+                <p class="p1">{{item.title}}</p>
+                <p class="p2">总价值：<span>{{item.totalPrice}}</span></p>
+              </div>
+            </li>
+            <div class="descr">
+              纪念奖：参赛球员均可获得来虎定制马来西亚大赛款价值88元羽毛球速干比赛服一件(报名费68元者)，龙骨手胶及引用水一瓶。
+            </div>
+            <div class="memorialAward">
+              <div class="btImg img1"></div>
+              <div class="btImg img2"></div>
+            </div>
+         </ul>
         </li>
         <li class="li3">
           <div class="title" @click="show3 = !show3">
@@ -130,20 +155,22 @@ export default {
       show4: true,
       show5: true,
       show6: true,
+      show7: true,
       activityDetailId: '',
       theDetail: '',
-      imgurl: '',
+      imgurl: '',  
       isChecked: false,  //是否勾选免责条款
       disabled: false,  //报名按钮是否能点击
       content: '',  //倒计时内容
       endTime: '',
       isTosignUp: '',
       state: '',  //后端传过来为2时，则表示人员已满，不能报名
+      prizeList: []  //奖品列表
     }
   },
   created() {
     // this.activityDetailId = this.$route.params.id
-    this.activityDetailId = '1'
+    this.activityDetailId = '34'
     window.sessionStorage.setItem('activityDetailId',this.activityDetailId)
     this.$http.activitiesDetail(this.activityDetailId).then(resp => {
       console.log(resp)
@@ -157,20 +184,27 @@ export default {
         this.countdowm(this.endTime) //执行倒计时函数
       }
     })
+    // 奖品列表
+    this.prizeList = [{
+      image: require('../../assets/prize1.png'),
+      title: '第1名:送2桶美孚1号',
+      totalPrice: '800+'
+    },{
+      image: require('../../assets/prize2.png'),
+      title: '第2名:送美孚1号速霸2000各1桶',
+      totalPrice: '600+'
+    },{
+      image: require('../../assets/prize3.png'),
+      title: '第3-4名:送2桶速霸2000',
+      totalPrice: '400+'
+    },{
+      image: require('../../assets/prize4.png'),
+      title: '第5-8名:送1桶速霸2000',
+      totalPrice: '200+'
+    }]
   },
   mounted () {
-    // 当前一页点击的是‘临时领队’时滚动条滚动到临时领队位置
-    if(window.sessionStorage.getItem('clickType') === '领队') {
-      const scrollHeight = this.$refs.leader.offsetTop - 50
-      // this.$refs.scrollBox.scrollTo(0,scrollHeight)
-      window.scrollTo(0,scrollHeight)
-    }
-    // 当前一页点击的是‘规则’时滚动条滚动到规则位置
-    if(window.sessionStorage.getItem('clickType') === '规则') {
-      const scrollHeight = this.$refs.rule.offsetTop - 50
-      // this.$refs.scrollBox.scrollTo(0,scrollHeight)
-      window.scrollTo(0,scrollHeight)
-    }
+    
   },
   methods: {
     // 免责条款
@@ -184,7 +218,10 @@ export default {
       const that = this
       const configData = JSON.parse(window.sessionStorage.getItem('config'))
       // console.log(configData) 
-      this.$indicator.open();
+      this.$toast({
+        message: '获取中...',
+        duration: 1000
+      });
       wx.config({
         // debug: true,
         appId: 'wxd3d4d3045a1213a1',
@@ -194,7 +231,6 @@ export default {
         jsApiList: ['openLocation']
       });
       wx.ready(function() {
-        that.$indicator.close();
         wx.openLocation({
           longitude: Number(that.theDetail.lon),
           latitude: Number(that.theDetail.lat),
@@ -211,7 +247,6 @@ export default {
       })
       // 当微信获取位置配置失败
       wx.error(function(res){
-        that.$indicator.close();
         that.$toast({
           message: '抱歉，调起导航失败，请稍后重试！',
           duration: 2000
@@ -292,7 +327,7 @@ export default {
             // this.$router.push({
             //   path: '/activitySignUp'
             // })
-            const redirectUrl = encodeURIComponent(`https://laihu.baogongxia.com/#/activitySignUp`)
+            const redirectUrl = encodeURIComponent(`https://laihu.baogongxia.com/#/matchSignUp`)
             // const redirectUrl = encodeURIComponent(`http://192.168.0.137:8082/#/activitySignUp`)
             // const appid = 'wxf1894ca38c849d17'  //测试号
             const appid = 'wxd3d4d3045a1213a1'  
@@ -388,7 +423,7 @@ export default {
         overflow: hidden;
         padding: 0 30px;
         .titleText{
-          font-size: 34px;
+          font-size: 36px;
           line-height: 70px;
           color: #fff;
         }
@@ -517,7 +552,7 @@ export default {
             color: #464646;
             line-height: 99px;
           }
-          .el-icon-arrow-down{
+          .sp2{
             float: right;
             margin-right: 18px;
             line-height: 99px;
@@ -597,6 +632,82 @@ export default {
                 margin-right: 20px;
                 background: url('../../assets/phoneIcon.png') no-repeat center;
                 background-size: 100% auto;
+              }
+            }
+          }
+        }
+        .prize{
+          padding-left: 25px;
+          padding-right: 25px;
+          .prizeDetail{
+            width: 100%;
+            min-height: 870px;
+            position: relative;
+            li{
+              width: 100%;
+              height: 140px;
+              background: url('../../assets/prizeBg.png') no-repeat center;
+              background-size: 100% auto;
+              margin-bottom: 20px;
+              padding: 0;
+              .left{
+                width: 28%;
+                height: 140px;
+                float: left;
+                .imgBox{
+                  width: 135px;
+                  height: 90px;
+                  margin-top: 25px;
+                  margin-left: 25px;
+                }
+              }
+              .right{
+                width: 72%;
+                height: 140px;
+                float: left;
+                .p1{
+                  color: #fff;
+                  font-size: 32px;
+                  line-height: 32px;
+                  margin-top: 30px;
+                }
+                .p2{
+                  font-size: 25px;
+                  color: #fff;
+                  margin-top: 20px;
+                  span{
+                    font-size: 32px;
+                    line-height: 32px;
+                    color: #ffc90f;
+                    // color: #ffbc01;
+                  }
+                }
+              }
+            }
+            .descr{
+              width: 100%;
+              font-size: 28px;
+              line-height: 40px;
+              color: #4a4a4a;
+            }
+            .memorialAward{
+              width: 235px;
+              height: 110px;
+              position: absolute;
+              bottom: 20px;
+              right: 15px;
+              .btImg{
+                width: 110px;
+                height: 110px;
+                border-radius: 50%;
+                float: left;
+                background: url('../../assets/prize5.png') no-repeat center;
+                background-size: cover;
+              }
+              .img2{
+                float: right;
+                background: url('../../assets/prize6.png') no-repeat center;
+                background-size: cover;
               }
             }
           }

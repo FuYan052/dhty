@@ -108,7 +108,7 @@ export default {
     // 立即使用
     toUse() {
       this.$router.push({
-        path: '/activityHome'
+        path: '/intelligenceTreatyBall'
       })
     },
     // 点击使用说明

@@ -256,7 +256,6 @@ export default {
         console.log(this.$route)
         this.placeName = this.$route.params.placeName || ''
         this.placeId = this.$route.params.placeId || ''
-        // this.title = '【' + this.sureDateValue + '日' + this.startTime + this.placeName + '】'
       }
     },
     showHeight(newVal , oldVal) {
@@ -269,9 +268,9 @@ export default {
     },
     signReasonVisible:function(newvs,oldvs){//picker关闭没有回调函数，所以侦听该属性替代
         if(newvs){
-            this.closeTouch();
+          this.closeTouch();
         }else{
-            this.openTouch();
+          this.openTouch();
         }
     }
   },
@@ -303,15 +302,26 @@ export default {
     //当天日期
     this.startDate = new Date()  
   },
-  mounted() {
+  activated() {
     const vm = this
     // window.resize监听页面高度的变化
     window.onresize = () => {
       return (() => {
         vm.showHeight = document.body.clientHeight
+        // alert(document.body.clientHeight)
       })()
     }
   },
+  // mounted() {
+  //   const vm = this
+  //   // window.resize监听页面高度的变化
+  //   window.onresize = () => {
+  //     return (() => {
+  //       vm.showHeight = document.body.clientHeight
+  //       alert(document.body.clientHeight)
+  //     })()
+  //   }
+  // },
   methods: {
     // 失去焦点事件
     blur() {
@@ -389,7 +399,6 @@ export default {
     },
     // 选择水平
     selectLevel(item) {
-      this.closeTouch();//关闭默认事件
       // 选中的标签id集合
       let selectedIdIndex = this.selectedLevelList.indexOf(item.skey)
       if(selectedIdIndex >= 0) {
@@ -621,6 +630,7 @@ export default {
                 }
               })
             },300)
+            this.openTouch();//打开默认事件
             // 清除sessionStorage里的字段
             window.sessionStorage.removeItem("typeId")
             window.sessionStorage.removeItem("typeValue")
@@ -647,10 +657,10 @@ export default {
     min-height: 100vh;
     background: #f2f2f2;
     position: relative;
-    overflow: hidden;
+    overflow: hidden; 
     .maxHeightBox{
       width: 100%;
-      height: auto;
+      height: 100vh;
       overflow: auto;
       padding: 20px 14px;
       padding-bottom: 310px;

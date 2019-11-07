@@ -345,6 +345,14 @@ export const cancelPay = (params) => {
 export const getPayActInfo = (params) => {
   return ajax.get(`/v1/rest/login/signUpInfo?id=${params.id}&userId=${params.userId}`)
 }
+// 比赛支付页信息
+export const getPayMatchInfo = (params) => {
+  return ajax.get(`/v1/rest/login/matchSignUpInfo?id=${params.id}&userId=${params.userId}`)
+}
+// 提交比赛支付
+export const postPayMatch = (params) => {
+  return ajax2.post(`/v1/rest/pay/payMatch`,params)
+}
 // 支付成功
 export const payOk = (params) => {
   return ajax.get(`/v1/rest/pay/ok?orderNo=${params}`)
