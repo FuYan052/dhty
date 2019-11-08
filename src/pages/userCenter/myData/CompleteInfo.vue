@@ -3,11 +3,15 @@
     <!-- 完善个人信息 -->
     <div class="completeInfo" v-title data-title="基本信息">
       <div class="maxHeightBox">
-        <div class="touxiang">
+        <div class="touxiang" @click="wxUploadImg">
+        <!-- <div class="touxiang"> -->
           <!-- <span class="text">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像</span> -->
           <span class="text">头像</span>
           <span class="el-icon-arrow-right"></span>
-          <el-upload
+          <div class="avatar" v-if="imageUrl">
+            <img :src="imageUrl" style="width: 100%; height: 100%; border-radius: 50%;">
+          </div>
+          <!-- <el-upload
             class="avatar-uploader"
             action="none"
             :multiple='false'
@@ -17,11 +21,9 @@
             :before-upload="beforeAvatarUpload"
             ref="upload"
             :http-request="uploadSectionFile">
-            <div class="avatar" v-if="imageUrl">
-              <img :src="imageUrl" style="width: 100%; height: 100%; border-radius: 50%;">
-            </div>
+            
             <i v-else class="el-icon-camera-solid avatar-uploader-icon"></i>
-          </el-upload>
+          </el-upload> -->
         </div>
         <ul class="ul1">
           <li @click="showInput">
@@ -204,14 +206,6 @@ export default {
           textAlign: 'center'
         }
       ],
-      // levelSlots: [
-      //   {
-      //     flex: 1,
-      //     values: ['初级', '中级','高级', '专业'],
-      //     className: 'slotL',
-      //     textAlign: 'center'
-      //   }
-      // ],
       professionSlots: [
         {
           flex: 1,
@@ -253,7 +247,11 @@ export default {
       _id: '',
       showLabels: true,
       // lll: [],
-      userId: ''
+      userId: '',
+      timestamp: '',  //调取微信上传图片接口参数
+      nonceStr: '',  //调取微信上传图片接口参数
+      signature: '',  //调取微信上传图片接口参数
+      localId: ''
     }
   },
   computed: {
@@ -281,6 +279,16 @@ export default {
       console.log(resp)
       if(resp.status == 200) {
         this.levelList = resp.data
+      }
+    })
+
+    // 获取签名，调取微信图片上传接口
+    this.$http.getSignature().then(resp => {
+      console.log(resp)
+      if(resp.status = 200) {
+        this.timestamp = resp.data.timestamp
+        this.nonceStr = resp.data.nonceStr
+        this.signature = resp.data.signature
       }
     })
   },
@@ -378,46 +386,70 @@ export default {
         }
       })
     },
-    beforeAvatarUpload(file) {
-      const isLt2M = file.size / 1024 / 1024 < 3;
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 3MB!');
-      }else if(isLt2M) {
-        this.$indicator.open('上传中...');
-      }else{
+    // 微信上传头像
+    wxUploadImg() {
+      const that = this
+      wx.config({
+        // debug: false,
+        appId: 'wxd3d4d3045a1213a1',
+        // appId: 'wxf1894ca38c849d17',  //测试号
+        timestamp: that.timestamp,
+        nonceStr: that.nonceStr,
+        signature: that.signature,
+        jsApiList: ['chooseImage','getLocalImgData']
+      });
+      wx.ready(function() {
+        // 选择图片
+        wx.chooseImage({
+          count: 1, // 默认9
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+          success: function (res) {
+            console.log(res)
+            that.localId = res.localIds[0]; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            // alert(localIds)
+            // 图片上传
+            wx.getLocalImgData({
+              localId: that.localId, // 图片的localID
+              success: function (res) {
+                console.log(res)
+                var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+                if (localData.indexOf('data:image') != 0) {
+                  //判断是否有这样的头部
+                  localData = 'data:image/jpeg;base64,' +  localData
+                }
+                localData = localData.replace(/\r|\n/g, '').replace('data:image/jgp', 'data:image/jpeg')
+                that.imageUrl = localData
+                that.formData = new FormData()
+                that.formData.append('file', localData);
+                that.$http.testPostUpolad(that.formData).then((resp) => {
+                  console.log(resp)
+                  if (resp.status == 200) {
+                    that.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
+                    that.$indicator.close();
+                    that.$toast({
+                      message: '头像上传成功！',
+                      duration: 2000
+                    });
+                  } else {
+                    that.$toast({
+                      message: '头像上传失败！',
+                      duration: 2000
+                    });
+                  }
+                });
+              } 
+            });
+          }
+        });
+      });
+      // 调取微信接口失败
+      wx.error(function(res){
         this.$toast({
-          message: '头像上传成功！',
+          message: '头像上传失败，稍后重试！',
           duration: 2000
         });
-      }
-      return isLt2M;
-    },
-    // 上传成功
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    uploadSectionFile(file) {
-      this.formData = new FormData()
-      this.formData.append('file', file.file);
-      this.$http.postUpolad(this.formData).then((resp) => {
-        if (resp.status == 200) {
-          this.imageUrl = resp.data[0]; // 请求成功之后赋给头像的URL
-          this.$indicator.close();
-          this.$toast({
-            message: '头像上传成功！',
-            duration: 2000
-          });
-        } else {
-          this.$toast({
-            message: '头像上传失败！',
-            duration: 2000
-          });
-        }
-      });
-    },
-    handlePictureCardPreview(file) {
-      this.imageUrl = file.url;
-      console.log(imageUrl)
+      })
     },
     // 昵称输入
     showInput() {
@@ -706,7 +738,7 @@ export default {
         display: block;
         float: right;
       }
-      .avatar-uploader{
+      .avatar{
         width: 94px;
         height: 94px;
         float: right;
@@ -826,30 +858,6 @@ export default {
   }
 </style>
 <style>
-   .completeInfo .avatar-uploader .el-upload{
-    width: 94px;
-    height: 94px;
-    font-size: 0;
-    border-radius: 50%;
-  }
-  .completeInfo .avatar-uploader .el-upload .avatar-uploader-icon{
-    width: 94px;
-    height: 94px;
-    font-size: 32px;
-    text-align: center;
-    vertical-align: middle;
-  }
-  .completeInfo .avatar{
-    width: 94px;
-    height: 94px;
-    display: block;
-    border-radius: 50%;
-  }
-  /* .completeInfo .avatar img{
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-  } */
   .completeInfo li .el-input{
     width: 300px;
     float: left;

@@ -93,8 +93,8 @@ export default {
   },
   computed: {
     total() {
-      if(this.isSelect) {
-        return Number(this.theDetail.cost) + 38  //需要定制38元的衣服
+      if(!this.isSelect) {
+        return Number(this.theDetail.cost) - 38  //需要定制38元的衣服
       }else{
         return Number(this.theDetail.cost)  //不需要定制衣服
       }
@@ -307,10 +307,10 @@ export default {
           float: left;
           padding-left: 30px;
           .titleText{
-            height: 36px;
+            height: 37px;
             font-size: 36px;
-            line-height: 36px;
-            margin-top: 4px;
+            line-height: 38px;
+            margin-top: 3px;
             width: 440px;
             overflow: hidden;
             display: -webkit-box;

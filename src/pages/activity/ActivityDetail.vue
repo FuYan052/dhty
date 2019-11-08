@@ -71,7 +71,7 @@
           </div>
           <div class="detail" v-show="show2">
             <p>1.新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话:18113011911（微信同号）。</p>
-            <p>2.活动人请按照客服通知的场地编号对号入场，球员会水平被分组，6人一个场地，练习热身实行15分钟轮换，双打比赛实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
+            <p>2.活动人请按照客服通知的场地编号对号入场，球员会按照水平分组，6人一个场地，练习热身15分钟后正式开始活动，双打实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
             <p>3.活动开始前2小时可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若互补成功，会短信通知。</p>
           </div>
         </li>
@@ -128,9 +128,17 @@ export default {
       endTime: '',
       isTosignUp: '',
       state: '',  //后端传过来为2时，则表示人员已满，不能报名
+      isFromUrl: null,  //判断url是否是通过分享链接进入
     }
   },
   created() {
+    // 判断url
+    if(window.location.href.indexOf('?from=singlemessage') > -1) {
+      this.isFromUrl = true
+    }else{
+      this.isFromUrl = false
+    }
+
     this.activityDetailId = this.$route.params.id
     window.sessionStorage.setItem('activityDetailId',this.activityDetailId)
     this.$http.activitiesDetail(this.activityDetailId).then(resp => {
@@ -143,6 +151,13 @@ export default {
         this.imgurl = resp.data.image
         this.endTime = (new Date(resp.data.endTime.replace(/-/g,'/')).getTime()) / 1000
         this.countdowm(this.endTime) //执行倒计时函数
+        
+        // 分享配置
+        if(this.isFromUrl) {
+          this.handleShare2()
+        }else{
+          this.handleShare1()
+        }
       }
     })
   },
@@ -167,49 +182,165 @@ export default {
         path: '/escapeClause'
       })
     },
+    // 分享配置
+    handleShare1() {
+      // 获取签名
+      this.$http.getSignature().then(resp => {
+        console.log(resp)
+        if(resp.status = 200) {
+          this.timestamp = resp.data.timestamp
+          this.nonceStr = resp.data.nonceStr
+          this.signature = resp.data.signature
+
+          const that = this
+          wx.config({
+            appId: 'wxd3d4d3045a1213a1',
+            // appId: 'wxf1894ca38c849d17',  //测试号
+            timestamp: that.timestamp,
+            nonceStr: that.nonceStr,
+            signature: that.signature,
+            jsApiList: ['openLocation','updateAppMessageShareData']
+          });
+          wx.ready(function() {
+            wx.updateAppMessageShareData({ 
+              title: that.theDetail.title, // 分享标题
+              desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
+              link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
+              success: function (res) {
+                // 设置成功
+              }
+            })
+          })
+        }
+      })
+    },
+    handleShare2() {
+      // 获取签名
+      this.$http.getSignatureInfo().then(resp => {
+        console.log(resp)
+        if(resp.status = 200) {
+          this.timestamp = resp.data.timestamp
+          this.nonceStr = resp.data.nonceStr
+          this.signature = resp.data.signature
+
+          const that = this
+          wx.config({
+            appId: 'wxd3d4d3045a1213a1',
+            // appId: 'wxf1894ca38c849d17',  //测试号
+            timestamp: that.timestamp,
+            nonceStr: that.nonceStr,
+            signature: that.signature,
+            jsApiList: ['openLocation','updateAppMessageShareData']
+          });
+          wx.ready(function() {
+            wx.updateAppMessageShareData({ 
+              title: that.theDetail.title, // 分享标题
+              desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
+              link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
+              success: function (res) {
+                // 设置成功
+              }
+            })
+          })
+        }
+      })
+    },
     // 地图导航
     toMap() {
-      const that = this
-      const configData = JSON.parse(window.sessionStorage.getItem('config'))
-      // console.log(configData) 
-      // this.$indicator.open();
-      this.$toast({
-        message: '获取中...',
-        duration: 800
-      });
-      wx.config({
-        // debug: true,
-        appId: 'wxd3d4d3045a1213a1',
-        timestamp: configData.timestamp,
-        nonceStr: configData.nonceStr,
-        signature: configData.signature,
-        jsApiList: ['openLocation']
-      });
-      wx.ready(function() {
-        // that.$indicator.close();
-        wx.openLocation({
-          longitude: Number(that.theDetail.lon),
-          latitude: Number(that.theDetail.lat),
-          scale: 13,
-          name: that.theDetail.venueName,
-          address: that.theDetail.address,
-          // fail: function() {
-          //   that.$toast({
-          //     message: '抱歉，调起导航失败，请重试！',
-          //     duration: 2000
-          //   });
-          // }
-        })
-      })
-      // 当微信获取位置配置失败
-      wx.error(function(res){
-        // that.$indicator.close();
-        that.$toast({
-          message: '抱歉，调起导航失败，请稍后重试！',
-          duration: 2000
-        });
-      });
+      if(this.isFromUrl) {
+        this.map2()
+      }else{
+        this.map1()
+      }
     },
+    map1() {
+      this.$http.getSignature().then(resp => {
+      console.log(resp)
+      if(resp.status = 200) {
+        this.timestamp = resp.data.timestamp
+        this.nonceStr = resp.data.nonceStr
+        this.signature = resp.data.signature
+
+        this.$toast({
+          message: '获取中...',
+          duration: 800
+        });
+        const that = this
+        wx.config({
+          // debug: true,
+          appId: 'wxd3d4d3045a1213a1',
+          // appId: 'wxf1894ca38c849d17',  //测试号
+          timestamp: that.timestamp,
+            nonceStr: that.nonceStr,
+            signature: that.signature,
+          jsApiList: ['openLocation','updateAppMessageShareData']
+        });
+        wx.ready(function() {
+          // that.$indicator.close();
+          wx.openLocation({
+            longitude: Number(that.theDetail.lon),
+            latitude: Number(that.theDetail.lat),
+            scale: 13,
+            name: that.theDetail.venueName,
+            address: that.theDetail.address,
+          })
+        })
+        // 当微信获取位置配置失败
+        wx.error(function(res){
+          // that.$indicator.close();
+          that.$toast({
+            message: '抱歉，调起导航失败，请稍后重试！',
+            duration: 2000
+          });
+        });
+      }
+    })
+  },
+  map2() {
+    this.$http.getSignatureInfo().then(resp => {
+      console.log(resp)
+      if(resp.status = 200) {
+        this.timestamp = resp.data.timestamp
+        this.nonceStr = resp.data.nonceStr
+        this.signature = resp.data.signature
+
+        this.$toast({
+          message: '获取中...',
+          duration: 800
+        });
+        const that = this
+        wx.config({
+          // debug: true,
+          appId: 'wxd3d4d3045a1213a1',
+          // appId: 'wxf1894ca38c849d17',  //测试号
+          timestamp: that.timestamp,
+            nonceStr: that.nonceStr,
+            signature: that.signature,
+          jsApiList: ['openLocation','updateAppMessageShareData']
+        });
+        wx.ready(function() {
+          // that.$indicator.close();
+          wx.openLocation({
+            longitude: Number(that.theDetail.lon),
+            latitude: Number(that.theDetail.lat),
+            scale: 13,
+            name: that.theDetail.venueName,
+            address: that.theDetail.address,
+          })
+        })
+        // 当微信获取位置配置失败
+        wx.error(function(res){
+          // that.$indicator.close();
+          that.$toast({
+            message: '抱歉，调起导航失败，请稍后重试！',
+            duration: 2000
+          });
+        });
+      }
+    })
+  },
     // 报名列表
     toList() {
       this.$router.push({
@@ -342,7 +473,7 @@ export default {
         position: absolute;
         top: 20px;
         left: 15px;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0,0,0,0.4);
         z-index: 19;
         .p1{
           width: 30%;
@@ -366,6 +497,15 @@ export default {
           letter-spacing: 4px;
           font-weight: 700;
           margin-top: 10px;
+        }
+        .shareBtn{
+          width: 45px;
+          height: 45px;
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: url('../../assets/shareIcon.png') no-repeat center;
+          background-size: 100% auto;
         }
       }
     }
@@ -643,7 +783,7 @@ export default {
           height: 22px;
           border: 1px solid #fff;
           margin-right: 5px;
-          margin-top: 4px;
+          margin-top: 2px;
           line-height: 28px;
           b{
             color: #f8c026;

@@ -394,9 +394,9 @@ export default {
           float: left;
           padding-left: 40px;
           .titleText{
-            height: 36px;
+            height: 37px;
             font-size: 36px;
-            line-height: 36px;
+            line-height: 38px;
             margin-top: 4px;
             width: 440px;
             overflow: hidden;

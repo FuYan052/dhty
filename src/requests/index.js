@@ -5,7 +5,7 @@ import { Indicator, Toast } from 'mint-ui'
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://qknip3.natappfree.cc/',
+  // baseURL: 'http://k9yxgp.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -14,7 +14,7 @@ const ajax = axios.create({
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://qknip3.natappfree.cc/',
+  // baseURL: 'http://k9yxgp.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -23,7 +23,7 @@ const ajax2 = axios.create({
 const ajax4 = axios.create({
   // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://qknip3.natappfree.cc/',
+  // baseURL: 'http://k9yxgp.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
   },
@@ -312,6 +312,10 @@ export const findDictList = (params) => {
 export const postUpolad = (params) => {
   return ajax.post(`/v1/rest/file/uploadOSS`,params)
 }
+// 上传图片base64
+export const testPostUpolad = (params) => {
+  return ajax.post(`/v1/rest/file/testUploadOSS`,params)
+}
 // 马上推广
 export const getPopularize = (params) => {
   return ajax.get(`/v1/rest/file/qRCode?userId=${params}`)
@@ -328,6 +332,10 @@ export const postBindPhone = (params) => {
 // 微信
 export const getSignature = () => {
   return ajax.get(`/v1/rest/login/getSignature`)
+}
+// 微信分享后变化的url获取签名
+export const getSignatureInfo = () => {
+  return ajax.get(`/v1/rest/login/getSignatureInfo`)
 }
 // 微信支付
 export const postPay = (params) => {
