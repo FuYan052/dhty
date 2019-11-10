@@ -65,7 +65,7 @@
         <div class="t3">
           <p v-if="isShowNoUse">暂无可用</p>
           <p v-else>
-            <span class="useNum" v-show="!haveSelected">11张可用</span>
+            <span class="useNum" v-show="!haveSelected">{{useCoupList.length}}张可用</span>
             <span v-show="haveSelected">-￥{{selectedCoupon.money}}</span>
           </p>
           <span class="el-icon-arrow-right"></span>

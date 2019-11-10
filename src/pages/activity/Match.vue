@@ -15,9 +15,10 @@
       </div>
       <!-- 标题及报名情况 -->
       <div class="titleBox">
+        <!-- <div class="titleText">美孚杯羽毛球赛美孚杯羽毛球赛美孚杯羽毛球赛美孚杯羽毛球赛</div> -->
         <div class="titleText">{{theDetail.title}}</div>
         <div class="people">
-          <span class="span1">￥<b>{{theDetail.cost}}</b>/人</span>
+          <span class="span1">￥<b>{{theDetail.cost}}</b>/人(含订制参赛服1件)</span>
           <span class="span2">{{theDetail.enrolled}}/{{theDetail.people}}</span>
         </div>
       </div>
@@ -170,13 +171,23 @@ export default {
       nonceStr: '',  //调取微信位置接口参数
       signature: '',  //调取微信位置接口参数
       isFromUrl: null,  //判断url是否是通过分享链接进入
+      fromType: '' //分享的类型
     }
   },
   created() {
+    // 判断url及分享类型
     if(window.location.href.indexOf('?from=singlemessage') > -1) {
       this.isFromUrl = true
+      this.fromType = 'singlemessage'
+    }else if(window.location.href.indexOf('?from=timeline') > -1) {
+      this.isFromUrl = true
+      this.fromType = 'timeline'
+    }else if(window.location.href.indexOf('?from=groupmessage') > -1) {
+      this.isFromUrl = true
+      this.fromType = 'groupmessage'
     }else{
       this.isFromUrl = false
+      this.fromType = ''
     }
     // this.activityDetailId = this.$route.params.id
     this.activityDetailId = '34'
@@ -261,7 +272,7 @@ export default {
     },
     handleShare2() {
       // 获取签名
-      this.$http.getSignatureInfo().then(resp => {
+      this.$http.getSignatureInfo(this.fromType).then(resp => {
         console.log(resp)
         if(resp.status = 200) {
           this.timestamp = resp.data.timestamp
@@ -343,7 +354,7 @@ export default {
     })
   },
   map2() {
-    this.$http.getSignatureInfo().then(resp => {
+    this.$http.getSignatureInfo(this.fromType).then(resp => {
       console.log(resp)
       if(resp.status = 200) {
         this.timestamp = resp.data.timestamp
@@ -550,17 +561,18 @@ export default {
       // overflow: auto;
       .titleBox{
         width: 100%;
-        height: 140px;
-        margin-top: 10px;
+        min-height: 140px;
+        margin-top: 20px;
         overflow: hidden;
         padding: 0 30px;
         .titleText{
-          font-size: 36px;
-          line-height: 70px;
+          font-size: 34px;
+          line-height: 55px;
           color: #fff;
         }
         .people{
           width: 100%;
+          margin-top: 10px;
           span{
             display: block;
             letter-spacing: 1px;
