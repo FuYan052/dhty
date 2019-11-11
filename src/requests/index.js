@@ -5,7 +5,7 @@ import { Indicator, Toast } from 'mint-ui'
 const ajax = axios.create({
   // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://k9yxgp.natappfree.cc/',
+  // baseURL: 'http://jt93ze.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
@@ -14,7 +14,7 @@ const ajax = axios.create({
 const ajax2 = axios.create({
   // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://k9yxgp.natappfree.cc/',
+  // baseURL: 'http://jt93ze.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
@@ -23,7 +23,7 @@ const ajax2 = axios.create({
 const ajax4 = axios.create({
   // baseURL: 'http://192.168.0.116:9000/',
   baseURL: 'https://laihu.baogongxia.com/',
-  // baseURL: 'http://k9yxgp.natappfree.cc/',
+  // baseURL: 'http://jt93ze.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
   },
@@ -334,8 +334,8 @@ export const getSignature = () => {
   return ajax.get(`/v1/rest/login/getSignature`)
 }
 // 微信分享后变化的url获取签名
-export const getSignatureInfo = () => {
-  return ajax.get(`/v1/rest/login/getSignatureInfo`)
+export const getSignatureInfo = (params) => {
+  return ajax.get(`/v1/rest/login/getSignatureInfo?url=${params}`)
 }
 // 微信支付
 export const postPay = (params) => {

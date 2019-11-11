@@ -20,9 +20,27 @@
       </li>
       <li class="timeLi">
         <span class="title">时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;间</span>
-        <input type="text" readonly class="timeInput time1" @click="showStartTime" v-model="startTime" placeholder="几点">
+        <!-- <input type="text" readonly class="timeInput time1" @click="showStartTime" v-model="startTime" placeholder="几点"> -->
+        <el-time-select
+          v-model="value"
+          :picker-options="{
+            start: '08:30',
+            step: '00:15',
+            end: '18:30'
+          }"
+          placeholder="选择时间">
+        </el-time-select>
         <span class="range">至</span>
-        <input readonly type="text" class="timeInput time2" @click="showEndTime" v-model="endTime" placeholder="几点">
+        <!-- <input readonly type="text" class="timeInput time2" @click="showEndTime" v-model="endTime" placeholder="几点"> -->
+        <el-time-select
+          v-model="value"
+          :picker-options="{
+            start: '08:30',
+            step: '00:15',
+            end: '18:30'
+          }"
+          placeholder="选择时间">
+        </el-time-select>
       </li>
       <!-- <li @click="showDeadline ">
         <span class="title">报名截止</span>
@@ -134,6 +152,7 @@
         :visibleItemCount='5'
         ref="picker"
         type="time"
+        v-model="actstartime"
         @confirm="handleConfirmStart">
       </mt-datetime-picker>
       <!-- 选择结束时间 -->
@@ -141,6 +160,7 @@
         v-show="endTimePicker"
         :visibleItemCount='5'
         ref="picker"
+        v-model="actendtime"
         type="time"
         @confirm="handleConfirmEnd">
       </mt-datetime-picker>
@@ -198,7 +218,9 @@ export default {
       // dateValue: '',  //选择日期
       sureDateValue: '',  //渲染日期
       startTime: '',  //活动开始时间
+      actstartime: '19:30',
       endTime: '',  //活动结束时间
+      actendtime: '21:30',
       startHour: null,  //控制结束时间大于开始时间
       currChange: function(){},
       currSure: function() {},
@@ -570,24 +592,24 @@ export default {
           message: '请选择活动地点！',
           duration: 2000
         });
-      }else if(this.selectedLevelList.length === 0){
-        this.$toast({
-          message: '请选择水平！',
-          duration: 2000
-        });
       }else if(this.peopleNum == '') {
         this.$toast({
           message: '请填写活动人数！',
           duration: 2000
         });
-      }else if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
-        this.$toast({
-          message: '费用请填写整数！',
-          duration: 2000
-        });
-      }else if(this.cost == '') {
+      }else if(this.cost == null) {
         this.$toast({
           message: '请填写费用！',
+          duration: 2000
+        });
+      // }else if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
+      //   this.$toast({
+      //     message: '费用请填写整数！',
+      //     duration: 2000
+      //   });
+      }else if(this.selectedLevelList.length === 0){
+        this.$toast({
+          message: '请选择水平！',
           duration: 2000
         });
       }else{
@@ -604,7 +626,7 @@ export default {
           people: this.peopleNum,
           alternatePeople: this.HBpeopleNum,
           serviceId: '1',
-          cost: this.cost,
+          cost: Number(this.cost),
           occupationLevel: this.selectedLevelList.join(','),
           // content: this.notes,
           // endTime: this.deadlineValue,

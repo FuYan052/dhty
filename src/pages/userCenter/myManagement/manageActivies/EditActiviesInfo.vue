@@ -600,24 +600,24 @@ export default {
           message: '请选择活动地点！',
           duration: 2000
         });
-      }else if(this.selectedLevelList.length === 0){
-        this.$toast({
-          message: '请选择水平！',
-          duration: 2000
-        });
       }else if(this.peopleNum == '') {
         this.$toast({
           message: '请填写活动人数！',
           duration: 2000
         });
-      }else if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
-        this.$toast({
-          message: '费用请填写整数！',
-          duration: 2000
-        }); 
-      }else if(this.cost == '') {
+      }else if(this.cost == null) {
         this.$toast({
           message: '请填写费用！',
+          duration: 2000
+        });
+      // }else if(!(/(^[0-9]*[1-9][0-9]*$)/.test(this.cost))) {
+      //   this.$toast({
+      //     message: '费用请填写整数！',
+      //     duration: 2000
+      //   });
+      }else if(this.selectedLevelList.length === 0){
+        this.$toast({
+          message: '请选择水平！',
           duration: 2000
         });
       }else{

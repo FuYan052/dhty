@@ -72,7 +72,7 @@
           <div class="detail" v-show="show2">
             <p>1.新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话:18113011911（微信同号）。</p>
             <p>2.活动人请按照客服通知的场地编号对号入场，球员会按照水平分组，6人一个场地，练习热身15分钟后正式开始活动，双打实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
-            <p>3.活动开始前2小时可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若互补成功，会短信通知。</p>
+            <p>3.活动开始<span class="sp1">前2小时</span>可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若候补成功，会短信通知。</p>
           </div>
         </li>
         <li class="li3">
@@ -129,16 +129,24 @@ export default {
       isTosignUp: '',
       state: '',  //后端传过来为2时，则表示人员已满，不能报名
       isFromUrl: null,  //判断url是否是通过分享链接进入
+      fromUrl: '' //分享的类型
     }
   },
   created() {
-    // 判断url
-    if(window.location.href.indexOf('?from=singlemessage') > -1) {
-      this.isFromUrl = true
-    }else{
-      this.isFromUrl = false
+    //判断是否是IOS设备
+    // IOS分享时的页面是首页，也就是进入页而不是当前页。所有可以采用刷新当前页，让进入页的链接改成当前页，再在页面卸载时删除缓存数据。
+    let agent = navigator.userAgent
+    let isIOS = !!agent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+    if(isIOS && !window.sessionStorage.getItem('isShareState')){
+      window.sessionStorage.setItem('isShareState',true)
+      this.$router.go(0)
     }
 
+    // 判断url及分享类型
+    if(window.location.href.indexOf('?from=') > -1) {
+      this.isFromUrl = true
+      this.fromUrl = encodeURIComponent(window.location.href.split('#')[0])
+    }
     this.activityDetailId = this.$route.params.id
     window.sessionStorage.setItem('activityDetailId',this.activityDetailId)
     this.$http.activitiesDetail(this.activityDetailId).then(resp => {
@@ -194,6 +202,7 @@ export default {
 
           const that = this
           wx.config({
+            // debug: true,
             appId: 'wxd3d4d3045a1213a1',
             // appId: 'wxf1894ca38c849d17',  //测试号
             timestamp: that.timestamp,
@@ -217,7 +226,7 @@ export default {
     },
     handleShare2() {
       // 获取签名
-      this.$http.getSignatureInfo().then(resp => {
+      this.$http.getSignatureInfo(this.fromUrl).then(resp => {
         console.log(resp)
         if(resp.status = 200) {
           this.timestamp = resp.data.timestamp
@@ -226,6 +235,7 @@ export default {
 
           const that = this
           wx.config({
+            // debug: true,
             appId: 'wxd3d4d3045a1213a1',
             // appId: 'wxf1894ca38c849d17',  //测试号
             timestamp: that.timestamp,
@@ -299,7 +309,7 @@ export default {
     })
   },
   map2() {
-    this.$http.getSignatureInfo().then(resp => {
+    this.$http.getSignatureInfo(this.fromUrl).then(resp => {
       console.log(resp)
       if(resp.status = 200) {
         this.timestamp = resp.data.timestamp
@@ -438,6 +448,7 @@ export default {
   beforeDestroy() {
     window.sessionStorage.removeItem('config')
     window.sessionStorage.removeItem('clickType')
+    window.sessionStorage.removeItem('isShareState');
   }
 }
 </script>
@@ -663,6 +674,9 @@ export default {
               font-size: 28px;
               line-height: 48px;
               color: #4a4a4a;
+              .sp1{
+                color: #ffbb02;
+              }
             }
           }
         }

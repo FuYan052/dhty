@@ -334,7 +334,7 @@ export default {
           margin-top: 35px;
         }
         .title{
-          width: 300px;
+          width: 200px;
           height: 102px;
           margin-left: 45px;
           line-height: 102px;
@@ -343,7 +343,7 @@ export default {
           float: left;
         }
         .right{
-          width: 200px;
+          width: 370px;
           height: 102px;
           float: right;
           text-align: right;

@@ -15,10 +15,10 @@
       </div>
       <!-- 临时群主 -->
       <div class="leader">
-        <div class="radiuBox" @click="isSelect = !isSelect"><span class="el-icon-check" v-show="isSelect"></span></div>
+        <div class="radiuBox" @click="handleChoiceLeader"><span class="el-icon-check" v-show="isSelect"></span></div>
         <div class="descr">
-          <p>担任本场临时群主<span>直降8元</span></p>
-          <p @click="isShowLeaderDetail = !isShowLeaderDetail">《来虎临时领队义务和责任》</p>
+          <p :class="{disableClass : isDisable1}">担任本场临时群主<span :class="{disableClass2 : isDisable1}">直降8元</span></p>
+          <p @click="isShowLeaderDetail = !isShowLeaderDetail" :class="{disableClass2 : isDisable1}">《来虎临时领队义务和责任》</p>
         </div>
         <div class="detail" v-show="isShowLeaderDetail">
           <p>1.担任临时群主，本次活动可直接抵扣8元打球费。</p>
@@ -28,8 +28,8 @@
       </div>
     </div>
     <!-- 报名人数 -->
-    <div class="number">报名人数</div>
-    <div class="numberWrap">
+    <div class="number"><span v-if="!isPreferActivities">报名人数</span><span v-else>选择性别</span></div>
+    <div class="numberWrap" v-if="!isPreferActivities">
       <ul>
         <li>
           <div class="left"><span></span><span class="text">男</span></div>
@@ -41,6 +41,23 @@
           <div class="left"><span></span><span class="text">女</span></div>
           <div class="right">
             <el-input-number :class="{actDesc : ableClickDesc2}" v-model="num2" @change="handleChangeWomen" :min="0"></el-input-number>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- 报名人数 -->
+    <div class="numberWrap2" v-else>
+      <ul>
+        <li>
+          <div class="left"><span></span><span class="text">男</span></div>
+          <div class="right">
+            <div class="circle" @click="choiceMen"><span v-show="isMen"></span></div>
+          </div>
+        </li>
+        <li>
+          <div class="left"><span></span><span class="text">女</span></div>
+          <div class="right">
+            <div class="circle" @click="choiceWomen"><span v-show="isWomen"></span></div>
           </div>
         </li>
       </ul>
@@ -62,10 +79,10 @@
       <div class="title" @click="toSelectCoup">
         <div class="t1">优惠</div>
         <div class="t2">{{selectedCoupon.name}}</div>
-        <div class="t3">
+        <div class="t3" :class="{disableClass2 : isDisable2}">
           <p v-if="isShowNoUse">暂无可用</p>
           <p v-else>
-            <span class="useNum" v-show="!haveSelected">11张可用</span>
+            <span class="useNum" v-show="!haveSelected">{{useCoupList.length}}张可用</span>
             <span v-show="haveSelected">-￥{{selectedCoupon.money}}</span>
           </p>
           <span class="el-icon-arrow-right"></span>
@@ -119,6 +136,10 @@ export default {
       isSelect: false,  //默认不选择临时领队
       isShowLeaderDetail: false,  //是否展示领队义务与责任
       // switchVuale: false,
+      isDisable1: false,  //是否能选临时群主
+      isPreferActivities: false,  //是否是优惠活动
+      isMen: false,  
+      isWomen: false,
     }
   },
   watch: {
@@ -144,7 +165,7 @@ export default {
       }else{
         this.haveSelected = false
       }
-    }
+    },
   },
   computed: {
     total() {
@@ -172,6 +193,13 @@ export default {
     },
     isShowNoUse(){
       return this.useCoupList.length === 0
+    },
+    isDisable2() {
+      if(Number(this.theDetail.cost) <= 5) {
+        return true
+      }else{
+        return false
+      }   
     }
   },
   created() {
@@ -189,6 +217,17 @@ export default {
         this.state = resp.data.activitiesDetailsInfoVOList.state
         this.useCoupList = resp.data.couponVoList
         this.notUserCoupList = resp.data.noCouponVoList
+        if(Number(this.theDetail.cost) <= 1) {
+          this.isPreferActivities = true
+        }else{
+          this.isPreferActivities = false
+        }
+        if(Number(this.theDetail.cost) <= 8) {
+          this.isSelect = false
+          this.isDisable1 = true
+        }else{
+          this.isDisable1 = false
+        }
       }
     })
   },
@@ -238,26 +277,68 @@ export default {
     handleChangeMen(value) {
       window.sessionStorage.setItem('menNum' ,value)
     },
+    // 选择性别男
+    choiceMen() {
+      this.isMen = !this.isMen
+      this.isWomen = false
+      this.num1 = 1
+      this.num2 = 0
+      if((!this.isWomen) && (!this.isMen)) {
+        this.num2 = 0
+        this.num1 = 0
+      }
+    },
+    // 选择性别女
+    choiceWomen() {
+      this.isWomen = !this.isWomen
+      this.isMen = false
+      this.num2 = 1
+      this.num1 = 0
+      if((!this.isWomen) && (!this.isMen)) {
+        this.num2 = 0
+        this.num1 = 0
+      }
+    },
+    // 选择临时群主
+    handleChoiceLeader() {
+      if(Number(this.theDetail.cost) <= 8) {
+        this.isSelect = false
+        this.isDisable1 = true
+      }else{
+        this.isSelect = !this.isSelect
+        this.isDisable1 = false
+      }
+    },
     // 是否使用优惠券
     isUseCoup() {
       this.haveSelected = false
     },
     // 选择优惠券
     toSelectCoup() {
-      // 将优惠券列表传给下一页
-      window.sessionStorage.setItem('useCouponList' ,JSON.stringify(this.useCoupList))
-      window.sessionStorage.setItem('notUserCoupList' ,JSON.stringify(this.notUserCoupList))
-      this.$router.push({
-        path: '/activitySignUp/selectCoupon'
-      })
+      if(!this.isDisable2) {
+        // 将优惠券列表传给下一页
+        window.sessionStorage.setItem('useCouponList' ,JSON.stringify(this.useCoupList))
+        window.sessionStorage.setItem('notUserCoupList' ,JSON.stringify(this.notUserCoupList))
+        this.$router.push({
+          path: '/activitySignUp/selectCoupon'
+        })
+      }
     },
     // 支付
     surePay() {
       if((this.num1 + this.num2) <= 0){
-        this.$toast({
-          message: '请添加报名人数！',
-          duration: 2000
-        })
+        if(this.isPreferActivities) {
+          this.$toast({
+            message: '请选择性别！',
+            duration: 2000
+          })
+        }else{
+          this.$toast({
+            message: '请添加报名人数！',
+            duration: 2000
+          })
+        }
+        
       }else if((this.num1 + this.num2) > this.people - this.enrolled) {
         this.$toast({
           message: '人数已超过限制！',
@@ -277,68 +358,68 @@ export default {
           isGroup: this.isSelect
         }
         console.log(params)
-        this.$http.postPay(params).then(resp => {
-          console.log(resp)
-          if(resp.status == 200) {
-            const configData = resp.data
-            window.sessionStorage.removeItem('womenNum')
-            window.sessionStorage.removeItem('menNum')
-            window.sessionStorage.removeItem('selectedCoupon')
+        // this.$http.postPay(params).then(resp => {
+        //   console.log(resp)
+        //   if(resp.status == 200) {
+        //     const configData = resp.data
+        //     window.sessionStorage.removeItem('womenNum')
+        //     window.sessionStorage.removeItem('menNum')
+        //     window.sessionStorage.removeItem('selectedCoupon')
 
-            wx.config({
-              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-              appId: configData.appId, // 必填，公众号的唯一标识
-              timestamp: configData.timeStamp, // 必填，生成签名的时间戳
-              nonceStr: configData.nonceStr, // 必填，生成签名的随机串
-              signature: configData.signature, // 必填，签名，见附录1
-              jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-            });
+        //     wx.config({
+        //       debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //       appId: configData.appId, // 必填，公众号的唯一标识
+        //       timestamp: configData.timeStamp, // 必填，生成签名的时间戳
+        //       nonceStr: configData.nonceStr, // 必填，生成签名的随机串
+        //       signature: configData.signature, // 必填，签名，见附录1
+        //       jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        //     });
 
-            wx.ready(function () {
-              wx.chooseWXPay({
-                  timestamp: configData.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写 。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                  nonceStr: configData.nonceStr, // 支付签名随机串，不长于 32 位
-                  package: configData.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-                  signType: configData.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                  paySign: configData.paySign, // 支付签名
-                  success: function (res) {
-                    // 支付成功后的回调函数
-                    console.log(res);
-                    window.sessionStorage.setItem('orderId',configData.orderNo)
-                    that.timer1 = setTimeout(() => {
-                      that.$router.replace({
-                        path: '/activitySignUp/paySuccess'
-                      })
-                    },500)
-                  }, 
-                  fail: function (res) {
-                    //失败回调函数
-                    console.log(res);
-                    // that.$toast({
-                    //   message: '支付失败!',
-                    //   duration: 2000
-                    // })
-                  },
-                  cancel: function(res) {
-                    that.$toast({
-                      message: '取消支付!',
-                      duration: 2000
-                    })
-                  }
-              });
-            }); 
-            // wx.error(function(res){
-            //   that.$toast({
-            //     message: '支付失败！',
-            //     duration: 2000
-            //   })
-            // })
-          }
-        })
+        //     wx.ready(function () {
+        //       wx.chooseWXPay({
+        //           timestamp: configData.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写 。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+        //           nonceStr: configData.nonceStr, // 支付签名随机串，不长于 32 位
+        //           package: configData.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+        //           signType: configData.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+        //           paySign: configData.paySign, // 支付签名
+        //           success: function (res) {
+        //             // 支付成功后的回调函数
+        //             console.log(res);
+        //             window.sessionStorage.setItem('orderId',configData.orderNo)
+        //             that.timer1 = setTimeout(() => {
+        //               that.$router.replace({
+        //                 path: '/activitySignUp/paySuccess'
+        //               })
+        //             },500)
+        //           }, 
+        //           fail: function (res) {
+        //             //失败回调函数
+        //             console.log(res);
+        //             // that.$toast({
+        //             //   message: '支付失败!',
+        //             //   duration: 2000
+        //             // })
+        //           },
+        //           cancel: function(res) {
+        //             that.$toast({
+        //               message: '取消支付!',
+        //               duration: 2000
+        //             })
+        //           }
+        //       });
+        //     }); 
+        //     // wx.error(function(res){
+        //     //   that.$toast({
+        //     //     message: '支付失败！',
+        //     //     duration: 2000
+        //     //   })
+        //     // })
+        //   }
+        // })
       }
     }
   },
-  beforeDestroy() {
+  beforeDestroy() { 
     window.sessionStorage.removeItem('womenNum')
     window.sessionStorage.removeItem('menNum')
     window.sessionStorage.removeItem('selectedCoupon')
@@ -551,6 +632,93 @@ export default {
             width: 260px;
             height: 100%;
             float: right;
+          }
+        }
+        li:nth-child(2){
+          border-top: 1px solid #f0f2f1;
+          .left{
+            span:nth-of-type(1){
+              padding-right: 25px;
+              background: url("../../assets/female.png") no-repeat center;
+              background-size: 60%
+            }
+          }
+        }
+      }
+    }
+    .numberWrap2{
+      width: 100%;
+      height: 208px;
+      border-radius: 15px;
+      background: #fff;
+      padding: 0 30px;
+      ul{
+        width: 100%;
+        height: auto;
+        li{
+          width: 100%;
+          height: 100px;
+          // padding-left: 30px;
+          // padding-right: 25px;
+          .left{
+            width: 200px;
+            height: 96px;
+            line-height: 96px;
+            float: left;
+            font-size: 25px;
+            span:nth-of-type(1){
+              display: block;
+              float: left;
+              width: 60px;
+              height: 96px;
+              margin-top: 4px;
+              line-height: 96px;
+              font-size: 38px;
+              // color: #12abe7;
+              padding-right: 25px;
+              margin-top: -2px;
+              // border: 1px solid red;
+              background: url("../../assets/male.png") no-repeat center;
+              background-size: 60%
+            }
+            .text{
+              display: block;
+              float: left;
+              height: 99px;
+              line-height: 97px;
+              font-size: 25px;
+              color: #000;
+              margin-left: 10px;
+            }
+          }
+          .right{
+            float: right;
+            margin-top: 22px;
+            .circle{
+              // width: 47px;
+              // height: 47px;
+              width: 60px;
+              height: 60px;
+              transform: scale(0.8);
+              display: inline-block;
+              border: 1px solid #febe14;
+              border-radius: 50%;
+              vertical-align: middle;
+              position: relative;
+              span{
+                display: block;
+                width: 21px;
+                height: 21px;
+                background: #febe14;
+                border-radius: 50%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin: auto;
+              }
+            }
           }
         }
         li:nth-child(2){
@@ -812,5 +980,11 @@ export default {
   content: '';
   width: 30px;
   height: 30px;
+}
+.disableClass{
+  color: #ccc !important;
+}
+.disableClass2{
+  color: #ccc !important;
 }
 </style>

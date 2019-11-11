@@ -38,7 +38,6 @@ export default {
   methods: {
     // 返回活动首页
     goActHome() {
-      
       window.location.replace('https://laihu.baogongxia.com/#/intelligenceTreatyBall')
     },
     // 查看活动

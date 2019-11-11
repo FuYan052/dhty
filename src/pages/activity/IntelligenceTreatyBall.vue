@@ -37,7 +37,7 @@
             </div>
             <!-- 场地 -->
             <div class="place" @click="toSignUp(item.id)">
-              {{item.venueName}}<span>￥<b>{{item.cost}}</b>/人</span>
+              {{item.venueName}}<span>￥<b>{{item.cost}}</b>/人<span v-show="item.cost <= 1" style="margin-left: -10px;">(限时抢鲜)</span></span>
             </div>
             <!-- 规则 -->
             <div class="ruler">
