@@ -22,24 +22,24 @@
         <span class="title">时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;间</span>
         <!-- <input type="text" readonly class="timeInput time1" @click="showStartTime" v-model="startTime" placeholder="几点"> -->
         <el-time-select
-          v-model="value"
+          v-model="startTime"
           :picker-options="{
-            start: '08:30',
-            step: '00:15',
-            end: '18:30'
+            start: '06:00',
+            step: '00:30',
+            end: '24:00'
           }"
-          placeholder="选择时间">
+          placeholder="开始时间">
         </el-time-select>
         <span class="range">至</span>
         <!-- <input readonly type="text" class="timeInput time2" @click="showEndTime" v-model="endTime" placeholder="几点"> -->
         <el-time-select
-          v-model="value"
+          v-model="endTime"
           :picker-options="{
-            start: '08:30',
-            step: '00:15',
-            end: '18:30'
+            start: '06:00',
+            step: '00:30',
+            end: '24:00'
           }"
-          placeholder="选择时间">
+          placeholder="结束时间">
         </el-time-select>
       </li>
       <!-- <li @click="showDeadline ">
@@ -1068,6 +1068,39 @@ export default {
     font-size: 30px;
   }
   .organization .mint-datetime-cancel{
-    color: rgb(139, 138, 138)
+    color: rgb(139, 138, 138);
+  }
+  .organization .el-date-editor--time-select{
+    height: 97px;
+  }
+  .el-date-editor--time-select .el-input__inner{
+    font-size: 30px;
+    height: 97px;
+    width: 200px;
+    margin-left: 30px;
+    border: none;
+    color: #000;
+    padding-left: 45px;
+  }
+  .el-popper .popper__arrow, .el-popper .popper__arrow:after{
+    content: '' !important;
+  }
+  .organization .el-date-editor--time-select .el-input__prefix{
+    display: none;
+  }
+  .organization .el-date-editor--time-select .el-input__suffix{
+    display: none;
+  }
+  .organization .el-date-editor--time-select .el-input{
+    border: none;
+  }
+  .time-select-item{
+    height: 65px;
+    line-height: 65px;
+    font-size: 27px;
+    text-align: center;
+  }
+  .time-select .el-picker-panel__content{
+    max-height: 400px;
   }
 </style>

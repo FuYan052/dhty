@@ -158,6 +158,14 @@ export default new Router({
         needCacheLast: true
       }
     },
+    // {
+    //   path: '/activityDetail/:id',
+    //   name: 'ActivityDetail',  //活动详情页
+    //   component: ActivityDetail,
+    //   meta: {
+    //     needCacheLast: true
+    //   }
+    // },
     {
       path: '/playgroundDetail',
       name: 'PlaygroundDetail',  //场馆详情

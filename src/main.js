@@ -58,8 +58,9 @@ router.beforeEach((to, from, next) => {
       next('/home')
     } else { 
       next()
-    } 
+    }
   }
+  console.log(location)
 });
 
 router.afterEach((to,from,next) => {

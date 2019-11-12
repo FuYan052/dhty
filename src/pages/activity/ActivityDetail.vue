@@ -47,7 +47,7 @@
                 :key="ind"
                 :class="{groupOwner : it.group}"
                 >
-                <img :src="it.image" style="width: 100; height:100%; border-radius: 50%;" alt="">
+                <img :src="it.image" style="width:100%; height: 100%; border-radius: 50%;" alt="">
               </div>
             </div>
           </div>
@@ -72,11 +72,7 @@
           <div class="detail" v-show="show2">
             <p>1.新人第一次活动请电话或者微信联系，以便为您提供更好的服务。电话:18113011911（微信同号）。</p>
             <p>2.活动人请按照客服通知的场地编号对号入场，球员会按照水平分组，6人一个场地，练习热身15分钟后正式开始活动，双打实行上下制（活动开始首局负者下场，其余时间不论胜负，每名球员打两局下场休息一局再上，禁止霸场，乱串场地）。</p>
-<<<<<<< HEAD
             <p>3.活动开始<span class="sp1">前2小时</span>可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若候补成功，会短信通知。</p>
-=======
-            <p>3.活动开始<span class="sp1">前2小时</span>可取消参与活动；报名未到或者未在活动开始前两小时取消的，均按照当场活动费用扣费。已经报满了的场次可以报名为候补。若报名结束后依然没有候补成功，则费用会在活动开始前两小时后原路退回；若互补成功，会短信通知。</p>
->>>>>>> caafee0a13ff52d97c96779d77c5b0ed2f4f742a
           </div>
         </li>
         <li class="li3">
@@ -133,48 +129,17 @@ export default {
       isTosignUp: '',
       state: '',  //后端传过来为2时，则表示人员已满，不能报名
       isFromUrl: null,  //判断url是否是通过分享链接进入
-<<<<<<< HEAD
       fromUrl: '' //分享的类型
     }
   },
   created() {
-    //判断是否是IOS设备
-    // IOS分享时的页面是首页，也就是进入页而不是当前页。所有可以采用刷新当前页，让进入页的链接改成当前页，再在页面卸载时删除缓存数据。
-    let agent = navigator.userAgent
-    let isIOS = !!agent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-    if(isIOS && !window.sessionStorage.getItem('isShareState')){
-      window.sessionStorage.setItem('isShareState',true)
-      this.$router.go(0)
-    }
-
     // 判断url及分享类型
     if(window.location.href.indexOf('?from=') > -1) {
       this.isFromUrl = true
       this.fromUrl = encodeURIComponent(window.location.href.split('#')[0])
     }
-=======
-      fromType: '' //分享的类型
-    }
-  },
-  created() {
-    // 判断url及分享类型
-    if(window.location.href.indexOf('?from=singlemessage') > -1) {
-      this.isFromUrl = true
-      this.fromType = 'singlemessage'
-    }else if(window.location.href.indexOf('?from=timeline') > -1) {
-      this.isFromUrl = true
-      this.fromType = 'timeline'
-    }else if(window.location.href.indexOf('?from=groupmessage') > -1) {
-      this.isFromUrl = true
-      this.fromType = 'groupmessage'
-    }else{
-      this.isFromUrl = false
-      this.fromType = ''
-    }
-    console.log(this.fromType)
->>>>>>> caafee0a13ff52d97c96779d77c5b0ed2f4f742a
     this.activityDetailId = this.$route.params.id
-    window.sessionStorage.setItem('activityDetailId',this.activityDetailId)
+    window.sessionStorage.getItem('activityDetailId')
     this.$http.activitiesDetail(this.activityDetailId).then(resp => {
       console.log(resp)
       if(resp.status == 200) {
@@ -240,6 +205,7 @@ export default {
             wx.updateAppMessageShareData({ 
               title: that.theDetail.title, // 分享标题
               desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
+              // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
               success: function (res) {
@@ -252,11 +218,7 @@ export default {
     },
     handleShare2() {
       // 获取签名
-<<<<<<< HEAD
       this.$http.getSignatureInfo(this.fromUrl).then(resp => {
-=======
-      this.$http.getSignatureInfo(this.fromType).then(resp => {
->>>>>>> caafee0a13ff52d97c96779d77c5b0ed2f4f742a
         console.log(resp)
         if(resp.status = 200) {
           this.timestamp = resp.data.timestamp
@@ -277,6 +239,7 @@ export default {
             wx.updateAppMessageShareData({ 
               title: that.theDetail.title, // 分享标题
               desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
+              // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
               success: function (res) {
@@ -339,11 +302,7 @@ export default {
     })
   },
   map2() {
-<<<<<<< HEAD
     this.$http.getSignatureInfo(this.fromUrl).then(resp => {
-=======
-    this.$http.getSignatureInfo(this.fromType).then(resp => {
->>>>>>> caafee0a13ff52d97c96779d77c5b0ed2f4f742a
       console.log(resp)
       if(resp.status = 200) {
         this.timestamp = resp.data.timestamp
@@ -522,7 +481,7 @@ export default {
         z-index: 19;
         .p1{
           width: 30%;
-          height: 32px;
+          height: 34px;
           line-height: 34px;
           font-size: 32px;
           color: #fff;
@@ -665,7 +624,7 @@ export default {
                 float: left;
                 margin-left: 10px;
                 border-radius: 50%;
-                border: 1px solid #fff;
+                border: 1px solid #dedede;
               }
               .groupOwner{
                 border: 2px solid #fac31e;

@@ -680,22 +680,22 @@ export default {
               li:nth-of-type(1){
                 background: url('../../assets/menuIcon1.png') no-repeat left center;
                 background-size: 34px 34px;
-                background-position: 34px 21px;
+                background-position: 34px 18px;
               }
               li:nth-of-type(2){
                 background: url('../../assets/menuIcon2.png') no-repeat left center;
                 background-size: 34px 34px;
-                background-position: 34px 21px;
+                background-position: 34px 18px;
               }
               li:nth-of-type(3){
                 background: url('../../assets/menuIcon3.png') no-repeat left center;
                 background-size: 34px 34px;
-                background-position: 34px 21px;
+                background-position: 34px 18px;
               }
               li:nth-of-type(4){
                 background: url('../../assets/menuIcon4.png') no-repeat left center;
                 background-size: 34px 34px;
-                background-position: 34px 21px;
+                background-position: 34px 18px;
               }
             }
           }

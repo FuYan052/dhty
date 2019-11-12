@@ -289,17 +289,10 @@ export default {
     },
     // 修改活动
     editActivies(id,enrolledVoList) {
-      if(enrolledVoList.length === 0) {
         window.sessionStorage.setItem('editGroupId',id)
         this.$router.push({
           path: '/userCenter/editActiviesInfo'
         })
-      }else{
-        this.$toast({
-          message: '已有人员报名，无法进行修改！',
-          duration: 2000
-        });
-      }
     },
     // 取消发布的活动
     cancelActivies(id,enrolledVoList) {

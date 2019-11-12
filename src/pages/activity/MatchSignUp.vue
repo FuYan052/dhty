@@ -15,9 +15,9 @@
       </div>
       <!-- 临时群主 -->
       <div class="leader">
-        <div class="radiuBox" @click="isSelect = !isSelect"><span class="el-icon-check" v-show="isSelect"></span></div>
+        <!-- <div class="radiuBox" @click="isSelect = true"><span class="el-icon-check" v-show="isSelect"></span></div> -->
         <div class="descr">
-          <p>定制马来西亚大赛款羽毛球运动服</p>
+          <p>含马来西亚大赛款羽毛球运动服1件</p>
         </div>
       </div>
     </div>
@@ -93,11 +93,10 @@ export default {
   },
   computed: {
     total() {
-      if(!this.isSelect) {
-        return Number(this.theDetail.cost) - 38  //需要定制38元的衣服
-      }else{
-        return Number(this.theDetail.cost)  //不需要定制衣服
-      }
+      return Number(this.theDetail.cost)
+      //   return Number(this.theDetail.cost) - 38  //需要定制38元的衣服
+      // }else{
+      //   return Number(this.theDetail.cost)  //不需要定制衣服
     }
   },
   created() {

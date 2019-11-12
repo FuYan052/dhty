@@ -171,33 +171,14 @@ export default {
       nonceStr: '',  //调取微信位置接口参数
       signature: '',  //调取微信位置接口参数
       isFromUrl: null,  //判断url是否是通过分享链接进入
-<<<<<<< HEAD
       fromUrl: '' //分享的类型
-=======
-      fromType: '' //分享的类型
->>>>>>> caafee0a13ff52d97c96779d77c5b0ed2f4f742a
     }
   },
   created() {
     // 判断url及分享类型
-<<<<<<< HEAD
     if(window.location.href.indexOf('?from=') > -1) {
       this.isFromUrl = true
       this.fromUrl = encodeURIComponent(window.location.href.split('#')[0]) 
-=======
-    if(window.location.href.indexOf('?from=singlemessage') > -1) {
-      this.isFromUrl = true
-      this.fromType = 'singlemessage'
-    }else if(window.location.href.indexOf('?from=timeline') > -1) {
-      this.isFromUrl = true
-      this.fromType = 'timeline'
-    }else if(window.location.href.indexOf('?from=groupmessage') > -1) {
-      this.isFromUrl = true
-      this.fromType = 'groupmessage'
-    }else{
-      this.isFromUrl = false
-      this.fromType = ''
->>>>>>> caafee0a13ff52d97c96779d77c5b0ed2f4f742a
     }
     // this.activityDetailId = this.$route.params.id
     this.activityDetailId = '34'
@@ -284,11 +265,7 @@ export default {
     },
     handleShare2() {
       // 获取签名
-<<<<<<< HEAD
       this.$http.getSignatureInfo(this.fromUrl).then(resp => {
-=======
-      this.$http.getSignatureInfo(this.fromType).then(resp => {
->>>>>>> caafee0a13ff52d97c96779d77c5b0ed2f4f742a
         console.log(resp)
         if(resp.status = 200) {
           this.timestamp = resp.data.timestamp
@@ -372,11 +349,7 @@ export default {
     })
   },
   map2() {
-<<<<<<< HEAD
     this.$http.getSignatureInfo(this.fromUrl).then(resp => {
-=======
-    this.$http.getSignatureInfo(this.fromType).then(resp => {
->>>>>>> caafee0a13ff52d97c96779d77c5b0ed2f4f742a
       console.log(resp)
       if(resp.status = 200) {
         this.timestamp = resp.data.timestamp
