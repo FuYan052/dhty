@@ -129,15 +129,21 @@ export default {
       isTosignUp: '',
       state: '',  //后端传过来为2时，则表示人员已满，不能报名
       isFromUrl: null,  //判断url是否是通过分享链接进入
-      fromUrl: '' //分享的类型
+      fromUrl: '', //分享的类型
+      timer1: null,
     }
   },
   created() {
-    // 判断url及分享类型
-    if(window.location.href.indexOf('?from=') > -1) {
-      this.isFromUrl = true
-      this.fromUrl = encodeURIComponent(window.location.href.split('#')[0])
-    }
+    // if (!window.sessionStorage.getItem('isReload')) {
+    //   window.sessionStorage.setItem('isReload', window.location.href)
+    //   // 微信分享需要重新设置URL
+    //   console.log('刷新')
+    //   window.location.href = window.location.href
+    // }
+
+    // 获取签名的url
+    this.fromUrl = encodeURIComponent(window.location.href.split('#')[0])
+
     this.activityDetailId = this.$route.params.id
     window.sessionStorage.getItem('activityDetailId')
     this.$http.activitiesDetail(this.activityDetailId).then(resp => {
@@ -150,13 +156,9 @@ export default {
         this.imgurl = resp.data.image
         this.endTime = (new Date(resp.data.endTime.replace(/-/g,'/')).getTime()) / 1000
         this.countdowm(this.endTime) //执行倒计时函数
-        
+
         // 分享配置
-        if(this.isFromUrl) {
-          this.handleShare2()
-        }else{
-          this.handleShare1()
-        }
+        this.handleShare()
       }
     })
   },
@@ -182,41 +184,7 @@ export default {
       })
     },
     // 分享配置
-    handleShare1() {
-      // 获取签名
-      this.$http.getSignature().then(resp => {
-        console.log(resp)
-        if(resp.status = 200) {
-          this.timestamp = resp.data.timestamp
-          this.nonceStr = resp.data.nonceStr
-          this.signature = resp.data.signature
-
-          const that = this
-          wx.config({
-            // debug: true,
-            appId: 'wxd3d4d3045a1213a1',
-            // appId: 'wxf1894ca38c849d17',  //测试号
-            timestamp: that.timestamp,
-            nonceStr: that.nonceStr,
-            signature: that.signature,
-            jsApiList: ['openLocation','updateAppMessageShareData']
-          });
-          wx.ready(function() {
-            wx.updateAppMessageShareData({ 
-              title: that.theDetail.title, // 分享标题
-              desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
-              // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
-              success: function (res) {
-                // 设置成功
-              }
-            })
-          })
-        }
-      })
-    },
-    handleShare2() {
+    handleShare() {
       // 获取签名
       this.$http.getSignatureInfo(this.fromUrl).then(resp => {
         console.log(resp)
@@ -233,75 +201,31 @@ export default {
             timestamp: that.timestamp,
             nonceStr: that.nonceStr,
             signature: that.signature,
-            jsApiList: ['openLocation','updateAppMessageShareData']
+            jsApiList: ['updateAppMessageShareData']
           });
-          wx.ready(function() {
-            wx.updateAppMessageShareData({ 
-              title: that.theDetail.title, // 分享标题
-              desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
-              // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
-              success: function (res) {
-                // 设置成功
-              }
+          this.timer1 = setTimeout(() => {
+            wx.ready(function() {
+              wx.updateAppMessageShareData({ 
+                title: that.theDetail.title, // 分享标题
+                desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
+                // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
+                success: function (res) {
+                  console.log('分享设置成功')
+                  // 设置成功
+                }
+              })
             })
-          })
+          },2000)
         }
       })
     },
     // 地图导航
     toMap() {
-      if(this.isFromUrl) {
-        this.map2()
-      }else{
-        this.map1()
-      }
+      this.map2()
     },
-    map1() {
-      this.$http.getSignature().then(resp => {
-      console.log(resp)
-      if(resp.status = 200) {
-        this.timestamp = resp.data.timestamp
-        this.nonceStr = resp.data.nonceStr
-        this.signature = resp.data.signature
-
-        this.$toast({
-          message: '获取中...',
-          duration: 800
-        });
-        const that = this
-        wx.config({
-          // debug: true,
-          appId: 'wxd3d4d3045a1213a1',
-          // appId: 'wxf1894ca38c849d17',  //测试号
-          timestamp: that.timestamp,
-            nonceStr: that.nonceStr,
-            signature: that.signature,
-          jsApiList: ['openLocation','updateAppMessageShareData']
-        });
-        wx.ready(function() {
-          // that.$indicator.close();
-          wx.openLocation({
-            longitude: Number(that.theDetail.lon),
-            latitude: Number(that.theDetail.lat),
-            scale: 13,
-            name: that.theDetail.venueName,
-            address: that.theDetail.address,
-          })
-        })
-        // 当微信获取位置配置失败
-        wx.error(function(res){
-          // that.$indicator.close();
-          that.$toast({
-            message: '抱歉，调起导航失败，请稍后重试！',
-            duration: 2000
-          });
-        });
-      }
-    })
-  },
-  map2() {
+    map2() {
     this.$http.getSignatureInfo(this.fromUrl).then(resp => {
       console.log(resp)
       if(resp.status = 200) {
@@ -324,7 +248,6 @@ export default {
           jsApiList: ['openLocation','updateAppMessageShareData']
         });
         wx.ready(function() {
-          // that.$indicator.close();
           wx.openLocation({
             longitude: Number(that.theDetail.lon),
             latitude: Number(that.theDetail.lat),
@@ -335,7 +258,6 @@ export default {
         })
         // 当微信获取位置配置失败
         wx.error(function(res){
-          // that.$indicator.close();
           that.$toast({
             message: '抱歉，调起导航失败，请稍后重试！',
             duration: 2000
@@ -439,9 +361,11 @@ export default {
     },
   },
   beforeDestroy() {
-    window.sessionStorage.removeItem('config')
+    // window.sessionStorage.removeItem('config')
     window.sessionStorage.removeItem('clickType')
-    window.sessionStorage.removeItem('isShareState');
+    window.sessionStorage.removeItem('isReload');
+    clearTimeout(this.timer1)
+    this.timer1 = null
   }
 }
 </script>

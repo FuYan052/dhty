@@ -73,6 +73,7 @@ export default {
   methods: {
     // 查询优惠券
     getCoupon() {
+      this.coupList = []
       const params = {
         userId: window.localStorage.getItem('userId'),
         state: this.currCateIndex
@@ -128,7 +129,7 @@ export default {
   .coupon{
     width: 100%;
     min-height: 100vh;
-    background: #fff;
+    background: #f6f5f8;
     position: relative;
     padding-top: 96px;
     .noList{

@@ -121,6 +121,8 @@ export default {
       couNum: null, //优惠券数量
       couMoney: null,  //优惠券金额
       activList: [],  //活动列表
+      fromUrl: '',
+      isIos: null,
     }
   },
   watch: {
@@ -133,6 +135,10 @@ export default {
     }
   },
   created() {
+    // 判断ios还是android
+    const u = navigator.userAgent;
+    this.isIos = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+
     // 默认日期为当天日期
     this.clickDate = this.findDate(0)
     // 先加载活动列表
@@ -168,8 +174,10 @@ export default {
     })
 
     // 获取用户当前经纬度，计算距离场馆的距离
+    // 获取签名的url
+    this.fromUrl = encodeURIComponent(window.location.href.split('#')[0])
     const that = this
-    this.$http.getSignature().then(resp => {
+    this.$http.getSignatureInfo(this.fromUrl).then(resp => {
       // console.log(resp)
       if(resp.status = 200) {
         this.timestamp = resp.data.timestamp
@@ -182,7 +190,7 @@ export default {
           signature: this.signature,
         }
         window.sessionStorage.setItem('config',JSON.stringify(configData))  //存sessionStorage给详情页调微信位置接口
-
+        
         wx.config({
           // debug: true,
           appId: 'wxd3d4d3045a1213a1',
@@ -361,30 +369,38 @@ export default {
     },
     // 点击临时领队
     leader(id) {
+      window.sessionStorage.setItem('activityDetailId',id)
       window.sessionStorage.setItem('clickType', '领队')
-      this.$router.push({
-        path: `/activityDetail/${id}`,
-      })
+      if(this.isIos) {
+        window.location.href = window.location.href.split('#')[0] + `#/activityDetail/${id}`
+      }else{
+        this.$router.push({
+          path: `/activityDetail/${id}`,
+        })
+      }
     },
     // 点击规则
     rule(id) {
+      window.sessionStorage.setItem('activityDetailId',id)
       window.sessionStorage.setItem('clickType', '规则')
-      this.$router.push({
-        path: `/activityDetail/${id}`,
-      })
+      if(this.isIos) {
+        window.location.href = window.location.href.split('#')[0] + `#/activityDetail/${id}`
+      }else{
+        this.$router.push({
+          path: `/activityDetail/${id}`,
+        })
+      }
     },
     // 去报名
     toSignUp(id) {
-      const configData = {
-        timestamp: this.timestamp,
-        nonceStr: this.nonceStr,
-        signature: this.signature,
-      }
-      window.sessionStorage.setItem('config',JSON.stringify(configData))  //详情页调微信接口的配置
       window.sessionStorage.setItem('activityDetailId',id)
-      this.$router.push({
-        path: `/activityDetail/${id}`,
-      })
+      if(this.isIos) {
+        window.location.href = window.location.href.split('#')[0] + `#/activityDetail/${id}`
+      }else{
+        this.$router.push({
+          path: `/activityDetail/${id}`,
+        })
+      }
     },
     // 查看优惠券
     toCheck() {
