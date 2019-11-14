@@ -159,7 +159,7 @@ export default new Router({
       }
     },
     // {
-    //   path: '/activityDetail/:id',
+    //   path: '/activityDetail',
     //   name: 'ActivityDetail',  //活动详情页
     //   component: ActivityDetail,
     //   meta: {

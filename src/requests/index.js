@@ -3,27 +3,27 @@ import { Message } from 'element-ui'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
-  // baseURL: 'http://192.168.0.116:9000/',
+  baseURL: 'http://192.168.0.116:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://nbfiiu.natappfree.cc/',
+  // baseURL: 'http://nbfiiu.natappfree.cc/',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
 })
 
 const ajax2 = axios.create({
-  // baseURL: 'http://192.168.0.116:9000/',
+  baseURL: 'http://192.168.0.116:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://nbfiiu.natappfree.cc/',
+  // baseURL: 'http://nbfiiu.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
     // 'token': window.localStorage.getItem('ty-token')
   },
 })
 const ajax4 = axios.create({
-  // baseURL: 'http://192.168.0.116:9000/',
+  baseURL: 'http://192.168.0.116:9000/',
   // baseURL: 'https://laihu.baogongxia.com/',
-  baseURL: 'http://nbfiiu.natappfree.cc/',
+  // baseURL: 'http://nbfiiu.natappfree.cc/',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
   },

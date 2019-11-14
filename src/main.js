@@ -60,7 +60,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   }
-  console.log(location)
+  // console.log(location)
 });
 
 router.afterEach((to,from,next) => {
