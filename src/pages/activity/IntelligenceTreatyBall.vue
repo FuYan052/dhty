@@ -123,6 +123,7 @@ export default {
       activList: [],  //活动列表
       fromUrl: '',
       isIos: null,
+      timer1: null
     }
   },
   watch: {
@@ -200,6 +201,7 @@ export default {
           signature: that.signature,
           jsApiList: [
             'getLocation',
+            'updateAppMessageShareData'
           ]
         });
         // 获取经纬度
@@ -244,6 +246,22 @@ export default {
               });
             }
           });
+
+          // 微信分享
+          // 分享配置
+              that.timer1 = setTimeout(() => {
+                wx.updateAppMessageShareData({ 
+                  title: '智能约球', // 分享标题
+                  desc: `时间：${that.clickDate};`, // 分享描述
+                  // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                  link: `https://laihu.baogongxia.com/#/intelligenceTreatyBall`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                  imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
+                  success: function (res) {
+                    console.log('分享设置成功')
+                    // 设置成功
+                  }
+                })
+              },1500)
         });
         // 当微信获取位置配置失败
         wx.error(function(res){
@@ -427,6 +445,10 @@ export default {
     handleAlert() {
       alert('暂未开通，敬请期待！')
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer1)
+    this.timer1 = null
   }
 }
 </script>

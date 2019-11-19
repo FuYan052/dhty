@@ -134,13 +134,6 @@ export default {
     }
   },
   created() {
-    // if (!window.sessionStorage.getItem('isReload')) {
-    //   window.sessionStorage.setItem('isReload', window.location.href)
-    //   // 微信分享需要重新设置URL
-    //   console.log('刷新')
-    //   window.location.href = window.location.href
-    // }
-
     // 获取签名的url
     this.fromUrl = encodeURIComponent(window.location.href.split('#')[0])
 
@@ -160,41 +153,48 @@ export default {
         // 获取签名
         this.$http.getSignatureInfo(this.fromUrl).then(resp => {
         console.log(resp)
-        if(resp.status = 200) {
-          this.timestamp = resp.data.timestamp
-          this.nonceStr = resp.data.nonceStr
-          this.signature = resp.data.signature
+          if(resp.status = 200) {
+            this.timestamp = resp.data.timestamp
+            this.nonceStr = resp.data.nonceStr
+            this.signature = resp.data.signature
 
-          const that = this
-          wx.config({
-            // debug: true,
-            appId: 'wxd3d4d3045a1213a1',
-            // appId: 'wxf1894ca38c849d17',  //测试号
-            timestamp: that.timestamp,
-            nonceStr: that.nonceStr,
-            signature: that.signature,
-            jsApiList: ['openLocation','updateAppMessageShareData']
-          });
-          // this.timer1 = setTimeout(() => {
-          //   wx.ready(function() {
-          //     wx.updateAppMessageShareData({ 
-          //       title: that.theDetail.title, // 分享标题
-          //       desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
-          //       // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          //       link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          //       imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
-          //       success: function (res) {
-          //         console.log('分享设置成功')
-          //         // 设置成功
-          //       }
-          //     })
-          //   })
-          // },2000)
-        }
-      })
-        // 分享配置
-        this.handleShare()
+            const that = this
+            wx.config({
+              // debug: true,
+              appId: 'wxd3d4d3045a1213a1',
+              // appId: 'wxf1894ca38c849d17',  //测试号
+              timestamp: that.timestamp,
+              nonceStr: that.nonceStr,
+              signature: that.signature,
+              jsApiList: ['openLocation','updateAppMessageShareData']
+            });
+            wx.ready(function() {
+              // 分享配置
+              that.timer1 = setTimeout(() => {
+                wx.updateAppMessageShareData({ 
+                  title: that.theDetail.title, // 分享标题
+                  desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
+                  // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                  link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                  imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
+                  success: function (res) {
+                    console.log('分享设置成功')
+                    // 设置成功
+                  }
+                })
+              },1500)
+            })
+          }
+        })
       }
+    })
+    // 记录用户浏览记录
+    const params2 = {
+      userId: window.localStorage.getItem('userId') || '',
+      actId: this.activityDetailId
+    }
+    this.$http.saveRecord(params2).then(resp => {
+      console.log(resp)
     })
   },
   mounted () {
@@ -220,23 +220,22 @@ export default {
     },
     // 分享配置
     handleShare() {
-      const that = this
-
-      this.timer1 = setTimeout(() => {
-            wx.ready(function() {
-              wx.updateAppMessageShareData({ 
-                title: that.theDetail.title, // 分享标题
-                desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
-                // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
-                success: function (res) {
-                  console.log('分享设置成功')
-                  // 设置成功
-                }
-              })
-            })
-          },3000)
+      // const that = this
+      // this.timer1 = setTimeout(() => {
+      //       // wx.ready(function() {
+      //         wx.updateAppMessageShareData({ 
+      //           title: that.theDetail.title, // 分享标题
+      //           desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
+      //           // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+      //           link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+      //           imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
+      //           success: function (res) {
+      //             console.log('分享设置成功')
+      //             // 设置成功
+      //           }
+      //         })
+      //       // })
+      //     },2000)
     },
     // 地图导航
     toMap() {
@@ -251,48 +250,16 @@ export default {
         address: that.theDetail.address,
       })
     },
-    map2() {
-    // this.$http.getSignatureInfo(this.fromUrl).then(resp => {
-    //   console.log(resp)
-    //   if(resp.status = 200) {
-    //     this.timestamp = resp.data.timestamp
-    //     this.nonceStr = resp.data.nonceStr
-    //     this.signature = resp.data.signature
-
-    //     this.$toast({
-    //       message: '获取中...',
-    //       duration: 800
-    //     });
-        const that = this
-        // wx.config({
-        //   // debug: true,
-        //   appId: 'wxd3d4d3045a1213a1',
-        //   // appId: 'wxf1894ca38c849d17',  //测试号
-        //   timestamp: that.timestamp,
-        //     nonceStr: that.nonceStr,
-        //     signature: that.signature,
-        //   jsApiList: ['openLocation','updateAppMessageShareData']
-        // });
-
-        // wx.ready(function() {
-          wx.openLocation({
-            longitude: Number(that.theDetail.lon),
-            latitude: Number(that.theDetail.lat),
-            scale: 13,
-            name: that.theDetail.venueName,
-            address: that.theDetail.address,
-          })
-        // })
-        // 当微信获取位置配置失败
-        // wx.error(function(res){
-        //   that.$toast({
-        //     message: '抱歉，调起导航失败，请稍后重试！',
-        //     duration: 2000
-        //   });
-        // });
-      // }
-    // })
-  },
+    // map2() {
+    //   const that = this
+    //   wx.openLocation({
+    //     longitude: Number(that.theDetail.lon),
+    //     latitude: Number(that.theDetail.lat),
+    //     scale: 13,
+    //     name: that.theDetail.venueName,
+    //     address: that.theDetail.address,
+    //   })
+    // },
     // 报名列表
     toList() {
       this.$router.push({
@@ -433,7 +400,7 @@ export default {
         .p1{
           width: 30%;
           height: 34px;
-          line-height: 34px;
+          line-height: 36px;
           font-size: 32px;
           color: #fff;
           margin: 0 auto;
