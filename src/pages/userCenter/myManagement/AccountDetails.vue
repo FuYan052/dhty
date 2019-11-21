@@ -91,16 +91,25 @@ export default {
           height: 150px;
           float: right;
           border-top: 1px solid #f2f2f2;
-          padding-right: 45px;
+          padding-right: 175px;
+          position: relative;
           .title{
             height: 30px;
             font-size: 29px;
-            line-height: 30px;
-            margin-top: 40px;
+            line-height: 32px;
+            margin-top: 39px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
             span{
-              float: right;
+              display: block;
+              // float: right;
               font-size: 36px;
               color: #222222;
+              position: absolute;
+              right: 30px;
+              top: 40px;
             }
             .fu{
               color: #e55e27;

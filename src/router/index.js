@@ -143,14 +143,6 @@ export default new Router({
       component: Match,  //美孚杯羽毛球赛
     },
     {
-      path: '/playground',
-      name: 'Playground',  //场馆列表页
-      component: Playground,
-      meta: {
-        keepAlive: true 
-      }
-    },
-    {
       path: '/activityDetail/:id',
       name: 'ActivityDetail',  //活动详情页
       component: ActivityDetail,
@@ -158,14 +150,14 @@ export default new Router({
         needCacheLast: true
       }
     },
-    // {
-    //   path: '/activityDetail',
-    //   name: 'ActivityDetail',  //活动详情页
-    //   component: ActivityDetail,
-    //   meta: {
-    //     needCacheLast: true
-    //   }
-    // },
+    {
+      path: '/playground',
+      name: 'Playground',  //场馆列表页
+      component: Playground,
+      meta: {
+        keepAlive: true 
+      }
+    },
     {
       path: '/playgroundDetail',
       name: 'PlaygroundDetail',  //场馆详情

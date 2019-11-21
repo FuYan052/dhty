@@ -28,6 +28,8 @@
             step: '00:30',
             end: '24:00'
           }"
+          :editable='false'
+          :clearable='false'
           placeholder="开始时间">
         </el-time-select>
         <span class="range">至</span>
@@ -39,6 +41,8 @@
             step: '00:30',
             end: '24:00'
           }"
+          :editable='false'
+          :clearable='false'
           placeholder="结束时间">
         </el-time-select>
       </li>
@@ -1093,6 +1097,10 @@ export default {
   }
   .organization .el-date-editor--time-select .el-input{
     border: none;
+  }
+  .organization .el-date-editor--time-select .el-input__inner::-webkit-input-placeholder{
+    font-size:32px;
+    color: #909090;
   }
   .time-select-item{
     height: 65px;

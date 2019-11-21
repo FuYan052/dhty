@@ -81,7 +81,7 @@ export default {
   data() {
     return {
       noData: false,  //缺省页控制
-      cateList: ['羽毛球', '跑步'],
+      cateList: ['羽毛球'],
       currIndex: 0,
       address: '',
       zoom: 3,
@@ -167,77 +167,15 @@ export default {
               // console.log(res)
               that.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
               that.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              // const params = {
-              //   type: that.type,
-              //   keyWord:'',
-              //   lon: that.longitude,
-              //   lat: that.latitude,
-              //   page: 1
-              // }
-              // that.$http.getPlaygroundList(params).then(resp => {
-              //   console.log(resp)
-              //   if(resp.status == 200) {
-              //     that.playGroungList = resp.data.rows
-              //     if(that.playGroungList.length == 0) {
-              //       that.noData = true
-              //     }else{
-              //       that.noData = false
-              //     }
-              //     // 分页信息
-              //     that.pageInfo.totalPage = resp.data.pageNum
-              //     that.pageInfo.page = resp.data.prePage
-
-              //     // console.log(this.playGroungList)
-              //   }
-              // })
             },
             cancel: function (res) {
               that.$toast('获取地理位置失败，当前距离为平台默认距离！')
-              // const params = {
-              //   type: that.type,
-              //   keyWord:'',
-              //   lon: that.currLon,
-              //   lat: that.currLat,
-              //   page: 1
-              // }
-              // that.$http.getPlaygroundList(params).then(resp => {
-              //   console.log(resp)
-              //   if(resp.status == 200) {
-              //     that.$toast('获取地理位置失败，当前距离为平台默认距离！')
-              //     that.playGroungList = resp.data.rows
-              //     if(that.playGroungList.length == 0) {
-              //       that.noData = true
-              //     }else{
-              //       that.noData = false
-              //     }
-              //     // console.log(this.playGroungList)
-              //     that.pageInfo.totalPage = resp.data.pageNum
-              //     that.pageInfo.page = resp.data.prePage
-              //   }
-              // })
             }
           })
         });
         // 调取微信接口失败
         wx.error(function(res){
           that.$toast('获取地理位置失败，当前距离为平台默认距离！')
-          // const params = {
-          //   type: that.type,
-          //   keyWord:'',
-          //   lon: that.currLon,
-          //   lat: that.currLat,
-          //   page: 1
-          // }
-          // that.$http.getPlaygroundList(params).then(resp => {
-          //   console.log(resp)
-          //   if(resp.status == 200) {
-          //     that.$toast('获取地理位置失败，当前距离为平台默认距离！')
-          //     that.playGroungList = resp.data.rows
-          //     // console.log(this.playGroungList)
-          //     that.pageInfo.totalPage = resp.data.pageNum
-          //     that.pageInfo.page = resp.data.prePage
-          //   }
-          // })
         })
       }
     })
@@ -382,12 +320,6 @@ methods: {
         that.$toast('抱歉，调起导航失败！')
       }
     })
-    // this.$router.push({
-    //   path: '/mapPage',
-    //   name: 'MapPage',
-    //   params: location
-    // })
-    // window.sessionStorage.setItem('location',JSON.stringify(location))
   }
 },
   beforeDestroy() {
@@ -434,11 +366,11 @@ methods: {
           font-size: 32px;
         }
         .cateItem:nth-child(1){
-          float: left;
+          margin: 0 auto;
         }
-        .cateItem:nth-child(2){
-          float: right;
-        }
+        // .cateItem:nth-child(2){
+        //   float: right;
+        // }
         .activeCate{
           color: #000;
           border-bottom: 3px solid #000;

@@ -190,7 +190,7 @@ export default {
     })
     // 记录用户浏览记录
     const params2 = {
-      userId: window.localStorage.getItem('userId') || '',
+      userId: window.localStorage.getItem('userId') || 0,
       actId: this.activityDetailId
     }
     this.$http.saveRecord(params2).then(resp => {
@@ -218,25 +218,6 @@ export default {
         path: '/escapeClause'
       })
     },
-    // 分享配置
-    handleShare() {
-      // const that = this
-      // this.timer1 = setTimeout(() => {
-      //       // wx.ready(function() {
-      //         wx.updateAppMessageShareData({ 
-      //           title: that.theDetail.title, // 分享标题
-      //           desc: `时间：${that.theDetail.time};  地点：${that.theDetail.venueName}`, // 分享描述
-      //           // link: `http://192.168.0.108:8081/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      //           link: `https://laihu.baogongxia.com/#/activityDetail/${that.activityDetailId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      //           imgUrl: 'https://dhty.oss-cn-shenzhen.aliyuncs.com/%E6%9D%A5%E8%99%8E%E5%9B%BE%E7%89%87.jpg', // 分享图标
-      //           success: function (res) {
-      //             console.log('分享设置成功')
-      //             // 设置成功
-      //           }
-      //         })
-      //       // })
-      //     },2000)
-    },
     // 地图导航
     toMap() {
       // this.map2()
@@ -250,16 +231,6 @@ export default {
         address: that.theDetail.address,
       })
     },
-    // map2() {
-    //   const that = this
-    //   wx.openLocation({
-    //     longitude: Number(that.theDetail.lon),
-    //     latitude: Number(that.theDetail.lat),
-    //     scale: 13,
-    //     name: that.theDetail.venueName,
-    //     address: that.theDetail.address,
-    //   })
-    // },
     // 报名列表
     toList() {
       this.$router.push({
@@ -355,9 +326,7 @@ export default {
     },
   },
   beforeDestroy() {
-    // window.sessionStorage.removeItem('config')
     window.sessionStorage.removeItem('clickType')
-    // window.sessionStorage.removeItem('isReload');
     clearTimeout(this.timer1)
     this.timer1 = null
   }
@@ -369,7 +338,6 @@ export default {
     width: 100%;
     min-height: 100vh;
     background: #1e1e1c;
-    // overflow: hidden;
     padding-bottom: 21vh;
     .topimg{
       width: 100%;
