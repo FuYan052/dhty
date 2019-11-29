@@ -1,6 +1,6 @@
 <template>
   <!-- 美孚杯羽毛球赛 -->
-  <div class="match" v-title data-title="美孚杯羽毛球赛">
+  <div class="match" v-title data-title="鼎力杯羽毛球赛">
     <div class="scrollBox" ref="scrollBox">
       <!-- 图片 -->
       <div class="topimg">
@@ -66,10 +66,9 @@
             赛事安排<span v-show="!show5" class="sp2 el-icon-arrow-down"></span><span  v-show="show5" class="sp2 el-icon-arrow-up"></span>
           </div>
           <div class="detail" v-show="show5">
-            <p>1.半决赛前采取单轮淘汰赛，一局31分制，16分交换场地，30平不加分，先到31分为胜。</p>
-            <p>2.半决赛及决赛采用三局两胜制，单局采用21分制。</p>
-            <p>3.比赛采用有中国羽协审定的《羽毛球竞赛规则》和世界羽联公布的最新规定。</p>
-            <p>4.男双遇到混双时让6分。</p>
+            <p>1.比赛采取单轮淘汰赛，一局31分制，16分交换场地，30平不加分，先到31分为胜。</p>
+            <p>2.比赛采用中国羽协审定的《羽毛球竞赛规则》和世界羽联公布的最新规定。</p>
+            <p>3.男双遇到混双时让6分。</p>
           </div>
         </li>
         <li class="li2">
@@ -216,7 +215,7 @@ export default {
 
     // 记录用户浏览记录
     const params2 = {
-      userId: window.localStorage.getItem('userId'),
+      userId: window.localStorage.getItem('userId') || 0,
       actId: this.activityDetailId
     }
     this.$http.saveRecord(params2).then(resp => {
@@ -266,7 +265,7 @@ export default {
                 })
               },1500)
             })
-          }
+          }   
         })
     },
     // 地图导航

@@ -55,7 +55,7 @@
       </div>
       <!-- 收缩项 -->
       <ul class="ul1">
-        <li class="li1" ref="leader">
+        <!-- <li class="li1" ref="leader">
           <div class="title" @click="show1 = !show1">
             临时群主的福利和义务<span class="sp1">(直降8元)</span><span v-show="!show1" class="sp2 el-icon-arrow-down"></span><span v-show="show1" class="sp2 el-icon-arrow-up"></span>
           </div>
@@ -64,7 +64,7 @@
             <p>2.一场活动仅有一名临时群主，如有其他人抢先担任，请按照普通球友的方式支付。</p>
             <p>3.在选择担任临时群主前，请您确保能提前到达活动场馆并能按照信息提示到来虎自助取球机或场馆前台领球，分发到每个场地。</p>
           </div>
-        </li>
+        </li> -->
         <li class="li2" ref="rule">
           <div class="title" @click="show2 = !show2">
             规则<span v-show="!show2" class="sp2 el-icon-arrow-down"></span><span  v-show="show2" class="sp2 el-icon-arrow-up"></span>
@@ -83,7 +83,7 @@
               </div>
             </div>
             <div class="name">
-              来虎客服
+              组织者
             </div>
             <div class="nameText" v-show="show3">虎妞</div>
             <span v-show="!show3" class="sp2 el-icon-arrow-down"></span><span  v-show="show3" class="sp2 el-icon-arrow-up"></span>
@@ -118,7 +118,7 @@ export default {
     return {
       show1: true,
       show2: true,
-      show3: false,
+      show3: true,
       activityDetailId: '',
       theDetail: '',
       imgurl: '',

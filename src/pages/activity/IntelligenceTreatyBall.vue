@@ -1,6 +1,6 @@
 <template>
   <!-- 智能约球 -->
-  <div class="intelligenceTreatyBall" v-title data-title="智能约球">
+  <div class="intelligenceTreatyBall" v-title data-title="预约打球">
     <!-- 日期 -->
     <div class="dateCate">
       <div class="wrap">
@@ -42,9 +42,9 @@
             <!-- 规则 -->
             <div class="ruler">
               <div class="wrap1">LI-NING&nbsp;&nbsp;A6(来虎专用球)</div>
-              <div class="wrap2" @click="leader(item.id)">临时群主</div>
+              <div class="wrap2" @click="leader(item.id)">组织者</div>
               <div class="wrap3" @click="rule(item.id)">规则</div>
-            </div>
+            </div> 
             <!-- 正在报名 -->
             <div class="signUp">
               <div class="imgBox" @click="toSignUp(item.id)">
@@ -514,7 +514,6 @@ export default {
       height: 91.5vh;
       background: url('../../assets/noDataBg.jpg') no-repeat center;
       background-size: cover;
-      background-position: 0 10%;
     }
     .contentBg{
       width: 100%;
