@@ -231,18 +231,18 @@ export const completeInfo = (params) => {
 // 我要参与
 // 活动详情
 export const activitiesDetail = (params) => {
-  return ajax.get(`/v1/rest/login/activitiesDetailInfo?id=${params}`)
+  return ajax.get(`/v1/rest/involved/activitiesDetailInfo?id=${params}`)
 }
 // 活动列表
 export const activitiesList = (params) => {
-  return ajax2.post(`/v1/rest/login/activitiesList`,params)
+  return ajax2.post(`/v1/rest/involved/activitiesList`,params)
 }
 export const activitiesList2 = (params) => {  //无加载缓冲显示
-  return ajax4.post(`/v1/rest/login/activitiesList`,params)
+  return ajax4.post(`/v1/rest/involved/activitiesList`,params)
 }
 // 报名列表
 export const getSignUpList = (params) => {
-  return ajax.get(`/v1/rest/login/activitiesEnrolled?id=${params}`)
+  return ajax.get(`/v1/rest/involved/activitiesEnrolled?id=${params}`)
 }
 // 申请加入社群
 export const applyJoinGroup = (params) => {
@@ -250,11 +250,11 @@ export const applyJoinGroup = (params) => {
 }
 // Ta参加过的活动 
 export const attendedActivities = (params) => {
-  return ajax.get(`/v1/rest/login/attendedActivities?id=${params.id}&type=${params.type}`)
+  return ajax.get(`/v1/rest/involved/attendedActivities?id=${params.id}&type=${params.type}`)
 }
 // 获取场地信息 
 export const getVenueInfo = (params) => {
-  return ajax.get(`/v1/rest/login/getVenueInfo?type=${params.type}&name=${params.name}`)
+  return ajax.get(`/v1/rest/involved/getVenueInfo?type=${params.type}&name=${params.name}`)
 }
 // 群活动
 export const groupActivity = (params) => {
@@ -274,11 +274,11 @@ export const groupMembers = (params) => {
 }
 // Ta人资料 
 export const informationOthers = (params) => {
-  return ajax.get(`/v1/rest/login/informationOthers?id=${params}`)
+  return ajax.get(`/v1/rest/involved/informationOthers?id=${params}`)
 }
 // Ta的活动参数
 export const motionParameters = (params) => {
-  return ajax.get(`/v1/rest/login/motionParameters?id=${params.id}&type=${params.type}`)
+  return ajax.get(`/v1/rest/involved/motionParameters?id=${params.id}&type=${params.type}`)
 }
 // ta组织的活动 
 export const organizedActivities = (params) => {
@@ -290,15 +290,15 @@ export const getGroupList = (params) => {
 }
 // 创建组织活动 
 export const organizingActivities = (params) => {
-  return ajax2.post(`/v1/rest/login/organizingActivities`,params)
+  return ajax2.post(`/v1/rest/involved/organizingActivities`,params)
 }
 // 组织活动可选择的客服人员
 export const customerService = () => {
-  return ajax.get(`/v1/rest/login/customerService`)
+  return ajax.get(`/v1/rest/involved/customerService`)
 }
 // 修改活动
 export const findOrganizingActivities = (params) => {
-  return ajax.post(`/v1/rest/login/findOrganizingActivities?id=${params}`)
+  return ajax.post(`/v1/rest/involved/findOrganizingActivities?id=${params}`)
 }
 // 取消发布的活动
 export const cancelOrgActivities = (params) => {
@@ -351,11 +351,11 @@ export const cancelPay = (params) => {
 }
 // 支付页信息
 export const getPayActInfo = (params) => {
-  return ajax.get(`/v1/rest/login/signUpInfo?id=${params.id}&userId=${params.userId}`)
+  return ajax.get(`/v1/rest/involved/signUpInfo?id=${params.id}&userId=${params.userId}`)
 }
 // 比赛支付页信息
 export const getPayMatchInfo = (params) => {
-  return ajax.get(`/v1/rest/login/matchSignUpInfo?id=${params.id}&userId=${params.userId}`)
+  return ajax.get(`/v1/rest/involved/matchSignUpInfo?id=${params.id}&userId=${params.userId}`)
 }
 // 提交比赛支付
 export const postPayMatch = (params) => {
@@ -371,7 +371,7 @@ export const cancelActive = (params) => {
 }
 // 优惠券弹框提示'知道了'操作，用于下次是否还弹框
 export const isShowCoupon = (params) => {
-  return ajax.get(`/v1/rest/login/activitiesListIsNoRead?userId=${params}`)
+  return ajax.get(`/v1/rest/involved/activitiesListIsNoRead?userId=${params}`)
 }
 // 账户明细
 export const getAccount = () => {
