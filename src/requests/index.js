@@ -3,8 +3,8 @@ import { Message } from 'element-ui'
 import { Indicator, Toast } from 'mint-ui'
 // 创建axios实例
 const ajax = axios.create({
-  // baseURL: 'http://192.168.0.116:8089/lhty',
-  baseURL: 'https://laihu.baogongxia.com/lhty',
+  baseURL: 'http://192.168.0.116:8089/lhty',
+  // baseURL: 'https://laihu.baogongxia.com/lhty',
   // baseURL: 'http://q2my6u.natappfree.cc/lhty',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
@@ -12,8 +12,8 @@ const ajax = axios.create({
 })
 
 const ajax2 = axios.create({
-  // baseURL: 'http://192.168.0.116:8089/lhty',
-  baseURL: 'https://laihu.baogongxia.com/lhty',
+  baseURL: 'http://192.168.0.116:8089/lhty',
+  // baseURL: 'https://laihu.baogongxia.com/lhty',
   // baseURL: 'http://q2my6u.natappfree.cc/lhty',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",
@@ -21,8 +21,8 @@ const ajax2 = axios.create({
   },
 })
 const ajax4 = axios.create({
-  // baseURL: 'http://192.168.0.116:8089/lhty',
-  baseURL: 'https://laihu.baogongxia.com/lhty',
+  baseURL: 'http://192.168.0.116:8089/lhty',
+  // baseURL: 'https://laihu.baogongxia.com/lhty',
   // baseURL: 'http://q2my6u.natappfree.cc/lhty',
   headers: {
     'Content-Type': "application/json;charset=UTF-8",

@@ -4,13 +4,17 @@
     <div class="scrollBox" ref="scrollBox">
       <!-- 图片 -->
       <div class="topimg">
-        <div class="img">
+        <!-- <div class="img">
           <img src="../../assets/matchBg.jpg" style="width:100%; height: 100%; border-radius: 8px;" alt="">
-          <!-- <img :src="theDetail.cVenueImage" style="width:100%; height: 100%; border-radius: 8px;" alt=""> -->
-        </div>
-        <div class="titleTop">
-          <!-- <p class="p1">美孚杯羽毛球赛</p>
-          <p class="p2">FASRER HIGHER STRONGER </p> -->
+        </div> -->
+        <div class="img">
+          <mt-swipe
+          @change="handleChange" 
+          :auto="3000">
+            <mt-swipe-item v-for="(item,index) in swipeList" :key="index">
+              <img @click="handleClick(item)" :src="item.imgUrl" style="width: 100; height:100%; border-radius: 8px;" alt="">
+            </mt-swipe-item>
+          </mt-swipe>
         </div>
       </div>
       <!-- 标题及报名情况 -->
@@ -172,6 +176,7 @@ export default {
       isFromUrl: null,  //判断url是否是通过分享链接进入
       fromUrl: '', //分享的类型
       timer1: null,
+      swipeList: []
     }
   },
   created() {
@@ -221,8 +226,33 @@ export default {
     this.$http.saveRecord(params2).then(resp => {
       console.log(resp)
     })
+
+    // 轮播图
+    this.swipeList = [{
+      id: 1,
+      imgUrl: require('../../assets/matchBg.jpg'),
+      clickUrl: 'https://www.baidu.com'
+    },{
+      id: 2,
+      imgUrl: require('../../assets/matchBg.jpg'),
+      clickUrl: 'http://www.baogongxia.com'
+    },{
+      id: 3,
+      imgUrl: require('../../assets/matchBg.jpg'),
+      clickUrl: 'http://www.baidu.com'
+    }]
   },
   methods: {
+    // 切换轮播图
+    handleChange(index) {
+      // console.log(index)
+    },
+    // 点击
+    handleClick(item) {
+      console.log(item)
+      window.location.href = item.clickUrl
+    },
+
     // 免责条款
     toEscapeClause() {
       this.$router.push({
@@ -403,43 +433,12 @@ export default {
       .img{
         width: 720px;
         height: 368px;
+        border-radius: 8px;
+        overflow: hidden;
         position: absolute;
         left: 15px;
         top: 20px;
         z-index: 9;
-      }
-      .titleTop{
-        width: 720px;
-        height: 368px;
-        border-radius: 15px;
-        position: absolute;
-        top: 20px;
-        left: 15px;
-        // background: rgba(0,0,0,0.4);
-        z-index: 19;
-        .p1{
-          width: 30%;
-          height: 32px;
-          line-height: 34px;
-          font-size: 32px;
-          color: #fff;
-          margin: 0 auto;
-          overflow: hidden;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 1;
-          margin-top: 120px;
-          padding-left: 20px;
-        }
-        .p2{
-          font-size: 22px;
-          line-height: 72px;
-          color: #fff;
-          text-align: center;
-          letter-spacing: 4px;
-          font-weight: 700;
-          margin-top: 10px;
-        }
       }
     }
     .scrollBox{

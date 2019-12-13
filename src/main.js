@@ -44,7 +44,7 @@ Vue.use(ElementUI);
 Vue.use(MintUI)
 // 图片放大查看
 // Vue.use(preview)
-
+  
 // 全局导航守卫
 router.beforeEach((to, from, next) => {
   let hasToken = localStorage.getItem('ty-token');

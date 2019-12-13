@@ -41,15 +41,23 @@
         </div>
       </li>
     </ul>
+    <!-- 滚动字幕 -->
+    <my-marquee :lists="bannerText"></my-marquee>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import MyMarquee from '@/components/MyMarquee'
 export default {
   name: 'ManageHome',
+  components:{
+    MyMarquee: MyMarquee
+  },
   data() {
     return {
+      bannerText: '这是一段滚动文字，广告文字，实现无缝滚动。',
+      // bannerText: [ "连雨不知春去，","一晴方觉夏深。"],
       currMenuList: [],
       menu1List: [  //普通用户展示菜单
         {
