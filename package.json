@@ -22,7 +22,7 @@
     "postcss-px-to-viewport-opt": "0.0.4",
     "postcss-viewport-units": "^0.1.6",
     "postcss-write-svg": "^3.0.1",
-    "v-distpicker": "^1.2.1",
+    "v-distpicker": "^1.2.7",
     "vue": "^2.5.2",
     "vue-baidu-map": "^0.21.22",
     "vue-photo-preview": "^1.1.3",
